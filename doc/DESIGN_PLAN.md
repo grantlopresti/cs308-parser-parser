@@ -10,6 +10,7 @@
 
 ###User Interface
 *This section describes how the user will interact with your program (keep it simple to start). Describe the overall appearance of program's user interface components and how users interact with these components (especially those specific to your program, i.e., means of input other than menus or toolbars). Include one or more pictures of the user interface (these pictures can be hand drawn and scanned in, created with a standard drawing program, or screen shots from a dummy program that serves as a exemplar). Also describe any erroneous situations that are reported to the user (i.e., bad input data, empty data, etc.). This section should go into as much detail as necessary to cover all your team wants to say.*
+
 The user will interact with the program in two phases. The first point of contact is a splash/startup screen where the user
 has various configuration options for how they want the visualization to appear (e.g. background, pane information, turtle
 color), as well as where the first stage of input for commands will come from (either read in from a text file or open a blank).
@@ -18,6 +19,11 @@ Following the initial configuration, the user then sees the "standard stage", wh
 type (e.g. ```GridPane```). Some regions of the screen will be a text box to input commands, a region showing the current
 drawing, a ```GO``` button to submit a chunk of text, as well as other panels/buttons to display a command history and current
 variables that can be accessed.
+
+All nodes in the LayoutPane that makes up the view will themselves be a custom Object (e.g. ```HistoryView```). These objects
+will extend a JavaFX element (e.g. ```TextInputBox```) but with a set of added functionality to achieve our goals. Command 
+inputs can also be loaded in from a text file. The user will have the ability to interact with components via button selection 
+(for configurations, toggling between panes, etc.) as well as for inputting commands (via loading a file or typing text into a command window).
 
 Regarding erroneous situations, we are currently playing with the idea of having a terminal-esque console which displays 
 status updates for all commands run (e.g. "Loaded in files...Parsed Inputs...Unraveled to 13 commands...Executed 13 commands")
@@ -38,6 +44,16 @@ may decide to implement a simple popup to display any types of errors while runn
 ###Design Considerations
 *This section describes any issues which need to be addressed or resolved before attempting to devise a complete design solution. Include any design decisions that the group discussed at length and describe at least one alternative in detail (including pros and cons from all sides of the discussion). Describe any assumptions or dependencies regarding the program that impact the overall design. This section should go into as much detail as necessary to cover all your team wants to say.*
 
+A major design discussion our group has discussed at length is how to organize the general flow of information in the program.
+We believe that a classic MVC model is ideal for the general programmatic design. Our current plan is to restrict the majority
+of logic to occur in the controller, and for the visualization and model to handle very specialized operations. For example,
+there will be NO references to any JavaFX elements anywhere besides the Visualization. Elements will have a mirror representation
+in the ```Model``` and in the ```View```, with a clean mapping between them that is negotiated by the controller. Model objects
+will however have some indication of visual representation, but they will GUI universal in nature (e.g. a hex color String).
+
+<img src="https://media.geeksforgeeks.org/wp-content/uploads/MVC-Design-Pattern.png" width="500">
+
+Furthermore, we would like to protect objects from modification, and intend to leverage a ```getImmutable()``` interface call to achieve this. 
 
 ###Team Responsibilities
 *This section describes the program components each team member plans to take primary and secondary responsibility for and a high-level plan of how the team will complete the program.*
@@ -69,13 +85,46 @@ may decide to implement a simple popup to display any types of errors while runn
 ##Use Cases
 *Clearly show the flow of calls to public methods described in your design needed to complete each example below, indicating in some way which class contains each method called:*
 
-- The user types 'fd 50' in the command window, and sees the turtle move in the display window
- leaving a trail, and the command is added to the environment's history.
-- Note, it is not necessary to understand exactly how parsing works in order to complete this
- example, just what the result of parsing the command will be.
+- The user types 'fd 50' in the command window, and sees the turtle move in the display window leaving a trail, and the command is added to the environment's history.
+
+When the user types 'fd 50' into the command window, the text is shuttled off to the ```Controller``` in raw form. The controller
+then goes through a series of parsing/unraveling processes (very simple for a single command) to create the ```Command``` object
+representing "Move forwards by 50 pixels". The ```Controller``` then sends the command to the ```Model```, which interprets
+the ```Command``` and performs it on the ```Turtle```. The ```Turtle``` within the ```Model``` has its position updated (using
+an internal method, dependent on its current position, heading, and distance traveled), and creates a ```Line``` DrawableObject 
+(in accordance with its ```Pen``` color and thickness attributes). Once the ```Model``` has completed the command, all
+new DrawableObjects are communicated to the ```View``` (via an external API to the ```Model```) and visualized approriately.
+In this instance, there would be a line (trail) that is displayed in the window, as well as the ```Turtle``` would be cast to 
+a ```TurtleView``` object with a new position (50 pixels forwards with respect to its current heading). After the command 
+has been run, it is appended to a ```History``` object within the ```Model```, which encapsulates a List of Commands 
+(each with a ```toString()``` method for displaying to the user). The updated ```History``` Object is also communicated to the View,
+and displayed according to current user configurations.
+
 - The user sets the pen's color using the UI so subsequent lines drawn when the turtle moves use
  that color.
+ 
+ The user navigates through a series of settings/configuration options from the standard stage, which get them to an
+ option to set the pen's attributes (color and thickness). After the user makes and confirms a selection, the information
+ is then shuttled off (via an external API) to the ```Controller```, which in turn updates the appropriate pen's attributes
+ (internal instance variables) in the ```Model```. For all subsequent graphics created, the DrawableObject that is communicated 
+ between the ```Model``` and ```View``` will be created with these updated attributes.
+ 
 - Additionally, each member of the team should create two use cases of their own (and the
  appropriate example code) for the part of the project for which they intend to take responsibility.
-- Note, these can still be done as a group, but should represent a variety of areas of the overall
- project.
+ 
+ - Team case:  User types in a series of commands into the command window
+ 
+ When the user types a series of commands into command window, the visualization packages the text and sends it (via an external API)
+ to the controller. The controller then goes through a series of parsing and unraveling stages to go from a stream of text -
+ which may contain variable declaration/modification as well as boolean logic, loops, or math operations - into a series of
+ commands that can be executed on the turtle, as well as logging any variables created. Each ```Command``` Object is then 
+ sent (via an external API) to the ```Model```, where an ```Interpreter``` determines how the command operates in the Model environment.
+ 
+ As commands are executed, they are added to a ```History``` object, which encapsulates a List of Commands (each with a ```toString()``` method
+ for displaying to the user). Additionally, commands will often create a drawable object (e.g. Line or Circle). Depending
+ on the ```Turtle``` that is creating these commands, these drawable objects will have an associated color and thickness.
+ 
+ Regarding the visualization of these drawable objects, after each step (step has yet to be defined), the View will request
+ an immutable collection of drawable objects from the model (including turtle(s) and shape(s)), cast them into ```ViewableObjects``` 
+ (each with an instance variable corresponding to the ```Turtle``` that created them), and then creates these JavaFX Objects
+ in the scene at the proper location.
