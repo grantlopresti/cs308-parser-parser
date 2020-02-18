@@ -3,7 +3,29 @@
 ##Basic Design
 
 ###Introduction
-*This section describes the problem your team is trying to solve by writing this program, the primary design goals of the project (i.e., where is it most flexible), and the primary architecture of the design (i.e., what is closed and what is open). Discuss the program at a high-level (i.e., without referencing specific classes, data structures, or code).*
+
+The main problem that our team is trying to solve by writing this program is to create a development environment for the
+SLogo programming language. Our design goals include maximizing flexibility in terms of adding new types of commands/inputs,
+understood languages, appearance/aesthetics changes (interface, programmed objects like Turtles), adding new types of "objects" in the SLogo
+environment, and running/saving custom LOGO files.
+
+The overall design of our project will follow the Model-View-Controller design pattern, with APIs that define how each component
+of the program interact and communicate with each other. The Model will contain all of the data, logic, and rules of our application.
+This entails the data and methods that involve Observable Model objects, such as Turtles and Pens. The Model should be closed to
+modification (should not be able to modify how Turtles behave), but instead should be open for extension (add new types of Observable
+objects, or new types of functionality).
+
+The View will contain the graphical representation of what is contained in the Model,
+as well as other UI elements such as buttons and text boxes. These UI elements should be flexible in their appearance and location
+ (based on resource files), but closed in terms of their core functionality (should not be able to modify what a text box does, for example).
+ 
+Finally, the Controller will be split into the Logical Controller and the Visual Controller.
+The logical Controller will handle the interaction/conversion between the user input and the Model, and the Visual Controller
+will handle the interaction between the Model and its rendering in the View. Certain elements within these Controllers should
+be extendable -- for example, the Logical Controller should be able to handle different / new types of commands from different
+types of inputs (text, file, etc.) and languages, and the Visual controller should be able to handle taking in new types of
+Model objects and associating them with visual information. Other parts of these Controllers should be closed, such as *how* the Visual controller
+associates certain model objects (e.g. Turtles) to their graphical representations, and *how* the Logical Controller parses inputs.
 
 ###Overview
 *This section serves as a map of your design for other programmers to gain a general understanding of how and why the program was divided up, and how the individual parts work together to provide the desired functionality. Describe the four APIs you intend to create (their purpose with regards to the program's functionality, and how they collaborate with each other) focusing specifically on the behavior, not the internal state. Include a picture of how the components are related (these pictures can be hand drawn and scanned in, created with a standard drawing program, or screen shots from a UML design program). To keep these classes as flexible as possible, your team must describe two different implementations (i.e., data structures, file formats, etc.) and then design your method signatures so they do not reveal the specifics of either implementation option. Discuss specific classes, methods, and data structures, but not individual lines of code.*
