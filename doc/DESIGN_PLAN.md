@@ -62,6 +62,7 @@ Furthermore, we would like to protect objects from modification, and intend to l
 *Clearly describe the program's four APIs and justify your reasoning for the design of each:*
 
 ###External: between the two separate sub-groups
+
 - How you plan to separate the graphical interface from the interpreter and how you plan to let
   them communicate when necessary
 - What objects will be used for communication, making it clear:
@@ -70,6 +71,40 @@ Furthermore, we would like to protect objects from modification, and intend to l
     - what data will be encapsulated
     - what errors may be thrown
     - _Note, all of these methods will need to be public_
+
+The graphical interface will be run by the "View" portion of the MVC model. However, it will be kept seperate from the
+command interpreter to ensure a streamlined design. To achieve this, a controller will be placed as an intermediary between
+the view and the input to the graphical interface. This controller will handle the interpretation of commands and parse
+them, so that they may be executed later by the model. The communication between the view and this controller class will
+require the view elements to send the input data over to the controller method, likely through the creation of an object.
+This object and any methods used in this transfer will be apart of the external API between the View and the controller.
+
+More generally, at least 2 controller objects will be required as a means of communication for the MVC model. A controller
+will be placed in the middle of the View and the Model components to facilitate information exchange between the two, such
+as converting Model turtle objects into View turtle objects so that they are ready to be displayed. Another controller will
+be utilized to receive incoming commands, parse them, and send them over to Model. These intermediary controllers will call
+methods native to the Model and View classes and run the computational aspects, whether that be processing turtle movement
+or displaying the turtle after it has moved.
+
+Immutable information will be used to ensure that variables that stay constant do not have the chance to be altered. This
+includes a Turtle's pen color once the object has been created for instance. It also includes the Model Turtle object and 
+View Turtle object once it has been created in each iteration of the program.
+
+For data encapsulation, the Turtle object's private information will be kept in the Model, and the controller will be able
+to call the various public methods that are laid out in the Model class, but will not directly have access to the data of
+the Turtle. This is referring specifically to the Model Turtle object. The View Turtle object is another example of an
+encapsulated piece of data that will be kept hidden from the Model for example. As mentioned before, an intermediary controller
+class will handle the conversion process between Model and View Turtle objects. The Model class will not be given the data
+of the View Turtle object and vice versa. Although each class will have its own data and methods, the controller classes
+will be the ones primarily responsible for executing the desired actions on that data without directly having access to it.
+This will be achieved via the external API methods that are available.
+
+As far as errors are concerned, we would have to deal with the possibility that the API will ask for data that is not present,
+in which case a null value error will be thrown. An error will also be thrown if a given public method is fed in data that
+is inconsistent with the type that it accepts. This can happen if the user input for example is such that the parser has
+not been trained to handle it.
+
+
 ###Internal: between each sub-group and its future programmers (maintainers)
 - How you plan to provide paths for extension through interfaces, inheritance, and design patterns
  for new features you might reasonably expect to be added to the program
@@ -80,6 +115,23 @@ Furthermore, we would like to protect objects from modification, and intend to l
     - what kind of code someone will be expected to write to implement new features
     - what errors may be thrown
     - Note, while some of these methods may be public, many may be protected or package friendly
+
+
+As mentioned, we anticipate having a minimum of two controllers in our design. To allow for extension into the types of
+controllers that we will likely need, there will be a general controller interface that outlines some of the basic methods
+common to all the controllers. This can include, for example, a data transfer methods. Inheritance can be utilized for
+extending classes of Turtle objects, as we will need a View Turtle object and Model Turtle object. 
+
+There are many parts of the code that will be closed to programmers for modification and others that are open to improvement.
+THe View class for example will likely be closed, as once the task of displaying a Turtle object has been complete, it can 
+be used for any future Turtles created. Other elements such as the parser class for example cannot necessarily be closed.
+New commands and structures may be added in the future to the program that will need to be parsed, which requires new capabilities.
+The Model class also will be made flexible to incorporate future changes such as multiple Turtles. For coders to write new features,
+we are hoping to have it sufficient for them to add existing methods to the selection of classes we have, and avoid writing
+new classes altogether. This will allow the overall structure of the program to remain lean and allow for change as well.
+
+Errors thrown can include type incompatibilities when calling methods inside a class on certain objects that are not of
+the correct type.
 
 
 ##Use Cases
