@@ -58,6 +58,19 @@ Furthermore, we would like to protect objects from modification, and intend to l
 ###Team Responsibilities
 *This section describes the program components each team member plans to take primary and secondary responsibility for and a high-level plan of how the team will complete the program.*
 
+- Alex Xu is responsible for design and implementation of the Model (e.g. ```Turtle``` and ```Pen```, subject to change). 
+Alex is also responsible for providing support on the ```LogicController``` that handles information exchange between the ```View``` and ```Model```
+
+- Amjad Syedibrahim is responsible for design and implementation of the ```LogicController``` that serves as an intermediary shuttling information
+from the ```View``` to the ```Model```. This portion will involve two stages, a ```Parser``` to convert text input (via file or ```TextBox```)
+into a ```Command``` Object that can be executed on the ```Model```.
+
+- Grant LoPresti is responsible for the design and implementation of the ```FrontEnd``` (View) of the program. He will additionally
+offer support on other portions and help guide the exchange of information between the ```LogicController``` and ```ViewController```.
+
+- Max Smith is responsible for the design and implementation of the ```ViewController```, which will translate updates in the
+```Model``` to visual objects displayed to the User.
+
 ##API Design
 *Clearly describe the program's four APIs and justify your reasoning for the design of each:*
 
