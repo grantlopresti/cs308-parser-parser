@@ -1,8 +1,8 @@
 # DESIGN_PLAN.md
 
-##Basic Design
+## Basic Design
 
-###Introduction
+### Introduction
 
 The main problem that our team is trying to solve by writing this program is to create a development environment for the
 SLogo programming language. Our design goals include maximizing flexibility in terms of adding new types of commands/inputs,
@@ -27,7 +27,7 @@ types of inputs (text, file, etc.) and languages, and the Visual controller shou
 Model objects and associating them with visual information. Other parts of these Controllers should be closed, such as *how* the Visual controller
 associates certain model objects (e.g. Turtles) to their graphical representations, and *how* the Logical Controller parses inputs.
 
-###Overview
+### Overview
 
 The program is divided up into three major components: The Model, View, and Controller. These are the three major components
 of the program, and will communicate with teach other through interfaces (APIs). The APIs that define how each component
@@ -71,7 +71,13 @@ These two examples demonstrate the type of flexibility we intend to have in our 
 implementation details (keeping it SHY). This way, developers can update/change the implementation of specific components of the
 program without affecting the API and the functionality of the rest of the program.
 
-###User Interface
+Overall Flow:
+
+![](Diagram1.png)
+
+![](Diagram2.png)
+
+### User Interface
 
 The user will interact with the program in two phases. The first point of contact is a splash/startup screen where the user
 has various configuration options for how they want the visualization to appear (e.g. background, pane information, turtle
@@ -97,7 +103,7 @@ may decide to implement a simple popup to display any types of errors while runn
 
 <img src="https://i.imgur.com/ReAJrfJ.jpg" width="500">
 
-###Design Details
+### Design Details
 
 APIs Include:
 
@@ -148,7 +154,7 @@ Internal (Within a component/package):
         * getCommandType()
         * toString()
     
-###API as Code
+### API as Code
 
 Our API separates our project into 4 distinct packages, controllers.logicalcontroller
 , controllers.visualcontroller, model, and view. Our API as Code includes the following Classes
@@ -173,7 +179,7 @@ Our API separates our project into 4 distinct packages, controllers.logicalcontr
   - view
     - Visible (Interface)
 
-###Design Considerations
+### Design Considerations
 
 A major design discussion our group has discussed at length is how to organize the general flow of information in the program.
 We believe that a classic MVC model is ideal for the general programmatic design. Our current plan is to restrict the majority
@@ -194,7 +200,7 @@ is to have JavaFX binding between the Model and View to remove the intermediate 
 with the technology as well as wanting to minimize logic processed in the Model and View, we elected to have a  controller
 serve as the intermediary.
 
-###Team Responsibilities
+### Team Responsibilities
 
 - Alex Xu is responsible for design and implementation of the Model (e.g. ```Turtle``` and ```Pen```, subject to change). 
 Alex is also responsible for providing support on the ```LogicController``` that handles information exchange between the ```View``` and ```Model```
@@ -209,11 +215,11 @@ offer support on other portions and help guide the exchange of information betwe
 - Max Smith is responsible for the design and implementation of the ```ViewController```, which will translate updates in the
 ```Model``` to visual objects displayed to the User.
 
-##API Design
+## API Design
 
-###External: between the two separate sub-groups
+### External: between the two separate sub-groups
 
-The graphical interface will be run by the "View" portion of the MVC model. However, it will be kept seperate from the
+The graphical interface will be run by the "View" portion of the MVC model. However, it will be kept separate from the
 command interpreter to ensure a streamlined design. To achieve this, a controller will be placed as an intermediary between
 the view and the input to the graphical interface. This controller will handle the interpretation of commands and parse
 them, so that they may be executed later by the model. The communication between the view and this controller class will
@@ -245,7 +251,7 @@ in which case a null value error will be thrown. An error will also be thrown if
 is inconsistent with the type that it accepts. This can happen if the user input for example is such that the parser has
 not been trained to handle it.
 
-###Internal: between each sub-group and its future programmers (maintainers)
+### Internal: between each sub-group and its future programmers (maintainers)
 
 As mentioned, we anticipate having a minimum of two controllers in our design. To allow for extension into the types of
 controllers that we will likely need, there will be a general controller interface that outlines some of the basic methods
@@ -263,7 +269,7 @@ new classes altogether. This will allow the overall structure of the program to 
 Errors thrown can include type incompatibilities when calling methods inside a class on certain objects that are not of
 the correct type.
 
-##Use Cases
+## Use Cases
 - The user types 'fd 50' in the command window, and sees the turtle move in the display window leaving a trail, and the command is added to the environment's history.
 
 When the user types 'fd 50' into the command window, the text is shuttled off to the ```Controller``` in raw form. The controller
@@ -287,9 +293,6 @@ and displayed according to current user configurations.
  is then shuttled off (via an external API) to the ```Controller```, which in turn updates the appropriate pen's attributes
  (internal instance variables) in the ```Model```. For all subsequent graphics created, the DrawableObject that is communicated 
  between the ```Model``` and ```View``` will be created with these updated attributes.
- 
-- Additionally, each member of the team should create two use cases of their own (and the
- appropriate example code) for the part of the project for which they intend to take responsibility.
  
  - Team case:  User types in a series of commands into the command window
  
@@ -335,3 +338,18 @@ and displayed according to current user configurations.
    
    Additionally, there will be options to configure specific components of the interfaces style, and these configurations
    will edit the CSS/FXML styling file associated with the current active theme. 
+   
+   - Team case: User wants to create a new type of object (like a Penguin)
+   
+   For this use case, the user would need to create a new concrete subclass of the ModelObject abstract class. This allows for
+   inheritance of the ModelObject methods, which are defined in the ModelInterface Java Interface (API) that the abstract class
+   implements. Then a new visual binding (the penguin's image, for example), will need to be created to allow for the Visualizer to
+   create a visualization of the this new object.
+   
+   -The user wants to disable the Turtle's pen
+   
+   To disable the Turtle's pen, the user types in the appropriate command "DISABLE PEN", for example. The GUI input will
+   provide the Logical Controller with this input, which parses the command and uses internal APIs (command objects) to determine
+   what action to perform on the Model. Then the ModelObject API is used to disable the Pen in in the ModelObject/Turtle.
+   Then the Visual Controller will obtain the status of this Pen through the ModelObject API, and disable line drawing in
+   the View via the View API.
