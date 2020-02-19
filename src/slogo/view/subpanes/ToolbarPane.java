@@ -9,11 +9,17 @@ public class ToolbarPane implements SubPane {
   @Override
   public ToolBar getNode() {
     return new ToolBar(new Button("New"),
-        new Button("Open"),
+        new Button("Load File"),
+        new Button("Load & Run"),
         new Separator(),
-        new Button("Cut"),
-        new Button("Copy"),
-        new Button("Paste"));
+        new Button("Background Color"),
+        new Button("Turtle Image"),
+        new Button("Pen Color"),
+        new Button("Clear Screen"),
+        new Separator(),
+        new Button("Language"),
+        new Separator(),
+        new Button("Help/Info"));
   }
 
 }

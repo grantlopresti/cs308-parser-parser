@@ -67,7 +67,8 @@ public class SlogoView extends Application {
   private TabPane getRightPane() {
     TabPane tabPaneRight = new TabPane();
     tabPaneRight.getTabs().addAll(new Tab("Data/Variables"),
-        new Tab("Command History"));
+        new Tab("Command History"),
+        new Tab("Error Handler"));
     return tabPaneRight;
   }
 
@@ -92,12 +93,12 @@ public class SlogoView extends Application {
   }
 
   private TabPane getLeftPane() {
-    TreeView<String> tv = createProjectsTree();
+    TreeView<String> projectsTree = createProjectsTree();
 
     TabPane tabPaneLeft = new TabPane();
-    Tab tab1 = new Tab("Project List");
-    tab1.setContent(tv);
-    tabPaneLeft.getTabs().addAll(tab1, new Tab("Explorer"));
+    Tab projectsTab = new Tab("Project List");
+    projectsTab.setContent(projectsTree);
+    tabPaneLeft.getTabs().addAll(new Tab("Defined Functions"), projectsTab;
     return tabPaneLeft;
   }
 
