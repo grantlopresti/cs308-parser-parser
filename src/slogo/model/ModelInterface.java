@@ -1,7 +1,8 @@
 package slogo.model;
 
 /**
- * Interface that dictates public methods that all ModelObjects are expected to support.
+ * Interface that dictates public methods that all ModelObjects are expected to support. This is the API for the model.
+ * Assumptions Include: Pen is always at the same location of the ModelObject
  * @author Alex Xu
  */
 public interface ModelInterface {
@@ -23,6 +24,23 @@ public interface ModelInterface {
      * @return double representing degrees
      */
     public double getHeading();
+
+    /**
+     * Returns whether the Pen is Active or Not.
+     * @return boolean representing pen state.
+     */
+    public boolean isPenActive();
+
+    /**
+     * Returns the thickness of the pen
+     * @return double representing the thickness of the Pen.
+     */
+    public double getPenThickness();
+
+    /**
+     * Sets the thickness of a Pen with the specified value
+     */
+    public void setPenThickness(double thickness);
 
     /**
      * Moves the ModelObject by a distance
