@@ -103,7 +103,7 @@ may decide to implement a simple popup to display any types of errors while runn
 
 Our API separates our project into 4 distinct packages, controllers.logicalcontroller
 , controllers.visualcontroller, model, and view. Our API as Code includes the following Classes
- and Hierchial Structure that can be viewed more in depth by exploring the classes and interfaces
+ and Hierarchical Structure that can be viewed more in depth by exploring the classes and interfaces
   within the mentioned packages.
   - controllers
     - logicalcontroller
@@ -131,7 +131,8 @@ We believe that a classic MVC model is ideal for the general programmatic design
 of logic to occur in the controller, and for the visualization and model to handle very specialized operations. For example,
 there will be NO references to any JavaFX elements anywhere besides the Visualization. Elements will have a mirror representation
 in the ```Model``` and in the ```View```, with a clean mapping between them that is negotiated by the controller. Model objects
-will however have some indication of visual representation, but they will GUI universal in nature (e.g. a hex color String).
+will however have some indication of visual representation, but their communication with the GUI
+ will be universal in nature (e.g. a hex color String).
 
 <img src="https://media.geeksforgeeks.org/wp-content/uploads/MVC-Design-Pattern.png" width="500">
 
