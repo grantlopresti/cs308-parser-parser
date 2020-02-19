@@ -2,8 +2,8 @@ package slogo.view;
 
 import java.util.List;
 import java.util.Queue;
-import slogo.visualcontroller.VisualCommand;
-import slogo.visualcontroller.VisualObject;
+import slogo.controllers.visualcontroller.VisualCommand;
+import slogo.controllers.visualcontroller.VisualObject;
 
 public interface Visible {
 
@@ -60,4 +60,15 @@ public interface Visible {
    */
   void appendMultipleCommands(Queue<VisualCommand> commands);
 
+  /**
+   * Feel free to completely change this code or delete it entirely.
+   */
+  class Main {
+      /**
+       * Start of the program.
+       */
+      public static void main (String[] args) {
+          System.out.println("Hello world");
+      }
+  }
 }

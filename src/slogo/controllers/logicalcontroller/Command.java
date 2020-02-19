@@ -1,6 +1,4 @@
-package slogo.Controllers.LogicalController;
-
-import java.util.ArrayList;
+package slogo.controllers.logicalcontroller;
 
 public interface Command {
 
