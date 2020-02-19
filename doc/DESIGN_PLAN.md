@@ -71,6 +71,9 @@ These two examples demonstrate the type of flexibility we intend to have in our 
 implementation details (keeping it SHY). This way, developers can update/change the implementation of specific components of the
 program without affecting the API and the functionality of the rest of the program.
 
+Overall Flow:
+
+
 ###User Interface
 
 The user will interact with the program in two phases. The first point of contact is a splash/startup screen where the user
