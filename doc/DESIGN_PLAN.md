@@ -339,3 +339,11 @@ and displayed according to current user configurations.
    inheritance of the ModelObject methods, which are defined in the ModelInterface Java Interface (API) that the abstract class
    implements. Then a new visual binding (the penguin's image, for example), will need to be created to allow for the Visualizer to
    create a visualization of the this new object.
+   
+   -The user wants to disable the Turtle's pen
+   
+   To disable the Turtle's pen, the user types in the appropriate command "DISABLE PEN", for example. The GUI input will
+   provide the Logical Controller with this input, which parses the command and uses internal APIs (command objects) to determine
+   what action to perform on the Model. Then the ModelObject API is used to disable the Pen in in the ModelObject/Turtle.
+   Then the Visual Controller will obtain the status of this Pen through the ModelObject API, and disable line drawing in
+   the View via the View API.
