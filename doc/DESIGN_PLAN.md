@@ -77,6 +77,8 @@ will however have some indication of visual representation, but they will GUI un
 
 Furthermore, we would like to protect objects from modification, and intend to leverage a ```getImmutable()``` interface call to achieve this. 
 
+To ensure
+
 ###Team Responsibilities
 *This section describes the program components each team member plans to take primary and secondary responsibility for and a high-level plan of how the team will complete the program.*
 
@@ -215,3 +217,31 @@ and displayed according to current user configurations.
  an immutable collection of drawable objects from the model (including turtle(s) and shape(s)), cast them into ```ViewableObjects``` 
  (each with an instance variable corresponding to the ```Turtle``` that created them), and then creates these JavaFX Objects
  in the scene at the proper location.
+ 
+  - Team case: User loads in text from file
+  
+  The procedure for executing all text as commands works towards the same goal - parsing a series of text into singularly
+  executable commands, and maintaining a list of variables to display to the user. The text is sent from the GUI to the 
+  LogicController, which goes through a two phase parsing process to first unravel the text into single line executables,
+  and then interprets each executable and executes a method on some portion of the model.
+  
+  As commands are run on the model, new GUI nodes must be configured. These new nodes to be created (e.g. circle, line,
+  turtle in new position) are added to a Queue in the ```ViewController```, and then fed into the view according to a configured animation
+  rate. For the first spring, this rate is instantaneous but in future sprints, it would be possible to create an
+  animation rate that processes new nodes every set period of time.
+  
+   - Team case: User types in "clearscreen"
+   
+   When the user types "clearscreen", the command is sent to the ```LogicController``` which parses/interprets the command
+   and sends it off to the model. The model has a cache of all Objects (JavaFX nodes) created by a single turtle. 
+   These nodes will then be passed on to the ViewController, which will instruct the ```View``` to remove these nodes from
+   the view.
+   
+   - Team case: User wants to reconfigure color theme of the GUI
+   
+   Selecting a configuration button on the GUI will populate a selection to configure the GUI theme (e.g. winter, fire, fall, etc.).
+   When the user selects a theme, the information is shuttled to the ViewController (with a potential intermediate stop
+   in the LogicController), which then changes the current GUI CSS/FXML styling options. 
+   
+   Additionally, there will be options to configure specific components of the interfaces style, and these configurations
+   will edit the CSS/FXML styling file associated with the current active theme. 
