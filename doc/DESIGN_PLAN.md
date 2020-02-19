@@ -213,7 +213,7 @@ offer support on other portions and help guide the exchange of information betwe
 
 ###External: between the two separate sub-groups
 
-The graphical interface will be run by the "View" portion of the MVC model. However, it will be kept seperate from the
+The graphical interface will be run by the "View" portion of the MVC model. However, it will be kept separate from the
 command interpreter to ensure a streamlined design. To achieve this, a controller will be placed as an intermediary between
 the view and the input to the graphical interface. This controller will handle the interpretation of commands and parse
 them, so that they may be executed later by the model. The communication between the view and this controller class will
@@ -288,9 +288,6 @@ and displayed according to current user configurations.
  (internal instance variables) in the ```Model```. For all subsequent graphics created, the DrawableObject that is communicated 
  between the ```Model``` and ```View``` will be created with these updated attributes.
  
-- Additionally, each member of the team should create two use cases of their own (and the
- appropriate example code) for the part of the project for which they intend to take responsibility.
- 
  - Team case:  User types in a series of commands into the command window
  
  When the user types a series of commands into command window, the visualization packages the text and sends it (via an external API)
@@ -335,3 +332,18 @@ and displayed according to current user configurations.
    
    Additionally, there will be options to configure specific components of the interfaces style, and these configurations
    will edit the CSS/FXML styling file associated with the current active theme. 
+   
+   - Team case: User wants to create a new type of object (like a Penguin)
+   
+   For this use case, the user would need to create a new concrete subclass of the ModelObject abstract class. This allows for
+   inheritance of the ModelObject methods, which are defined in the ModelInterface Java Interface (API) that the abstract class
+   implements. Then a new visual binding (the penguin's image, for example), will need to be created to allow for the Visualizer to
+   create a visualization of the this new object.
+   
+   -The user wants to disable the Turtle's pen
+   
+   To disable the Turtle's pen, the user types in the appropriate command "DISABLE PEN", for example. The GUI input will
+   provide the Logical Controller with this input, which parses the command and uses internal APIs (command objects) to determine
+   what action to perform on the Model. Then the ModelObject API is used to disable the Pen in in the ModelObject/Turtle.
+   Then the Visual Controller will obtain the status of this Pen through the ModelObject API, and disable line drawing in
+   the View via the View API.
