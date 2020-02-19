@@ -73,6 +73,9 @@ program without affecting the API and the functionality of the rest of the progr
 
 Overall Flow:
 
+![](Diagram1.png)
+
+![](Diagram2.png)
 
 ###User Interface
 
