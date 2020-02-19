@@ -150,6 +150,29 @@ Internal (Within a component/package):
     
 ###API as Code
 
+Our API separates our project into 4 distinct packages, controllers.logicalcontroller
+, controllers.visualcontroller, model, and view. Our API as Code includes the following Classes
+ and Hierchial Structure that can be viewed more in depth by exploring the classes and interfaces
+  within the mentioned packages.
+  - controllers
+    - logicalcontroller
+        - Command (Class)
+    - visualcontroller
+        - VisualCommand (Class)
+        - VisualInterface (Interface)
+        - VisualObject (Abstract Class)
+        - VisualTurtle (Class)
+  - exceptions
+    - InvalidCommandException
+    - InvalidXMLException
+  - model
+    - ModelInterface (Class)
+    - ModelObject (Abstract Class)
+    - ModelTurtle (Class)
+    - Pen (Class)
+  - view
+    - Visible (Interface)
+
 ###Design Considerations
 
 A major design discussion our group has discussed at length is how to organize the general flow of information in the program.
@@ -163,7 +186,12 @@ will however have some indication of visual representation, but they will GUI un
 
 Furthermore, we would like to protect objects from modification, and intend to leverage a ```getImmutable()``` interface call to achieve this. 
 
-To ensure
+To ensure integrity and encapsulation with regards to the flow of information, we are planning on implementing two types
+of Controllers. One ```LogicController``` to massage and translate information that the user inputs into commmands on the model, as well
+as a ```ViewController``` to translate  model updates into new/updated nodes in the ```View```. An alternate design we considered
+is to have JavaFX binding between the Model and View to remove the intermediate ```ViewController```. However, due to inexperience
+with the technology as well as wanting to minimize logic processed in the Model and View, we elected to have a  controller
+serve as the intermediary.
 
 ###Team Responsibilities
 
