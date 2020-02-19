@@ -77,7 +77,12 @@ will however have some indication of visual representation, but they will GUI un
 
 Furthermore, we would like to protect objects from modification, and intend to leverage a ```getImmutable()``` interface call to achieve this. 
 
-To ensure
+To ensure integrity and encapsulation with regards to the flow of information, we are planning on implementing two types
+of Controllers. One ```LogicController``` to massage and translate information that the user inputs into commmands on the model, as well
+as a ```ViewController``` to translate  model updates into new/updated nodes in the ```View```. An alternate design we considered
+is to have JavaFX binding between the Model and View to remove the intermediate ```ViewController```. However, due to inexperience
+with the technology as well as wanting to minimize logic processed in the Model and View, we elected to have a  controller
+serve as the intermediary.
 
 ###Team Responsibilities
 *This section describes the program components each team member plans to take primary and secondary responsibility for and a high-level plan of how the team will complete the program.*
