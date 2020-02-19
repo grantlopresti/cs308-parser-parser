@@ -154,7 +154,7 @@ Internal (Within a component/package):
         * getCommandType()
         * toString()
     
-###API as Code
+### API as Code
 
 Our API separates our project into 4 distinct packages, controllers.logicalcontroller
 , controllers.visualcontroller, model, and view. Our API as Code includes the following Classes
