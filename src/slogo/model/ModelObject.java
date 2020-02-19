@@ -1,44 +1,89 @@
 package slogo.model;
 
 /**
- * Interface that dictates public methods that all ModelObjects are expected to support.
+ * Abstract class that dictates encapsulation and logic for all ModelObjects.
  * @author Alex Xu
  */
-public interface ModelObject{
+public abstract class ModelObject implements ModelInterface{
+    private double xCoordinate;
+    private double yCoordinate;
+    private double heading;
 
     /**
-     * Returns the X location of the ModelObject, depending on implementation
-     * @return double representing X coordinate
+     * Default Constructor for all ModelObjects
      */
-    public double getX();
+    public ModelObject(){
+        xCoordinate = 0.0;
+        yCoordinate = 0.0;
+        heading = 0.0;
+    }
 
     /**
-     * Returns the Y location of the ModelObject, depending on the implementation
-     * @return double representing Y coordinate
+     * Overrides method defined in the ModelObject Interface. Returns the X location of the ModelObjects (Center of ModelObjects).
+     * This coordinate is not necessarily a direct Pixel location.
+     * @return int representing X coordinate in an imaginary plane
      */
-    public double getY();
+    @Override
+    public double getX() {
+        return xCoordinate;
+    }
 
     /**
-     * Returns heading (in degrees) of the ModelObject
-     * @return double representing degrees
+     * Overrides method defined in the ModelObject Interface. Returns the Y location of the ModelObjects (Center of ModelObjects).
+     * This coordinate is not necessarily a direct Pixel location.
+     * @return int representing Y coordinate in an imaginary plane
      */
-    public double getHeading();
+    @Override
+    public double getY() {
+        return yCoordinate;
+    }
 
     /**
-     * Moves the ModelObject by a distance
-     * @param distance to move the ModelObject
+     * Overrides method defined in the ModelObject Interface. Returns the Heading of the ModelObjects (in degrees)
+     * @return double representing the heading value
      */
-    public void move(double distance);
+    @Override
+    public double getHeading() {
+        return heading;
+    }
 
     /**
-     * Sets the Heading to the specified degree
-     * @param degree to set the ModelObject heading to
+     * Overrides method defined in the ModelObject Interface. Moves the ModelObjects by the specified distance.
+     * @param distance to move the ModelObjects
      */
-    public void setHeading(double degree);
+    @Override
+    public void move(double distance) {
+        xCoordinate += calcX(distance);
+        yCoordinate += calcY(distance);
+    }
 
     /**
-     * Turns the ModelObject (heading) by the specified degree
-     * @param degree to turn the ModelObject by
+     * Overrides method defined in the ModelObject Interface. Sets the heading of the ModelObjects to the specified degree.
+     * @param degree to set the ModelObjects heading to
      */
-    public void turn(double degree);
+    @Override
+    public void setHeading(double degree) {
+        heading = degree;
+    }
+
+    /**
+     * Overrides method defined in the ModelObject Interface. Turns the ModelObjects (heading) by the specified degree.
+     * @param degree to turn the ModelObjects by
+     */
+    @Override
+    public void turn(double degree) {
+        heading += degree;
+    }
+
+    private double calcX(double distance){
+        double radians = Math.toRadians(heading);
+        double cosValue = Math.cos(radians);
+        return distance*cosValue;
+    }
+
+    private double calcY(double distance){
+        double radians = Math.toRadians(heading);
+        double sinValue = Math.sin(radians);
+        return distance*sinValue;
+    }
 }

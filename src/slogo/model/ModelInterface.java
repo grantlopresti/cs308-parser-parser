@@ -1,0 +1,44 @@
+package slogo.model;
+
+/**
+ * Interface that dictates public methods that all ModelObjects are expected to support.
+ * @author Alex Xu
+ */
+public interface ModelInterface {
+
+    /**
+     * Returns the X location of the ModelObject, depending on implementation
+     * @return double representing X coordinate
+     */
+    public double getX();
+
+    /**
+     * Returns the Y location of the ModelObject, depending on the implementation
+     * @return double representing Y coordinate
+     */
+    public double getY();
+
+    /**
+     * Returns heading (in degrees) of the ModelObject
+     * @return double representing degrees
+     */
+    public double getHeading();
+
+    /**
+     * Moves the ModelObject by a distance
+     * @param distance to move the ModelObject
+     */
+    public void move(double distance);
+
+    /**
+     * Sets the Heading to the specified degree
+     * @param degree to set the ModelObject heading to
+     */
+    public void setHeading(double degree);
+
+    /**
+     * Turns the ModelObject (heading) by the specified degree
+     * @param degree to turn the ModelObject by
+     */
+    public void turn(double degree);
+}
