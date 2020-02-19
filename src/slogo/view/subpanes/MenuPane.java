@@ -8,7 +8,7 @@ import javafx.scene.control.SeparatorMenuItem;
 public class MenuPane implements SubPane {
 
   @Override
-  public MenuBar getPane() {
+  public MenuBar getNode() {
     MenuBar menuBar = new MenuBar();
     Menu fileMenu = new Menu("File");
     fileMenu.getItems().addAll(new MenuItem("New"),
