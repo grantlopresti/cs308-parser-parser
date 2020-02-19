@@ -99,6 +99,55 @@ may decide to implement a simple popup to display any types of errors while runn
 
 ###Design Details
 
+APIs Include:
+
+External (Interacts with the Controller):
+
+1. ModelObject/Turtle API - 
+    * Thus API is used by the Visual and Logical controllers to interact with the "model" component of the program.
+    * The logical controller interacts with this API to manipulate the objects in the model with the provided API as defined
+    in the ModelInterface Java Interface.
+        * Methods include:
+            * setPenThickness(double thickness);
+            * move(double distance);
+            * setHeading(double degree);
+            * turn(double degree);
+    * The visual controller interacts with this API to create VisualObjects in the model with the provided API as defined by the ModelInterface.
+        * Methods include:
+            * getX();
+            * getY();
+            * getHeading();
+            * isPenActive();
+            * getPenThickness();
+2. ViewObject API
+    * This external API is used by the Visual controller to manipulate objects in the View.
+    * Methods include:
+        * setImage();
+        * setWidth();
+        * setColor();
+
+Internal (Within a component/package):
+
+1. Pen API
+    * This is an internal API used in the model component to provide additional abstraction.
+    * The ModelObject / Turtle uses this API to communicate with its Pen.
+    * Methods include:
+        * setThickness();
+        * isActive();
+        * getThickness();
+2. View API
+    * This is an internal API that is used by the View/ViewManager to update certain aesthetics.
+    * Methods planned include:
+        * setBGColor()
+        * setPanelLocation()
+        * setImage()
+3. Command API
+    * This is an internal API used by the Logical controller to handle command types
+    * Planned methods include:
+        * getValue()
+        * getCommandType()
+        * toString()
+    
 ###API as Code
 
 Our API separates our project into 4 distinct packages, controllers.logicalcontroller
@@ -163,15 +212,6 @@ offer support on other portions and help guide the exchange of information betwe
 
 ###External: between the two separate sub-groups
 
-- How you plan to separate the graphical interface from the interpreter and how you plan to let
-  them communicate when necessary
-- What objects will be used for communication, making it clear:
-    - how needed information will get where it is needed
-    - what information will be immutable
-    - what data will be encapsulated
-    - what errors may be thrown
-    - _Note, all of these methods will need to be public_
-
 The graphical interface will be run by the "View" portion of the MVC model. However, it will be kept seperate from the
 command interpreter to ensure a streamlined design. To achieve this, a controller will be placed as an intermediary between
 the view and the input to the graphical interface. This controller will handle the interpretation of commands and parse
@@ -204,18 +244,7 @@ in which case a null value error will be thrown. An error will also be thrown if
 is inconsistent with the type that it accepts. This can happen if the user input for example is such that the parser has
 not been trained to handle it.
 
-
 ###Internal: between each sub-group and its future programmers (maintainers)
-- How you plan to provide paths for extension through interfaces, inheritance, and design patterns
- for new features you might reasonably expect to be added to the program
-- What subclasses or implementing classes will be used to extend each part to add new features
-, making it clear:
-    - what parts of your code you expect to be closed to modification
-    - what freedom future coders will have in choosing how to implement new features
-    - what kind of code someone will be expected to write to implement new features
-    - what errors may be thrown
-    - Note, while some of these methods may be public, many may be protected or package friendly
-
 
 As mentioned, we anticipate having a minimum of two controllers in our design. To allow for extension into the types of
 controllers that we will likely need, there will be a general controller interface that outlines some of the basic methods
@@ -233,10 +262,7 @@ new classes altogether. This will allow the overall structure of the program to 
 Errors thrown can include type incompatibilities when calling methods inside a class on certain objects that are not of
 the correct type.
 
-
 ##Use Cases
-*Clearly show the flow of calls to public methods described in your design needed to complete each example below, indicating in some way which class contains each method called:*
-
 - The user types 'fd 50' in the command window, and sees the turtle move in the display window leaving a trail, and the command is added to the environment's history.
 
 When the user types 'fd 50' into the command window, the text is shuttled off to the ```Controller``` in raw form. The controller
