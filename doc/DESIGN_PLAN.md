@@ -28,10 +28,50 @@ Model objects and associating them with visual information. Other parts of these
 associates certain model objects (e.g. Turtles) to their graphical representations, and *how* the Logical Controller parses inputs.
 
 ###Overview
-*This section serves as a map of your design for other programmers to gain a general understanding of how and why the program was divided up, and how the individual parts work together to provide the desired functionality. Describe the four APIs you intend to create (their purpose with regards to the program's functionality, and how they collaborate with each other) focusing specifically on the behavior, not the internal state. Include a picture of how the components are related (these pictures can be hand drawn and scanned in, created with a standard drawing program, or screen shots from a UML design program). To keep these classes as flexible as possible, your team must describe two different implementations (i.e., data structures, file formats, etc.) and then design your method signatures so they do not reveal the specifics of either implementation option. Discuss specific classes, methods, and data structures, but not individual lines of code.*
+
+The program is divided up into three major components: The Model, View, and Controller. These are the three major components
+of the program, and will communicate with teach other through interfaces (APIs). The APIs that define how each component
+of the program interact and communicate with each other. The Model will contain all of the data, logic, and rules of our application.
+This entails the data and methods that involve Observable Model objects, such as Turtles and Pens. The Model should be closed to
+modification (should not be able to modify how Turtles behave), but instead should be open for extension (add new types of Observable
+objects, or new types of functionality).
+
+As described in the introduction, the Model will handle the encapsulation of data and logic that governs the "model" of the program,
+which includes object including the Turtle and the Pen. The View of of the program will be responsible for rendering the images
+that the end user sees on the screen. Finally, the Controllers (logical and visual) will be responsible for the "intermediate"
+interactions between the user input (commands) and the model, and between the model and the front-end View. The controller will
+interact with these different components via external APIs. Public methods that dictate the behavior *within* certain packages
+will be handled by the internal APIs.
+
+**The APIs we intend to create include:**
+
+External (Interacts with the Controller):
+1. ModelObject/Turtle API - Used by the Visual and Logical controllers
+2. ViewObject API - Used by the Visual controller
+
+Internal (Within a component/package):
+1. Pen API - Used within the model component
+2. View API - Used within the View component to update images and aesthetics
+3. Command API - Used within the Logical controller to handle command types
+
+An example discussed here would be the ModelObject / Turtle external API. In this case, there can be many different implementations
+of the turtle's features. By using an API that does not reveal the implementation details, we aim to make our code as 
+clean and flexible as possible. For example, in the API we plan to include a ```move()``` method that the Logical controller
+may interact with. This method can be implemented internally via many different methods, including keeping track of polar 
+coordinates based off an angle and distance value. Once ```getX()``` and ```getY()``` are used, these polar coordinates may be
+converted to the Cartesian plane. Another implementation is that the ```move()``` method may automatically calculate updates
+to X and Y cartesian coordinates internally, and do the conversion work "up front" in the ```move()``` method rather than in the
+getter methods. In any case, the point is that the method signatures in the API will **not** be affected by these changes.
+
+In another example also in the ModelObject/Turtle external API is the Pen feature. Whether the Pen is intrinsic to the ModelObject/Turtle
+itself (is a set of properties that it stores internally), or further abstracted to be its own separate class (an instance object
+that the ModelObject/Turtle has), does not affect the methods defined in the API, including  ```isPenActive()```, ```getPenThickness()```, etc.
+
+These two examples demonstrate the type of flexibility we intend to have in our program through the use of APIs that obscure
+implementation details (keeping it SHY). This way, developers can update/change the implementation of specific components of the
+program without affecting the API and the functionality of the rest of the program.
 
 ###User Interface
-*This section describes how the user will interact with your program (keep it simple to start). Describe the overall appearance of program's user interface components and how users interact with these components (especially those specific to your program, i.e., means of input other than menus or toolbars). Include one or more pictures of the user interface (these pictures can be hand drawn and scanned in, created with a standard drawing program, or screen shots from a dummy program that serves as a exemplar). Also describe any erroneous situations that are reported to the user (i.e., bad input data, empty data, etc.). This section should go into as much detail as necessary to cover all your team wants to say.*
 
 The user will interact with the program in two phases. The first point of contact is a splash/startup screen where the user
 has various configuration options for how they want the visualization to appear (e.g. background, pane information, turtle
@@ -58,13 +98,10 @@ may decide to implement a simple popup to display any types of errors while runn
 <img src="https://i.imgur.com/ReAJrfJ.jpg" width="500">
 
 ###Design Details
-*This section describes each API introduced in the Overview in detail (as well as any other sub-components that may be needed but are not significant to include in a high-level description of the program). Describe how each API supports specific features given in the assignment specification, what resources it might use, how it is intended to be used, and how it could be extended to include additional requirements (from the assignment specification or discussed by your team). Finally, justify the decision to create each class introduced with respect to the design's key goals, principles, and abstractions. This section should go into as much detail as necessary to cover all your team wants to say.*
 
 ###API as Code
-*Your APIs should be written as Java interfaces, types that cannot contain instance variables or private methods, in appropriate packages. These should be Java code files that compile and contain extensive comments to explain the purpose of each interface and each method within the interface (note this code can be generated directly from a UML diagram). Include any Exceptions you plan to throw because of errors that might occur within your methods. Note, this does not require that all of these types will remain as interfaces in the final implementation, just that the goal is for you to focus on each type's behavior and purpose. Also include the steps needed to complete the Use Cases below to help make your ideas more concrete.*
 
 ###Design Considerations
-*This section describes any issues which need to be addressed or resolved before attempting to devise a complete design solution. Include any design decisions that the group discussed at length and describe at least one alternative in detail (including pros and cons from all sides of the discussion). Describe any assumptions or dependencies regarding the program that impact the overall design. This section should go into as much detail as necessary to cover all your team wants to say.*
 
 A major design discussion our group has discussed at length is how to organize the general flow of information in the program.
 We believe that a classic MVC model is ideal for the general programmatic design. Our current plan is to restrict the majority
@@ -85,7 +122,6 @@ with the technology as well as wanting to minimize logic processed in the Model 
 serve as the intermediary.
 
 ###Team Responsibilities
-*This section describes the program components each team member plans to take primary and secondary responsibility for and a high-level plan of how the team will complete the program.*
 
 - Alex Xu is responsible for design and implementation of the Model (e.g. ```Turtle``` and ```Pen```, subject to change). 
 Alex is also responsible for providing support on the ```LogicController``` that handles information exchange between the ```View``` and ```Model```
@@ -101,7 +137,6 @@ offer support on other portions and help guide the exchange of information betwe
 ```Model``` to visual objects displayed to the User.
 
 ##API Design
-*Clearly describe the program's four APIs and justify your reasoning for the design of each:*
 
 ###External: between the two separate sub-groups
 
