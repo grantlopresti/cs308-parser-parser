@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.text.Font?>
 <GridPane xmlns:fx="http://javafx.com/fxml" hgap="10" vgap="10"
-  fx:controller="slogo.view.Home" fx:id="HomePane">
+  fx:controller="slogo.view.windows.Home" fx:id="HomePane">
   <Button GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="CENTER" 
     GridPane.rowIndex="4"
     GridPane.rowSpan="1" fx:id="LaunchSlogo" prefHeight="40" prefWidth="150" text="Launch Slogo">

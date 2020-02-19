@@ -1,4 +1,4 @@
-package slogo.view;
+package slogo.view.windows;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -36,14 +36,13 @@ public class Home extends Application {
 
   /**
    * Entry point for application
-   *
    * @param primaryStage the main stage for the Home view
    * @throws IOException caused by FileInputStream for loading the FXML
    */
   @Override
   public void start(Stage primaryStage) throws IOException {
     FXMLLoader loader = new FXMLLoader();
-    String fxmlPath = "src/slogo/view/HomeView.fxml";
+    String fxmlPath = "src/slogo/view/windows/HomeView.fxml";
     System.out.println(System.getProperty("user.dir"));
     FileInputStream fis = new FileInputStream(fxmlPath);
     GridPane ap = loader.load(fis);
@@ -54,38 +53,24 @@ public class Home extends Application {
     primaryStage.show();
   }
 
-  @FXML
-  private void launchSim() {
-    SlogoView mainView = new SlogoView();
-    try {
-      mainView.start(new Stage());
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
-
-    /**
-   * Sets actions for buttons for default simulations
+  /**
+   * Sets actions for buttons
+   *  Both for launching the application
+   *  and for changing settings
    */
   public void initialize() {
     LaunchSlogo.setOnAction(e -> launchSim());
-    ColorScheme.setOnAction(e -> launchSim("firespread.xml"));
-    Language.setOnAction(e -> launchSim("gameoflifegun.xml"));
-    Defaults.setOnAction(e -> launchSim("percolation.xml"));
-    Help.setOnAction(e -> launchSim("predatorprey.xml"));
+    //TODO: Add actual events to these button clicks
+    ColorScheme.setOnAction(e -> System.out.println("ColorScheme"));
+    Language.setOnAction(e -> System.out.println("Language Select"));
+    Defaults.setOnAction(e -> System.out.println("Set Defaults"));
+    Help.setOnAction(e -> System.out.println("Display Help Menu"));
   }
 
-  private void launchSim(String xmlFile) {
-//    SimulationWindow simulationWindow = new SimulationWindow();
-//    try {
-//      simulationWindow.start(new Stage(), "data/" + xmlFile);
-//    } catch (MalformedXMLException e) {
-//      new Alert(AlertType.WARNING, "Malformed XML file - try another one", ButtonType.OK).show();
-//    } catch (NumberFormatException e2) {
-//      new Alert(AlertType.WARNING, "Error in XML file - try another one. "
-//          + "Error message: " + e2.getMessage(), ButtonType.OK).show();
-//    }
-//  }
+  @FXML
+  private void launchSim() {
+    SlogoView mainView = new SlogoView();
+    mainView.start(new Stage());
   }
 
 }
