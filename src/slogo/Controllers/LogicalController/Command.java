@@ -18,7 +18,7 @@ public interface Command {
     public double getCommandType();
 
     /**
-     * Method to return the String representatio of the Command object.
+     * Method to return the String representation of the Command object.
      * @return
      */
     public String toString();
