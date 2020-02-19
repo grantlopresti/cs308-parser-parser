@@ -1,15 +1,15 @@
 package slogo.view.windows;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import slogo.view.subpanes.MenuPane;
 import slogo.view.subpanes.ToolbarPane;
+import slogo.view.subpanes.UserInputPane;
 
 public class SlogoView extends Application {
 
@@ -42,30 +42,53 @@ public class SlogoView extends Application {
     return borderPane;
   }
 
-  private VBox getBottomPane() {
-    HBox programInputArea = new HBox();
-    programInputArea.getChildren().addAll(new TextField(), new Button("Run"));
-    programInputArea.setAlignment(Pos.CENTER);
+  private HBox getBottomPane() {
+    Label programCredits = new Label("Slogo - Parser Team 10");
+    Label teamCredits = new Label("Created by: Alex Xu, Amjad Syedibrahim, Grant "
+        + "LoPresti, and Max Smith");
+    Label classCredits = new Label("CS 308 - Spring 2020 - Duvall");
 
-    Label programCredits = new Label("Slogo | Created by: Alex Xu, Amjad Syedibrahim, Grant "
-          + "LoPresti, and Max Smith | CS 308 - Spring 2020");
+    Region creditsSpacingLeft = new Region();
+    HBox.setHgrow(creditsSpacingLeft, Priority.ALWAYS);
 
-    VBox lowerPane = new VBox();
-    lowerPane.getChildren().addAll(programInputArea, programCredits);
-    lowerPane.setAlignment(Pos.CENTER);
+    Region creditsSpacingRight = new Region();
+    HBox.setHgrow(creditsSpacingRight, Priority.ALWAYS);
 
-    return lowerPane;
+    HBox creditsBar = new HBox();
+    creditsBar.getChildren().addAll(programCredits, creditsSpacingLeft, teamCredits,
+        creditsSpacingRight,
+        classCredits);
+    creditsBar.setAlignment(Pos.CENTER);
+    creditsBar.setPadding(new Insets(3));
+
+    return creditsBar;
   }
 
   private TabPane getRightPane() {
     TabPane tabPaneRight = new TabPane();
-    tabPaneRight.getTabs().addAll(new Tab("Outline"),
-        new Tab("Task List"));
+    tabPaneRight.getTabs().addAll(new Tab("Data/Variables"),
+        new Tab("Command History"));
     return tabPaneRight;
   }
 
-  private TextArea getCenterPane() {
-    return new TextArea();
+  private BorderPane getCenterPane() {
+    TextArea inputPane = new UserInputPane().getNode();
+    inputPane.setPrefSize(WINDOW_WIDTH*0.5,WINDOW_HEIGHT*0.15);
+    inputPane.setWrapText(true);
+
+    Button runButton = new Button("Run");
+    runButton.setMinSize(40,WINDOW_HEIGHT*0.15);
+    runButton.setPrefWidth(120);
+
+    HBox programInputArea = new HBox();
+    programInputArea.getChildren().addAll(inputPane, runButton);
+    programInputArea.setAlignment(Pos.CENTER);
+
+    BorderPane centerPane = new BorderPane();
+    centerPane.setCenter(new TextArea());
+    centerPane.setBottom(programInputArea);
+
+    return centerPane;
   }
 
   private TabPane getLeftPane() {
@@ -83,7 +106,7 @@ public class SlogoView extends Application {
     ToolbarPane toolbar = new ToolbarPane();
 
     VBox vbox = new VBox();
-    vbox.getChildren().addAll(menu.getPane(), toolbar.getPane());
+    vbox.getChildren().addAll(menu.getNode(), toolbar.getNode());
     return vbox;
   }
 

@@ -7,7 +7,7 @@ import javafx.scene.control.ToolBar;
 public class ToolbarPane implements SubPane {
 
   @Override
-  public ToolBar getPane() {
+  public ToolBar getNode() {
     return new ToolBar(new Button("New"),
         new Button("Open"),
         new Separator(),

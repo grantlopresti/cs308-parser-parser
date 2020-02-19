@@ -1,5 +1,11 @@
 package slogo.view.subpanes;
 
-public class VisualizationPane {
+import javafx.scene.layout.GridPane;
 
+public class VisualizationPane implements SubPane {
+
+  @Override
+  public GridPane getNode() {
+    return null;
+  }
 }

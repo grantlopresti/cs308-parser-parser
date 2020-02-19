@@ -2,7 +2,7 @@ package slogo.view.subpanes;
 
 import javafx.scene.Node;
 
-public class CommandHistoryPane implements SubPane {
+public class CreditsPane implements SubPane {
 
   @Override
   public Node getNode() {

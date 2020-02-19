@@ -1,5 +1,11 @@
 package slogo.view.subpanes;
 
-public class DataViewerPane {
+import javafx.scene.Node;
 
+public class DataViewerPane implements SubPane{
+
+  @Override
+  public Node getNode() {
+    return null;
+  }
 }
