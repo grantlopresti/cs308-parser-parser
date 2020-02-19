@@ -1,8 +1,8 @@
 # DESIGN_PLAN.md
 
-##Basic Design
+## Basic Design
 
-###Introduction
+### Introduction
 
 The main problem that our team is trying to solve by writing this program is to create a development environment for the
 SLogo programming language. Our design goals include maximizing flexibility in terms of adding new types of commands/inputs,
@@ -27,7 +27,7 @@ types of inputs (text, file, etc.) and languages, and the Visual controller shou
 Model objects and associating them with visual information. Other parts of these Controllers should be closed, such as *how* the Visual controller
 associates certain model objects (e.g. Turtles) to their graphical representations, and *how* the Logical Controller parses inputs.
 
-###Overview
+### Overview
 
 The program is divided up into three major components: The Model, View, and Controller. These are the three major components
 of the program, and will communicate with teach other through interfaces (APIs). The APIs that define how each component
@@ -77,7 +77,7 @@ Overall Flow:
 
 ![](Diagram2.png)
 
-###User Interface
+### User Interface
 
 The user will interact with the program in two phases. The first point of contact is a splash/startup screen where the user
 has various configuration options for how they want the visualization to appear (e.g. background, pane information, turtle
@@ -103,7 +103,7 @@ may decide to implement a simple popup to display any types of errors while runn
 
 <img src="https://i.imgur.com/ReAJrfJ.jpg" width="500">
 
-###Design Details
+### Design Details
 
 APIs Include:
 
@@ -154,7 +154,7 @@ Internal (Within a component/package):
         * getCommandType()
         * toString()
     
-###API as Code
+### API as Code
 
 Our API separates our project into 4 distinct packages, controllers.logicalcontroller
 , controllers.visualcontroller, model, and view. Our API as Code includes the following Classes
@@ -179,7 +179,7 @@ Our API separates our project into 4 distinct packages, controllers.logicalcontr
   - view
     - Visible (Interface)
 
-###Design Considerations
+### Design Considerations
 
 A major design discussion our group has discussed at length is how to organize the general flow of information in the program.
 We believe that a classic MVC model is ideal for the general programmatic design. Our current plan is to restrict the majority
@@ -200,7 +200,7 @@ is to have JavaFX binding between the Model and View to remove the intermediate 
 with the technology as well as wanting to minimize logic processed in the Model and View, we elected to have a  controller
 serve as the intermediary.
 
-###Team Responsibilities
+### Team Responsibilities
 
 - Alex Xu is responsible for design and implementation of the Model (e.g. ```Turtle``` and ```Pen```, subject to change). 
 Alex is also responsible for providing support on the ```LogicController``` that handles information exchange between the ```View``` and ```Model```
@@ -215,9 +215,9 @@ offer support on other portions and help guide the exchange of information betwe
 - Max Smith is responsible for the design and implementation of the ```ViewController```, which will translate updates in the
 ```Model``` to visual objects displayed to the User.
 
-##API Design
+## API Design
 
-###External: between the two separate sub-groups
+### External: between the two separate sub-groups
 
 The graphical interface will be run by the "View" portion of the MVC model. However, it will be kept separate from the
 command interpreter to ensure a streamlined design. To achieve this, a controller will be placed as an intermediary between
@@ -251,7 +251,7 @@ in which case a null value error will be thrown. An error will also be thrown if
 is inconsistent with the type that it accepts. This can happen if the user input for example is such that the parser has
 not been trained to handle it.
 
-###Internal: between each sub-group and its future programmers (maintainers)
+### Internal: between each sub-group and its future programmers (maintainers)
 
 As mentioned, we anticipate having a minimum of two controllers in our design. To allow for extension into the types of
 controllers that we will likely need, there will be a general controller interface that outlines some of the basic methods
@@ -269,7 +269,7 @@ new classes altogether. This will allow the overall structure of the program to 
 Errors thrown can include type incompatibilities when calling methods inside a class on certain objects that are not of
 the correct type.
 
-##Use Cases
+## Use Cases
 - The user types 'fd 50' in the command window, and sees the turtle move in the display window leaving a trail, and the command is added to the environment's history.
 
 When the user types 'fd 50' into the command window, the text is shuttled off to the ```Controller``` in raw form. The controller
