@@ -1,15 +1,23 @@
 package slogo.view.windows;
 
 import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+
+import slogo.view.subpanes.CommandHistoryTab;
+import slogo.view.subpanes.CreditsPane;
+import slogo.view.subpanes.DataViewerTab;
+import slogo.view.subpanes.DefinedFunctionsTab;
+import slogo.view.subpanes.ErrorHandlerTab;
+import slogo.view.subpanes.FileTreeTab;
 import slogo.view.subpanes.MenuPane;
 import slogo.view.subpanes.ToolbarPane;
 import slogo.view.subpanes.UserInputPane;
+import slogo.view.subpanes.VisualizationPane;
 
 public class SlogoView extends Application {
 
@@ -28,9 +36,7 @@ public class SlogoView extends Application {
     stage.show();
   }
 
-
   public BorderPane createBorderPane() {
-
     BorderPane borderPane = new BorderPane();
 
     borderPane.setTop(getUpperPane());
@@ -42,83 +48,73 @@ public class SlogoView extends Application {
     return borderPane;
   }
 
-  private HBox getBottomPane() {
-    Label programCredits = new Label("Slogo - Parser Team 10");
-    Label teamCredits = new Label("Created by: Alex Xu, Amjad Syedibrahim, Grant "
-        + "LoPresti, and Max Smith");
-    Label classCredits = new Label("CS 308 - Spring 2020 - Duvall");
+  private VBox getUpperPane() {
+    VBox vbox = new VBox();
 
-    Region creditsSpacingLeft = new Region();
-    HBox.setHgrow(creditsSpacingLeft, Priority.ALWAYS);
+    MenuBar menu = new MenuPane().getNode();
+    ToolBar tools = new ToolbarPane().getNode();
 
-    Region creditsSpacingRight = new Region();
-    HBox.setHgrow(creditsSpacingRight, Priority.ALWAYS);
+    vbox.getChildren().addAll(menu, tools);
 
-    HBox creditsBar = new HBox();
-    creditsBar.getChildren().addAll(programCredits, creditsSpacingLeft, teamCredits,
-        creditsSpacingRight,
-        classCredits);
-    creditsBar.setAlignment(Pos.CENTER);
-    creditsBar.setPadding(new Insets(3));
-
-    return creditsBar;
+    return vbox;
   }
 
-  private TabPane getRightPane() {
-    TabPane tabPaneRight = new TabPane();
-    tabPaneRight.getTabs().addAll(new Tab("Data/Variables"),
-        new Tab("Command History"),
-        new Tab("Error Handler"));
-    return tabPaneRight;
+  private TabPane getLeftPane() {
+    TabPane tabPaneLeft = new TabPane();
+
+    Tab definedFunctions = new DefinedFunctionsTab().getTab();
+    Tab fileTree = new FileTreeTab().getTab();
+
+    tabPaneLeft.getTabs().addAll(definedFunctions, fileTree);
+    tabPaneLeft.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+
+    return tabPaneLeft;
   }
 
   private BorderPane getCenterPane() {
-    TextArea inputPane = new UserInputPane().getNode();
-    inputPane.setPrefSize(WINDOW_WIDTH*0.5,WINDOW_HEIGHT*0.15);
-    inputPane.setWrapText(true);
-
-    Button runButton = new Button("Run");
-    runButton.setMinSize(40,WINDOW_HEIGHT*0.15);
-    runButton.setPrefWidth(120);
-
-    HBox programInputArea = new HBox();
-    programInputArea.getChildren().addAll(inputPane, runButton);
-    programInputArea.setAlignment(Pos.CENTER);
-
     BorderPane centerPane = new BorderPane();
-    centerPane.setCenter(new TextArea());
+
+    GridPane visualization = new VisualizationPane().getNode();
+    HBox programInputArea = getProgramInputNode();
+
+    centerPane.setCenter(visualization);
     centerPane.setBottom(programInputArea);
 
     return centerPane;
   }
 
-  private TabPane getLeftPane() {
-    TreeView<String> projectsTree = createProjectsTree();
+  private HBox getProgramInputNode() {
+    HBox programInputArea = new HBox();
 
-    TabPane tabPaneLeft = new TabPane();
-    Tab projectsTab = new Tab("Project List");
-    projectsTab.setContent(projectsTree);
-    tabPaneLeft.getTabs().addAll(new Tab("Defined Functions"), projectsTab;
-    return tabPaneLeft;
+    TextArea inputPane = new UserInputPane().getNode();
+    inputPane.setPrefSize(WINDOW_WIDTH * 0.5, WINDOW_HEIGHT * 0.15);
+    inputPane.setWrapText(true);
+
+    Button runButton = new Button("Run");
+    runButton.setMinSize(40, WINDOW_HEIGHT * 0.15);
+    runButton.setPrefWidth(120);
+
+    programInputArea.getChildren().addAll(inputPane, runButton);
+    programInputArea.setAlignment(Pos.CENTER);
+
+    return programInputArea;
   }
 
-  private VBox getUpperPane() {
-    MenuPane menu = new MenuPane();
-    ToolbarPane toolbar = new ToolbarPane();
+  private TabPane getRightPane() {
+    TabPane tabPaneRight = new TabPane();
 
-    VBox vbox = new VBox();
-    vbox.getChildren().addAll(menu.getNode(), toolbar.getNode());
-    return vbox;
+    Tab data = new DataViewerTab().getTab();
+    Tab commands = new CommandHistoryTab().getTab();
+    Tab errors = new ErrorHandlerTab().getTab();
+
+    tabPaneRight.getTabs().addAll(data, commands, errors);
+    tabPaneRight.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+
+    return tabPaneRight;
   }
 
-  private TreeView<String> createProjectsTree() {
-    TreeItem<String> projectsTree = new TreeItem<>("Projects");
-    projectsTree.getChildren().addAll(
-        new TreeItem<>("Project 1"),
-        new TreeItem<>("Project 2"),
-        new TreeItem<>("Project 3"),
-        new TreeItem<>("Project 4"));
-    return new TreeView<>(projectsTree);
+  private static HBox getBottomPane() {
+    return new CreditsPane().getNode();
   }
 
 }

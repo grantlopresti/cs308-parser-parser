@@ -8,7 +8,7 @@ public class ToolbarPane implements SubPane {
 
   @Override
   public ToolBar getNode() {
-    return new ToolBar(new Button("New"),
+    return new ToolBar(
         new Button("Load File"),
         new Button("Load & Run"),
         new Separator(),
