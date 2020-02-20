@@ -1,4 +1,4 @@
-package slogo.controllers.logicalcontroller;
+package slogo.logicalcontroller;
 
 public interface Command {
 
