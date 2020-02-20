@@ -1,4 +1,4 @@
-package slogo.controllers.visualcontroller;
+package slogo.visualcontroller;
 
 import java.awt.Color;
 

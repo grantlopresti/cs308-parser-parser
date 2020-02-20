@@ -8,16 +8,7 @@ import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-import slogo.view.subpanes.CommandHistoryTab;
-import slogo.view.subpanes.CreditsPane;
-import slogo.view.subpanes.DataViewerTab;
-import slogo.view.subpanes.DefinedFunctionsTab;
-import slogo.view.subpanes.ErrorHandlerTab;
-import slogo.view.subpanes.FileTreeTab;
-import slogo.view.subpanes.MenuPane;
-import slogo.view.subpanes.ToolbarPane;
-import slogo.view.subpanes.UserInputPane;
-import slogo.view.subpanes.VisualizationPane;
+import slogo.view.subsections.*;
 
 public class SlogoView extends Application {
 
@@ -44,6 +35,8 @@ public class SlogoView extends Application {
     borderPane.setCenter(getCenterPane());
     borderPane.setRight(getRightPane());
     borderPane.setBottom(getBottomPane());
+
+    borderPane.setMaxSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 
     return borderPane;
   }
