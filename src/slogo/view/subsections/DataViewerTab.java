@@ -1,4 +1,4 @@
-package slogo.view.subpanes;
+package slogo.view.subsections;
 
 import javafx.scene.control.Tab;
 

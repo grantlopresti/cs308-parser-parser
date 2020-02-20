@@ -2,8 +2,8 @@ package slogo.view;
 
 import java.util.List;
 import java.util.Queue;
-import slogo.controllers.visualcontroller.VisualCommand;
-import slogo.controllers.visualcontroller.VisualObject;
+import slogo.visualcontroller.VisualCommand;
+import slogo.visualcontroller.VisualObject;
 
 public interface Visible {
 
