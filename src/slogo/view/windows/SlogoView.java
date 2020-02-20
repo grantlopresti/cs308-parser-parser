@@ -79,15 +79,17 @@ public class SlogoView extends Application {
   private HBox getProgramInputNode() {
     HBox programInputArea = new HBox();
 
-    TextArea inputPane = new UserInputPane().getNode();
-    inputPane.setPrefSize(WINDOW_WIDTH * 0.5, WINDOW_HEIGHT * 0.15);
-    inputPane.setWrapText(true);
+    UserInputPane inputPane = new UserInputPane();
+    TextArea inputArea = inputPane.getNode();
+    inputArea.setPrefSize(WINDOW_WIDTH * 0.5, WINDOW_HEIGHT * 0.15);
+    inputArea.setWrapText(true);
 
     Button runButton = new Button("Run");
-    runButton.setMinSize(40, WINDOW_HEIGHT * 0.15);
+    runButton.setMinSize(60, WINDOW_HEIGHT * 0.15);
     runButton.setPrefWidth(120);
+    runButton.setOnAction(e -> inputPane.sendUserCommand());
 
-    programInputArea.getChildren().addAll(inputPane, runButton);
+    programInputArea.getChildren().addAll(inputArea, runButton);
     programInputArea.setAlignment(Pos.CENTER);
 
     return programInputArea;
