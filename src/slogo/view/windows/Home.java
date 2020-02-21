@@ -28,13 +28,6 @@ public class Home extends Application {
   private Button Help;
 
   /**
-   * Main method for the application - entry point
-   */
-  public static void main(String[] args) {
-    Application.launch(args);
-  }
-
-  /**
    * Entry point for application
    * @param primaryStage the main stage for the Home view
    * @throws IOException caused by FileInputStream for loading the FXML

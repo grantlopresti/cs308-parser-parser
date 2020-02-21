@@ -15,9 +15,7 @@ public class SlogoView extends Application {
   private static final int WINDOW_WIDTH = 1440;
   private static final int WINDOW_HEIGHT = 720;
 
-  public static void main(String[] args) {
-    Application.launch(args);
-  }
+  private UserInputPane myInputPane;
 
   @Override
   public void start(Stage stage) {
@@ -45,7 +43,7 @@ public class SlogoView extends Application {
     VBox vbox = new VBox();
 
     MenuBar menu = new MenuPane().getNode();
-    ToolBar tools = new ToolbarPane().getNode();
+    ToolBar tools = new ToolbarPane(this).getNode();
 
     vbox.getChildren().addAll(menu, tools);
 
@@ -79,15 +77,15 @@ public class SlogoView extends Application {
   private HBox getProgramInputNode() {
     HBox programInputArea = new HBox();
 
-    UserInputPane inputPane = new UserInputPane();
-    TextArea inputArea = inputPane.getNode();
+    myInputPane = new UserInputPane();
+    TextArea inputArea = myInputPane.getNode();
     inputArea.setPrefSize(WINDOW_WIDTH * 0.5, WINDOW_HEIGHT * 0.15);
     inputArea.setWrapText(true);
 
     Button runButton = new Button("Run");
     runButton.setMinSize(60, WINDOW_HEIGHT * 0.15);
     runButton.setPrefWidth(120);
-    runButton.setOnAction(e -> inputPane.sendUserCommand());
+    runButton.setOnAction(e -> myInputPane.sendUserCommand());
 
     programInputArea.getChildren().addAll(inputArea, runButton);
     programInputArea.setAlignment(Pos.CENTER);
@@ -110,6 +108,14 @@ public class SlogoView extends Application {
 
   private static HBox getBottomPane() {
     return new CreditsPane().getNode();
+  }
+
+  public void announceError(){
+    //TODO: Handle Announcing Errors
+  }
+
+  public void setUserInputAreaText(String fileContents) {
+    myInputPane.setInputArea(fileContents);
   }
 
 }
