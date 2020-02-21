@@ -1,5 +1,6 @@
 package slogo.view.subsections;
 
+
 import javafx.scene.control.TextArea;
 import slogo.logicalcontroller.LogicalController;
 
@@ -10,6 +11,10 @@ public class UserInputPane implements SubPane {
   public UserInputPane() {
     myTextArea = new TextArea();
     myTextArea.setPromptText("Enter Logo Commands Here:");
+  }
+
+  public void setInputArea(String text){
+    myTextArea.setText(text);
   }
 
   @Override
