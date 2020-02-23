@@ -17,7 +17,7 @@ public class VisualizationPane implements SubPane {
   public GridPane getNode() {
     GridPane visualizer = new GridPane();
 
-    ImageView turtle = new ImageView("resources/images/TurtleBasicWhite.PNG");
+    ImageView turtle = new ImageView("images/TurtleBasicWhite.PNG");
     turtle.setFitWidth(40);
     turtle.setPreserveRatio(true);
     turtle.setRotate(-90);

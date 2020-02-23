@@ -1,5 +1,6 @@
 package slogo.logicalcontroller;
 
+
 public interface Command {
 
 
@@ -20,6 +21,5 @@ public interface Command {
      * @return
      */
     public String toString();
-
 
 }
