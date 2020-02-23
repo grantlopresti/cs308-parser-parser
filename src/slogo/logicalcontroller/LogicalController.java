@@ -47,7 +47,7 @@ public class LogicalController {
       }
       else{
         String commandName = myCurrentCommand.getCommandType();
-        Method method = mo.getClass().getMethod(commandName, double.class);   //Uses reflection to do: ModelObject.
+        Method method = mo.getClass().getMethod(commandName, double.class);
         double myValue = myCurrentCommand.getValue();
         method.invoke(mo, myValue);
       }
@@ -61,6 +61,15 @@ public class LogicalController {
    */
   public List<VisualCommand> getVisualCommands(){
     return myVisualCommands;
+  }
+
+  /**
+   * Returns the collection of ModelObjects.
+   * @return
+   */
+  //TODO: Not to self: change so that it returns a collection of immutable modelobjects instead.
+  public ModelCollection getModelCollection(){
+    return myModelCollection;
   }
 
   /**
