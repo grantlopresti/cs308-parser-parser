@@ -8,6 +8,7 @@ public abstract class ModelObject implements ModelInterface{
     private double xCoordinate;
     private double yCoordinate;
     private double heading;
+    //TODO: Add ID instance variable
 
     /**
      * Default Constructor for all ModelObjects

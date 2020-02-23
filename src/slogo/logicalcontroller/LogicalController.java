@@ -39,7 +39,7 @@ public class LogicalController {
     //Command myCurrentCommand = myParser.parse(command);
 
     //Then, get the command type and use reflection to call methods in on the List of ModelObjects.
-    
+
 
   }
 
