@@ -1,5 +1,6 @@
 package slogo.view.windows;
 
+import java.util.List;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -9,6 +10,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import slogo.view.subsections.*;
+import slogo.visualcontroller.VisualTurtle;
 
 public class SlogoView extends Application {
 
@@ -16,6 +18,8 @@ public class SlogoView extends Application {
   private static final int WINDOW_HEIGHT = 720;
 
   private UserInputPane myInputPane;
+  private VisualizationPane myVisualizationPane;
+  private Pane myCenterPane;
 
   @Override
   public void start(Stage stage) {
@@ -30,7 +34,8 @@ public class SlogoView extends Application {
 
     borderPane.setTop(getUpperPane());
     borderPane.setLeft(getLeftPane());
-    borderPane.setCenter(getCenterPane());
+    myCenterPane = getCenterPane();
+    borderPane.setCenter(myCenterPane);
     borderPane.setRight(getRightPane());
     borderPane.setBottom(getBottomPane());
 
@@ -65,7 +70,9 @@ public class SlogoView extends Application {
   private BorderPane getCenterPane() {
     BorderPane centerPane = new BorderPane();
 
-    GridPane visualization = new VisualizationPane().getNode();
+    VisualizationPane visualizer = new VisualizationPane();
+    myVisualizationPane = visualizer;
+    GridPane visualization = visualizer.getNode();
     HBox programInputArea = getProgramInputNode();
 
     centerPane.setCenter(visualization);
@@ -117,5 +124,15 @@ public class SlogoView extends Application {
   public void setUserInputAreaText(String fileContents) {
     myInputPane.setInputArea(fileContents);
   }
+
+  public void updateVisualTurtles(List<VisualTurtle> visualTurtles) {
+    for (VisualTurtle turtle : visualTurtles){
+      System.out.println(turtle);
+      System.out.println(myVisualizationPane);
+    }
+
+
+  }
+
 
 }

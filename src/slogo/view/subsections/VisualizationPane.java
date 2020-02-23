@@ -1,5 +1,6 @@
 package slogo.view.subsections;
 
+import java.util.List;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.effect.Light;
@@ -10,8 +11,12 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import slogo.view.windows.SlogoView;
+import slogo.visualcontroller.VisualTurtle;
 
 public class VisualizationPane implements SubPane {
+
+  private List<VisualTurtle> myTurtles;
 
   @Override
   public GridPane getNode() {
@@ -43,5 +48,9 @@ public class VisualizationPane implements SubPane {
     lighting.setSurfaceScale(0.0);
     lighting.setLight(new Light.Distant(45, 45, color));
     return lighting;
+  }
+
+  public void addVisualTurtle(VisualTurtle turtle) {
+
   }
 }
