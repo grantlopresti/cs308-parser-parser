@@ -1,34 +1,59 @@
 package slogo.logicalcontroller;
 
 import slogo.exceptions.InvalidCommandException;
-import slogo.model.ModelObject;
-
-import java.util.ArrayList;
-import java.util.List;
-
-/**
- * Logical controller handles the interaction between the user input from the GUI, the parser, command objects,
- * variables, and changes in the Model package.
- * @author Alex Xu
- */
+import java.util.*;
+import java.io.*;
 
 public class LogicalController {
 
-  private static List<ModelObject> modelObjectList;
-  //private parser myParser;
+  private Stack<String> commands = new Stack<String>();
+  private Stack<String> values = new Stack<String>();
+  private File langFile = new File("./resources/");
+  private File currentLangFile;
+  private ResourceBundle langResources;
+  private String language;
+  private InputStream inputStream;
+  private Map<String, String> commandArray;
+  private ResourceBundle resources;
 
-  private LogicalController(){}
 
-  /**
-   * Initializes the Logical Controller. Should only be called once at the start of the program.
-   */
-  public static void initializeController(){
-    modelObjectList = new ArrayList<ModelObject>();
+
+
+
+  public LogicalController(String language) throws IOException {
+    this.language = language;
+    commandArray = new HashMap<String, String>();
+    FileInputStream fis = new FileInputStream("resources/languages/"+this.language+".properties");
+    resources = new PropertyResourceBundle(fis);
+    genCommandArray();
+    System.out.println(Arrays.asList(this.commandArray));
+
+
+
+  }
+
+  public String getLang(){
+    return this.language;
+  }
+
+  public void genCommandArray(){
+    for(String key: Collections.list(resources.getKeys())){
+      String regex = resources.getString(key);
+      if(regex.indexOf("|") != -1){
+        commandArray.put(regex.substring(0, regex.indexOf("|")), key);
+        commandArray.put(regex.substring(regex.indexOf("|")+1), key);
+      }
+      else{
+        commandArray.put(regex, key);
+      }
+
+    }
   }
 
   /**
    * Code that interacts with the GUI, and receives strings as commands
    * @param command
+   * Added comment
    * @throws InvalidCommandException
    */
   //TODO: May need to discuss the code below.
@@ -42,5 +67,10 @@ public class LogicalController {
     
 
   }
+
+public static void main (String[] args) throws IOException {
+  LogicalController lc = new LogicalController("French");
+  System.out.println(lc.getLang());
+}
 
 }

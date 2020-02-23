@@ -1,5 +1,6 @@
 package slogo.logicalcontroller.command;
 
+
 public interface Command {
 
     //FIXME: Use Generics to make command objects flexible in return value - Alex X.
@@ -21,6 +22,5 @@ public interface Command {
      * @return
      */
     public String toString();
-
 
 }
