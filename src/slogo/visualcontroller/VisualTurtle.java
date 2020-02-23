@@ -1,18 +1,41 @@
 package slogo.visualcontroller;
 
-import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 
 public class VisualTurtle extends VisualObject {
-  Image myImage;
-  double myCenterX;
-  double myCenterY;
-  double myHeading;
 
-  public Image getImage() {
+  public static final ImageView DEFAULT_IMAGE = new ImageView("resources/images/TurtleBasicWhite.PNG");
+  public static final Color DEFAULT_COLOR = Color.PURPLE;
+  public static final double DEFAULT_SIZE = 30;
+  public static final double DEFAULT_X = 0;
+  public static final double DEFAULT_Y = 0;
+  public static final double DEFAULT_HEADING = -90;
+
+  private ImageView myImage = DEFAULT_IMAGE;
+  private Color myColor = DEFAULT_COLOR;
+  private double myCenterX = DEFAULT_X;
+  private double myCenterY = DEFAULT_Y;
+  private double myHeading = DEFAULT_HEADING;
+  private double mySize = DEFAULT_SIZE;
+
+  public VisualTurtle(){
+
+  }
+
+  public double getSize() {
+    return mySize;
+  }
+
+  public void setSize(double size) {
+    mySize = size;
+  }
+
+  public ImageView getImage() {
     return myImage;
   }
 
-  public void setImage(Image image) {
+  public void setImage(ImageView image) {
     myImage = image;
   }
 
@@ -40,5 +63,17 @@ public class VisualTurtle extends VisualObject {
     myHeading = heading;
   }
 
+  public Color getColor() {
+    return myColor;
+  }
+
+  public void setColor(Color color) {
+    myColor = color;
+  }
+
+  public void setCenter(double centerX, double centerY) {
+    myCenterX = centerX;
+    myCenterY = centerY;
+  }
 
 }
