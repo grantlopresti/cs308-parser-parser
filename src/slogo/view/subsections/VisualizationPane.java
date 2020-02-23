@@ -1,5 +1,6 @@
 package slogo.view.subsections;
 
+import java.util.ArrayList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.effect.Light;
@@ -10,24 +11,29 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import slogo.visualcontroller.VisualTurtle;
 
 public class VisualizationPane implements SubPane {
+
+  private ArrayList<VisualTurtle> myTurtles = new ArrayList<>();
 
   @Override
   public GridPane getNode() {
     GridPane visualizer = new GridPane();
 
-    ImageView turtle = new ImageView("images/TurtleBasicWhite.PNG");
-    turtle.setFitWidth(40);
-    turtle.setPreserveRatio(true);
-    turtle.setRotate(-90);
-    turtle.setX(0);
-    turtle.setY(0);
+    for (VisualTurtle turtle : myTurtles) {
+      ImageView turtleImage = new ImageView(turtle.getImage());
+      turtleImage.setFitWidth(turtle.getSize());
+      turtleImage.setPreserveRatio(true);
+      turtleImage.setRotate(turtle.getHeading());
+      turtleImage.setX(turtle.getCenterX());
+      turtleImage.setY(turtle.getCenterY());
 
-    Lighting lighting = getLightingEffect(Color.PURPLE);
-    turtle.setEffect(lighting);
+      Lighting lighting = getLightingEffect(turtle.getColor());
+      turtleImage.setEffect(lighting);
 
-    visualizer.getChildren().addAll(turtle);
+      visualizer.getChildren().add(turtleImage);
+    }
 
     visualizer.setBackground(new Background(new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
     visualizer.setAlignment(Pos.CENTER);
@@ -43,5 +49,9 @@ public class VisualizationPane implements SubPane {
     lighting.setSurfaceScale(0.0);
     lighting.setLight(new Light.Distant(45, 45, color));
     return lighting;
+  }
+
+  public void addVisualTurtle(VisualTurtle turtle) {
+    myTurtles.add(turtle);
   }
 }

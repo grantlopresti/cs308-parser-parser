@@ -1,42 +1,51 @@
 package slogo.view.windows;
 
+import java.util.ArrayList;
+import java.util.List;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import slogo.view.subsections.*;
+import slogo.visualcontroller.VisualTurtle;
 
 public class SlogoView extends Application {
 
   private static final int WINDOW_WIDTH = 1440;
   private static final int WINDOW_HEIGHT = 720;
 
+  private BorderPane myBorderPane;
+
   private UserInputPane myInputPane;
+  private VisualizationPane myVisualizationPane;
+  private Pane myCenterPane;
 
   @Override
   public void start(Stage stage) {
-    Scene scene = new Scene(createBorderPane(), WINDOW_WIDTH, WINDOW_HEIGHT);
+    myBorderPane = new BorderPane();
+    myVisualizationPane = new VisualizationPane();
+    Scene scene = new Scene(createGUIBorderPane(), WINDOW_WIDTH, WINDOW_HEIGHT);
     stage.setTitle("Layout Demo");
     stage.setScene(scene);
     stage.show();
   }
 
-  public BorderPane createBorderPane() {
-    BorderPane borderPane = new BorderPane();
+  public BorderPane createGUIBorderPane() {
+    myBorderPane.setTop(getUpperPane());
+    myBorderPane.setLeft(getLeftPane());
+    myCenterPane = getCenterPane();
+    myBorderPane.setCenter(myCenterPane);
+    myBorderPane.setRight(getRightPane());
+    myBorderPane.setBottom(getBottomPane());
 
-    borderPane.setTop(getUpperPane());
-    borderPane.setLeft(getLeftPane());
-    borderPane.setCenter(getCenterPane());
-    borderPane.setRight(getRightPane());
-    borderPane.setBottom(getBottomPane());
+    myBorderPane.setMaxSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-    borderPane.setMaxSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-
-    return borderPane;
+    return myBorderPane;
   }
 
   private VBox getUpperPane() {
@@ -65,7 +74,7 @@ public class SlogoView extends Application {
   private BorderPane getCenterPane() {
     BorderPane centerPane = new BorderPane();
 
-    GridPane visualization = new VisualizationPane().getNode();
+    GridPane visualization = myVisualizationPane.getNode();
     HBox programInputArea = getProgramInputNode();
 
     centerPane.setCenter(visualization);
@@ -85,7 +94,10 @@ public class SlogoView extends Application {
     Button runButton = new Button("Run");
     runButton.setMinSize(60, WINDOW_HEIGHT * 0.15);
     runButton.setPrefWidth(120);
-    runButton.setOnAction(e -> myInputPane.sendUserCommand());
+    runButton.setOnAction(e -> {
+      myInputPane.sendUserCommand();
+      doUpdate();
+    });
 
     programInputArea.getChildren().addAll(inputArea, runButton);
     programInputArea.setAlignment(Pos.CENTER);
@@ -117,5 +129,28 @@ public class SlogoView extends Application {
   public void setUserInputAreaText(String fileContents) {
     myInputPane.setInputArea(fileContents);
   }
+
+  public void updateVisualTurtles(List<VisualTurtle> visualTurtles) {
+    System.out.println(myVisualizationPane);
+    for (VisualTurtle turtle : visualTurtles){
+      myVisualizationPane.addVisualTurtle(turtle);
+    }
+    myBorderPane.setCenter(getCenterPane());
+  }
+
+  public void doUpdate() {
+    List<VisualTurtle> visualTurtles = new ArrayList<>();
+
+    visualTurtles.add(new VisualTurtle());
+
+    VisualTurtle customTurtle = new VisualTurtle();
+    customTurtle.setCenter(1000, 1000);
+    customTurtle.setColor(Color.RED);
+    customTurtle.setSize(50);
+    visualTurtles.add(customTurtle);
+
+    updateVisualTurtles(visualTurtles);
+  }
+
 
 }
