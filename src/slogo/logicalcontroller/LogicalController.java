@@ -53,6 +53,7 @@ public class LogicalController {
   /**
    * Code that interacts with the GUI, and receives strings as commands
    * @param command
+   * Added comment
    * @throws InvalidCommandException
    */
   //TODO: May need to discuss the code below.
