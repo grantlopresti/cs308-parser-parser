@@ -1,9 +1,12 @@
 package slogo.logicalcontroller;
 
 import slogo.exceptions.InvalidCommandException;
+import slogo.logicalcontroller.parser.Parser;
+import slogo.model.ModelCollection;
 import slogo.model.ModelObject;
+import slogo.visualcontroller.VisualCommand;
 
-import java.util.ArrayList;
+import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -14,33 +17,59 @@ import java.util.List;
 
 public class LogicalController {
 
-  private static List<ModelObject> modelObjectList;
-  //private parser myParser;
-
-  private LogicalController(){}
+  private ModelCollection myModelCollection;
+  private List<VisualCommand> myVisualCommands;
+  private Parser myParser;
 
   /**
-   * Initializes the Logical Controller. Should only be called once at the start of the program.
+   * Default constructor for the Logical Controller
    */
-  public static void initializeController(){
-    modelObjectList = new ArrayList<ModelObject>();
+  public LogicalController(){
+    initializeController();
   }
 
   /**
    * Code that interacts with the GUI, and receives strings as commands
+   * Assumption is that there is only one ModelObject (Turtle)
    * @param command
    * @throws InvalidCommandException
    */
-  //TODO: May need to discuss the code below.
+  //TODO: Note to self:  Need to change the code below to non-static. Also worry about error handling later.
   public static void handleNewCommand(String command) throws InvalidCommandException {
-    //TODO: Handle input command, try/catch for invalid and route potential error back to
     System.out.println(command);
 
-    //Command myCurrentCommand = myParser.parse(command);
+    /*
+    Command myCurrentCommand = myParser.parse(command);   //TODO: Amjad: Parser.parse() method needs to return a Command (or collection of commands, as implementation here can change easily)
+                                                          //TODO: Naming of methods/classes can change and are flexible
+    for (Object mo : myModelCollection){
+      if(myCurrentCommand.getCommandCategory().equals(VISUAL_COMMAND_NAME){
+        myVisualCommands.add(myCurrentCommand);
+      }
+      else{
+        String commandName = myCurrentCommand.getCommandType();
+        Method method = mo.getClass().getMethod(commandName, double.class);   //Uses reflection to do: ModelObject.
+        double myValue = myCurrentCommand.getValue();
+        method.invoke(mo, myValue);
+      }
+    }
+    */
+  }
 
-    //Then, get the command type and use reflection to call methods in on the List of ModelObjects.
+  /**
+   * Returns collection of VisualCommands.
+   * @return
+   */
+  public List<VisualCommand> getVisualCommands(){
+    return myVisualCommands;
+  }
 
-
+  /**
+   * Initializes/Resets the Logical Controller.
+   */
+  private void initializeController(){
+    myModelCollection = new ModelCollection();
+    //myParser = new Parser();
+    //myVisualCommands = new ArrayList<VisualCommand>();
   }
 
 }

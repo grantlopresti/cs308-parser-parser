@@ -26,6 +26,12 @@ public interface ModelInterface {
     public double getHeading();
 
     /**
+     * Returns the ID of the ModelObject
+     * @return int representing the ID number
+     */
+    public int getID();
+
+    /**
      * Returns whether the Pen is Active or Not.
      * @return boolean representing pen state.
      */

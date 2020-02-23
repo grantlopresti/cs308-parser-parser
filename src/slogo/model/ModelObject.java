@@ -8,7 +8,7 @@ public abstract class ModelObject implements ModelInterface{
     private double xCoordinate;
     private double yCoordinate;
     private double heading;
-    //TODO: Add ID instance variable
+    private int ID;
 
     /**
      * Default Constructor for all ModelObjects
@@ -17,6 +17,16 @@ public abstract class ModelObject implements ModelInterface{
         xCoordinate = 0.0;
         yCoordinate = 0.0;
         heading = 0.0;
+        ID = 0;
+    }
+
+    /**
+     * Constructor for ModelObject that takes in a specific ID Value.
+     * @param idValue
+     */
+    public ModelObject(int idValue){
+        this();
+        ID = idValue;
     }
 
     /**
@@ -74,6 +84,14 @@ public abstract class ModelObject implements ModelInterface{
     @Override
     public void turn(double degree) {
         heading += degree;
+    }
+
+    /**
+     * Returns the ID Number of the ModelObject.
+     */
+    @Override
+    public int getID(){
+        return ID;
     }
 
     private double calcX(double distance){
