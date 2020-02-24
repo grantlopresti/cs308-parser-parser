@@ -49,7 +49,7 @@ public class LogicalController {
     System.out.println(Arrays.asList(this.commandArray));
   }
 
-  public void setLanguage(String langauge){
+  public static void setLanguage(String langauge){
     
   }
 
