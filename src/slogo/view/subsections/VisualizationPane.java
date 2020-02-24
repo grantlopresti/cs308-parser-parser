@@ -28,6 +28,7 @@ public class VisualizationPane implements SubPane {
     setBackground(visualizer);
 
     for (VisualTurtle turtle : myTurtles) {
+      System.out.println(turtle.getImage());
       ImageView turtleImage = new ImageView(turtle.getImage());
       turtleImage.setFitWidth(turtle.getSize());
       turtleImage.setPreserveRatio(true);

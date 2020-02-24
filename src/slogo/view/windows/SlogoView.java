@@ -147,8 +147,8 @@ public class SlogoView extends Application {
     visualTurtles.add(new VisualTurtle());
 
     VisualTurtle customTurtle = new VisualTurtle();
-    customTurtle.setCenter(1000, 100);
-    customTurtle.setImage(TurtleImage.TURTLE);
+    customTurtle.setCenter(100, 100);
+    customTurtle.setImage(TurtleImage.DOG);
     customTurtle.setColor(Color.RED);
     customTurtle.setSize(50);
     visualTurtles.add(customTurtle);
