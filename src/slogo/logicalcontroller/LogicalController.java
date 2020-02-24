@@ -22,7 +22,7 @@ public class LogicalController {
 
   private LogicalController() {}
 
-  public void setLanguage(String langauge){
+  public static void setLanguage(String langauge){
     //Parser.setLanguage(language);
   }
 
@@ -39,25 +39,11 @@ public class LogicalController {
   }
 */
 
-  /*
-  public String getLang(){
-    return this.language;
-  }
-*/
-  /*
-  public void getCommandArray(){
-    for(String key: Collections.list(resources.getKeys())){
-      String regex = resources.getString(key);
-      if(regex.indexOf("|") != -1){
-        commandArray.put(regex.substring(0, regex.indexOf("|")), key);
-        commandArray.put(regex.substring(regex.indexOf("|")+1), key);
-      }
-      else{
-        commandArray.put(regex, key);
-      }
-    }
-  }
-  */
+
+
+
+
+
 
   /**
    * Code that interacts with the GUI, and receives strings as commands

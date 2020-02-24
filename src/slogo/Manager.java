@@ -19,7 +19,7 @@ public class Manager {
     }
 
     public void receiveCommand(String command){
-        LogicalController.handleNewCommand(command, myModelCollection);
+        //LogicalController.handleNewCommand(command, myModelCollection);
 
     }
 
