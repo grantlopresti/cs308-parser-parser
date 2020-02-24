@@ -23,7 +23,7 @@ public class SlogoView extends Application {
   private static final int WINDOW_HEIGHT = 700;
 
   private static final int VISUALIZER_WIDTH = 800;
-  private static final int VISUALIZER_HEIGHT = 515;
+  private static final int VISUALIZER_HEIGHT = 535;
 
   private BorderPane myBorderPane;
   private UserInputPane myInputPane;
@@ -34,7 +34,8 @@ public class SlogoView extends Application {
     myBorderPane = new BorderPane();
     myVisualizationPane = new VisualizationPane(VISUALIZER_WIDTH, VISUALIZER_HEIGHT);
     Scene scene = new Scene(createGUIBorderPane(), WINDOW_WIDTH, WINDOW_HEIGHT);
-    stage.setTitle("Layout Demo");
+    stage.setTitle("Parser Parser - Slogo Project - CS 308");
+    scene.getStylesheets().add("stylesheets/defaultStyle.css");
     stage.setScene(scene);
     stage.show();
   }
@@ -55,10 +56,11 @@ public class SlogoView extends Application {
   private VBox getUpperPane() {
     VBox vbox = new VBox();
 
-    MenuBar menu = new MenuPane().getNode();
+    //MenuBar menu = new MenuPane().getNode();
     ToolBar tools = new ToolbarPane(this).getNode();
 
-    vbox.getChildren().addAll(menu, tools);
+    //vbox.getChildren().addAll(menu, tools);
+    vbox.getChildren().addAll(tools);
 
     return vbox;
   }
@@ -96,6 +98,7 @@ public class SlogoView extends Application {
     inputArea.setWrapText(true);
 
     Button runButton = new Button("Run");
+    runButton.setId("record-sales");
     runButton.setMinSize(60, WINDOW_HEIGHT * 0.15);
     runButton.setPrefWidth(120);
     runButton.setOnAction(e -> {
@@ -161,6 +164,8 @@ public class SlogoView extends Application {
     customTurtle.setColor(Color.RED);
     customTurtle.setSize(50);
     visualTurtles.add(customTurtle);
+
+
 
     updateVisualTurtles(visualTurtles);
   }

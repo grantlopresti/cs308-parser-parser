@@ -5,7 +5,6 @@ import slogo.view.TurtleImage;
 
 public class VisualTurtle extends VisualObject {
 
-  //public static final String DEFAULT_IMAGE = TurtleImage.DOG;
   public static final String DEFAULT_IMAGE = TurtleImage.TURTLE;
   public static final Color DEFAULT_COLOR = Color.PURPLE;
   public static final double DEFAULT_SIZE = 30;
@@ -17,9 +16,10 @@ public class VisualTurtle extends VisualObject {
   private Color myColor = DEFAULT_COLOR;
   private double myCenterX = DEFAULT_X;
   private double myCenterY = DEFAULT_Y;
+  private double myPreviousX = 0;
+  private double myPreviousY = 0;
   private double myHeading = DEFAULT_HEADING;
   private double mySize = DEFAULT_SIZE;
-
 
   public double getSize() {
     return mySize;
@@ -51,6 +51,22 @@ public class VisualTurtle extends VisualObject {
 
   public void setCenterY(double centerY) {
     myCenterY = centerY;
+  }
+
+  public double getPreviousX() {
+    return myPreviousX;
+  }
+
+  public void setPreviousX(double previousX) {
+    myPreviousX = previousX;
+  }
+
+  public double getPreviousY() {
+    return myPreviousY;
+  }
+
+  public void setPreviousY(double previousY) {
+    myPreviousY = previousY;
   }
 
   public double getHeading() {

@@ -1,7 +1,5 @@
 package slogo.view;
 
-
-import java.io.IOException;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import slogo.view.windows.Home;

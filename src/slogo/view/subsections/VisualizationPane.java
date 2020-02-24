@@ -7,6 +7,8 @@ import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import slogo.visualcontroller.VisualCommand;
 import slogo.visualcontroller.VisualData;
@@ -39,19 +41,42 @@ public class VisualizationPane implements SubPane {
     setBackground(visualizer);
 
     addTurtlesToVisualizer(visualizer);
+    addLinesToVisualizer(visualizer);
 
     visualizer.resize(groupWidth, groupHeight);
 
     return visualizer;
   }
 
+  private void addLinesToVisualizer(Group visualizer) {
+    for (VisualLine line : myLines) {
+      Line lineImage = new Line();
+
+      setAdjustedLineLocations(line, lineImage);
+
+      lineImage.setStroke(line.getColor());
+      lineImage.setStrokeWidth(line.getThickness());
+
+      visualizer.getChildren().add(lineImage);
+    }
+  }
+
+  private void setAdjustedLineLocations(VisualLine line, Line lineImage) {
+    lineImage.setStartX(line.getStartX());
+    lineImage.setStartY(line.getStartY());
+
+    lineImage.setEndX(line.getEndX());
+    lineImage.setEndY(line.getEndY());
+  }
+
   private void addTurtlesToVisualizer(Group visualizer) {
     for (VisualTurtle turtle : myTurtles) {
-      System.out.println(turtle.getImage());
       ImageView turtleImage = new ImageView(turtle.getImage());
+
       turtleImage.setFitWidth(turtle.getSize());
       turtleImage.setPreserveRatio(true);
       turtleImage.setRotate(turtle.getHeading());
+
       setAdjustedX(turtleImage, turtle.getCenterX());
       setAdjustedY(turtleImage, turtle.getCenterY());
 
