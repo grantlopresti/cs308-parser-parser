@@ -14,18 +14,61 @@ import java.util.List;
  * variables, and changes in the Model package.
  * @author Alex Xu
  */
+import java.util.*;
+import java.io.*;
 
 public class LogicalController {
 
   private ModelCollection myModelCollection;
   private List<VisualCommand> myVisualCommands;
   private Parser myParser;
+  private Stack<String> commands = new Stack<String>();
+  private Stack<String> values = new Stack<String>();
+  private File langFile = new File("./resources/");
+  private File currentLangFile;
+  private ResourceBundle langResources;
+  private String language;
+  private InputStream inputStream;
+  private Map<String, String> commandArray;
+  private ResourceBundle resources;
+
+
 
   /**
    * Default constructor for the Logical Controller
    */
   public LogicalController(){
     initializeController();
+
+
+  public LogicalController(String language) throws IOException {
+    this.language = language;
+    commandArray = new HashMap<String, String>();
+    FileInputStream fis = new FileInputStream("resources/languages/"+this.language+".properties");
+    resources = new PropertyResourceBundle(fis);
+    genCommandArray();
+    System.out.println(Arrays.asList(this.commandArray));
+
+
+
+  }
+
+  public String getLang(){
+    return this.language;
+  }
+
+  public void genCommandArray(){
+    for(String key: Collections.list(resources.getKeys())){
+      String regex = resources.getString(key);
+      if(regex.indexOf("|") != -1){
+        commandArray.put(regex.substring(0, regex.indexOf("|")), key);
+        commandArray.put(regex.substring(regex.indexOf("|")+1), key);
+      }
+      else{
+        commandArray.put(regex, key);
+      }
+
+    }
   }
 
   /**
@@ -36,6 +79,7 @@ public class LogicalController {
    */
   //TODO: Note to self:  Need to change the code below to non-static. Also worry about error handling later.
   public static void handleNewCommand(String command) throws InvalidCommandException {
+    //TODO: Handle input command, try/catch for invalid and route potential error back to
     System.out.println(command);
 
     /*
@@ -80,5 +124,10 @@ public class LogicalController {
     //myParser = new Parser();
     //myVisualCommands = new ArrayList<VisualCommand>();
   }
+
+public static void main (String[] args) throws IOException {
+  LogicalController lc = new LogicalController("French");
+  System.out.println(lc.getLang());
+}
 
 }
