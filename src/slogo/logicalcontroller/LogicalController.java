@@ -50,7 +50,7 @@ public class LogicalController {
   }
 
   public void setLanguage(String langauge){
-    
+
   }
 
   public String getLang(){
