@@ -1,8 +1,9 @@
 package slogo.logicalcontroller.command;
 
+
 public interface Command {
 
-    //FIXME: Use Generics to make command objects flexible in return value - Alex X.
+    //FIXME: Please Use Generics to make command objects flexible in return value - Alex X.
 
     /**
      * Getter method to return the value of the command, also the number of units of movement.
@@ -21,6 +22,5 @@ public interface Command {
      * @return
      */
     public String toString();
-
 
 }
