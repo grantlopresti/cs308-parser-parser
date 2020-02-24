@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Application;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.TabPane.TabClosingPolicy;
@@ -11,24 +12,26 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import slogo.view.TurtleImage;
 import slogo.view.subsections.*;
 import slogo.visualcontroller.VisualTurtle;
 
 public class SlogoView extends Application {
 
-  private static final int WINDOW_WIDTH = 1440;
-  private static final int WINDOW_HEIGHT = 720;
+  private static final int WINDOW_WIDTH = 1355;
+  private static final int WINDOW_HEIGHT = 700;
+
+  private static final int VISUALIZER_WIDTH = 800;
+  private static final int VISUALIZER_HEIGHT = 515;
 
   private BorderPane myBorderPane;
-
   private UserInputPane myInputPane;
   private VisualizationPane myVisualizationPane;
-  private Pane myCenterPane;
 
   @Override
   public void start(Stage stage) {
     myBorderPane = new BorderPane();
-    myVisualizationPane = new VisualizationPane();
+    myVisualizationPane = new VisualizationPane(VISUALIZER_WIDTH, VISUALIZER_HEIGHT);
     Scene scene = new Scene(createGUIBorderPane(), WINDOW_WIDTH, WINDOW_HEIGHT);
     stage.setTitle("Layout Demo");
     stage.setScene(scene);
@@ -38,7 +41,7 @@ public class SlogoView extends Application {
   public BorderPane createGUIBorderPane() {
     myBorderPane.setTop(getUpperPane());
     myBorderPane.setLeft(getLeftPane());
-    myCenterPane = getCenterPane();
+    Pane myCenterPane = getCenterPane();
     myBorderPane.setCenter(myCenterPane);
     myBorderPane.setRight(getRightPane());
     myBorderPane.setBottom(getBottomPane());
@@ -74,7 +77,7 @@ public class SlogoView extends Application {
   private BorderPane getCenterPane() {
     BorderPane centerPane = new BorderPane();
 
-    GridPane visualization = myVisualizationPane.getNode();
+    Group visualization = myVisualizationPane.getNode();
     HBox programInputArea = getProgramInputNode();
 
     centerPane.setCenter(visualization);
@@ -144,7 +147,8 @@ public class SlogoView extends Application {
     visualTurtles.add(new VisualTurtle());
 
     VisualTurtle customTurtle = new VisualTurtle();
-    customTurtle.setCenter(1000, 1000);
+    customTurtle.setCenter(100, 100);
+    customTurtle.setImage(TurtleImage.DOG);
     customTurtle.setColor(Color.RED);
     customTurtle.setSize(50);
     visualTurtles.add(customTurtle);

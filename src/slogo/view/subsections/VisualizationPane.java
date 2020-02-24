@@ -1,33 +1,40 @@
 package slogo.view.subsections;
 
 import java.util.ArrayList;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import slogo.visualcontroller.VisualTurtle;
 
 public class VisualizationPane implements SubPane {
 
+  private double groupWidth;
+  private double groupHeight;
+
   private ArrayList<VisualTurtle> myTurtles = new ArrayList<>();
 
+  public VisualizationPane(double width, double height){
+    groupWidth = width;
+    groupHeight = height;
+  }
+
   @Override
-  public GridPane getNode() {
-    GridPane visualizer = new GridPane();
+  public Group getNode() {
+    Group visualizer = new Group();
+
+    setBackground(visualizer);
 
     for (VisualTurtle turtle : myTurtles) {
+      System.out.println(turtle.getImage());
       ImageView turtleImage = new ImageView(turtle.getImage());
       turtleImage.setFitWidth(turtle.getSize());
       turtleImage.setPreserveRatio(true);
       turtleImage.setRotate(turtle.getHeading());
-      turtleImage.setX(turtle.getCenterX());
-      turtleImage.setY(turtle.getCenterY());
+      setAdjustedX(turtleImage, turtle.getCenterX());
+      setAdjustedY(turtleImage, turtle.getCenterY());
 
       Lighting lighting = getLightingEffect(turtle.getColor());
       turtleImage.setEffect(lighting);
@@ -35,10 +42,31 @@ public class VisualizationPane implements SubPane {
       visualizer.getChildren().add(turtleImage);
     }
 
-    visualizer.setBackground(new Background(new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
-    visualizer.setAlignment(Pos.CENTER);
+    visualizer.resize(groupWidth, groupHeight);
 
     return visualizer;
+  }
+
+  private void setBackground(Group visualizer) {
+    Rectangle background = new Rectangle();
+    background.setWidth(groupWidth);
+    background.setHeight(groupHeight);
+    background.setFill(Color.DARKGRAY);
+    visualizer.getChildren().add(background);
+  }
+
+  private void setAdjustedX(ImageView turtleImage, double centerX) {
+    double adjustedX = centerX + groupWidth /2;
+    if (adjustedX <= groupWidth && adjustedX >= 0) {
+      turtleImage.setX(adjustedX);
+    } else {
+      turtleImage.setVisible(false);
+    }
+  }
+
+  private void setAdjustedY(ImageView turtleImage, double centerY) {
+    double adjustedY = -1*centerY + groupHeight /2;
+    turtleImage.setY(adjustedY);
   }
 
   private Lighting getLightingEffect (Color color) {
