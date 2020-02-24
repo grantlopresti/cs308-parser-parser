@@ -7,21 +7,21 @@ import slogo.model.ModelObject;
 import slogo.visualcontroller.VisualCommand;
 
 import java.lang.reflect.Method;
-import java.util.List;
+
+import java.util.*;
+import java.io.*;
 
 /**
  * Logical controller handles the interaction between the user input from the GUI, the parser, command objects,
  * variables, and changes in the Model package.
- * @author Alex Xu
+ * @author Alex Xu and Amjad S.
  */
-import java.util.*;
-import java.io.*;
-
 public class LogicalController {
 
   private ModelCollection myModelCollection;
   private List<VisualCommand> myVisualCommands;
   private Parser myParser;
+
   private Stack<String> commands = new Stack<String>();
   private Stack<String> values = new Stack<String>();
   private File langFile = new File("./resources/");
@@ -32,25 +32,21 @@ public class LogicalController {
   private Map<String, String> commandArray;
   private ResourceBundle resources;
 
-
-
   /**
    * Default constructor for the Logical Controller
    */
-  public LogicalController(){
+  public LogicalController() {
     initializeController();
-
+  }
 
   public LogicalController(String language) throws IOException {
+    this();
     this.language = language;
     commandArray = new HashMap<String, String>();
     FileInputStream fis = new FileInputStream("resources/languages/"+this.language+".properties");
     resources = new PropertyResourceBundle(fis);
     genCommandArray();
     System.out.println(Arrays.asList(this.commandArray));
-
-
-
   }
 
   public String getLang(){
@@ -67,7 +63,6 @@ public class LogicalController {
       else{
         commandArray.put(regex, key);
       }
-
     }
   }
 
@@ -111,7 +106,7 @@ public class LogicalController {
    * Returns the collection of ModelObjects.
    * @return
    */
-  //TODO: Not to self: change so that it returns a collection of immutable modelobjects instead.
+  //TODO: Not to self: change in the future so that it returns a collection of immutable modelobjects instead.
   public ModelCollection getModelCollection(){
     return myModelCollection;
   }
@@ -125,9 +120,10 @@ public class LogicalController {
     //myVisualCommands = new ArrayList<VisualCommand>();
   }
 
-public static void main (String[] args) throws IOException {
-  LogicalController lc = new LogicalController("French");
-  System.out.println(lc.getLang());
-}
-
+  /*
+  public static void main (String[] args) throws IOException {
+    LogicalController lc = new LogicalController("French");
+    System.out.println(lc.getLang());
+  }
+   */
 }
