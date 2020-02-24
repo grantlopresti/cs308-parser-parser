@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Separator;
 import javafx.scene.control.ToolBar;
 import javafx.stage.FileChooser;
@@ -14,6 +17,8 @@ import slogo.view.windows.SlogoView;
 
 public class ToolbarPane implements SubPane {
 
+  private static final String DEFAULT_LANGUAGE = "English";
+
   private SlogoView myViewer;
 
   private Button myLoader = new Button("Load File");
@@ -22,7 +27,19 @@ public class ToolbarPane implements SubPane {
   private Button myTurtleImage = new Button("Turtle Image");
   private Button myPenColor = new Button("Pen Color");
   private Button myClearScreen = new Button("Clear Screen");
-  private Button myLanguage = new Button("Language");
+  private static final ObservableList<String> languageOptions =
+      FXCollections.observableArrayList(
+          "English",
+          "Chinese",
+          "French",
+          "German",
+          "Italian",
+          "Portuguese",
+          "Russian",
+          "Spanish",
+          "Urdu"
+      );
+  private ComboBox<String> myLanguage = new ComboBox<>(languageOptions);
   private Button myHelpInfo = new Button("Help/Info");
 
   public ToolbarPane(SlogoView viewer){
@@ -54,8 +71,15 @@ public class ToolbarPane implements SubPane {
 //    myTurtleImage.setOnAction();
 //    myPenColor.setOnAction();
 //    myClearScreen.setOnAction();
-//    myLanguage.setOnAction();
+    setDefaultLanguage();
+    myLanguage.getSelectionModel().selectedItemProperty().addListener( (options, oldValue,
+        newValue) -> changeLanguage(newValue));
 //    myHelpInfo.setOnAction();
+  }
+
+  private void setDefaultLanguage() {
+    myLanguage.setValue(DEFAULT_LANGUAGE);
+    changeLanguage(DEFAULT_LANGUAGE);
   }
 
   private void loadFile() {
@@ -88,7 +112,7 @@ public class ToolbarPane implements SubPane {
   }
 
   private void changeLanguage(String language) {
-    //LogicalController.setLanguage(fileContents);
+    LogicalController.setLanguage(language);
   }
 
   private String getTextFromFile(File file) {
