@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 
 import slogo.view.TurtleImage;
 import slogo.view.subsections.*;
+import slogo.visualcontroller.VisualLine;
 import slogo.visualcontroller.VisualTurtle;
 
 public class SlogoView extends Application {
@@ -134,9 +135,16 @@ public class SlogoView extends Application {
   }
 
   public void updateVisualTurtles(List<VisualTurtle> visualTurtles) {
-    System.out.println(myVisualizationPane);
     for (VisualTurtle turtle : visualTurtles){
       myVisualizationPane.addVisualTurtle(turtle);
+    }
+    myBorderPane.setCenter(getCenterPane());
+  }
+
+  public void updateVisualLines(List<VisualLine> visualLines) {
+    System.out.println(myVisualizationPane);
+    for (VisualLine line : visualLines){
+      myVisualizationPane.addVisualLine(line);
     }
     myBorderPane.setCenter(getCenterPane());
   }

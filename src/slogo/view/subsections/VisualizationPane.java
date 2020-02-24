@@ -1,20 +1,31 @@
 package slogo.view.subsections;
 
 import java.util.ArrayList;
+import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import slogo.visualcontroller.VisualCommand;
+import slogo.visualcontroller.VisualData;
+import slogo.visualcontroller.VisualError;
+import slogo.visualcontroller.VisualLine;
 import slogo.visualcontroller.VisualTurtle;
+import slogo.visualcontroller.VisualUserFunction;
 
 public class VisualizationPane implements SubPane {
 
   private double groupWidth;
   private double groupHeight;
 
-  private ArrayList<VisualTurtle> myTurtles = new ArrayList<>();
+  private List<VisualTurtle> myTurtles = new ArrayList<>();
+  private List<VisualCommand> myCommands = new ArrayList<>();
+  private List<VisualError> myErrors = new ArrayList<>();
+  private List<VisualUserFunction> myFunctions = new ArrayList<>();
+  private List<VisualLine> myLines = new ArrayList<>();
+  private List<VisualData> myData = new ArrayList<>();
 
   public VisualizationPane(double width, double height){
     groupWidth = width;
@@ -27,6 +38,14 @@ public class VisualizationPane implements SubPane {
 
     setBackground(visualizer);
 
+    addTurtlesToVisualizer(visualizer);
+
+    visualizer.resize(groupWidth, groupHeight);
+
+    return visualizer;
+  }
+
+  private void addTurtlesToVisualizer(Group visualizer) {
     for (VisualTurtle turtle : myTurtles) {
       System.out.println(turtle.getImage());
       ImageView turtleImage = new ImageView(turtle.getImage());
@@ -41,10 +60,6 @@ public class VisualizationPane implements SubPane {
 
       visualizer.getChildren().add(turtleImage);
     }
-
-    visualizer.resize(groupWidth, groupHeight);
-
-    return visualizer;
   }
 
   private void setBackground(Group visualizer) {
@@ -81,5 +96,30 @@ public class VisualizationPane implements SubPane {
 
   public void addVisualTurtle(VisualTurtle turtle) {
     myTurtles.add(turtle);
+  }
+
+  public void addVisualCommand(VisualCommand command) {
+    myCommands.add(command);
+  }
+
+  public void addVisualLine(VisualLine line) {
+    myLines.add(line);
+  }
+
+  public void addVisualError(VisualError error) {
+    myErrors.add(error);
+    displayError(error);
+  }
+
+  private void displayError(VisualError error) {
+    //TODO: add code to have popup that displays error message with okay button
+  }
+
+  public void addVisualData(VisualData data) {
+    myData.add(data);
+  }
+
+  public void addVisualUserFunction(VisualUserFunction function) {
+    myFunctions.add(function);
   }
 }
