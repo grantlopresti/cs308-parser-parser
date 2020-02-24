@@ -87,6 +87,10 @@ public class ToolbarPane implements SubPane {
       LogicalController.handleNewCommand(fileContents);
   }
 
+  private void changeLanguage(String language) {
+    //LogicalController.setLanguage(fileContents);
+  }
+
   private String getTextFromFile(File file) {
     Path filePath = file.toPath();
     try {
