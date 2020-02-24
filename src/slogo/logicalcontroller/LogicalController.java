@@ -49,6 +49,10 @@ public class LogicalController {
     System.out.println(Arrays.asList(this.commandArray));
   }
 
+  public void setLanguage(String langauge){
+    
+  }
+
   public String getLang(){
     return this.language;
   }
@@ -94,14 +98,15 @@ public class LogicalController {
     */
   }
 
+  /*
   /**
    * Returns collection of VisualCommands.
    * @return
-   */
+
   public List<VisualCommand> getVisualCommands(){
     return myVisualCommands;
   }
-
+*/
   /**
    * Returns the collection of ModelObjects.
    * @return
