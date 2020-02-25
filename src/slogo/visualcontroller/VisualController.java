@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class VisualController {
+public class VisualController implements VisualInterface {
 
   private double myAnimationRate = 0.0;
   private final SlogoView mySlogoView;
@@ -43,7 +43,8 @@ public class VisualController {
    * @param rate is the new animation rate for adding lines into the view
    * TODO - implement animation rate of object addition via queueing/threading (not threading lol)
    */
-  public void setAnmiationRate(double rate) {
+  @Override
+  public void setAnimationRate(double rate) {
     this.myAnimationRate = rate;
   }
 
@@ -53,6 +54,7 @@ public class VisualController {
    * @param command to determine how the turtle changes
    * TODO: Update switch to reflection, review tutorials and ask Alex for advice
    */
+  @Override
   public void moveTurtle(ModelTurtle turtle, Command command) {
     VisualTurtle visualTurtle = addTurtleToMap(turtle);
     visualTurtle.updateVisualTurtle(turtle);
