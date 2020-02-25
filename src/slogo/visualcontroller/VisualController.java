@@ -20,14 +20,17 @@ public class VisualController implements VisualInterface {
   // TODO: Update lines to queues, turtles to map (with ID) - check with Grant in VisPane to match structure
   // TODO: Have view controller send data, functions, and errors directly to view? Could send here first for styling
   private Map<Integer, VisualTurtle> myTurtles = new HashMap<>();
+  private List<VisualLine> myLines = new ArrayList<>();
   private List<VisualCommand> myCommands = new ArrayList<>();
   private List<VisualError> myErrors = new ArrayList<>();
   private List<VisualUserFunction> myFunctions = new ArrayList<>();
-  private List<VisualLine> myLines = new ArrayList<>();
   private List<VisualData> myData = new ArrayList<>();
 
   // TODO - Refactor to appropriate location (in command logical controller  package?), may need for reflection
   enum CommandName {FORWARD, BACKWARD, LEFT, RIGHT;}
+  private static final String FORWARD = "Forward";
+  private static final String BACKWARD = "Backward";
+
 
   /**
    * Constructor for a VisualController, with its associated SlogoView
@@ -60,8 +63,8 @@ public class VisualController implements VisualInterface {
     visualTurtle.updateVisualTurtle(turtle);
     myVisualizationPane.addVisualTurtle(visualTurtle);
     switch (command.toString()) {
-      case("Forward"):
-      case("Backward"):
+      case(FORWARD):
+      case(BACKWARD):
         if (turtle.isPenActive()) {
           appendLine(new VisualLine(visualTurtle));
         }
@@ -77,6 +80,15 @@ public class VisualController implements VisualInterface {
   private VisualTurtle addTurtleToMap(ModelTurtle turtle) {
     myTurtles.putIfAbsent(turtle.getID(), new VisualTurtle(turtle));
     return myTurtles.get(turtle.getID());
+  }
+
+  /**
+   * Main method for testing ability to add elements
+   * TODO - implement in SLogo View
+   * @param args
+   */
+  public static void main (String[] args) {
+
   }
 
 }
