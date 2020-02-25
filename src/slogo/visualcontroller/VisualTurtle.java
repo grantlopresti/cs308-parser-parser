@@ -51,7 +51,7 @@ public class VisualTurtle extends VisualObject {
    */
   public void updateVisualTurtle(ModelTurtle turtle) {
     if (turtle.getID() == myID) {
-      updatePriorValues(turtle);
+      updatePriorValues();
       setCurrentValues(turtle);
     } else {
       // TODO - implement error condition, visual controller attempting to modify wrong turtle
@@ -66,7 +66,7 @@ public class VisualTurtle extends VisualObject {
     myPenThickness = turtle.getPenThickness();
   }
 
-  private void updatePriorValues(ModelTurtle turtle) {
+  private void updatePriorValues() {
     myPreviousX = myCenterX;
     myPreviousY = myCenterY;
     myPreviousHeading = myHeading;

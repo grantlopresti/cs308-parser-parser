@@ -4,6 +4,7 @@ import slogo.logicalcontroller.LogicalController;
 import slogo.model.ModelCollection;
 import slogo.model.ModelTurtle;
 import slogo.view.windows.SlogoView;
+import slogo.visualcontroller.VisualController;
 
 /**
  * Purpose of this class is to manage the controllers and the model.
@@ -12,6 +13,8 @@ import slogo.view.windows.SlogoView;
 public class Manager {
     private ModelCollection myModelCollection;
     private SlogoView mySlogoView;
+    private VisualController myVisualController;
+    private LogicalController myLogicalController;
 
     public Manager(){
         myModelCollection = new ModelCollection();

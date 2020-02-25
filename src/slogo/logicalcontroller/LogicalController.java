@@ -72,6 +72,7 @@ public class LogicalController {
         System.out.println("Command Executed: " + commandName);
         System.out.println("After Y: " + myModelObject.getY());
         System.out.println("After X: " + myModelObject.getX());
+
       }
       //}
     }

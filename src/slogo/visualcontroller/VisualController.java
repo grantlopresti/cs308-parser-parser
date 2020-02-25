@@ -14,7 +14,6 @@ public class VisualController implements VisualInterface {
 
   private double myAnimationRate = 0.0;
   private final SlogoView mySlogoView;
-  private final VisualizationPane myVisualizationPane;
 
   // Currently mirroring structure of VisualizationPane.java
   // TODO: Update lines to queues, turtles to map (with ID) - check with Grant in VisPane to match structure
@@ -36,9 +35,8 @@ public class VisualController implements VisualInterface {
    * Constructor for a VisualController, with its associated SlogoView
    * @param view is the view in which VisualObjects will be added to the display
    */
-  public VisualController(SlogoView view, VisualizationPane pane){
+  public VisualController(SlogoView view){
     this.mySlogoView = view;
-    this.myVisualizationPane = pane;
   }
 
   /**
@@ -55,13 +53,13 @@ public class VisualController implements VisualInterface {
    * Called by the logical controller to update turtle state and draw shapes in Slogo view
    * @param turtle model turtle that is currently being acted on
    * @param command to determine how the turtle changes
-   * TODO: Update switch to reflection, review tutorials and ask Alex for advice
+   * TODO - Update switch to reflection, review tutorials and ask Alex for advice
    */
   @Override
   public void moveTurtle(ModelTurtle turtle, Command command) {
     VisualTurtle visualTurtle = addTurtleToMap(turtle);
     visualTurtle.updateVisualTurtle(turtle);
-    myVisualizationPane.addVisualTurtle(visualTurtle);
+    mySlogoView.updateVisualTurtles(new ArrayList<VisualTurtle>(List.of(visualTurtle)));
     switch (command.toString()) {
       case(FORWARD):
       case(BACKWARD):
@@ -74,21 +72,12 @@ public class VisualController implements VisualInterface {
 
   private void appendLine(VisualLine line) {
     myLines.add(line);
-    myVisualizationPane.addVisualLine(line);
+    mySlogoView.updateVisualLines(new ArrayList<VisualLine>(List.of(line)));
   }
 
   private VisualTurtle addTurtleToMap(ModelTurtle turtle) {
     myTurtles.putIfAbsent(turtle.getID(), new VisualTurtle(turtle));
     return myTurtles.get(turtle.getID());
-  }
-
-  /**
-   * Main method for testing ability to add elements
-   * TODO - implement in SLogo View
-   * @param args
-   */
-  public static void main (String[] args) {
-
   }
 
 }
