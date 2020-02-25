@@ -25,6 +25,7 @@ public class VisualTurtle extends VisualObject {
   private double myHeading = DEFAULT_HEADING;
   private double myPreviousHeading = DEFAULT_HEADING;
   private double mySize = DEFAULT_SIZE;
+  private double myPenThickness;
 
   /**
    * Constructor for visual turtle object from a model turtle object
@@ -55,6 +56,7 @@ public class VisualTurtle extends VisualObject {
     this.myCenterX = turtle.getX();
     this.myCenterY = turtle.getY();
     this.myHeading = turtle.getHeading();
+    this.myPenThickness = turtle.getPenThickness();
   }
 
   private void updatePriorValues(ModelTurtle turtle) {
@@ -142,6 +144,10 @@ public class VisualTurtle extends VisualObject {
   public void setCenter(double centerX, double centerY) {
     myCenterX = centerX;
     myCenterY = centerY;
+  }
+
+  public double getPenThickeness() {
+    return myPenThickness;
   }
 
 }

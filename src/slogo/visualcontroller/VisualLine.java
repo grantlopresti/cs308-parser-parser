@@ -22,6 +22,15 @@ public class VisualLine {
     this.myThickness = thickness;
   }
 
+  public VisualLine(VisualTurtle turtle) {
+    this.myStartX = turtle.getPreviousX();
+    this.myEndX = turtle.getCenterX();
+    this.myStartY = turtle.getPreviousY();
+    this.myEndY = turtle.getCenterY();
+    this.myColor = turtle.getColor();
+    this.myThickness = turtle.getPenThickeness();
+  }
+
   public double getStartX() {
     return myStartX;
   }

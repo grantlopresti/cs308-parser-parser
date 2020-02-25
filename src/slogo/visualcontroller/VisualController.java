@@ -1,5 +1,6 @@
 package slogo.visualcontroller;
 
+import slogo.logicalcontroller.command.Command;
 import slogo.model.ModelTurtle;
 import slogo.view.windows.SlogoView;
 
@@ -47,13 +48,22 @@ public class VisualController {
    * @param command to determine how the turtle changes
    * TODO: Update switch to reflection, review tutorials and ask Alex for advice
    */
-  public void appendToView(ModelTurtle turtle, String command) {
-    addTurtleToMap(turtle);
-
+  public void appendToView(ModelTurtle turtle, Command command) {
+    VisualTurtle visualTurtle = addTurtleToMap(turtle);
+    visualTurtle.updateVisualTurtle(turtle);
+    switch (command.toString()) {
+      case("Forward"):
+      case("Backward"):
+        if (turtle.isPenActive()) {
+          myLines.add(new VisualLine(visualTurtle));
+        }
+        break;
+    }
   }
 
-  private void addTurtleToMap(ModelTurtle turtle) {
+  private VisualTurtle addTurtleToMap(ModelTurtle turtle) {
     myTurtles.putIfAbsent(turtle.getID(), new VisualTurtle(turtle));
+    return myTurtles.get(turtle.getID());
   }
 
   private void turtleMoved(ModelTurtle turtle, String command) {
