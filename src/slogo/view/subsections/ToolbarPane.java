@@ -146,11 +146,27 @@ public class ToolbarPane implements SubPane {
 
   private void sendCommands(File file) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, IOException {
       String fileContents = getTextFromFile(file);
+    try {
       LogicalController.handleNewCommand(fileContents);
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    } catch (NoSuchMethodException e) {
+      e.printStackTrace();
+    } catch (InstantiationException e) {
+      e.printStackTrace();
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    } catch (InvocationTargetException e) {
+      e.printStackTrace();
+    }
   }
 
-  private void changeLanguage(String language) throws IOException {
-    LogicalController.setLanguage(language);
+  private void changeLanguage(String language) {
+    try {
+      LogicalController.setLanguage(language);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   private String getTextFromFile(File file) {
