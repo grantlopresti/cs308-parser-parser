@@ -18,4 +18,9 @@ public class Forward implements Command {
     public String getCommandType() {
         return "Forward";
     }
+
+    @Override
+    public String toString(){
+        return (getCommandType() + " " + getValue());
+    }
 }
