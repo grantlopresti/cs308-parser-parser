@@ -6,60 +6,44 @@ public class VisualLine {
   private static final Color DEFAULT_COLOR = Color.BLACK;
   private static final double DEFAULT_THICKNESS = 5;
 
-  private double myStartX;
-  private double myStartY;
-  private double myEndX;
-  private double myEndY;
-  private Color myColor = DEFAULT_COLOR;
-  private double myThickness = DEFAULT_THICKNESS;
+  private final double myStartX;
+  private final double myStartY;
+  private final double myEndX;
+  private final double myEndY;
+  private final Color myColor;
+  private final double myThickness;
+
+  public VisualLine(double startX, double startY, double endX, double endY, Color color, double thickness) {
+    this.myStartX = startX;
+    this.myStartY = startY;
+    this.myEndX = endX;
+    this.myEndY = endY;
+    this.myColor = color;
+    this.myThickness = thickness;
+  }
 
   public double getStartX() {
     return myStartX;
-  }
-
-  public void setStartX(double startX) {
-    myStartX = startX;
   }
 
   public double getStartY() {
     return myStartY;
   }
 
-  public void setStartY(double startY) {
-    myStartY = startY;
-  }
-
   public double getEndX() {
     return myEndX;
-  }
-
-  public void setEndX(double endX) {
-    myEndX = endX;
   }
 
   public double getEndY() {
     return myEndY;
   }
 
-  public void setEndY(double endY) {
-    myEndY = endY;
-  }
-
   public Color getColor() {
     return myColor;
-  }
-
-  public void setColor(Color color) {
-    myColor = color;
   }
 
   public double getThickness() {
     return myThickness;
   }
 
-  public void setThickness(double thickness) {
-    myThickness = thickness;
-  }
-  
-  
 }
