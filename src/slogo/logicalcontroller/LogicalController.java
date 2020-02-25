@@ -1,8 +1,16 @@
 package slogo.logicalcontroller;
 
 import slogo.exceptions.InvalidCommandException;
+import slogo.logicalcontroller.command.Command;
+import slogo.logicalcontroller.command.Parser;
 import slogo.model.ModelCollection;
 import slogo.model.ModelTurtle;
+
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Logical controller handles the interaction between the user input from the GUI, the parser, command objects,
@@ -10,33 +18,19 @@ import slogo.model.ModelTurtle;
  * @author Alex Xu and Amjad S.
  */
 public class LogicalController {
-  private ModelCollection myModelCollection;
-  private Parser myParser;
+  private static Parser myParser;
+  private static ModelCollection myModelCollection;
 
   private LogicalController() {}
 
-  public static void setLanguage(String langauge){
-    myParser = new Parser();
+  /**
+   * To be called from the front-end to change the language (also needs to happen the first time).
+   * @param language
+   * @throws IOException
+   */
+  public static void setLanguage(String language) throws IOException {
+    myParser = new Parser(language);
   }
-
-
-  /*
-  public LogicalController(String language) throws IOException {
-    this();
-    this.language = language;
-    commandArray = new HashMap<String, String>();
-    FileInputStream fis = new FileInputStream("resources/languages/"+this.language+".properties");
-    resources = new PropertyResourceBundle(fis);
-    genCommandArray();
-    System.out.println(Arrays.asList(this.commandArray));
-  }
-*/
-
-
-
-
-
-
 
   /**
    * Code that interacts with the GUI, and receives strings as commands
@@ -44,13 +38,17 @@ public class LogicalController {
    * @param command
    * @throws InvalidCommandException
    */
-  public static void handleNewCommand(String command) throws InvalidCommandException {
+  public static void handleNewCommand(String command) throws InvalidCommandException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
     //TODO: Handle input command, try/catch for invalid and route potential error back to
-    System.out.println(command);
+    //System.out.println(command);
 
-    /*
-    Command myCurrentCommand = myParser.parse(command);   //TODO: Amjad: Parser.parse() method needs to return a Command (or collection of commands, as implementation here can change easily)
-                                                          //TODO: Naming of methods/classes can change and are flexible
+    List<String> commandList;
+    commandList = Arrays.asList(command.split("\n"));
+
+
+    myParser.parse(commandList);
+    List<Command> commandObjectList = myParser.getCommands();
+    Command myCurrentCommand = commandObjectList.get(0);    //TODO: Only one command right now
     for (Object mo : myModelCollection){
       if(myCurrentCommand.getCommandCategory().equals(VISUAL_COMMAND_NAME){
         myVisualCommands.add(myCurrentCommand);
@@ -62,7 +60,7 @@ public class LogicalController {
         method.invoke(mo, myValue);
       }
     }
-    */
+
   }
 
   /**
@@ -77,13 +75,19 @@ public class LogicalController {
   /**
    * Initializes/Resets the Logical Controller.
    */
-  public void initializeController(){
+  public static void initializeController(){
     myModelCollection = new ModelCollection();
     myModelCollection.append(new ModelTurtle());
   }
 
-  public static void main(String[] args){
+  /**
+   * Overloaded method. Initializes/Resets the Logical Controller.
+   * @param language
+   */
+  public static void initializeController(String language) throws IOException {
+    myModelCollection = new ModelCollection();
+    myModelCollection.append(new ModelTurtle());
 
+    myParser = new Parser(language);
   }
-
 }
