@@ -18,6 +18,8 @@ import javafx.scene.shape.Shape;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
+//testing
+
 /**
  * An example class to show how to animate objects over time.
  *

@@ -7,10 +7,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Separator;
 import javafx.scene.control.ToolBar;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import slogo.logicalcontroller.LogicalController;
@@ -24,7 +28,7 @@ public class ToolbarPane implements SubPane {
 
   private Button myLoader = new Button("Load File");
   private Button myLoadAndRun = new Button("Load & Run");
-  private Button myBGColor = new Button("Background Color");
+  private ColorPicker myBGColorPicker = new ColorPicker();
   private Button myTurtleImage = new Button("Turtle Image");
   private Button myPenColor = new Button("Pen Color");
   private Button myClearScreen = new Button("Clear Screen");
@@ -56,7 +60,8 @@ public class ToolbarPane implements SubPane {
       myLoader,
       myLoadAndRun,
       new Separator(),
-      myBGColor,
+      new Text("BG Color:"),
+      myBGColorPicker,
       myTurtleImage,
       myPenColor,
       myClearScreen,
@@ -85,9 +90,14 @@ public class ToolbarPane implements SubPane {
       }
     });
 //    myBGColor.setOnAction();
+    myLoadAndRun.setOnAction(e -> loadAndRun());
+    myBGColorPicker.setOnAction(t -> {
+      Color c = myBGColorPicker.getValue();
+      myViewer.setBGColor(c.getRed(), c.getGreen(), c.getBlue());
+    });
 //    myTurtleImage.setOnAction();
 //    myPenColor.setOnAction();
-//    myClearScreen.setOnAction();
+    myClearScreen.setOnAction(e -> clearVisualizationScreen());
     setDefaultLanguage();
     myLanguage.getSelectionModel().selectedItemProperty().addListener( (options, oldValue,
         newValue) -> {
@@ -100,6 +110,11 @@ public class ToolbarPane implements SubPane {
 //    myHelpInfo.setOnAction();
   }
 
+  private void clearVisualizationScreen() {
+    myViewer.clearScreen();
+  }
+
+  private void setDefaultLanguage() {
   private void setDefaultLanguage() throws IOException {
     myLanguage.setValue(DEFAULT_LANGUAGE);
     changeLanguage(DEFAULT_LANGUAGE);

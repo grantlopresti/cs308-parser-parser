@@ -99,7 +99,7 @@ public class SlogoView extends Application {
     inputArea.setWrapText(true);
 
     Button runButton = new Button("Run");
-    runButton.setId("record-sales");
+    runButton.setId("run-button");
     runButton.setMinSize(60, WINDOW_HEIGHT * 0.15);
     runButton.setPrefWidth(120);
     runButton.setOnAction(e -> {
@@ -159,6 +159,7 @@ public class SlogoView extends Application {
     visualTurtles.add(new VisualTurtle());
 
     VisualTurtle customTurtle = new VisualTurtle();
+    customTurtle.setChangeState(true);
     customTurtle.setCenter(100, 100);
     customTurtle.setImage(TurtleImage.DOG);
     customTurtle.setHeading(45);
@@ -166,10 +167,18 @@ public class SlogoView extends Application {
     customTurtle.setSize(50);
     visualTurtles.add(customTurtle);
 
-
-
     updateVisualTurtles(visualTurtles);
   }
 
 
+  public void setBGColor(double red, double green, double blue) {
+    myVisualizationPane.setBGColor(red, green, blue);
+    myBorderPane.setCenter(getCenterPane());
+  }
+
+  public void clearScreen() {
+    myVisualizationPane.clearElements();
+    myVisualizationPane.resetBGColor();
+    myBorderPane.setCenter(getCenterPane());
+  }
 }

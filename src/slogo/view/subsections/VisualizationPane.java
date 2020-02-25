@@ -2,14 +2,23 @@ package slogo.view.subsections;
 
 import java.util.ArrayList;
 import java.util.List;
+import javafx.animation.Animation;
+import javafx.animation.PathTransition;
+import javafx.animation.RotateTransition;
+import javafx.animation.SequentialTransition;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
+import javafx.scene.shape.HLineTo;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 import slogo.visualcontroller.VisualCommand;
 import slogo.visualcontroller.VisualData;
 import slogo.visualcontroller.VisualError;
@@ -19,8 +28,12 @@ import slogo.visualcontroller.VisualUserFunction;
 
 public class VisualizationPane implements SubPane {
 
+  private static final Color DEFAULT_COLOR = Color.DARKGRAY;
+
   private double groupWidth;
   private double groupHeight;
+
+  private Color myBGColor = DEFAULT_COLOR;
 
   private List<VisualTurtle> myTurtles = new ArrayList<>();
   private List<VisualCommand> myCommands = new ArrayList<>();
@@ -75,10 +88,18 @@ public class VisualizationPane implements SubPane {
 
       turtleImage.setFitWidth(turtle.getSize());
       turtleImage.setPreserveRatio(true);
-      turtleImage.setRotate(turtle.getHeading());
+      //turtleImage.setRotate(turtle.getHeading());
 
-      setAdjustedX(turtleImage, turtle.getCenterX());
-      setAdjustedY(turtleImage, turtle.getCenterY());
+      setAdjustedX(turtleImage, turtle.getPreviousX());
+      setAdjustedY(turtleImage, turtle.getPreviousY());
+
+      if (turtle.hasChangedState()) {
+        Animation turtleAnimation = makeAnimation(turtle, turtleImage);
+        turtleAnimation.play();
+      } else {
+        setAdjustedX(turtleImage, turtle.getCenterX());
+        setAdjustedY(turtleImage, turtle.getCenterY());
+      }
 
       Lighting lighting = getLightingEffect(turtle.getColor());
       turtleImage.setEffect(lighting);
@@ -87,16 +108,32 @@ public class VisualizationPane implements SubPane {
     }
   }
 
+  private Animation makeAnimation (VisualTurtle turtle, Node agent) {
+    // create something to follow
+    Path path = new Path();
+    path.getElements().add(new MoveTo(getAdjustedX(turtle.getPreviousX()),
+        getAdjustedY(turtle.getPreviousY())));
+    path.getElements().add(new LineTo(getAdjustedX(turtle.getCenterX()),
+        getAdjustedY(turtle.getCenterY())));
+    // create an animation where the shape follows a path
+    PathTransition pt = new PathTransition(Duration.seconds(4), path, agent);
+    // create an animation that rotates the shape
+    RotateTransition rt = new RotateTransition(Duration.seconds(3));
+    rt.setByAngle(turtle.getPreviousHeading()-turtle.getHeading());
+    // put them together in order
+    return new SequentialTransition(agent, pt, rt);
+  }
+
   private void setBackground(Group visualizer) {
     Rectangle background = new Rectangle();
     background.setWidth(groupWidth);
     background.setHeight(groupHeight);
-    background.setFill(Color.DARKGRAY);
+    background.setFill(myBGColor);
     visualizer.getChildren().add(background);
   }
 
   private void setAdjustedX(ImageView turtleImage, double centerX) {
-    double adjustedX = centerX + groupWidth /2;
+    double adjustedX = getAdjustedX(centerX);
     if (adjustedX <= groupWidth && adjustedX >= 0) {
       turtleImage.setX(adjustedX);
     } else {
@@ -104,9 +141,17 @@ public class VisualizationPane implements SubPane {
     }
   }
 
+  private double getAdjustedX(double centerX) {
+    return centerX + groupWidth /2;
+  }
+
   private void setAdjustedY(ImageView turtleImage, double centerY) {
-    double adjustedY = -1*centerY + groupHeight /2;
+    double adjustedY = getAdjustedY(centerY);
     turtleImage.setY(adjustedY);
+  }
+
+  private double getAdjustedY(double centerY) {
+    return -1*centerY + groupHeight /2;
   }
 
   private Lighting getLightingEffect (Color color) {
@@ -146,5 +191,18 @@ public class VisualizationPane implements SubPane {
 
   public void addVisualUserFunction(VisualUserFunction function) {
     myFunctions.add(function);
+  }
+
+  public void setBGColor(double red, double green, double blue) {
+    myBGColor = new Color(red, green, blue, 1);
+  }
+
+  public void clearElements() {
+    myTurtles = new ArrayList<>();
+    myLines = new ArrayList<>();
+  }
+
+  public void resetBGColor() {
+    myBGColor = DEFAULT_COLOR;
   }
 }
