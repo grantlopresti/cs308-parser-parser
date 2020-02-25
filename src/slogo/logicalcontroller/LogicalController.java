@@ -19,11 +19,12 @@ import java.io.*;
  */
 public class LogicalController {
   private ModelCollection myModelCollection;
+  private Parser myParser;
 
   private LogicalController() {}
 
   public static void setLanguage(String langauge){
-    //Parser.setLanguage(language);
+    myParser = new Parser();
   }
 
 
@@ -84,7 +85,7 @@ public class LogicalController {
   /**
    * Initializes/Resets the Logical Controller.
    */
-  private void initializeController(){
+  public void initializeController(){
     myModelCollection = new ModelCollection();
     myModelCollection.append(new ModelTurtle());
   }
