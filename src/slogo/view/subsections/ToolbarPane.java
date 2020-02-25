@@ -7,28 +7,35 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Separator;
 import javafx.scene.control.ToolBar;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import slogo.logicalcontroller.LogicalController;
+import slogo.view.TurtleImage;
 import slogo.view.windows.SlogoView;
 
 public class ToolbarPane implements SubPane {
 
   private static final String DEFAULT_LANGUAGE = "English";
+  private static final String DEFAULT_TURTLE_IMAGE = "Turtle";
 
   private SlogoView myViewer;
 
   private Button myLoader = new Button("Load File");
   private Button myLoadAndRun = new Button("Load & Run");
   private ColorPicker myBGColorPicker = new ColorPicker();
-  private Button myTurtleImage = new Button("Turtle Image");
+  private ComboBox<String> myTurtleImage = new ComboBox<>(TurtleImage.getLanguages());
   private Button myPenColor = new Button("Pen Color");
   private Button myClearScreen = new Button("Clear Screen");
   private static final ObservableList<String> languageOptions =
@@ -61,6 +68,7 @@ public class ToolbarPane implements SubPane {
       new Separator(),
       new Text("BG Color:"),
       myBGColorPicker,
+      new Text("Turtle Image:"),
       myTurtleImage,
       myPenColor,
       myClearScreen,
@@ -80,7 +88,10 @@ public class ToolbarPane implements SubPane {
       Color c = myBGColorPicker.getValue();
       myViewer.setBGColor(c.getRed(), c.getGreen(), c.getBlue());
     });
-//    myTurtleImage.setOnAction();
+    myTurtleImage.getSelectionModel().selectedItemProperty().addListener( (options, oldValue,
+        newValue) -> {
+      changeTurtleImage(newValue);
+    });
 //    myPenColor.setOnAction();
     myClearScreen.setOnAction(e -> clearVisualizationScreen());
     setDefaultLanguage();
@@ -88,7 +99,28 @@ public class ToolbarPane implements SubPane {
         newValue) -> {
       changeLanguage(newValue);
     });
-//    myHelpInfo.setOnAction();
+    myHelpInfo.setOnAction(e -> showHelpWindow());
+  }
+
+  private void changeTurtleImage(Object newValue) {
+  }
+
+  private void showHelpWindow() {
+    Stage stage = new Stage();
+    stage.setTitle("Slogo Help/Info");
+    stage.setWidth(1200);
+    stage.setHeight(600);
+    Scene scene = new Scene(new Group());
+    VBox root = new VBox();
+    final WebView browser = new WebView();
+    final WebEngine webEngine = browser.getEngine();
+    webEngine.load("https://www2.cs.duke.edu/courses/compsci308/current/assign/03_parser/commands.php");
+
+    root.getChildren().addAll(browser);
+    scene.setRoot(root);
+
+    stage.setScene(scene);
+    stage.show();
   }
 
   private void clearVisualizationScreen() {

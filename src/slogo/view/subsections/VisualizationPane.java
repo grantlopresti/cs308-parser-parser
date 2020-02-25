@@ -32,6 +32,7 @@ public class VisualizationPane implements SubPane {
 
   private double groupWidth;
   private double groupHeight;
+  private Group myVisualizer;
 
   private Color myBGColor = DEFAULT_COLOR;
 
@@ -49,16 +50,16 @@ public class VisualizationPane implements SubPane {
 
   @Override
   public Group getNode() {
-    Group visualizer = new Group();
+    myVisualizer = new Group();
 
-    setBackground(visualizer);
+    setBackground();
 
-    addTurtlesToVisualizer(visualizer);
-    addLinesToVisualizer(visualizer);
+    addTurtlesToVisualizer(myVisualizer);
+    addLinesToVisualizer(myVisualizer);
 
-    visualizer.resize(groupWidth, groupHeight);
+    myVisualizer.resize(groupWidth, groupHeight);
 
-    return visualizer;
+    return myVisualizer;
   }
 
   private void addLinesToVisualizer(Group visualizer) {
@@ -124,12 +125,12 @@ public class VisualizationPane implements SubPane {
     return new SequentialTransition(agent, pt, rt);
   }
 
-  private void setBackground(Group visualizer) {
+  private void setBackground() {
     Rectangle background = new Rectangle();
     background.setWidth(groupWidth);
     background.setHeight(groupHeight);
     background.setFill(myBGColor);
-    visualizer.getChildren().add(background);
+    myVisualizer.getChildren().add(background);
   }
 
   private void setAdjustedX(ImageView turtleImage, double centerX) {
@@ -195,6 +196,7 @@ public class VisualizationPane implements SubPane {
 
   public void setBGColor(double red, double green, double blue) {
     myBGColor = new Color(red, green, blue, 1);
+    setBackground();
   }
 
   public void clearElements() {

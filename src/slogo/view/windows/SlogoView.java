@@ -2,7 +2,9 @@ package slogo.view.windows;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -15,6 +17,7 @@ import javafx.stage.Stage;
 
 import slogo.view.TurtleImage;
 import slogo.view.subsections.*;
+import slogo.visualcontroller.VisualCommand;
 import slogo.visualcontroller.VisualLine;
 import slogo.visualcontroller.VisualTurtle;
 
@@ -104,7 +107,7 @@ public class SlogoView extends Application {
     runButton.setPrefWidth(120);
     runButton.setOnAction(e -> {
       myInputPane.sendUserCommand();
-      doTestUpdate();
+      //doTestUpdate();
     });
 
     programInputArea.getChildren().addAll(inputArea, runButton);
@@ -138,43 +141,57 @@ public class SlogoView extends Application {
     myInputPane.setInputArea(fileContents);
   }
 
-  public void updateVisualTurtles(List<VisualTurtle> visualTurtles) {
-    for (VisualTurtle turtle : visualTurtles){
+  public void updateVisualTurtles(Map<Integer, VisualTurtle> visualTurtles) {
+    for (VisualTurtle turtle : visualTurtles.values()){
       myVisualizationPane.addVisualTurtle(turtle);
     }
     myBorderPane.setCenter(getCenterPane());
   }
 
   public void updateVisualLines(List<VisualLine> visualLines) {
-    System.out.println(myVisualizationPane);
     for (VisualLine line : visualLines){
       myVisualizationPane.addVisualLine(line);
     }
     myBorderPane.setCenter(getCenterPane());
   }
 
-  public void doTestUpdate() {
-    List<VisualTurtle> visualTurtles = new ArrayList<>();
+  public void updateVisualCommands(List<VisualCommand> visualCommands) {
 
-    visualTurtles.add(new VisualTurtle());
-
-    VisualTurtle customTurtle = new VisualTurtle();
-    customTurtle.setChangeState(true);
-    customTurtle.setPreviousCenter(100, 100);
-    customTurtle.setCenter(200, 100);
-    customTurtle.setImage(TurtleImage.DOG);
-    customTurtle.setHeading(45);
-    customTurtle.setColor(Color.RED);
-    customTurtle.setSize(50);
-    visualTurtles.add(customTurtle);
-
-    updateVisualTurtles(visualTurtles);
   }
+
+  public void updateVisualErrors(List<VisualLine> visualLines) {
+
+  }
+
+  public void updateVisualData(List<VisualLine> visualLines) {
+
+  }
+
+  public void updateVisualUserFunctions(List<VisualLine> visualLines) {
+
+  }
+
+//  public void doTestUpdate() {
+//    Map<Integer, VisualTurtle> visualTurtles = new HashMap<>();
+//
+//    visualTurtles.add(new VisualTurtle());
+//
+//    VisualTurtle customTurtle = new VisualTurtle();
+//    customTurtle.setChangeState(true);
+//    customTurtle.setPreviousCenter(100, 100);
+//    customTurtle.setCenter(200, 100);
+//    customTurtle.setImage(TurtleImage.DOG);
+//    customTurtle.setHeading(45);
+//    customTurtle.setColor(Color.RED);
+//    customTurtle.setSize(50);
+//    visualTurtles.add(customTurtle);
+//
+//    updateVisualTurtles(visualTurtles);
+//  }
 
 
   public void setBGColor(double red, double green, double blue) {
     myVisualizationPane.setBGColor(red, green, blue);
-    myBorderPane.setCenter(getCenterPane());
   }
 
   public void clearScreen() {
