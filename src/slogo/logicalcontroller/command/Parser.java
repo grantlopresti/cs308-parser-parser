@@ -8,18 +8,20 @@ public class Parser {
 
     private String lang;
     private Map<String, String> commandArray;
-    private Stack<String> commands = new Stack<String>();
-    private Stack<String> values = new Stack<String>();
-    private ArrayList<Command> commandObjs = new ArrayList<Command>();
-    ResourceBundle resources;
+    private Stack<String> commands;
+    private Stack<String> values;
+    private ArrayList<Command> commandObjs;
+    private ResourceBundle resources;
 
     public Parser(String language) throws IOException {
         this.lang = language;
         commandArray = new HashMap<String, String>();
+        commands = new Stack<String>();
+        values = new Stack<String>();
+        commandObjs = new ArrayList<Command>();
         FileInputStream fis = new FileInputStream("resources/languages/"+this.lang+".properties");
         resources = new PropertyResourceBundle(fis);
         genCommandArray();
-
 
     }
 
@@ -52,7 +54,8 @@ public class Parser {
             Constructor con = cl.getConstructor(String.class);
             Object obj = con.newInstance(values.pop());
             commandObjs.add((Command) obj);
-            
+            System.out.println((Command)obj);
+
         }
 
     }
