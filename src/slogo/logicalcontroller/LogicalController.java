@@ -1,16 +1,8 @@
 package slogo.logicalcontroller;
 
 import slogo.exceptions.InvalidCommandException;
-import slogo.logicalcontroller.parser.Parser;
 import slogo.model.ModelCollection;
-import slogo.model.ModelObject;
 import slogo.model.ModelTurtle;
-import slogo.visualcontroller.VisualCommand;
-
-import java.lang.reflect.Method;
-
-import java.util.*;
-import java.io.*;
 
 /**
  * Logical controller handles the interaction between the user input from the GUI, the parser, command objects,
@@ -87,6 +79,10 @@ public class LogicalController {
   private void initializeController(){
     myModelCollection = new ModelCollection();
     myModelCollection.append(new ModelTurtle());
+  }
+
+  public static void main(String[] args){
+
   }
 
 }

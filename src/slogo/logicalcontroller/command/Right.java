@@ -17,4 +17,9 @@ public class Right implements Command {
     public String getCommandType() {
         return "Right";
     }
+
+    @Override
+    public String toString(){
+        return (getCommandType() + " " + getValue());
+    }
 }
