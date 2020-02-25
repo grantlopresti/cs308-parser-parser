@@ -7,7 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
@@ -73,21 +72,7 @@ public class ToolbarPane implements SubPane {
   private void initializeButtons() throws IOException {
     myLoader.setOnAction(e -> loadFile());
     myLoadAndRun.setOnAction(e -> {
-      try {
-        loadAndRun();
-      } catch (ClassNotFoundException ex) {
-        ex.printStackTrace();
-      } catch (NoSuchMethodException ex) {
-        ex.printStackTrace();
-      } catch (InstantiationException ex) {
-        ex.printStackTrace();
-      } catch (IllegalAccessException ex) {
-        ex.printStackTrace();
-      } catch (InvocationTargetException ex) {
-        ex.printStackTrace();
-      } catch (IOException ex) {
-        ex.printStackTrace();
-      }
+      loadAndRun();
     });
 //    myBGColor.setOnAction();
     myLoadAndRun.setOnAction(e -> loadAndRun());
@@ -101,11 +86,7 @@ public class ToolbarPane implements SubPane {
     setDefaultLanguage();
     myLanguage.getSelectionModel().selectedItemProperty().addListener( (options, oldValue,
         newValue) -> {
-      try {
-        changeLanguage(newValue);
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
+      changeLanguage(newValue);
     });
 //    myHelpInfo.setOnAction();
   }
@@ -114,7 +95,6 @@ public class ToolbarPane implements SubPane {
     myViewer.clearScreen();
   }
 
-  private void setDefaultLanguage() {
   private void setDefaultLanguage() throws IOException {
     myLanguage.setValue(DEFAULT_LANGUAGE);
     changeLanguage(DEFAULT_LANGUAGE);
@@ -126,9 +106,23 @@ public class ToolbarPane implements SubPane {
     myViewer.setUserInputAreaText(fileContents);
   }
 
-  private void loadAndRun() throws ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, IOException {
+  private void loadAndRun() {
     File file = getUserFile();
-    sendCommands(file);
+    try {
+      sendCommands(file);
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    } catch (NoSuchMethodException e) {
+      e.printStackTrace();
+    } catch (InvocationTargetException e) {
+      e.printStackTrace();
+    } catch (InstantiationException e) {
+      e.printStackTrace();
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   private File getUserFile() {
