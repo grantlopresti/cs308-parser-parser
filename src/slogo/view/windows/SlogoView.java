@@ -104,7 +104,7 @@ public class SlogoView extends Application {
     runButton.setPrefWidth(120);
     runButton.setOnAction(e -> {
       myInputPane.sendUserCommand();
-      doUpdate();
+      //doTestUpdate();
     });
 
     programInputArea.getChildren().addAll(inputArea, runButton);
@@ -153,7 +153,7 @@ public class SlogoView extends Application {
     myBorderPane.setCenter(getCenterPane());
   }
 
-  public void doUpdate() {
+  public void doTestUpdate() {
     List<VisualTurtle> visualTurtles = new ArrayList<>();
 
     visualTurtles.add(new VisualTurtle());
