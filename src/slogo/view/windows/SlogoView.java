@@ -141,8 +141,8 @@ public class SlogoView extends Application {
     myInputPane.setInputArea(fileContents);
   }
 
-  public void updateVisualTurtles(Map<Integer, VisualTurtle> visualTurtles) {
-    for (VisualTurtle turtle : visualTurtles.values()){
+  public void updateVisualTurtles(ArrayList<VisualTurtle> visualTurtles) {
+    for (VisualTurtle turtle : visualTurtles){
       myVisualizationPane.addVisualTurtle(turtle);
     }
     myBorderPane.setCenter(getCenterPane());
