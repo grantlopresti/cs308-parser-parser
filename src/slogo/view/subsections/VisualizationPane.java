@@ -7,7 +7,6 @@ import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import slogo.visualcontroller.VisualCommand;
@@ -21,6 +20,8 @@ public class VisualizationPane implements SubPane {
 
   private double groupWidth;
   private double groupHeight;
+
+  private Color myBGColor = Color.DARKGRAY;
 
   private List<VisualTurtle> myTurtles = new ArrayList<>();
   private List<VisualCommand> myCommands = new ArrayList<>();
@@ -91,7 +92,7 @@ public class VisualizationPane implements SubPane {
     Rectangle background = new Rectangle();
     background.setWidth(groupWidth);
     background.setHeight(groupHeight);
-    background.setFill(Color.DARKGRAY);
+    background.setFill(myBGColor);
     visualizer.getChildren().add(background);
   }
 
@@ -146,5 +147,9 @@ public class VisualizationPane implements SubPane {
 
   public void addVisualUserFunction(VisualUserFunction function) {
     myFunctions.add(function);
+  }
+
+  public void setBGColor(double red, double green, double blue) {
+    myBGColor = new Color(red, green, blue, 1);
   }
 }

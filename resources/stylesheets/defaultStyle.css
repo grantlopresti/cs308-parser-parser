@@ -1,4 +1,41 @@
-#record-sales {
+.button {
+  -fx-background-color: #3c3c3c;
+  -fx-alignment: CENTER;
+  -fx-text-fill: #96b946;
+  -fx-font-size: 12px;
+  -fx-font-weight: bold;
+}
+.button:hover{
+  -fx-background-color: #e6e6e6;
+}
+
+
+.tab-pane .tab-header-area .tab-header-background {
+  -fx-opacity: 30;
+}
+.tab {
+  -fx-background-insets: 0 2 0 2,0,0;
+}
+.tab-pane .tab {
+  -fx-background-color: #e6e6e6;
+}
+.tab-pane .tab:selected {
+  -fx-background-color: #3c3c3c;
+}
+.tab .tab-label {
+  -fx-alignment: CENTER;
+  -fx-text-fill: #828282;
+  -fx-font-size: 12px;
+  -fx-font-weight: bold;
+}
+.tab:selected .tab-label {
+  -fx-alignment: CENTER;
+  -fx-text-fill: #96b946;
+}
+
+
+
+#run-button {
   -fx-padding: 8 15 15 15;
   -fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;
   -fx-background-radius: 8;
@@ -10,19 +47,16 @@
   -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.75) , 4,0,0,1 );
   -fx-font-weight: bold;
   -fx-font-size: 1.1em;
+  -fx-text-fill: white;
 }
-#record-sales:hover {
+#run-button:hover {
   -fx-background-color:
       linear-gradient(from 0% 93% to 0% 100%, #a34313 0%, #903b12 100%),
       #9d4024,
       #d86e3a,
       radial-gradient(center 50% 50%, radius 100%, #ea7f4b, #c54e2c);
 }
-#record-sales:pressed {
+#run-button:pressed {
   -fx-padding: 10 15 13 15;
   -fx-background-insets: 2 0 0 0,2 0 3 0, 2 0 4 0, 2 0 5 0;
-}
-#record-sales Text {
-  -fx-fill: white;
-  -fx-effect: dropshadow( gaussian , #a30000 , 0,0,0,2 );
 }
