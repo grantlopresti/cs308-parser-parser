@@ -4,7 +4,11 @@ public abstract class VisualText {
 
     public final String myString;
 
-    protected VisualText(String myString) {
+    public VisualText(String myString) {
         this.myString = myString;
+    }
+
+    public String getString() {
+        return this.myString;
     }
 }

@@ -14,7 +14,7 @@ public class VisualTurtle extends VisualObject {
   public static final double DEFAULT_Y = 0;
   public static final double DEFAULT_HEADING = 0;
 
-  private final int myID;
+  private int myID;
   private boolean myChangeState = DEFAULT_CHANGE_STATE;
   private String myImage = DEFAULT_IMAGE;
   private Color myColor = DEFAULT_COLOR;
@@ -26,6 +26,13 @@ public class VisualTurtle extends VisualObject {
   private double myPreviousHeading = DEFAULT_HEADING;
   private double mySize = DEFAULT_SIZE;
   private double myPenThickness;
+
+  /**
+   * Empty constructor for testing within VisualizationPane
+   */
+  public VisualTurtle(){
+
+  }
 
   /**
    * Constructor for visual turtle object from a model turtle object

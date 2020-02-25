@@ -16,6 +16,7 @@ public class VisualController {
 
   // Currently mirroring structure of VisualizationPane.java
   // TODO: Update lines to queues, turtles to map (with ID)
+  // TODO: Have view controller send data, functions, and errors directly to view
   private Map<Integer, VisualTurtle> myTurtles = new HashMap<>();
   private List<VisualCommand> myCommands = new ArrayList<>();
   private List<VisualError> myErrors = new ArrayList<>();
@@ -64,10 +65,6 @@ public class VisualController {
   private VisualTurtle addTurtleToMap(ModelTurtle turtle) {
     myTurtles.putIfAbsent(turtle.getID(), new VisualTurtle(turtle));
     return myTurtles.get(turtle.getID());
-  }
-
-  private void turtleMoved(ModelTurtle turtle, String command) {
-
   }
 
 }

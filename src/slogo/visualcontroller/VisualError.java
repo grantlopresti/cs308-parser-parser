@@ -1,5 +1,8 @@
 package slogo.visualcontroller;
 
-public class VisualError {
+public class VisualError extends VisualText {
 
+    public VisualError(String myString) {
+        super(myString);
+    }
 }
