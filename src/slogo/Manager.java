@@ -23,8 +23,6 @@ public class Manager {
 
     }
 
-    //DELETE ME
-
 
 
     //TODO:
