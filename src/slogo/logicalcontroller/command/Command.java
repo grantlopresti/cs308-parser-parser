@@ -1,7 +1,7 @@
 package slogo.logicalcontroller.command;
 
 
-public interface Command {
+public interface Command<E> {
 
     //FIXME: Please Use Generics to make command objects flexible in return value - Alex X.
 

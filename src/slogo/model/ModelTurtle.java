@@ -42,4 +42,11 @@ public class ModelTurtle extends ModelObject {
     public double getPenThickness() {
         return myPen.getThickness();
     }
+
+    public void penUp(){
+        myPen.penUp();
+    }
+    public void penDown(){
+        myPen.penDown();
+    }
 }

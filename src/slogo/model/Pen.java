@@ -47,4 +47,14 @@ public class Pen {
     protected double getThickness(){
         return myThickness;
     }
+
+
+
+    protected void penDown(){
+        active = true;
+    }
+
+    protected void penUp(){
+        active = false;
+    }
 }

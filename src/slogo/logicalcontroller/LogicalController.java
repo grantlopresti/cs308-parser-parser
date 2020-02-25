@@ -8,7 +8,7 @@ import slogo.model.ModelTurtle;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
@@ -50,15 +50,16 @@ public class LogicalController {
     List<Command> commandObjectList = myParser.getCommands();
     Command myCurrentCommand = commandObjectList.get(0);    //TODO: Only one command right now
     for (Object mo : myModelCollection){
-      if(myCurrentCommand.getCommandCategory().equals(VISUAL_COMMAND_NAME){
-        myVisualCommands.add(myCurrentCommand);
-      }
-      else{
+      //if(myCurrentCommand.getCommandCategory().equals(VISUAL_COMMAND_NAME){
+      //  myVisualCommands.add(myCurrentCommand);
+      //}
+      //else{
         String commandName = myCurrentCommand.getCommandType();
-        Method method = mo.getClass().getMethod(commandName, double.class);
+        Class parameterClass = Class.forName("double");
+        Method method = mo.getClass().getMethod(commandName, parameterClass);
         double myValue = myCurrentCommand.getValue();
         method.invoke(mo, myValue);
-      }
+      //}
     }
 
   }
@@ -67,7 +68,7 @@ public class LogicalController {
    * Returns the collection of ModelObjects.
    * @return
    */
-  //TODO: Not to self: change in the future so that it returns a collection of immutable modelobjects instead.
+  //TODO: Not to self: change in the future so that it returns a collection of immutable model objects instead.
    public ModelCollection getModelCollection(){
     return myModelCollection;
    }
@@ -90,4 +91,5 @@ public class LogicalController {
 
     myParser = new Parser(language);
   }
+
 }
