@@ -5,6 +5,8 @@ import javafx.stage.Stage;
 import slogo.view.windows.Home;
 import slogo.view.windows.SlogoView;
 
+import java.io.IOException;
+
 public class ViewTester {
 
   private static final SlogoView mainStage = new SlogoView();
@@ -13,7 +15,11 @@ public class ViewTester {
   public static void main(String[] args) {
 
     Platform.startup(() -> {
-      mainStage.start(new Stage());
+      try {
+        mainStage.start(new Stage());
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     });
 
   }

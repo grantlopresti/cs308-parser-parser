@@ -2,6 +2,7 @@ package slogo.view.subsections;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import javafx.collections.FXCollections;
@@ -47,7 +48,7 @@ public class ToolbarPane implements SubPane {
   }
 
   @Override
-  public ToolBar getNode() {
+  public ToolBar getNode() throws IOException {
     
     initializeButtons();
 
@@ -64,20 +65,42 @@ public class ToolbarPane implements SubPane {
       myHelpInfo);
   }
 
-  private void initializeButtons() {
+  private void initializeButtons() throws IOException {
     myLoader.setOnAction(e -> loadFile());
-    myLoadAndRun.setOnAction(e -> loadAndRun());
+    myLoadAndRun.setOnAction(e -> {
+      try {
+        loadAndRun();
+      } catch (ClassNotFoundException ex) {
+        ex.printStackTrace();
+      } catch (NoSuchMethodException ex) {
+        ex.printStackTrace();
+      } catch (InstantiationException ex) {
+        ex.printStackTrace();
+      } catch (IllegalAccessException ex) {
+        ex.printStackTrace();
+      } catch (InvocationTargetException ex) {
+        ex.printStackTrace();
+      } catch (IOException ex) {
+        ex.printStackTrace();
+      }
+    });
 //    myBGColor.setOnAction();
 //    myTurtleImage.setOnAction();
 //    myPenColor.setOnAction();
 //    myClearScreen.setOnAction();
     setDefaultLanguage();
     myLanguage.getSelectionModel().selectedItemProperty().addListener( (options, oldValue,
-        newValue) -> changeLanguage(newValue));
+        newValue) -> {
+      try {
+        changeLanguage(newValue);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    });
 //    myHelpInfo.setOnAction();
   }
 
-  private void setDefaultLanguage() {
+  private void setDefaultLanguage() throws IOException {
     myLanguage.setValue(DEFAULT_LANGUAGE);
     changeLanguage(DEFAULT_LANGUAGE);
   }
@@ -88,7 +111,7 @@ public class ToolbarPane implements SubPane {
     myViewer.setUserInputAreaText(fileContents);
   }
 
-  private void loadAndRun() {
+  private void loadAndRun() throws ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, IOException {
     File file = getUserFile();
     sendCommands(file);
   }
@@ -106,12 +129,12 @@ public class ToolbarPane implements SubPane {
     return fc.showOpenDialog(new Stage());
   }
 
-  private void sendCommands(File file) {
+  private void sendCommands(File file) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, IOException {
       String fileContents = getTextFromFile(file);
       LogicalController.handleNewCommand(fileContents);
   }
 
-  private void changeLanguage(String language) {
+  private void changeLanguage(String language) throws IOException {
     LogicalController.setLanguage(language);
   }
 

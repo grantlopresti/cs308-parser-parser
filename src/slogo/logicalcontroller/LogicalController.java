@@ -39,8 +39,9 @@ public class LogicalController {
    * @param command
    * @throws InvalidCommandException
    */
-  public static void handleNewCommand(String command) throws InvalidCommandException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+  public static void handleNewCommand(String command) throws InvalidCommandException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, IOException {
     //TODO: Handle input command, try/catch for invalid and route potential error back to
+    initializeController("English");
     System.out.println(command);
 
     List<String> commandList;
@@ -49,27 +50,29 @@ public class LogicalController {
 
     myParser.parse(commandList);
     List<Command> commandObjectList = myParser.getCommands();
-    Command myCurrentCommand = commandObjectList.get(0);    //TODO: Only one command right now
 
     for (Object mo : myModelCollection){
       //if(myCurrentCommand.getCommandCategory().equals(VISUAL_COMMAND_NAME){
       //  myVisualCommands.add(myCurrentCommand);
       //}
       //else{
+      for(Command myCurrentCommand : commandObjectList) {
+        //Command myCurrentCommand = commandObjectList.get(0);
         ModelObject myModelObject = (ModelObject) mo;
 
-        System.out.println(myModelObject.getY());
-        System.out.println(myModelObject.getX());
+        System.out.println("Before Y " + myModelObject.getY());
+        System.out.println("Before X " + myModelObject.getX());
 
         String commandName = myCurrentCommand.getCommandType();
-        Class parameterClass = Class.forName("double");
-        Method method = myModelObject.getClass().getMethod(commandName, parameterClass);
+        //Class parameterClass = Class.forName("double");
+        Method method = myModelObject.getClass().getMethod(commandName.toLowerCase(), double.class);
         double myValue = myCurrentCommand.getValue();
         method.invoke(myModelObject, myValue);
 
         System.out.println("Command Executed: " + commandName);
-        System.out.println(myModelObject.getY());
-        System.out.println(myModelObject.getX());
+        System.out.println("After Y: " + myModelObject.getY());
+        System.out.println("After X: " + myModelObject.getX());
+      }
       //}
     }
 
