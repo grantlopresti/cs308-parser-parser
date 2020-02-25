@@ -25,8 +25,11 @@ public class UserInputPane implements SubPane {
   public void sendUserCommand() {
     String userCommand = myTextArea.getText();
     myTextArea.clear();
+    System.out.println(userCommand);
     try {
-      LogicalController.handleNewCommand(userCommand);
+      if (!userCommand.equals("")) {
+        LogicalController.handleNewCommand(userCommand);
+      }
     }
     catch (Exception e){
       e.printStackTrace();

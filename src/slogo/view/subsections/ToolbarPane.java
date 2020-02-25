@@ -2,6 +2,7 @@ package slogo.view.subsections;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import javafx.collections.FXCollections;
@@ -120,11 +121,27 @@ public class ToolbarPane implements SubPane {
 
   private void sendCommands(File file) {
       String fileContents = getTextFromFile(file);
+    try {
       LogicalController.handleNewCommand(fileContents);
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    } catch (NoSuchMethodException e) {
+      e.printStackTrace();
+    } catch (InstantiationException e) {
+      e.printStackTrace();
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    } catch (InvocationTargetException e) {
+      e.printStackTrace();
+    }
   }
 
   private void changeLanguage(String language) {
-    LogicalController.setLanguage(language);
+    try {
+      LogicalController.setLanguage(language);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   private String getTextFromFile(File file) {
