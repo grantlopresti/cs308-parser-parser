@@ -2,6 +2,7 @@ package slogo.visualcontroller;
 
 import slogo.logicalcontroller.command.Command;
 import slogo.model.ModelTurtle;
+import slogo.view.subsections.VisualizationPane;
 import slogo.view.windows.SlogoView;
 
 import java.util.ArrayList;
@@ -13,10 +14,11 @@ public class VisualController {
 
   private double myAnimationRate = 0.0;
   private final SlogoView mySlogoView;
+  private final VisualizationPane myVisualizationPane;
 
   // Currently mirroring structure of VisualizationPane.java
-  // TODO: Update lines to queues, turtles to map (with ID)
-  // TODO: Have view controller send data, functions, and errors directly to view
+  // TODO: Update lines to queues, turtles to map (with ID) - check with Grant in VisPane to match structure
+  // TODO: Have view controller send data, functions, and errors directly to view? Could send here first for styling
   private Map<Integer, VisualTurtle> myTurtles = new HashMap<>();
   private List<VisualCommand> myCommands = new ArrayList<>();
   private List<VisualError> myErrors = new ArrayList<>();
@@ -24,20 +26,22 @@ public class VisualController {
   private List<VisualLine> myLines = new ArrayList<>();
   private List<VisualData> myData = new ArrayList<>();
 
-  // TODO - Refactor to appropriate location (in command logical controller  package?)
+  // TODO - Refactor to appropriate location (in command logical controller  package?), may need for reflection
   enum CommandName {FORWARD, BACKWARD, LEFT, RIGHT;}
 
   /**
    * Constructor for a VisualController, with its associated SlogoView
    * @param view is the view in which VisualObjects will be added to the display
    */
-  public VisualController(SlogoView view){
+  public VisualController(SlogoView view, VisualizationPane pane){
     this.mySlogoView = view;
+    this.myVisualizationPane = pane;
   }
 
   /**
    * Public method callable by the logical controller to adjust the animation rate
    * @param rate is the new animation rate for adding lines into the view
+   * TODO - implement animation rate of object addition via queueing/threading (not threading lol)
    */
   public void setAnmiationRate(double rate) {
     this.myAnimationRate = rate;
@@ -49,17 +53,23 @@ public class VisualController {
    * @param command to determine how the turtle changes
    * TODO: Update switch to reflection, review tutorials and ask Alex for advice
    */
-  public void appendToView(ModelTurtle turtle, Command command) {
+  public void moveTurtle(ModelTurtle turtle, Command command) {
     VisualTurtle visualTurtle = addTurtleToMap(turtle);
     visualTurtle.updateVisualTurtle(turtle);
+    myVisualizationPane.addVisualTurtle(visualTurtle);
     switch (command.toString()) {
       case("Forward"):
       case("Backward"):
         if (turtle.isPenActive()) {
-          myLines.add(new VisualLine(visualTurtle));
+          appendLine(new VisualLine(visualTurtle));
         }
         break;
     }
+  }
+
+  private void appendLine(VisualLine line) {
+    myLines.add(line);
+    myVisualizationPane.addVisualLine(line);
   }
 
   private VisualTurtle addTurtleToMap(ModelTurtle turtle) {
