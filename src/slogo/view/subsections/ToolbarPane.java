@@ -78,11 +78,15 @@ public class ToolbarPane implements SubPane {
     });
 //    myTurtleImage.setOnAction();
 //    myPenColor.setOnAction();
-//    myClearScreen.setOnAction();
+    myClearScreen.setOnAction(e -> clearVisualizationScreen());
     setDefaultLanguage();
     myLanguage.getSelectionModel().selectedItemProperty().addListener( (options, oldValue,
         newValue) -> changeLanguage(newValue));
 //    myHelpInfo.setOnAction();
+  }
+
+  private void clearVisualizationScreen() {
+    myViewer.clearScreen();
   }
 
   private void setDefaultLanguage() {

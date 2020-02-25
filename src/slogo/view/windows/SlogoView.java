@@ -158,6 +158,7 @@ public class SlogoView extends Application {
     visualTurtles.add(new VisualTurtle());
 
     VisualTurtle customTurtle = new VisualTurtle();
+    customTurtle.setChangeState(true);
     customTurtle.setCenter(100, 100);
     customTurtle.setImage(TurtleImage.DOG);
     customTurtle.setHeading(45);
@@ -171,6 +172,12 @@ public class SlogoView extends Application {
 
   public void setBGColor(double red, double green, double blue) {
     myVisualizationPane.setBGColor(red, green, blue);
+    myBorderPane.setCenter(getCenterPane());
+  }
+
+  public void clearScreen() {
+    myVisualizationPane.clearElements();
+    myVisualizationPane.resetBGColor();
     myBorderPane.setCenter(getCenterPane());
   }
 }
