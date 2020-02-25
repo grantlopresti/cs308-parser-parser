@@ -31,6 +31,9 @@ public class Parser {
 
     public void parse(List<String> lines) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         for (String line : lines) {
+            int numVals = 0;
+            int numCommands = 0;
+            int compoundVal = 0;
             if (line.trim().length() > 0) {
                 String[] splited = line.split("\\s+");
                 boolean prev = false;
@@ -38,26 +41,43 @@ public class Parser {
                     if(!hasValue(s)){
                         commands.push(s);
                         prev = true;
+                        numCommands++;
                     }
                     else{
                         values.push(s);
+                        numVals++;
                     }
                 }
+
             }
+
+            if(numCommands>numVals){
+                compoundVal = numCommands-numVals;
+            }
+            System.out.println(compoundVal);
+            unravel(compoundVal);
         }
-        unravel();
+
     }
 
-    public void unravel() throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    public void unravel(int cv) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        String theVal = null;
+        int comVal = cv;
         while(!commands.isEmpty() && !values.isEmpty()){
             Class cl = Class.forName("slogo.logicalcontroller.command."+commandArray.get(commands.pop()));
             Constructor con = cl.getConstructor(String.class);
-            Object obj = con.newInstance(values.pop());
+            theVal = values.pop();
+            Object obj = con.newInstance(theVal);
             commandObjs.add((Command) obj);
             System.out.println((Command)obj);
-
         }
-
+        while(!commands.isEmpty() && comVal>0){
+            Class cl = Class.forName("slogo.logicalcontroller.command."+commandArray.get(commands.pop()));
+            Constructor con = cl.getConstructor(String.class);
+            Object obj = con.newInstance(theVal);
+            commandObjs.add((Command) obj);
+            comVal--;
+        }
     }
 
     private boolean hasValue(String val){
@@ -104,7 +124,12 @@ public class Parser {
     public static void main (String[] args) throws IOException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         Parser p = new Parser("English");
         List<String> test = new ArrayList<String>();
-        test.add("rt 1");
+        test.add("fd fd fd fd 50");
         p.parse(test);
+        ArrayList<Command> testt = p.getCommands();
+        for(Command c: testt){
+            System.out.println(testt);
+        }
+
     }
 }
