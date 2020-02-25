@@ -25,7 +25,6 @@ public class Manager {
 
 
 
-
     //TODO:
     /*
     1. Launch the GUI, with Manager passed in?
