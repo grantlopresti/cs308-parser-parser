@@ -60,16 +60,16 @@ public class VisualTurtle extends VisualObject {
   }
 
   private void setCurrentValues(ModelTurtle turtle) {
-    this.myCenterX = turtle.getX();
-    this.myCenterY = turtle.getY();
-    this.myHeading = turtle.getHeading();
-    this.myPenThickness = turtle.getPenThickness();
+    myCenterX = turtle.getX();
+    myCenterY = turtle.getY();
+    myHeading = turtle.getHeading();
+    myPenThickness = turtle.getPenThickness();
   }
 
   private void updatePriorValues(ModelTurtle turtle) {
-    this.myPreviousX = this.myCenterX;
-    this.myPreviousY = this.myCenterY;
-    this.myPreviousHeading = this.myHeading;
+    myPreviousX = myCenterX;
+    myPreviousY = myCenterY;
+    myPreviousHeading = myHeading;
   }
 
   public double getSize() {
