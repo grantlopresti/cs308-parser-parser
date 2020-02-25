@@ -4,6 +4,7 @@ import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.command.Parser;
 import slogo.model.ModelCollection;
+import slogo.model.ModelObject;
 import slogo.model.ModelTurtle;
 
 import java.io.IOException;
@@ -40,7 +41,7 @@ public class LogicalController {
    */
   public static void handleNewCommand(String command) throws InvalidCommandException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
     //TODO: Handle input command, try/catch for invalid and route potential error back to
-    //System.out.println(command);
+    System.out.println(command);
 
     List<String> commandList;
     commandList = Arrays.asList(command.split("\n"));
@@ -49,16 +50,26 @@ public class LogicalController {
     myParser.parse(commandList);
     List<Command> commandObjectList = myParser.getCommands();
     Command myCurrentCommand = commandObjectList.get(0);    //TODO: Only one command right now
+
     for (Object mo : myModelCollection){
       //if(myCurrentCommand.getCommandCategory().equals(VISUAL_COMMAND_NAME){
       //  myVisualCommands.add(myCurrentCommand);
       //}
       //else{
+        ModelObject myModelObject = (ModelObject) mo;
+
+        System.out.println(myModelObject.getY());
+        System.out.println(myModelObject.getX());
+
         String commandName = myCurrentCommand.getCommandType();
         Class parameterClass = Class.forName("double");
-        Method method = mo.getClass().getMethod(commandName, parameterClass);
+        Method method = myModelObject.getClass().getMethod(commandName, parameterClass);
         double myValue = myCurrentCommand.getValue();
-        method.invoke(mo, myValue);
+        method.invoke(myModelObject, myValue);
+
+        System.out.println("Command Executed: " + commandName);
+        System.out.println(myModelObject.getY());
+        System.out.println(myModelObject.getX());
       //}
     }
 

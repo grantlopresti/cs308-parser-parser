@@ -1,6 +1,6 @@
 package slogo.logicalcontroller.command;
 
-public class Forward implements Command {
+public class Forward extends ModifierCommand{
 
     private double value;
 
