@@ -153,6 +153,11 @@ public class VisualTurtle extends VisualObject {
     myCenterY = centerY;
   }
 
+  public void setPreviousCenter(double centerX, double centerY) {
+    myPreviousX = centerX;
+    myPreviousY = centerY;
+  }
+
   public double getPenThickeness() {
     return myPenThickness;
   }
