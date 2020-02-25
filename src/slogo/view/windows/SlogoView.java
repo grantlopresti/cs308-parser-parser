@@ -1,5 +1,6 @@
 package slogo.view.windows;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Application;
@@ -30,7 +31,7 @@ public class SlogoView extends Application {
   private VisualizationPane myVisualizationPane;
 
   @Override
-  public void start(Stage stage) {
+  public void start(Stage stage) throws IOException {
     myBorderPane = new BorderPane();
     myVisualizationPane = new VisualizationPane(VISUALIZER_WIDTH, VISUALIZER_HEIGHT);
     Scene scene = new Scene(createGUIBorderPane(), WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -40,7 +41,7 @@ public class SlogoView extends Application {
     stage.show();
   }
 
-  public BorderPane createGUIBorderPane() {
+  public BorderPane createGUIBorderPane() throws IOException {
     myBorderPane.setTop(getUpperPane());
     myBorderPane.setLeft(getLeftPane());
     Pane myCenterPane = getCenterPane();
@@ -53,7 +54,7 @@ public class SlogoView extends Application {
     return myBorderPane;
   }
 
-  private VBox getUpperPane() {
+  private VBox getUpperPane() throws IOException {
     VBox vbox = new VBox();
 
     //MenuBar menu = new MenuPane().getNode();

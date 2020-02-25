@@ -1,5 +1,8 @@
 package slogo.visualcontroller;
 
-public class VisualCommand {
+public class VisualCommand extends VisualText{
 
+    public VisualCommand(String myString) {
+        super(myString);
+    }
 }

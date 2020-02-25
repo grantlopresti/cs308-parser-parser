@@ -52,7 +52,13 @@ public class Home extends Application {
    *  and for changing settings
    */
   public void initialize() {
-    LaunchSlogo.setOnAction(e -> launchSim());
+    LaunchSlogo.setOnAction(e -> {
+      try {
+        launchSim();
+      } catch (IOException ex) {
+        ex.printStackTrace();
+      }
+    });
     //TODO: Add actual events to these button clicks
     ColorScheme.setOnAction(e -> System.out.println("ColorScheme"));
     Language.setOnAction(e -> System.out.println("Language Select"));
@@ -61,7 +67,7 @@ public class Home extends Application {
   }
 
   @FXML
-  private void launchSim() {
+  private void launchSim() throws IOException {
     SlogoView mainView = new SlogoView();
     mainView.start(new Stage());
   }

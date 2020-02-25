@@ -94,6 +94,11 @@ public abstract class ModelObject implements ModelInterface{
         return ID;
     }
 
+    @Override
+    public void forward(double value){
+        move(value);
+    }
+
     private double calcX(double distance){
         double radians = Math.toRadians(heading);
         double cosValue = Math.cos(radians);
