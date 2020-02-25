@@ -65,4 +65,6 @@ public interface ModelInterface {
      * @param degree to turn the ModelObject by
      */
     public void turn(double degree);
+
+    public void forward(double value);
 }
