@@ -28,7 +28,7 @@ public class Pen {
             myThickness = value;
         }
         else{
-
+            myThickness = 0;
         }
     }
 
