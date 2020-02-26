@@ -2,8 +2,9 @@ package slogo.view.subsections;
 
 import java.util.ArrayList;
 import java.util.List;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
+
+import javafx.beans.property.Property;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -15,8 +16,8 @@ public class CommandHistoryTab implements SubTab {
   private SlogoView myViewer;
 
   private List<VisualCommand> myCommands;
-
   private VBox myVBox;
+  private ListView myListView;
 
   public CommandHistoryTab(SlogoView viewer) {
     myViewer = viewer;
@@ -29,6 +30,7 @@ public class CommandHistoryTab implements SubTab {
     myCommands.add(command);
   }
 
+  // NOTE - these two methods no longer needed with bindigns, automatic updates after property set
   public void updateTab(){
     for (VisualCommand command: myCommands){
       myVBox.getChildren().add(getVisualizedCommand(command));
@@ -42,10 +44,17 @@ public class CommandHistoryTab implements SubTab {
   }
 
   @Override
-  public Tab getTab() {
+  public Tab getTab(Property property) {
     updateTab();
     Tab tab = new Tab("Command History", myVBox);
     tab.getStyleClass().addAll("command-tab");
     return tab;
+  }
+
+  // NOTE - this is the magic sauce, when the itemsproperty is bound as visualcontroller instance changes, yours does too
+  private void setProperty(Property property) {
+    myListView = new ListView();
+    myListView.itemsProperty().bind(property);
+    myVBox.getChildren().add(myListView);
   }
 }

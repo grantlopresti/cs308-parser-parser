@@ -2,9 +2,8 @@ package slogo.view.windows;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -16,14 +15,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import slogo.logicalcontroller.LogicalController;
-import slogo.logicalcontroller.command.Command;
-import slogo.view.TurtleImage;
 import slogo.view.subsections.*;
-import slogo.visualcontroller.VisualCommand;
-import slogo.visualcontroller.VisualData;
-import slogo.visualcontroller.VisualLine;
-import slogo.visualcontroller.VisualTurtle;
-import slogo.visualcontroller.VisualUserFunction;
+import slogo.visualcontroller.*;
 
 public class SlogoView extends Application {
 
@@ -39,9 +32,11 @@ public class SlogoView extends Application {
   private CommandHistoryTab myCommandsTab;
 
   private LogicalController myLogicalController;
+  private VisualController myVisualController;
 
-  public SlogoView (LogicalController control) {
-    this.myLogicalController = control;
+  public SlogoView (LogicalController logicalController, VisualController visualController) {
+    this.myLogicalController = logicalController;
+    this.myVisualController = visualController;
   }
 
   @Override
@@ -84,8 +79,8 @@ public class SlogoView extends Application {
   private TabPane getLeftPane() {
     TabPane tabPaneLeft = new TabPane();
 
-    Tab definedFunctions = new DefinedFunctionsTab().getTab();
-    Tab fileTree = new FileTreeTab().getTab();
+    Tab definedFunctions = new DefinedFunctionsTab().getTab(this.myVisualController.getProperty(VisualProperty.FUNCTION));
+    Tab fileTree = new FileTreeTab().getTab(this.myVisualController.getProperty(VisualProperty.FILE));
 
     tabPaneLeft.getTabs().addAll(definedFunctions, fileTree);
     tabPaneLeft.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
@@ -145,10 +140,11 @@ public class SlogoView extends Application {
   private TabPane getRightPane() {
     TabPane tabPaneRight = new TabPane();
 
-    Tab data = new DataViewerTab().getTab();
-    myCommandsTab = new CommandHistoryTab(this);
-    Tab commands = myCommandsTab.getTab();
-    Tab errors = new ErrorHandlerTab().getTab();
+    myCommandsTab = new CommandHistoryTab();
+    Tab commands = myCommandsTab.getTab(this.myVisualController.getProperty(VisualProperty.COMMAND));
+
+    Tab data = new DataViewerTab().getTab(this.myVisualController.getProperty(VisualProperty.DATA));
+    Tab errors = new ErrorHandlerTab().getTab(this.myVisualController.getProperty(VisualProperty.ERROR));
 
     tabPaneRight.getTabs().addAll(commands, data, errors);
     tabPaneRight.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
@@ -183,21 +179,13 @@ public class SlogoView extends Application {
     myBorderPane.setCenter(getCenterPane());
   }
 
-  public void updateVisualCommands(List<VisualCommand> visualCommands) {
+  public void updateVisualCommands(List<VisualCommand> visualCommands) { ;}
 
-  }
+  public void updateVisualErrors(List<VisualLine> visualLines) { ;}
 
-  public void updateVisualErrors(List<VisualLine> visualLines) {
+  public void updateVisualData(List<VisualData> visualData) { ;}
 
-  }
-
-  public void updateVisualData(List<VisualData> visualData) {
-
-  }
-
-  public void updateVisualUserFunctions(List<VisualUserFunction> visualFunctions) {
-
-  }
+  public void updateVisualUserFunctions(List<VisualUserFunction> visualFunctions) { ;}
 
 //  public void doTestUpdate() {
 //    Map<Integer, VisualTurtle> visualTurtles = new HashMap<>();

@@ -7,6 +7,7 @@ package slogo.model;
 public class ModelTurtle extends ModelObject {
 
     private Pen myPen;
+    private boolean isShowing;
 
     /**
      * Default constructor of ModelTurtle object
@@ -14,6 +15,7 @@ public class ModelTurtle extends ModelObject {
     public ModelTurtle(){
         super();
         myPen = new Pen();
+        isShowing = true;
     }
 
     /**
@@ -48,5 +50,16 @@ public class ModelTurtle extends ModelObject {
     }
     public void penDown(){
         myPen.penDown();
+    }
+
+    public void showTurtle(){
+        isShowing = true;
+    }
+    public void hideTurtle(){
+        isShowing = false;
+    }
+
+    public boolean isShowing(){
+        return isShowing;
     }
 }

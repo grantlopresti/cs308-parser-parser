@@ -1,34 +1,38 @@
 package slogo.visualcontroller;
 
-import slogo.logicalcontroller.command.Command;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import slogo.exceptions.LogicalException;
+import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
-import slogo.model.ModelObject;
 import slogo.model.ModelTurtle;
-import slogo.view.subsections.VisualizationPane;
 import slogo.view.windows.SlogoView;
 
 import java.util.*;
 
-public class VisualController {
+public class VisualController implements VisualInterface {
 
   private double myAnimationRate = 0.0;
   private SlogoView mySlogoView;
 
-  // Currently mirroring structure of VisualizationPane.java
-  // TODO: Update lines to queues, turtles to map (with ID) - check with Grant in VisPane to match structure
-  // TODO: Have view controller send data, functions, and errors directly to view? Could send here first for styling
+  // Currently mirroring structure of VisualizationPane.java (change to bindings)
   private Map<Integer, VisualTurtle> myTurtles = new HashMap<>();
   private List<VisualLine> myLines = new ArrayList<>();
+
   private List<VisualCommand> myCommands = new ArrayList<>();
   private List<VisualError> myErrors = new ArrayList<>();
   private List<VisualUserFunction> myFunctions = new ArrayList<>();
   private List<VisualData> myData = new ArrayList<>();
 
-  // TODO - Refactor to appropriate location (in command logical controller  package?), may need for reflection
-  enum CommandName {FORWARD, BACKWARD, LEFT, RIGHT;}
-  private static final String FORWARD = "Forward";
-  private static final String BACKWARD = "Backward";
-
+  private SimpleObjectProperty<ObservableList<VisualError>> myErrorsProperty;
+  private SimpleObjectProperty<ObservableList<VisualCommand>> myCommandsProperty;
+  private SimpleObjectProperty<ObservableList<VisualUserFunction>> myFunctionsProperty;
+  private SimpleObjectProperty<ObservableList<VisualData>> myDataProperty;
+  private SimpleObjectProperty<ObservableList<VisualVariable>> myVariablesProperty;
+  private SimpleObjectProperty<ObservableList<VisualFile>> myFilesProperty;
 
   /**
    * Constructor for a VisualController, with its associated SlogoView
@@ -39,7 +43,16 @@ public class VisualController {
   }
 
   public VisualController() {
+    initProperties();
+  }
 
+  private void initProperties() {
+    myErrorsProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
+    myCommandsProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
+    myFunctionsProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
+    myDataProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
+    myVariablesProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
+    myFilesProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
   }
 
   public void setSlogoView(SlogoView view) {
@@ -51,6 +64,7 @@ public class VisualController {
    * @param rate is the new animation rate for adding lines into the view
    * TODO - implement animation rate of object addition via queueing/threading (not threading lol)
    */
+  @Override
   public void setAnimationRate(double rate) {
     this.myAnimationRate = rate;
   }
@@ -58,8 +72,10 @@ public class VisualController {
   /**
    * Called by the logical controller to update turtle state and draw shapes in Slogo view
    * @param modelCollection model turtle that is currently being acted on
-   * TODO - Update switch to reflection, review tutorials and ask Alex for advice
+   * TODO - Update switch to reflection based on object type
+   * TODO - Add casting try catch
    */
+  @Override
   public void moveModelObject(ModelCollection modelCollection) {
     Iterator iter = modelCollection.iterator();
     while (iter.hasNext()) {
@@ -69,18 +85,39 @@ public class VisualController {
   }
 
   /**
-   *
-   * @param command
+   * Called by Logical Controller after a successful command execution
+   * @param command String representation of prior command execution
    */
-  public void updateCommands(Command command) {
-
+  @Override
+  public void updateCommands(String command) {
+    this.myCommandsProperty.getValue().add(new VisualCommand(command));
   }
 
   /**
-   * TODO Implement error add
+   *
+   * @param e Exception that was just thrown by the logical controller
+   * TODO - Incorporate error severity into logical controller error creation
    */
-  public void updateErrors() {
+  @Override
+  public void updateErrors(LogicalException e) {
+    this.myErrorsProperty.getValue().add(new VisualError(e));
+  }
 
+  @Override
+  public void updateVariables(Variable v) {
+    this.myVariablesProperty.getValue().add(new VisualVariable(v));
+  }
+
+  @Override
+  public Property getProperty(VisualProperty type) {
+    return switch (type) {
+      case COMMAND -> myCommandsProperty;
+      case DATA -> myDataProperty;
+      case VARIABLE -> myVariablesProperty;
+      case ERROR -> myErrorsProperty;
+      case FUNCTION -> myFunctionsProperty;
+      case FILE -> myFilesProperty;
+    };
   }
 
   private void moveTurtle(ModelTurtle turtle) {
