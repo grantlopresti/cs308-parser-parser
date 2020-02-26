@@ -16,6 +16,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import slogo.logicalcontroller.LogicalController;
+import slogo.logicalcontroller.command.Command;
 import slogo.view.TurtleImage;
 import slogo.view.subsections.*;
 import slogo.visualcontroller.VisualCommand;
@@ -35,6 +36,8 @@ public class SlogoView extends Application {
   private BorderPane myBorderPane;
   private UserInputPane myInputPane;
   private VisualizationPane myVisualizationPane;
+  private CommandHistoryTab myCommandsTab;
+
   private LogicalController myLogicalController;
 
   public SlogoView (LogicalController control) {
@@ -143,7 +146,8 @@ public class SlogoView extends Application {
     TabPane tabPaneRight = new TabPane();
 
     Tab data = new DataViewerTab().getTab();
-    Tab commands = new CommandHistoryTab().getTab();
+    myCommandsTab = new CommandHistoryTab();
+    Tab commands = myCommandsTab.getTab();
     Tab errors = new ErrorHandlerTab().getTab();
 
     tabPaneRight.getTabs().addAll(data, commands, errors);

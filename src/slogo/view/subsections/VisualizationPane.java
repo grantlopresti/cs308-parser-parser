@@ -47,6 +47,11 @@ public class VisualizationPane implements SubPane {
   public VisualizationPane(double width, double height){
     groupWidth = width;
     groupHeight = height;
+    addInitialTurtle();
+  }
+
+  private void addInitialTurtle() {
+    myTurtles.add(new VisualTurtle());
   }
 
   @Override
