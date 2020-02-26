@@ -140,7 +140,8 @@ public class SlogoView extends Application {
   private TabPane getRightPane() {
     TabPane tabPaneRight = new TabPane();
 
-    myCommandsTab = new CommandHistoryTab(this);
+    myCommandsTab = new CommandHistoryTab();
+    myCommandsTab.setSlogoView(this);
     Tab commands = myCommandsTab.getTab(myVisualController.getProperty(VisualProperty.COMMAND));
 
     Tab data = new DataViewerTab().getTab(myVisualController.getProperty(VisualProperty.DATA));

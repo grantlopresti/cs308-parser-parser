@@ -22,11 +22,6 @@ public class VisualController implements VisualInterface {
   private Map<Integer, VisualTurtle> myTurtles = new HashMap<>();
   private List<VisualLine> myLines = new ArrayList<>();
 
-  private List<VisualCommand> myCommands = new ArrayList<>();
-  private List<VisualError> myErrors = new ArrayList<>();
-  private List<VisualUserFunction> myFunctions = new ArrayList<>();
-  private List<VisualData> myData = new ArrayList<>();
-
   private SimpleObjectProperty<ObservableList<VisualError>> myErrorsProperty;
   private SimpleObjectProperty<ObservableList<VisualCommand>> myCommandsProperty;
   private SimpleObjectProperty<ObservableList<VisualUserFunction>> myFunctionsProperty;

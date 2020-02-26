@@ -5,7 +5,14 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 
-public class FileTreeTab implements SubTab{
+public class FileTreeTab extends SubTab{
+
+  private static final String TAB_NAME = "Project List";
+  private static final String TAB_ELEMENTS = "project-tab";
+
+  public FileTreeTab() {
+    super();
+  }
 
   @Override
   public Tab getTab(Property property) {
@@ -17,14 +24,10 @@ public class FileTreeTab implements SubTab{
         new TreeItem<>("Project 3"),
         new TreeItem<>("Project 4"));
 
-    Tab projectsTab = new Tab("Project List");
+    Tab projectsTab = new Tab(TAB_NAME);
     projectsTab.setContent(new TreeView<>(projectsTree));
 
     return projectsTab;
   }
 
-  // NOTE - may not be needed here with current tree items
-  private void setProperty(Property property) {
-
-  }
 }
