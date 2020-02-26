@@ -52,7 +52,8 @@ public class LogicalController {
 
     for(Object turtle : myModelCollection){
       ModelTurtle myModelTurtle = (ModelTurtle) turtle;
-      myModelTurtle.move(30);
+      myModelTurtle.move(100);
+      myModelTurtle.turn(90);
       myVisualController.updateCommands("test");
     }
     myVisualController.moveModelObject(myModelCollection);
