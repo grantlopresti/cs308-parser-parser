@@ -26,7 +26,6 @@ public class Manager {
     private VisualController myVisualController;
     private LogicalController myLogicalController;
 
-
     public Manager() throws IOException {
         createModel();
         createVisualController();

@@ -66,9 +66,6 @@ public class LogicalController {
       passToVisualController(currentCommand);
     }
 
-
-
-
     /*
     for (Object mo : myModelCollection){
       for(Command myCurrentCommand : commandObjectList) {
