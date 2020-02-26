@@ -58,7 +58,8 @@ public class VisualController {
   /**
    * Called by the logical controller to update turtle state and draw shapes in Slogo view
    * @param modelCollection model turtle that is currently being acted on
-   * TODO - Update switch to reflection, review tutorials and ask Alex for advice
+   * TODO - Update switch to reflection based on object type
+   * TODO - Add casting try catch
    */
   public void moveModelObject(ModelCollection modelCollection) {
     Iterator iter = modelCollection.iterator();
@@ -69,18 +70,20 @@ public class VisualController {
   }
 
   /**
-   *
-   * @param command
+   * Called by Logical Controller after a successful command execution
+   * @param command String representation of prior command execution
    */
-  public void updateCommands(Command command) {
-
+  public void updateCommands(String command) {
+    myCommands.add(new VisualCommand(command));
   }
 
   /**
-   * TODO Implement error add
+   *
+   * @param e Exception that was just thrown by the logical controller
+   * TODO - Incorporate error severity into logical controller error creation
    */
-  public void updateErrors() {
-
+  public void updateErrors(RuntimeException e) {
+    myErrors.add(new VisualError(e.toString(), ErrorSeverity.BASIC));
   }
 
   private void moveTurtle(ModelTurtle turtle) {
