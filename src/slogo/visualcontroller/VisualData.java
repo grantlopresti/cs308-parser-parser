@@ -8,12 +8,12 @@ public class VisualData {
     private final double myValue;
 
     public VisualData(String name, double value) {
-        this.myName = name;
-        this.myValue = value;
+        myName = name;
+        myValue = value;
     }
 
-    public String getName() {return this.myName;}
-    public double getValue() {return this.myValue;}
-    public String toString() {return this.myName + SEPARATOR + this.myValue;}
+    public String getName() {return myName;}
+    public double getValue() {return myValue;}
+    public String toString() {return myName + SEPARATOR + myValue;}
 
 }

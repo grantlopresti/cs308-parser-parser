@@ -22,24 +22,19 @@ public class VisualController implements VisualInterface {
   private Map<Integer, VisualTurtle> myTurtles = new HashMap<>();
   private List<VisualLine> myLines = new ArrayList<>();
 
-  private List<VisualCommand> myCommands = new ArrayList<>();
-  private List<VisualError> myErrors = new ArrayList<>();
-  private List<VisualUserFunction> myFunctions = new ArrayList<>();
-  private List<VisualData> myData = new ArrayList<>();
-
-  // TODO: Implement all collections as properties, bind to front end
   private SimpleObjectProperty<ObservableList<VisualError>> myErrorsProperty;
   private SimpleObjectProperty<ObservableList<VisualCommand>> myCommandsProperty;
   private SimpleObjectProperty<ObservableList<VisualUserFunction>> myFunctionsProperty;
   private SimpleObjectProperty<ObservableList<VisualData>> myDataProperty;
   private SimpleObjectProperty<ObservableList<VisualVariable>> myVariablesProperty;
+  private SimpleObjectProperty<ObservableList<VisualFile>> myFilesProperty;
 
   /**
    * Constructor for a VisualController, with its associated SlogoView
    * @param view is the view in which VisualObjects will be added to the display
    */
   public VisualController(SlogoView view){
-    this.mySlogoView = view;
+    mySlogoView = view;
   }
 
   public VisualController() {
@@ -52,10 +47,11 @@ public class VisualController implements VisualInterface {
     myFunctionsProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
     myDataProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
     myVariablesProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
+    myFilesProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
   }
 
   public void setSlogoView(SlogoView view) {
-    this.mySlogoView = view;
+    mySlogoView = view;
   }
 
   /**
@@ -65,7 +61,7 @@ public class VisualController implements VisualInterface {
    */
   @Override
   public void setAnimationRate(double rate) {
-    this.myAnimationRate = rate;
+    myAnimationRate = rate;
   }
 
   /**
@@ -89,7 +85,9 @@ public class VisualController implements VisualInterface {
    */
   @Override
   public void updateCommands(String command) {
-    this.myCommandsProperty.getValue().add(new VisualCommand(command));
+    FXCollections.reverse(myCommandsProperty.getValue());
+    myCommandsProperty.getValue().add(new VisualCommand(command));
+    FXCollections.reverse(myCommandsProperty.getValue());
   }
 
   /**
@@ -99,12 +97,14 @@ public class VisualController implements VisualInterface {
    */
   @Override
   public void updateErrors(LogicalException e) {
-    this.myErrorsProperty.getValue().add(new VisualError(e));
+    VisualError error = new VisualError(e);
+    myErrorsProperty.getValue().add(error);
+    mySlogoView.announceError(error);
   }
 
   @Override
   public void updateVariables(Variable v) {
-    this.myVariablesProperty.getValue().add(new VisualVariable(v));
+    myVariablesProperty.getValue().add(new VisualVariable(v));
   }
 
   @Override
@@ -120,6 +120,8 @@ public class VisualController implements VisualInterface {
         return myErrorsProperty;
       case FUNCTION:
         return myFunctionsProperty;
+      case FILE:
+        return myFilesProperty;
       default:
         throw new IllegalArgumentException();
     }
@@ -127,10 +129,10 @@ public class VisualController implements VisualInterface {
 
   private void moveTurtle(ModelTurtle turtle) {
     VisualTurtle visualTurtle = addTurtleToMap(turtle);
+    visualTurtle.setChangeState(true);
     visualTurtle.updateVisualTurtle(turtle);
-    System.out.println(visualTurtle.toString());
     try {
-      mySlogoView.updateVisualTurtles(new ArrayList<VisualTurtle>(List.of(visualTurtle)));
+      mySlogoView.updateVisualTurtles(new ArrayList<>(List.of(visualTurtle)));
       if (turtle.isPenActive())
         appendLine(new VisualLine(visualTurtle));
     } catch (NullPointerException e) {

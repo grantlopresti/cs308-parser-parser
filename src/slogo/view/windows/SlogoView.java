@@ -2,21 +2,21 @@ package slogo.view.windows;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.LogicalController;
-import slogo.view.TurtleImage;
 import slogo.view.subsections.*;
 import slogo.visualcontroller.*;
 
@@ -31,12 +31,14 @@ public class SlogoView extends Application {
   private BorderPane myBorderPane;
   private UserInputPane myInputPane;
   private VisualizationPane myVisualizationPane;
+  private CommandHistoryTab myCommandsTab;
+
   private LogicalController myLogicalController;
   private VisualController myVisualController;
 
   public SlogoView (LogicalController logicalController, VisualController visualController) {
-    this.myLogicalController = logicalController;
-    this.myVisualController = visualController;
+    myLogicalController = logicalController;
+    myVisualController = visualController;
   }
 
   @Override
@@ -68,7 +70,7 @@ public class SlogoView extends Application {
     VBox vbox = new VBox();
 
     //MenuBar menu = new MenuPane().getNode();
-    ToolBar tools = new ToolbarPane(this, this.myLogicalController).getNode();
+    ToolBar tools = new ToolbarPane(this, myLogicalController).getNode();
 
     //vbox.getChildren().addAll(menu, tools);
     vbox.getChildren().addAll(tools);
@@ -79,8 +81,8 @@ public class SlogoView extends Application {
   private TabPane getLeftPane() {
     TabPane tabPaneLeft = new TabPane();
 
-    Tab definedFunctions = new DefinedFunctionsTab().getTab();
-    Tab fileTree = new FileTreeTab().getTab();
+    Tab definedFunctions = new DefinedFunctionsTab().getTab(myVisualController.getProperty(VisualProperty.FUNCTION));
+    Tab fileTree = new FileTreeTab().getTab(myVisualController.getProperty(VisualProperty.FILE));
 
     tabPaneLeft.getTabs().addAll(definedFunctions, fileTree);
     tabPaneLeft.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
@@ -140,11 +142,16 @@ public class SlogoView extends Application {
   private TabPane getRightPane() {
     TabPane tabPaneRight = new TabPane();
 
-    Tab data = new DataViewerTab().getTab();
-    Tab commands = new CommandHistoryTab().getTab();
-    Tab errors = new ErrorHandlerTab().getTab();
+    myCommandsTab = new CommandHistoryTab();
+    myCommandsTab.setSlogoView(this);
+    Tab commands = myCommandsTab.getTab(myVisualController.getProperty(VisualProperty.COMMAND));
 
-    tabPaneRight.getTabs().addAll(data, commands, errors);
+    Tab data = new DataViewerTab().getTab(myVisualController.getProperty(VisualProperty.DATA));
+
+    ErrorHandlerTab errorTab = new ErrorHandlerTab();
+    Tab errors = errorTab.getTab(myVisualController.getProperty(VisualProperty.ERROR));
+
+    tabPaneRight.getTabs().addAll(commands, data, errors);
     tabPaneRight.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 
     return tabPaneRight;
@@ -154,8 +161,23 @@ public class SlogoView extends Application {
     return new CreditsPane().getNode();
   }
 
-  public void announceError(){
+  public void announceError(VisualError error){
     //TODO: Handle Announcing Errors
+    Alert alert;
+
+    if (error.getSeverity() == ErrorSeverity.CRITICAL) {
+      alert = new Alert(AlertType.ERROR);
+    } else if (error.getSeverity() == ErrorSeverity.MEDIUM){
+      alert = new Alert(AlertType.WARNING);
+    } else {
+      alert = new Alert(AlertType.INFORMATION);
+    }
+
+    alert.setTitle("Alert");
+    alert.setHeaderText(null);
+    alert.setContentText(error.toString());
+
+    alert.showAndWait();
   }
 
   public void setUserInputAreaText(String fileContents) {
@@ -176,41 +198,6 @@ public class SlogoView extends Application {
     myVisualizationPane.getNode();
     myBorderPane.setCenter(getCenterPane());
   }
-
-  public void updateVisualCommands(List<VisualCommand> visualCommands) {
-
-  }
-
-  public void updateVisualErrors(List<VisualLine> visualLines) {
-
-  }
-
-  public void updateVisualData(List<VisualData> visualData) {
-
-  }
-
-  public void updateVisualUserFunctions(List<VisualUserFunction> visualFunctions) {
-
-  }
-
-//  public void doTestUpdate() {
-//    Map<Integer, VisualTurtle> visualTurtles = new HashMap<>();
-//
-//    visualTurtles.add(new VisualTurtle());
-//
-//    VisualTurtle customTurtle = new VisualTurtle();
-//    customTurtle.setChangeState(true);
-//    customTurtle.setPreviousCenter(100, 100);
-//    customTurtle.setCenter(200, 100);
-//    customTurtle.setImage(TurtleImage.DOG);
-//    customTurtle.setHeading(45);
-//    customTurtle.setColor(Color.RED);
-//    customTurtle.setSize(50);
-//    visualTurtles.add(customTurtle);
-//
-//    updateVisualTurtles(visualTurtles);
-//  }
-
 
   public void setBGColor(double red, double green, double blue) {
     myVisualizationPane.setBGColor(red, green, blue);

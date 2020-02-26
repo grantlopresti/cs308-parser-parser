@@ -11,13 +11,13 @@ import java.util.List;
  * @author Alex Xu
  */
 public class ModelCollection implements Iterable {
-    private List<ModelObject> modelObjectList;
+    private List<ModelObject> myModelObjectList;
 
     /**
      * Default Constructor for ModelCollection object
      */
     public ModelCollection(){
-        modelObjectList = new ArrayList<ModelObject>();
+        myModelObjectList = new ArrayList<ModelObject>();
     }
 
     /**
@@ -25,7 +25,7 @@ public class ModelCollection implements Iterable {
      * @param myModelObject
      */
     public void append(ModelObject myModelObject){
-        modelObjectList.add(myModelObject);
+        myModelObjectList.add(myModelObject);
     }
 
     /**
@@ -34,7 +34,7 @@ public class ModelCollection implements Iterable {
      * @return
      */
     public ModelObject get(int index){
-        return modelObjectList.get(index);
+        return myModelObjectList.get(index);
     }
 
     /**
@@ -43,6 +43,6 @@ public class ModelCollection implements Iterable {
      */
     @Override
     public Iterator iterator() {
-        return this.modelObjectList.iterator();
+        return myModelObjectList.iterator();
     }
 }

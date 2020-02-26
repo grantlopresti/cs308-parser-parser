@@ -77,11 +77,11 @@ public class VisualizationPane implements SubPane {
   }
 
   private void setAdjustedLineLocations(VisualLine line, Line lineImage) {
-    lineImage.setStartX(line.getStartX());
-    lineImage.setStartY(line.getStartY());
+    lineImage.setStartX(getAdjustedX(line.getStartX()));
+    lineImage.setStartY(getAdjustedY(line.getStartY()));
 
-    lineImage.setEndX(line.getEndX());
-    lineImage.setEndY(line.getEndY());
+    lineImage.setEndX(getAdjustedX(line.getEndX()));
+    lineImage.setEndY(getAdjustedY(line.getEndY()));
   }
 
   private void addTurtlesToVisualizer(Group visualizer) {
@@ -94,6 +94,7 @@ public class VisualizationPane implements SubPane {
 
       setAdjustedX(turtleImage, turtle.getPreviousX());
       setAdjustedY(turtleImage, turtle.getPreviousY());
+      turtleImage.rotateProperty().set(turtle.getHeading()-90);
 
       if (turtle.hasChangedState()) {
         Animation turtleAnimation = makeAnimation(turtle, turtleImage);
@@ -121,7 +122,7 @@ public class VisualizationPane implements SubPane {
     PathTransition pt = new PathTransition(Duration.seconds(4), path, agent);
     // create an animation that rotates the shape
     RotateTransition rt = new RotateTransition(Duration.seconds(3));
-    rt.setByAngle(turtle.getPreviousHeading()-turtle.getHeading());
+    rt.setByAngle(turtle.getPreviousHeading() - turtle.getHeading());
     // put them together in order
     return new SequentialTransition(agent, pt, rt);
   }
@@ -149,7 +150,11 @@ public class VisualizationPane implements SubPane {
 
   private void setAdjustedY(ImageView turtleImage, double centerY) {
     double adjustedY = getAdjustedY(centerY);
-    turtleImage.setY(adjustedY);
+    if (adjustedY <= groupHeight && adjustedY >= 0) {
+      turtleImage.setY(adjustedY);
+    } else {
+      turtleImage.setVisible(false);
+    }
   }
 
   private double getAdjustedY(double centerY) {

@@ -7,19 +7,26 @@ public class VisualError {
 
     private final String myMessage;
     private final ErrorSeverity mySeverity;
+    private static final String SEPARATOR = ": ";
 
     public VisualError(LogicalException e) {
-        this.myMessage = e.toString();
-        this.mySeverity = e.getErrorSeverity();
+        myMessage = e.getMessage();
+        mySeverity = e.getErrorSeverity();
     }
 
     public VisualError(String message, ErrorSeverity severe) {
-        this.myMessage = message;
-        this.mySeverity = severe;
+        myMessage = message;
+        mySeverity = severe;
     }
 
-    public ErrorSeverity getSeverity() {return this.mySeverity;}
-    public Color getColor() {return this.mySeverity.getColor();}
-    public String getMessage() {return this.myMessage;}
+    public ErrorSeverity getSeverity() {return mySeverity;}
+    public Color getColor() {return mySeverity.getColor();}
+
+    @Override
+    public String toString() {return errorMessage();}
+
+    private String errorMessage() {
+        return mySeverity.getLevel() + SEPARATOR + myMessage;
+    }
 
 }
