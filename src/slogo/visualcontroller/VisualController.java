@@ -127,10 +127,10 @@ public class VisualController implements VisualInterface {
 
   private void moveTurtle(ModelTurtle turtle) {
     VisualTurtle visualTurtle = addTurtleToMap(turtle);
+    visualTurtle.setChangeState(true);
     visualTurtle.updateVisualTurtle(turtle);
-    System.out.println(visualTurtle.toString());
     try {
-      mySlogoView.updateVisualTurtles(new ArrayList<VisualTurtle>(List.of(visualTurtle)));
+      mySlogoView.updateVisualTurtles(new ArrayList<>(List.of(visualTurtle)));
       if (turtle.isPenActive())
         appendLine(new VisualLine(visualTurtle));
     } catch (NullPointerException e) {
