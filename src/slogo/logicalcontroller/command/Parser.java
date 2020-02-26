@@ -41,9 +41,12 @@ public class Parser {
             int compoundVal = 0;
             if (line.trim().length() > 0) {
                 String[] splited = line.split("\\s+");
-                checkMath(splited);
+                String com = retComs(splited);
+                double math = checkMath(splited);
+                String new_splited_string = com+" " + math;
+                String[] new_splited = new_splited_string.split(" ");
                 boolean prev = false;
-                for(String s: splited){
+                for(String s: new_splited){
                     if(!hasValue(s)){
                         commands.push(s);
                         prev = true;
@@ -101,6 +104,20 @@ public class Parser {
         return ret;
     }
 
+    public String retComs(String[] splited){
+        HashSet mathTypes = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pow","pi","sum", "+","difference", "-","product","*","quotient","/","remainder", "%","minus","~"));
+
+        String com = "";
+        for(String s: splited){
+            if(!mathTypes.contains(s) && !s.matches(".*\\d.*")){
+                com+=s + " ";
+            }
+        }
+
+        com = com.substring(0, com.length()-1);
+        return com;
+    }
+
     public String retMath(String[] splited){
 
         HashSet mathTypes = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pow","pi","sum", "+","difference", "-","product","*","quotient","/","remainder", "%","minus","~"));
@@ -114,7 +131,6 @@ public class Parser {
 
         math = math.substring(0, math.length()-1);
         return math;
-
     }
 
     public void unravel(int cv) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
@@ -181,7 +197,7 @@ public class Parser {
     public static void main (String[] args) throws IOException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, ScriptException {
         Parser p = new Parser("English");
         List<String> test = new ArrayList<String>();
-        test.add("fd fd fd tan 50");
+        test.add("fd fd fd tan (50 + 10)");
         p.parse(test);
         System.out.println(p.getLang());
         ArrayList<Command> testt = p.getCommands();
