@@ -1,6 +1,9 @@
 package slogo.visualcontroller;
 
+import javafx.beans.property.Property;
+import slogo.exceptions.LogicalException;
 import slogo.logicalcontroller.command.Command;
+import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
 import slogo.model.ModelTurtle;
 
@@ -18,12 +21,15 @@ public interface VisualInterface {
      * Called by the logical controller to update turtle state and draw shapes in Slogo view
      *
      * @param modelCollection collection of model objects
-     * @param command to determine how the turtle changes
      */
-    public void moveModelObject(ModelCollection modelCollection, Command command);
+    public void moveModelObject(ModelCollection modelCollection);
 
-    public void updateCommands(List<Command> commands);
+    public void updateCommands(String command);
 
-    public void updateErrors(List<RuntimeException> exceptions);
+    public void updateErrors(LogicalException e);
+
+    public void updateVariables(Variable v);
+
+    public Property getProperty(VisualProperty type);
 
 }

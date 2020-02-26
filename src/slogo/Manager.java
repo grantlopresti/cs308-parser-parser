@@ -50,7 +50,7 @@ public class Manager {
     }
 
     private void createSlogoView() {
-        this.mySlogoView = new SlogoView(this.myLogicalController);
+        this.mySlogoView = new SlogoView(this.myLogicalController, this.myVisualController);
     }
 
     private void createLogicalController() throws IOException {

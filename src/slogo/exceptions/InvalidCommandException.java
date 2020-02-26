@@ -13,4 +13,9 @@ public class InvalidCommandException extends LogicalException {
         this.myErrorSeverity = ErrorSeverity.MEDIUM;
     }
 
+    @Override
+    public ErrorSeverity getErrorSeverity() {
+        return this.myErrorSeverity;
+    }
+
 }

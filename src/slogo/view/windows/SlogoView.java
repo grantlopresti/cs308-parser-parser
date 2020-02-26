@@ -18,11 +18,7 @@ import javafx.stage.Stage;
 import slogo.logicalcontroller.LogicalController;
 import slogo.view.TurtleImage;
 import slogo.view.subsections.*;
-import slogo.visualcontroller.VisualCommand;
-import slogo.visualcontroller.VisualData;
-import slogo.visualcontroller.VisualLine;
-import slogo.visualcontroller.VisualTurtle;
-import slogo.visualcontroller.VisualUserFunction;
+import slogo.visualcontroller.*;
 
 public class SlogoView extends Application {
 
@@ -36,9 +32,11 @@ public class SlogoView extends Application {
   private UserInputPane myInputPane;
   private VisualizationPane myVisualizationPane;
   private LogicalController myLogicalController;
+  private VisualController myVisualController;
 
-  public SlogoView (LogicalController control) {
-    this.myLogicalController = control;
+  public SlogoView (LogicalController logicalController, VisualController visualController) {
+    this.myLogicalController = logicalController;
+    this.myVisualController = visualController;
   }
 
   @Override

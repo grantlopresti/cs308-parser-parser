@@ -13,4 +13,9 @@ public class InvalidXMLConfigException extends LogicalException {
         this.myErrorSeverity = ErrorSeverity.CRITICAL;
     }
 
+    @Override
+    public ErrorSeverity getErrorSeverity() {
+        return this.myErrorSeverity;
+    }
+
 }
