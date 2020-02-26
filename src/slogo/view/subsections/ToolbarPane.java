@@ -28,6 +28,7 @@ import slogo.view.windows.SlogoView;
 import javax.script.ScriptException;
 
 public class ToolbarPane implements SubPane {
+
   private LogicalController myLogicalController;
   private static final String DEFAULT_LANGUAGE = "English";
   private static final String DEFAULT_TURTLE_IMAGE = "Turtle";
@@ -38,7 +39,7 @@ public class ToolbarPane implements SubPane {
   private Button myLoadAndRun = new Button("Load & Run");
   private ColorPicker myBGColorPicker = new ColorPicker();
   private ComboBox<String> myTurtleImage = new ComboBox<>(TurtleImage.getLanguages());
-  private Button myPenColor = new Button("Pen Color");
+  private ColorPicker myPenColorPicker = new ColorPicker();
   private Button myClearScreen = new Button("Clear Screen");
   private static final ObservableList<String> languageOptions =
       FXCollections.observableArrayList(
@@ -55,64 +56,76 @@ public class ToolbarPane implements SubPane {
   private ComboBox<String> myLanguage = new ComboBox<>(languageOptions);
   private Button myHelpInfo = new Button("Help/Info");
 
-  public ToolbarPane(SlogoView viewer, LogicalController logicalController){
+  public ToolbarPane(SlogoView viewer, LogicalController logicalController) {
     myViewer = viewer;
     myLogicalController = logicalController;
   }
 
   @Override
   public ToolBar getNode() throws IOException {
-    
+
     initializeButtons();
 
     return new ToolBar(
-      myLoader,
-      myLoadAndRun,
-      new Separator(),
-      new Text("BG Color:"),
-      myBGColorPicker,
-      new Text("Turtle Image:"),
-      myTurtleImage,
-      myPenColor,
-      myClearScreen,
-      new Separator(),
-      myLanguage,
-      myHelpInfo);
+        myLoader,
+        myLoadAndRun,
+        new Separator(),
+        new Text("BG Color:"),
+        myBGColorPicker,
+        new Separator(),
+        new Text("Turtle Image:"),
+        myTurtleImage,
+        new Separator(),
+        new Text("Pen Color:"),
+        myPenColorPicker,
+        new Separator(),
+        myClearScreen,
+        new Separator(),
+        new Text("Language:"),
+        myLanguage,
+        new Separator(),
+        myHelpInfo);
   }
 
   private void initializeButtons() throws IOException {
     myLoader.setOnAction(e -> loadFile());
-    myLoadAndRun.setOnAction(e -> {
-      try {
-        loadAndRun();
-      } catch (ScriptException ex) {
-        ex.printStackTrace();
-      }
-    });
+    initializeLoadAndRunButton();
 //    myBGColor.setOnAction();
-    myLoadAndRun.setOnAction(e -> {
-      try {
-        loadAndRun();
-      } catch (ScriptException ex) {
-        ex.printStackTrace();
-      }
-    });
     myBGColorPicker.setOnAction(t -> {
       Color c = myBGColorPicker.getValue();
       myViewer.setBGColor(c.getRed(), c.getGreen(), c.getBlue());
     });
-    myTurtleImage.getSelectionModel().selectedItemProperty().addListener( (options, oldValue,
+    setDefaultTurtleImage();
+    myTurtleImage.getSelectionModel().selectedItemProperty().addListener((options, oldValue,
         newValue) -> {
       changeTurtleImage(newValue);
     });
-//    myPenColor.setOnAction();
+    myPenColorPicker.setOnAction(t -> {
+      Color c = myPenColorPicker.getValue();
+      myViewer.setPenColor(c.getRed(), c.getGreen(), c.getBlue());
+    });
     myClearScreen.setOnAction(e -> clearVisualizationScreen());
     setDefaultLanguage();
-    myLanguage.getSelectionModel().selectedItemProperty().addListener( (options, oldValue,
+    myLanguage.getSelectionModel().selectedItemProperty().addListener((options, oldValue,
         newValue) -> {
       changeLanguage(newValue);
     });
     myHelpInfo.setOnAction(e -> showHelpWindow());
+  }
+
+  private void setDefaultTurtleImage() {
+    myTurtleImage.setValue(DEFAULT_TURTLE_IMAGE);
+    changeTurtleImage(DEFAULT_TURTLE_IMAGE);
+  }
+
+  private void initializeLoadAndRunButton() {
+    myLoadAndRun.setOnAction(e -> {
+      try {
+        loadAndRun();
+      } catch (ScriptException ex) {
+        ex.printStackTrace();
+      }
+    });
   }
 
   private void changeTurtleImage(Object newValue) {
@@ -127,7 +140,8 @@ public class ToolbarPane implements SubPane {
     VBox root = new VBox();
     final WebView browser = new WebView();
     final WebEngine webEngine = browser.getEngine();
-    webEngine.load("https://www2.cs.duke.edu/courses/compsci308/current/assign/03_parser/commands.php");
+    webEngine
+        .load("https://www2.cs.duke.edu/courses/compsci308/current/assign/03_parser/commands.php");
 
     root.getChildren().addAll(browser);
     scene.setRoot(root);
@@ -140,7 +154,7 @@ public class ToolbarPane implements SubPane {
     myViewer.clearScreen();
   }
 
-  private void setDefaultLanguage() throws IOException {
+  private void setDefaultLanguage() {
     myLanguage.setValue(DEFAULT_LANGUAGE);
     changeLanguage(DEFAULT_LANGUAGE);
   }
@@ -183,8 +197,9 @@ public class ToolbarPane implements SubPane {
     return fc.showOpenDialog(new Stage());
   }
 
-  private void sendCommands(File file) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, IOException, ScriptException {
-      String fileContents = getTextFromFile(file);
+  private void sendCommands(File file)
+      throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, IOException, ScriptException {
+    String fileContents = getTextFromFile(file);
     try {
       myLogicalController.handleNewCommand(fileContents);
     } catch (ClassNotFoundException e) {
