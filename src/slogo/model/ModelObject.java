@@ -106,7 +106,7 @@ public abstract class ModelObject implements ModelInterface{
     }
 
     public void setTowards(double x, double y){
-        
+        setHeading(angle);
     }
 
     /**
