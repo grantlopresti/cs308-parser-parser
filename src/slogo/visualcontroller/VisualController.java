@@ -109,13 +109,20 @@ public class VisualController implements VisualInterface {
 
   @Override
   public Property getProperty(VisualProperty type) {
-    return switch (type) {
-      case COMMAND -> myCommandsProperty;
-      case DATA -> myDataProperty;
-      case VARIABLE -> myVariablesProperty;
-      case ERROR -> myErrorsProperty;
-      case FUNCTION -> myFunctionsProperty;
-    };
+    switch (type) {
+      case COMMAND:
+        return myCommandsProperty;
+      case DATA:
+        return myDataProperty;
+      case VARIABLE:
+        return myVariablesProperty;
+      case ERROR:
+        return myErrorsProperty;
+      case FUNCTION:
+        return myFunctionsProperty;
+      default:
+        throw new IllegalArgumentException();
+    }
   }
 
   private void moveTurtle(ModelTurtle turtle) {
