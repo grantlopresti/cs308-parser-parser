@@ -34,7 +34,7 @@ public class VisualController implements VisualInterface {
    * @param view is the view in which VisualObjects will be added to the display
    */
   public VisualController(SlogoView view){
-    this.mySlogoView = view;
+    mySlogoView = view;
   }
 
   public VisualController() {
@@ -51,7 +51,7 @@ public class VisualController implements VisualInterface {
   }
 
   public void setSlogoView(SlogoView view) {
-    this.mySlogoView = view;
+    mySlogoView = view;
   }
 
   /**
@@ -61,7 +61,7 @@ public class VisualController implements VisualInterface {
    */
   @Override
   public void setAnimationRate(double rate) {
-    this.myAnimationRate = rate;
+    myAnimationRate = rate;
   }
 
   /**
@@ -97,12 +97,14 @@ public class VisualController implements VisualInterface {
    */
   @Override
   public void updateErrors(LogicalException e) {
-    this.myErrorsProperty.getValue().add(new VisualError(e));
+    VisualError error = new VisualError(e);
+    myErrorsProperty.getValue().add(error);
+    mySlogoView.announceError(error);
   }
 
   @Override
   public void updateVariables(Variable v) {
-    this.myVariablesProperty.getValue().add(new VisualVariable(v));
+    myVariablesProperty.getValue().add(new VisualVariable(v));
   }
 
   @Override

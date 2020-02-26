@@ -123,9 +123,9 @@ public class Parser {
     }
 
     public void set(List<String> command, ModelCollection modelC, List<Variable> var){
-        this.command_input = command;
-        this.model = modelC;
-        this.variables = var;
+        command_input = command;
+        model = modelC;
+        variables = var;
     }
 
     public boolean isFinished(){
@@ -133,7 +133,7 @@ public class Parser {
     }
 
     public ModelCollection getModel(){
-        return this.model;
+        return model;
     }
 
     public Command getCommand(){

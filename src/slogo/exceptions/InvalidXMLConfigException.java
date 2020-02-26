@@ -10,12 +10,12 @@ public class InvalidXMLConfigException extends LogicalException {
 
     public InvalidXMLConfigException() {
         super();
-        this.myErrorSeverity = ErrorSeverity.CRITICAL;
+        myErrorSeverity = ErrorSeverity.CRITICAL;
     }
 
     @Override
     public ErrorSeverity getErrorSeverity() {
-        return this.myErrorSeverity;
+        return myErrorSeverity;
     }
 
 }

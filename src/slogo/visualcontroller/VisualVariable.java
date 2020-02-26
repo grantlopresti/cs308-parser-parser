@@ -8,7 +8,7 @@ public class VisualVariable {
     private final double myValue;
 
     public VisualVariable(Variable v) {
-        this.myName = v.getName();
-        this.myValue = v.getValue();
+        myName = v.getName();
+        myValue = v.getValue();
     }
 }

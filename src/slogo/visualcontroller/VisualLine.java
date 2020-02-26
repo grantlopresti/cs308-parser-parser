@@ -14,21 +14,21 @@ public class VisualLine {
   private final double myThickness;
 
   public VisualLine(double startX, double startY, double endX, double endY, Color color, double thickness) {
-    this.myStartX = startX;
-    this.myStartY = startY;
-    this.myEndX = endX;
-    this.myEndY = endY;
-    this.myColor = color;
-    this.myThickness = thickness;
+    myStartX = startX;
+    myStartY = startY;
+    myEndX = endX;
+    myEndY = endY;
+    myColor = color;
+    myThickness = thickness;
   }
 
   public VisualLine(VisualTurtle turtle) {
-    this.myStartX = turtle.getPreviousX();
-    this.myEndX = turtle.getCenterX();
-    this.myStartY = turtle.getPreviousY();
-    this.myEndY = turtle.getCenterY();
-    this.myColor = turtle.getColor();
-    this.myThickness = turtle.getPenThickeness();
+    myStartX = turtle.getPreviousX();
+    myEndX = turtle.getCenterX();
+    myStartY = turtle.getPreviousY();
+    myEndY = turtle.getCenterY();
+    myColor = turtle.getColor();
+    myThickness = turtle.getPenThickeness();
   }
 
   public double getStartX() {

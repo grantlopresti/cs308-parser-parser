@@ -41,7 +41,7 @@ public class VisualTurtle extends VisualObject {
    */
   public VisualTurtle(ModelTurtle turtle) {
     setCurrentValues(turtle);
-    this.myID = turtle.getID();
+    myID = turtle.getID();
   }
 
   /**
