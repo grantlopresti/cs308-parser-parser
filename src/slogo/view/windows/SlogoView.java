@@ -140,11 +140,14 @@ public class SlogoView extends Application {
   private TabPane getRightPane() {
     TabPane tabPaneRight = new TabPane();
 
-    myCommandsTab = new CommandHistoryTab(this);
+    myCommandsTab = new CommandHistoryTab();
+    myCommandsTab.setSlogoView(this);
     Tab commands = myCommandsTab.getTab(myVisualController.getProperty(VisualProperty.COMMAND));
 
     Tab data = new DataViewerTab().getTab(myVisualController.getProperty(VisualProperty.DATA));
-    Tab errors = new ErrorHandlerTab().getTab(myVisualController.getProperty(VisualProperty.ERROR));
+
+    ErrorHandlerTab errorTab = new ErrorHandlerTab();
+    Tab errors = errorTab.getTab(myVisualController.getProperty(VisualProperty.ERROR));
 
     tabPaneRight.getTabs().addAll(commands, data, errors);
     tabPaneRight.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
@@ -178,33 +181,6 @@ public class SlogoView extends Application {
     myVisualizationPane.getNode();
     myBorderPane.setCenter(getCenterPane());
   }
-
-  public void updateVisualCommands(List<VisualCommand> visualCommands) { ;}
-
-  public void updateVisualErrors(List<VisualLine> visualLines) { ;}
-
-  public void updateVisualData(List<VisualData> visualData) { ;}
-
-  public void updateVisualUserFunctions(List<VisualUserFunction> visualFunctions) { ;}
-
-//  public void doTestUpdate() {
-//    Map<Integer, VisualTurtle> visualTurtles = new HashMap<>();
-//
-//    visualTurtles.add(new VisualTurtle());
-//
-//    VisualTurtle customTurtle = new VisualTurtle();
-//    customTurtle.setChangeState(true);
-//    customTurtle.setPreviousCenter(100, 100);
-//    customTurtle.setCenter(200, 100);
-//    customTurtle.setImage(TurtleImage.DOG);
-//    customTurtle.setHeading(45);
-//    customTurtle.setColor(Color.RED);
-//    customTurtle.setSize(50);
-//    visualTurtles.add(customTurtle);
-//
-//    updateVisualTurtles(visualTurtles);
-//  }
-
 
   public void setBGColor(double red, double green, double blue) {
     myVisualizationPane.setBGColor(red, green, blue);

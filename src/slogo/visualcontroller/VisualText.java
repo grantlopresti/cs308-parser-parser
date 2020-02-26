@@ -8,7 +8,8 @@ public abstract class VisualText {
         this.myString = myString;
     }
 
-    public String getString() {
+    @Override
+    public String toString() {
         return this.myString;
     }
 }

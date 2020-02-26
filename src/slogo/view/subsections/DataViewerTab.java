@@ -3,18 +3,19 @@ package slogo.view.subsections;
 import javafx.beans.property.Property;
 import javafx.scene.control.Tab;
 
-public class DataViewerTab implements SubTab {
+public class DataViewerTab extends SubTab {
 
-  public DataViewerTab() {;}
+  private static final String TAB_NAME = "Data/Variables";
+  private static final String TAB_ELEMENTS = "data-tab";
+
+  public DataViewerTab() {
+    super();
+  }
 
   @Override
   public Tab getTab(Property property) {
     setProperty(property);
-    return new Tab("Data/Variables");
-  }
-
-  private void setProperty(Property property) {
-
+    return new Tab(TAB_NAME);
   }
 
 }

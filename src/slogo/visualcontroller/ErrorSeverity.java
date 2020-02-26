@@ -15,4 +15,5 @@ public enum ErrorSeverity {
     }
 
     public Color getColor() {return this.myColor;}
+    public String getLevel() {return this.mySevereLevel;}
 }
