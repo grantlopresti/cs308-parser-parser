@@ -213,4 +213,10 @@ public class SlogoView extends Application {
     Color customColor = new Color(red,green,blue,1);
     myVisualizationPane.setPenColor(customColor);
   }
+
+  public void changeTurtleImage(String newValue) {
+
+
+    myVisualController.changeTurtleImage(newValue);
+  }
 }

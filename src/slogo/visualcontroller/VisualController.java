@@ -5,10 +5,12 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import javafx.scene.image.ImageView;
 import slogo.exceptions.LogicalException;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
 import slogo.model.ModelTurtle;
+import slogo.view.TurtleImage;
 import slogo.view.windows.SlogoView;
 
 import java.util.*;
@@ -147,8 +149,11 @@ public class VisualController implements VisualInterface {
   }
 
   private VisualTurtle addTurtleToMap(ModelTurtle turtle) {
-    myTurtles.putIfAbsent(turtle.getID(), new VisualTurtle(turtle));
+    myTurtles.putIfAbsent(turtle.getID(), new VisualTurtle());
     return myTurtles.get(turtle.getID());
   }
 
+  public void changeTurtleImage(String newValue) {
+    myTurtles.get(0).setImage(TurtleImage.DOG.getImagePath());
+  }
 }
