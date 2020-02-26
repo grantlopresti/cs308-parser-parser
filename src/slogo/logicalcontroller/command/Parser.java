@@ -1,5 +1,8 @@
 package slogo.logicalcontroller.command;
 
+import slogo.logicalcontroller.variable.Variable;
+import slogo.model.ModelCollection;
+
 import java.util.*;
 import java.io.*;
 import java.lang.reflect.*;
@@ -7,6 +10,9 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
+/**
+ * Purpose of this class is to parse incoming commands from the console and from a text file that the user will have an option to read in.
+ */
 public class Parser {
 
     private String lang;
@@ -17,7 +23,15 @@ public class Parser {
     private ResourceBundle resources;
     private HashMap<String, String> type1;
     private HashSet<String> type2;
+    private ModelCollection model;
+    private List<Variable> variables;
+    private List<String> command_input;
 
+    /**
+     * Constructor for the Parser class that takes in the input language and initializes all the used variables that are required for parsing
+     * @param language
+     * @throws IOException
+     */
     public Parser(String language) throws IOException {
         this.lang = language;
         commandArray = new HashMap<String, String>();
@@ -30,6 +44,10 @@ public class Parser {
 
     }
 
+    /**
+     * Returns the final list of commands for the model to execute
+     * @return
+     */
     public ArrayList<Command> getCommands(){
         return this.commandObjs;
     }
@@ -51,26 +69,26 @@ public class Parser {
                         commands.push(s);
                         prev = true;
                         numCommands++;
-                    }
-                    else{
+                    } else{
                         values.push(s);
                         numVals++;
                     }
                 }
-
             }
 
             if(numCommands>numVals){
                 compoundVal = numCommands-numVals;
             }
-            System.out.println(compoundVal);
             unravel(compoundVal);
         }
 
     }
 
+    public void executeNextCommand(){
+
+    }
+
     public double checkMath(String[] splited) throws ScriptException {
-        System.out.println(Arrays.toString(splited));
         String op = retMath(splited);
         String[] operation = op.split("\\s+");
         type1 = new HashMap<String, String>(){{
@@ -82,7 +100,6 @@ public class Parser {
             put("minus", "~");
         }};
         type2 = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pow","pi"));
-
         for(int i = 0; i<operation.length; i++){
             if((type1.keySet()).contains(operation[i])){
                 String temp = operation[i];
@@ -102,6 +119,24 @@ public class Parser {
         System.out.println(String.join("", operation));
         double ret = (double)engine.eval(String.join("", operation));
         return ret;
+    }
+
+    public void set(List<String> command, ModelCollection modelC, List<Variable> var){
+        this.command_input = command;
+        this.model = modelC;
+        this.variables = var;
+    }
+
+    public boolean isFinished(){
+        return true;
+    }
+
+    public ModelCollection getModel(){
+        return this.model;
+    }
+
+    public Command getCommand(){
+        return null;
     }
 
     public String retComs(String[] splited){
@@ -142,7 +177,6 @@ public class Parser {
             theVal = values.pop();
             Object obj = con.newInstance(theVal);
             commandObjs.add((Command) obj);
-            System.out.println((Command)obj);
         }
         while(!commands.isEmpty() && comVal>0){
             Class cl = Class.forName("slogo.logicalcontroller.command."+commandArray.get(commands.pop()));
@@ -162,6 +196,7 @@ public class Parser {
         }
         return false;
     }
+
 
     public String getSymbol(String text){
         final String ERROR = "NO MATCH";
@@ -197,17 +232,12 @@ public class Parser {
     public static void main (String[] args) throws IOException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, ScriptException {
         Parser p = new Parser("English");
         List<String> test = new ArrayList<String>();
-        test.add("fd fd fd tan (50 + 10)");
+        test.add("fd 50");
         p.parse(test);
-        System.out.println(p.getLang());
         ArrayList<Command> testt = p.getCommands();
         for(Command c: testt){
-            System.out.println(testt);
+            System.out.println(c);
         }
-
-
-
-
 
     }
 }
