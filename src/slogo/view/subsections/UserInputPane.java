@@ -5,12 +5,13 @@ import javafx.scene.control.TextArea;
 import slogo.logicalcontroller.LogicalController;
 
 public class UserInputPane implements SubPane {
-
+  private LogicalController myLogicalController;
   private TextArea myTextArea;
 
-  public UserInputPane() {
+  public UserInputPane(LogicalController logicalcontroller) {
     myTextArea = new TextArea();
     myTextArea.setPromptText("Enter Logo Commands Here:");
+    myLogicalController = logicalcontroller;
   }
 
   public void setInputArea(String text){
@@ -28,7 +29,7 @@ public class UserInputPane implements SubPane {
     System.out.println(userCommand);
     try {
       if (!userCommand.equals("")) {
-        LogicalController.handleNewCommand(userCommand);
+        myLogicalController.handleNewCommand(userCommand);
       }
     }
     catch (Exception e){
