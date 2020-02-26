@@ -7,7 +7,6 @@ import javafx.beans.property.Property;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import slogo.view.windows.SlogoView;
 import slogo.visualcontroller.VisualCommand;
 
@@ -30,22 +29,23 @@ public class CommandHistoryTab implements SubTab {
     myCommands.add(command);
   }
 
-  // NOTE - these two methods no longer needed with bindigns, automatic updates after property set
-  public void updateTab(){
-    for (VisualCommand command: myCommands){
-      myVBox.getChildren().add(getVisualizedCommand(command));
-    }
-  }
-
-  private Node getVisualizedCommand(VisualCommand command) {
-    Button clickableCommand = new Button(command.getString());
-    clickableCommand.setOnAction(e -> myViewer.setUserInputAreaText(command.getString()));
-    return clickableCommand;
-  }
+//  // NOTE - these two methods no longer needed with bindigns, automatic updates after property set
+//  public void updateTab(){
+//    for (VisualCommand command: myCommands){
+//      myVBox.getChildren().add(getVisualizedCommand(command));
+//    }
+//  }
+//
+//  private Node getVisualizedCommand(VisualCommand command) {
+//    Button clickableCommand = new Button(command.getString());
+//    clickableCommand.setOnAction(e -> myViewer.setUserInputAreaText(command.getString()));
+//    return clickableCommand;
+//  }
 
   @Override
   public Tab getTab(Property property) {
-    updateTab();
+    //updateTab();
+    setProperty(property);
     Tab tab = new Tab("Command History", myVBox);
     tab.getStyleClass().addAll("command-tab");
     return tab;
