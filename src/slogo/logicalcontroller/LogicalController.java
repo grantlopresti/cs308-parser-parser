@@ -8,6 +8,7 @@ import slogo.model.ModelObject;
 import slogo.model.ModelTurtle;
 import slogo.visualcontroller.VisualController;
 
+import javax.script.ScriptException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -39,7 +40,7 @@ public class LogicalController {
    * @param command
    * @throws InvalidCommandException
    */
-  public static void handleNewCommand(String command) throws InvalidCommandException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, IOException {
+  public static void handleNewCommand(String command) throws InvalidCommandException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, IOException, ScriptException {
     //TODO: Handle input command, try/catch for invalid and route potential error back to
     initializeController("English");
     System.out.println(command);
