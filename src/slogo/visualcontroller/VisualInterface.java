@@ -1,6 +1,7 @@
 package slogo.visualcontroller;
 
 import slogo.logicalcontroller.command.Command;
+import slogo.model.ModelCollection;
 import slogo.model.ModelTurtle;
 
 public interface VisualInterface {
@@ -14,9 +15,9 @@ public interface VisualInterface {
     /**
      * Called by the logical controller to update turtle state and draw shapes in Slogo view
      *
-     * @param turtle  model turtle that is currently being acted on
+     * @param modelCollection collection of model objects
      * @param command to determine how the turtle changes
      */
-    public void moveTurtle(ModelTurtle turtle, Command command);
+    public void moveModelObject(ModelCollection modelCollection, Command command);
 
 }

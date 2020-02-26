@@ -1,14 +1,13 @@
 package slogo.visualcontroller;
 
 import slogo.logicalcontroller.command.Command;
+import slogo.model.ModelCollection;
+import slogo.model.ModelObject;
 import slogo.model.ModelTurtle;
 import slogo.view.subsections.VisualizationPane;
 import slogo.view.windows.SlogoView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class VisualController implements VisualInterface {
 
@@ -56,7 +55,14 @@ public class VisualController implements VisualInterface {
    * TODO - Update switch to reflection, review tutorials and ask Alex for advice
    */
   @Override
-  public void moveTurtle(ModelTurtle turtle, Command command) {
+  public void moveModelObject(ModelCollection modelCollection, Command command) {
+    Iterator iter = modelCollection.iterator();
+    Object o;
+    while (iter.hasNext()) {
+      o = iter.next();
+      o.getClass();
+    }
+    /*
     VisualTurtle visualTurtle = addTurtleToMap(turtle);
     visualTurtle.updateVisualTurtle(turtle);
     mySlogoView.updateVisualTurtles(new ArrayList<VisualTurtle>(List.of(visualTurtle)));
@@ -68,6 +74,8 @@ public class VisualController implements VisualInterface {
         }
         break;
     }
+
+     */
   }
 
   private void appendLine(VisualLine line) {
