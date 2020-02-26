@@ -32,6 +32,8 @@ public class LogicalController {
   public LogicalController(ModelCollection modelCollection, VisualController visualController, List<Variable> variables){
     this.myModelCollection = modelCollection;
     this.myVisualController = visualController;
+    this.myModelCollection.append(new ModelTurtle());
+    this.myVisualController.moveModelObject(this.myModelCollection);
     this.myVariables = variables;
   }
 
@@ -51,8 +53,16 @@ public class LogicalController {
    * @throws InvalidCommandException
    */
   public void handleNewCommand(String command) throws InvalidCommandException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, IOException, ScriptException {
-    System.out.println(command);
+    //System.out.println(command);
 
+    for(Object turtle : myModelCollection){
+      ModelTurtle myModelTurtle = (ModelTurtle) turtle;
+      myModelTurtle.move(30);
+    }
+    myVisualController.moveModelObject(myModelCollection);
+
+    System.out.println("Got here");
+    /*
     List<String> commandList;
     commandList = Arrays.asList(command.split("\n"));
 
@@ -65,7 +75,7 @@ public class LogicalController {
       Command currentCommand = myParser.getCommand();
       passToVisualController(currentCommand);
     }
-
+*/
     /*
     for (Object mo : myModelCollection){
       for(Command myCurrentCommand : commandObjectList) {
@@ -92,6 +102,6 @@ public class LogicalController {
   }
 
   private void passToVisualController(Command command){
-    myVisualController.moveModelObject(myModelCollection, command);
+    myVisualController.moveModelObject(myModelCollection);
   }
 }

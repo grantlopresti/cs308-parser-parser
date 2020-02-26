@@ -162,4 +162,7 @@ public class VisualTurtle extends VisualObject {
     return myPenThickness;
   }
 
+  @Override
+  public String toString() {return "Testing";}
+
 }

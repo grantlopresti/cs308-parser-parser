@@ -16,7 +16,7 @@ public abstract class ModelObject implements ModelInterface{
     public ModelObject(){
         xCoordinate = 0.0;
         yCoordinate = 0.0;
-        heading = 90.0;
+        heading = 0.0;
         ID = 0;
     }
 
