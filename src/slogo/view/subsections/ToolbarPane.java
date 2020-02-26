@@ -19,6 +19,8 @@ import javafx.stage.Stage;
 import slogo.logicalcontroller.LogicalController;
 import slogo.view.windows.SlogoView;
 
+import javax.script.ScriptException;
+
 public class ToolbarPane implements SubPane {
 
   private static final String DEFAULT_LANGUAGE = "English";
@@ -72,10 +74,20 @@ public class ToolbarPane implements SubPane {
   private void initializeButtons() throws IOException {
     myLoader.setOnAction(e -> loadFile());
     myLoadAndRun.setOnAction(e -> {
-      loadAndRun();
+      try {
+        loadAndRun();
+      } catch (ScriptException ex) {
+        ex.printStackTrace();
+      }
     });
 //    myBGColor.setOnAction();
-    myLoadAndRun.setOnAction(e -> loadAndRun());
+    myLoadAndRun.setOnAction(e -> {
+      try {
+        loadAndRun();
+      } catch (ScriptException ex) {
+        ex.printStackTrace();
+      }
+    });
     myBGColorPicker.setOnAction(t -> {
       Color c = myBGColorPicker.getValue();
       myViewer.setBGColor(c.getRed(), c.getGreen(), c.getBlue());
@@ -106,7 +118,7 @@ public class ToolbarPane implements SubPane {
     myViewer.setUserInputAreaText(fileContents);
   }
 
-  private void loadAndRun() {
+  private void loadAndRun() throws ScriptException {
     File file = getUserFile();
     try {
       sendCommands(file);
@@ -138,7 +150,7 @@ public class ToolbarPane implements SubPane {
     return fc.showOpenDialog(new Stage());
   }
 
-  private void sendCommands(File file) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, IOException {
+  private void sendCommands(File file) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, IOException, ScriptException {
       String fileContents = getTextFromFile(file);
     try {
       LogicalController.handleNewCommand(fileContents);
