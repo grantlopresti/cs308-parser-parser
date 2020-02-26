@@ -3,14 +3,17 @@ package slogo.logicalcontroller;
 import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.command.Parser;
+import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
 import slogo.model.ModelObject;
 import slogo.model.ModelTurtle;
+import slogo.visualcontroller.VisualController;
 
 import javax.script.ScriptException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,17 +23,20 @@ import java.util.List;
  * @author Alex Xu and Amjad S.
  */
 public class LogicalController {
-  private static Parser myParser;
-  private static ModelCollection myModelCollection;
+  private Parser myParser;
 
-  private LogicalController() {}
+  private ModelCollection myModelCollection;
+  private List<Command> myCommandList;
+  private List<Variable> myVariableList;
+
+  public LogicalController(){}
 
   /**
    * To be called from the front-end to change the language (also needs to happen the first time).
    * @param language
    * @throws IOException
    */
-  public static void setLanguage(String language) throws IOException {
+  public void setLanguage(String language) throws IOException {
     myParser = new Parser(language);
   }
 
@@ -40,7 +46,7 @@ public class LogicalController {
    * @param command
    * @throws InvalidCommandException
    */
-  public static void handleNewCommand(String command) throws InvalidCommandException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, IOException, ScriptException {
+  public void handleNewCommand(String command) throws InvalidCommandException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, IOException, ScriptException {
     //TODO: Handle input command, try/catch for invalid and route potential error back to
     initializeController("English");
     System.out.println(command);
@@ -53,10 +59,6 @@ public class LogicalController {
     List<Command> commandObjectList = myParser.getCommands();
 
     for (Object mo : myModelCollection){
-      //if(myCurrentCommand.getCommandCategory().equals(VISUAL_COMMAND_NAME){
-      //  myVisualCommands.add(myCurrentCommand);
-      //}
-      //else{
       for(Command myCurrentCommand : commandObjectList) {
         //Command myCurrentCommand = commandObjectList.get(0);
         ModelObject myModelObject = (ModelObject) mo;
@@ -75,37 +77,37 @@ public class LogicalController {
         System.out.println("After X: " + myModelObject.getX());
 
       }
-      //}
     }
+
+    //passToVisualController(myModelCollection, myCommandList, myVariableList);
+
 
   }
 
-  /**
-   * Returns the collection of ModelObjects.
-   * @return
-   */
-  //TODO: Not to self: change in the future so that it returns a collection of immutable model objects instead.
-   public ModelCollection getModelCollection(){
-    return myModelCollection;
-   }
+  private void passToVisualController(){
+    //VisualController.(myModelCollection, myCommandList, myVariableList);
+  }
 
   /**
    * Initializes/Resets the Logical Controller.
    */
-  public static void initializeController(){
+  public void initializeController(){
     myModelCollection = new ModelCollection();
     myModelCollection.append(new ModelTurtle());
   }
 
   /**
-   * Overloaded method. Initializes/Resets the Logical Controller.
+   * Overloaded method. Initializes/Resets the Logical Controller. Should be called before logical controller can be used.
    * @param language
    */
-  public static void initializeController(String language) throws IOException {
+  public void initializeController(String language) throws IOException {
     myModelCollection = new ModelCollection();
     myModelCollection.append(new ModelTurtle());
 
-    myParser = new Parser(language);
+    setLanguage(language);
+
+    myCommandList = new ArrayList<>();
+    myVariableList = new ArrayList<>();
   }
 
 }
