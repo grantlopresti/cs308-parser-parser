@@ -19,16 +19,18 @@ import slogo.logicalcontroller.LogicalController;
 import slogo.view.TurtleImage;
 import slogo.view.subsections.*;
 import slogo.visualcontroller.VisualCommand;
+import slogo.visualcontroller.VisualData;
 import slogo.visualcontroller.VisualLine;
 import slogo.visualcontroller.VisualTurtle;
+import slogo.visualcontroller.VisualUserFunction;
 
 public class SlogoView extends Application {
 
-  private static final int WINDOW_WIDTH = 1355;
+  private static final int WINDOW_WIDTH = 1370;
   private static final int WINDOW_HEIGHT = 700;
 
   private static final int VISUALIZER_WIDTH = 800;
-  private static final int VISUALIZER_HEIGHT = 535;
+  private static final int VISUALIZER_HEIGHT = 525;
 
   private BorderPane myBorderPane;
   private UserInputPane myInputPane;
@@ -43,6 +45,7 @@ public class SlogoView extends Application {
   public void start(Stage stage) throws IOException {
     myBorderPane = new BorderPane();
     myVisualizationPane = new VisualizationPane(VISUALIZER_WIDTH, VISUALIZER_HEIGHT);
+    myInputPane = new UserInputPane(myLogicalController);
     Scene scene = new Scene(createGUIBorderPane(), WINDOW_WIDTH, WINDOW_HEIGHT);
     stage.setTitle("Parser Parser - Slogo Project - CS 308");
     scene.getStylesheets().add("stylesheets/defaultStyle.css");
@@ -102,24 +105,38 @@ public class SlogoView extends Application {
   private HBox getProgramInputNode() {
     HBox programInputArea = new HBox();
 
-    myInputPane = new UserInputPane(this.myLogicalController);
     TextArea inputArea = myInputPane.getNode();
     inputArea.setPrefSize(WINDOW_WIDTH * 0.5, WINDOW_HEIGHT * 0.15);
     inputArea.setWrapText(true);
 
-    Button runButton = new Button("Run");
-    runButton.setId("run-button");
-    runButton.setMinSize(60, WINDOW_HEIGHT * 0.15);
-    runButton.setPrefWidth(120);
-    runButton.setOnAction(e -> {
-      myInputPane.sendUserCommand();
-      //doTestUpdate();
-    });
+    VBox buttonArea = getButtonsVBox();
 
-    programInputArea.getChildren().addAll(inputArea, runButton);
+    programInputArea.getChildren().addAll(inputArea, buttonArea);
     programInputArea.setAlignment(Pos.CENTER);
 
     return programInputArea;
+  }
+
+  private VBox getButtonsVBox() {
+    VBox buttonArea = new VBox();
+    Button runButton = new Button("Run");
+    runButton.setId("run-button");
+    runButton.setMinSize(60, WINDOW_HEIGHT * 0.10);
+    runButton.setPrefWidth(120);
+    runButton.setOnAction(e -> {
+      myInputPane.sendUserCommand();
+    });
+
+    Button clearButton = new Button("Clear");
+    clearButton.setId("run-button");
+    clearButton.setMinSize(60, WINDOW_HEIGHT * 0.05);
+    clearButton.setPrefWidth(120);
+    clearButton.setOnAction(e -> {
+      myInputPane.clear();
+    });
+
+    buttonArea.getChildren().addAll(runButton, clearButton);
+    return buttonArea;
   }
 
   private TabPane getRightPane() {
@@ -158,6 +175,7 @@ public class SlogoView extends Application {
     for (VisualLine line : visualLines){
       myVisualizationPane.addVisualLine(line);
     }
+    myVisualizationPane.getNode();
     myBorderPane.setCenter(getCenterPane());
   }
 
@@ -169,11 +187,11 @@ public class SlogoView extends Application {
 
   }
 
-  public void updateVisualData(List<VisualLine> visualLines) {
+  public void updateVisualData(List<VisualData> visualData) {
 
   }
 
-  public void updateVisualUserFunctions(List<VisualLine> visualLines) {
+  public void updateVisualUserFunctions(List<VisualUserFunction> visualFunctions) {
 
   }
 
@@ -204,5 +222,10 @@ public class SlogoView extends Application {
     myVisualizationPane.clearElements();
     myVisualizationPane.resetBGColor();
     myBorderPane.setCenter(getCenterPane());
+  }
+
+  public void setPenColor(double red, double green, double blue) {
+    Color customColor = new Color(red,green,blue,1);
+    myVisualizationPane.setPenColor(customColor);
   }
 }

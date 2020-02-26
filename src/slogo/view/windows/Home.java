@@ -68,8 +68,8 @@ public class Home extends Application {
 
   @FXML
   private void launchSim() throws IOException {
-    SlogoView mainView = new SlogoView();
-    mainView.start(new Stage());
+    // SlogoView mainView = new SlogoView();
+    // mainView.start(new Stage());
   }
 
 }

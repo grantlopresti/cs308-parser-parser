@@ -12,7 +12,6 @@ import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.HLineTo;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
@@ -28,13 +27,15 @@ import slogo.visualcontroller.VisualUserFunction;
 
 public class VisualizationPane implements SubPane {
 
-  private static final Color DEFAULT_COLOR = Color.DARKGRAY;
+  private static final Color DEFAULT_BG_COLOR = Color.DARKGRAY;
+  private static final Color DEFAULT_PEN_COLOR = Color.BLACK;
 
   private double groupWidth;
   private double groupHeight;
   private Group myVisualizer;
 
-  private Color myBGColor = DEFAULT_COLOR;
+  private Color myBGColor = DEFAULT_BG_COLOR;
+  private Color myPenColor = DEFAULT_PEN_COLOR;
 
   private List<VisualTurtle> myTurtles = new ArrayList<>();
   private List<VisualCommand> myCommands = new ArrayList<>();
@@ -205,6 +206,10 @@ public class VisualizationPane implements SubPane {
   }
 
   public void resetBGColor() {
-    myBGColor = DEFAULT_COLOR;
+    myBGColor = DEFAULT_BG_COLOR;
+  }
+
+  public void setPenColor(Color customColor) {
+    myPenColor = customColor;
   }
 }

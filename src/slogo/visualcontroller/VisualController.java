@@ -58,17 +58,14 @@ public class VisualController {
   /**
    * Called by the logical controller to update turtle state and draw shapes in Slogo view
    * @param modelCollection model turtle that is currently being acted on
-   * @param command to determine how the turtle changes
    * TODO - Update switch to reflection, review tutorials and ask Alex for advice
    */
-  public void moveModelObject(ModelCollection modelCollection, Command command) {
+  public void moveModelObject(ModelCollection modelCollection) {
     Iterator iter = modelCollection.iterator();
-    Object o;
     while (iter.hasNext()) {
-      o = iter.next();
-      o.getClass();
+      ModelTurtle turtle = (ModelTurtle) iter.next();
+      moveTurtle(turtle);
     }
-
   }
 
   /**
@@ -86,18 +83,18 @@ public class VisualController {
 
   }
 
-  private void moveTurtle(ModelTurtle turtle, Command command) {
+  private void moveTurtle(ModelTurtle turtle) {
     VisualTurtle visualTurtle = addTurtleToMap(turtle);
     visualTurtle.updateVisualTurtle(turtle);
-    mySlogoView.updateVisualTurtles(new ArrayList<VisualTurtle>(List.of(visualTurtle)));
-    switch (command.toString()) {
-      case(FORWARD):
-      case(BACKWARD):
-        if (turtle.isPenActive()) {
-          appendLine(new VisualLine(visualTurtle));
-        }
-        break;
+    System.out.println(visualTurtle.toString());
+    try {
+      mySlogoView.updateVisualTurtles(new ArrayList<VisualTurtle>(List.of(visualTurtle)));
+      if (turtle.isPenActive())
+        appendLine(new VisualLine(visualTurtle));
+    } catch (NullPointerException e) {
+      System.out.println("Given null turtle set, passing on draw");
     }
+
   }
 
   private void appendLine(VisualLine line) {

@@ -26,7 +26,6 @@ public class Manager {
     private VisualController myVisualController;
     private LogicalController myLogicalController;
 
-
     public Manager() throws IOException {
         createModel();
         createVisualController();
@@ -65,7 +64,7 @@ public class Manager {
 
     private void createModel() {
         this.myModelCollection = new ModelCollection();
-        this.myModelCollection.append(new ModelTurtle());
+        // this.myModelCollection.append(new ModelTurtle());
         this.myVariables = new ArrayList<Variable>();
     }
 
