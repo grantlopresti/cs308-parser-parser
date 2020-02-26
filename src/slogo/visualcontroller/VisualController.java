@@ -90,7 +90,9 @@ public class VisualController implements VisualInterface {
    */
   @Override
   public void updateCommands(String command) {
-    this.myCommandsProperty.getValue().add(new VisualCommand(command));
+    FXCollections.reverse(myCommandsProperty.getValue());
+    myCommandsProperty.getValue().add(new VisualCommand(command));
+    FXCollections.reverse(myCommandsProperty.getValue());
   }
 
   /**
@@ -110,14 +112,22 @@ public class VisualController implements VisualInterface {
 
   @Override
   public Property getProperty(VisualProperty type) {
-    return switch (type) {
-      case COMMAND -> myCommandsProperty;
-      case DATA -> myDataProperty;
-      case VARIABLE -> myVariablesProperty;
-      case ERROR -> myErrorsProperty;
-      case FUNCTION -> myFunctionsProperty;
-      case FILE -> myFilesProperty;
-    };
+    switch (type) {
+      case COMMAND:
+        return myCommandsProperty;
+      case DATA:
+        return myDataProperty;
+      case VARIABLE:
+        return myVariablesProperty;
+      case ERROR:
+        return myErrorsProperty;
+      case FUNCTION:
+        return myFunctionsProperty;
+      case FILE:
+        return myFilesProperty;
+      default:
+        throw new IllegalArgumentException();
+    }
   }
 
   private void moveTurtle(ModelTurtle turtle) {
