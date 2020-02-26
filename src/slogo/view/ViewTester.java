@@ -10,12 +10,13 @@ import java.io.IOException;
 
 public class ViewTester {
 
-  private static final SlogoView mainStage = new SlogoView();
+  // TODO - update SLogoView LogicalController interaction to all instance, not static references
+  private static final SlogoView mainStage = new SlogoView(new LogicalController());
   //private static final Home mainStage = new Home();
 
   public static void main(String[] args) {
 
-    LogicalController.initializeController();
+    // LogicalController.initializeController();
 
     Platform.startup(() -> {
       try {
@@ -24,8 +25,6 @@ public class ViewTester {
         e.printStackTrace();
       }
     });
-
-
 
   }
 }

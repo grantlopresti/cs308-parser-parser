@@ -15,6 +15,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import slogo.logicalcontroller.LogicalController;
 import slogo.view.TurtleImage;
 import slogo.view.subsections.*;
 import slogo.visualcontroller.VisualCommand;
@@ -32,6 +33,11 @@ public class SlogoView extends Application {
   private BorderPane myBorderPane;
   private UserInputPane myInputPane;
   private VisualizationPane myVisualizationPane;
+  private LogicalController myLogicalController;
+
+  public SlogoView (LogicalController control) {
+    this.myLogicalController = control;
+  }
 
   @Override
   public void start(Stage stage) throws IOException {

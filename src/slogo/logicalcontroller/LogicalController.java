@@ -26,10 +26,16 @@ public class LogicalController {
   private Parser myParser;
 
   private ModelCollection myModelCollection;
+  private VisualController myVisualController;
   private List<Command> myCommandList;
   private List<Variable> myVariableList;
 
   public LogicalController(){}
+
+  public LogicalController(ModelCollection model, VisualController control) {
+    this.myModelCollection = model;
+    this.myVisualController = control;
+  }
 
   /**
    * To be called from the front-end to change the language (also needs to happen the first time).
