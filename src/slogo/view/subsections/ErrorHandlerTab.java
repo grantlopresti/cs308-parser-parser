@@ -6,12 +6,12 @@ import javafx.scene.control.Tab;
 public class ErrorHandlerTab implements SubTab {
 
   @Override
-  public Tab getTab() {
+  public Tab getTab(Property property) {
+    setProperty(property);
     return new Tab("Error Handler");
   }
 
-  @Override
-  public void setProperty(Property property) {
+  private void setProperty(Property property) {
 
   }
 }

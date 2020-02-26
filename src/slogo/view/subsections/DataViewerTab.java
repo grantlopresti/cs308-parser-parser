@@ -8,12 +8,12 @@ public class DataViewerTab implements SubTab {
   public DataViewerTab() {;}
 
   @Override
-  public Tab getTab() {
+  public Tab getTab(Property property) {
+    setProperty(property);
     return new Tab("Data/Variables");
   }
 
-  @Override
-  public void setProperty(Property property) {
+  private void setProperty(Property property) {
 
   }
 

@@ -27,12 +27,12 @@ public class VisualController implements VisualInterface {
   private List<VisualUserFunction> myFunctions = new ArrayList<>();
   private List<VisualData> myData = new ArrayList<>();
 
-  // TODO: Implement all collections as properties, bind to front end
   private SimpleObjectProperty<ObservableList<VisualError>> myErrorsProperty;
   private SimpleObjectProperty<ObservableList<VisualCommand>> myCommandsProperty;
   private SimpleObjectProperty<ObservableList<VisualUserFunction>> myFunctionsProperty;
   private SimpleObjectProperty<ObservableList<VisualData>> myDataProperty;
   private SimpleObjectProperty<ObservableList<VisualVariable>> myVariablesProperty;
+  private SimpleObjectProperty<ObservableList<VisualFile>> myFilesProperty;
 
   /**
    * Constructor for a VisualController, with its associated SlogoView
@@ -52,6 +52,7 @@ public class VisualController implements VisualInterface {
     myFunctionsProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
     myDataProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
     myVariablesProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
+    myFilesProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
   }
 
   public void setSlogoView(SlogoView view) {
@@ -115,6 +116,7 @@ public class VisualController implements VisualInterface {
       case VARIABLE -> myVariablesProperty;
       case ERROR -> myErrorsProperty;
       case FUNCTION -> myFunctionsProperty;
+      case FILE -> myFilesProperty;
     };
   }
 

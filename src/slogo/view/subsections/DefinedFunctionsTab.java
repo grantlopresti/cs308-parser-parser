@@ -6,12 +6,12 @@ import javafx.scene.control.Tab;
 public class DefinedFunctionsTab implements SubTab {
 
   @Override
-  public Tab getTab() {
+  public Tab getTab(Property property) {
+    setProperty(property);
     return new Tab("Defined Functions");
   }
 
-  @Override
-  public void setProperty(Property property) {
+  private void setProperty(Property property) {
 
   }
 }

@@ -5,8 +5,6 @@ import javafx.scene.control.Tab;
 
 public interface SubTab {
 
-  public Tab getTab();
-
-  public void setProperty(Property property);
+  public Tab getTab(Property property);
 
 }

@@ -8,8 +8,8 @@ import javafx.scene.control.TreeView;
 public class FileTreeTab implements SubTab{
 
   @Override
-  public Tab getTab() {
-
+  public Tab getTab(Property property) {
+    setProperty(property);
     TreeItem<String> projectsTree = new TreeItem<>("Projects");
     projectsTree.getChildren().addAll(
         new TreeItem<>("Project 1"),
@@ -23,8 +23,8 @@ public class FileTreeTab implements SubTab{
     return projectsTab;
   }
 
-  @Override
-  public void setProperty(Property property) {
+  // NOTE - may not be needed here with current tree items
+  private void setProperty(Property property) {
 
   }
 }

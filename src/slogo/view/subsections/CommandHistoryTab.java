@@ -25,6 +25,7 @@ public class CommandHistoryTab implements SubTab {
     myCommands.add(command);
   }
 
+  // NOTE - these two methods no longer needed with bindigns, automatic updates after property set
   public void updateTab(){
     for (VisualCommand command: myCommands){
       myVBox.getChildren().add(getVisualizedCommand(command));
@@ -36,13 +37,14 @@ public class CommandHistoryTab implements SubTab {
   }
 
   @Override
-  public Tab getTab() {
+  public Tab getTab(Property property) {
     updateTab();
+    setProperty(property);
     return new Tab("Command History", myVBox);
   }
 
-  @Override
-  public void setProperty(Property property) {
+  // NOTE - this is the magic sauce, when the itemsproperty is bound as visualcontroller instance changes, yours does too
+  private void setProperty(Property property) {
     myListView = new ListView();
     myListView.itemsProperty().bind(property);
     myVBox.getChildren().add(myListView);
