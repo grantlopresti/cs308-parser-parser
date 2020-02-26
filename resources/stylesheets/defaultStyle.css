@@ -34,6 +34,11 @@
 }
 
 
+.command-tab {
+  -fx-alignment: CENTER;
+  -fx-background-color: lightblue;
+}
+
 
 #run-button {
   -fx-padding: 8 15 15 15;

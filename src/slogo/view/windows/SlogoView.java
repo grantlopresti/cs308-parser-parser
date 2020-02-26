@@ -73,7 +73,7 @@ public class SlogoView extends Application {
     VBox vbox = new VBox();
 
     //MenuBar menu = new MenuPane().getNode();
-    ToolBar tools = new ToolbarPane(this, this.myLogicalController).getNode();
+    ToolBar tools = new ToolbarPane(this, myLogicalController).getNode();
 
     //vbox.getChildren().addAll(menu, tools);
     vbox.getChildren().addAll(tools);
@@ -146,11 +146,11 @@ public class SlogoView extends Application {
     TabPane tabPaneRight = new TabPane();
 
     Tab data = new DataViewerTab().getTab();
-    myCommandsTab = new CommandHistoryTab();
+    myCommandsTab = new CommandHistoryTab(this);
     Tab commands = myCommandsTab.getTab();
     Tab errors = new ErrorHandlerTab().getTab();
 
-    tabPaneRight.getTabs().addAll(data, commands, errors);
+    tabPaneRight.getTabs().addAll(commands, data, errors);
     tabPaneRight.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 
     return tabPaneRight;
