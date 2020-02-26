@@ -4,6 +4,8 @@ import slogo.logicalcontroller.command.Command;
 import slogo.model.ModelCollection;
 import slogo.model.ModelTurtle;
 
+import java.util.List;
+
 public interface VisualInterface {
 
     /**
@@ -19,5 +21,9 @@ public interface VisualInterface {
      * @param command to determine how the turtle changes
      */
     public void moveModelObject(ModelCollection modelCollection, Command command);
+
+    public void updateCommands(List<Command> commands);
+
+    public void updateErrors(List<RuntimeException> exceptions);
 
 }

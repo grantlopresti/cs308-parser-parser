@@ -9,7 +9,7 @@ import slogo.view.windows.SlogoView;
 
 import java.util.*;
 
-public class VisualController implements VisualInterface {
+public class VisualController {
 
   private double myAnimationRate = 0.0;
   private final SlogoView mySlogoView;
@@ -43,26 +43,42 @@ public class VisualController implements VisualInterface {
    * @param rate is the new animation rate for adding lines into the view
    * TODO - implement animation rate of object addition via queueing/threading (not threading lol)
    */
-  @Override
   public void setAnimationRate(double rate) {
     this.myAnimationRate = rate;
   }
 
   /**
    * Called by the logical controller to update turtle state and draw shapes in Slogo view
-   * @param turtle model turtle that is currently being acted on
+   * @param modelCollection model turtle that is currently being acted on
    * @param command to determine how the turtle changes
    * TODO - Update switch to reflection, review tutorials and ask Alex for advice
    */
-  @Override
-  public static void moveModelObject(ModelCollection modelCollection, Command command) {
+  public void moveModelObject(ModelCollection modelCollection, Command command) {
     Iterator iter = modelCollection.iterator();
     Object o;
     while (iter.hasNext()) {
       o = iter.next();
       o.getClass();
     }
-    /*
+
+  }
+
+  /**
+   *
+   * @param command
+   */
+  public void updateCommands(Command command) {
+
+  }
+
+  /**
+   * TODO Implement error add
+   */
+  public void updateErrors() {
+
+  }
+
+  private void moveTurtle(ModelTurtle turtle, Command command) {
     VisualTurtle visualTurtle = addTurtleToMap(turtle);
     visualTurtle.updateVisualTurtle(turtle);
     mySlogoView.updateVisualTurtles(new ArrayList<VisualTurtle>(List.of(visualTurtle)));
@@ -74,8 +90,6 @@ public class VisualController implements VisualInterface {
         }
         break;
     }
-
-     */
   }
 
   private void appendLine(VisualLine line) {

@@ -17,6 +17,11 @@ public class Manager {
     private LogicalController myLogicalController;
 
     public Manager(){
+        createModel();
+
+    }
+
+    private void createModel() {
         myModelCollection = new ModelCollection();
         myModelCollection.append(new ModelTurtle());
     }
