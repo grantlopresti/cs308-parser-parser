@@ -1,6 +1,7 @@
 package slogo.logicalcontroller;
 
 import slogo.exceptions.InvalidCommandException;
+import slogo.exceptions.LogicalException;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
@@ -53,11 +54,11 @@ public class LogicalController {
     for(Object turtle : myModelCollection){
       ModelTurtle myModelTurtle = (ModelTurtle) turtle;
       myModelTurtle.move(30);
-      myVisualController.updateCommands("test");
     }
     myVisualController.moveModelObject(myModelCollection);
+    myVisualController.updateCommands(command);
+    myVisualController.updateErrors(new InvalidCommandException("test error"));
 
-    System.out.println("Got here");
     /*
     List<String> commandList;
     commandList = Arrays.asList(command.split("\n"));

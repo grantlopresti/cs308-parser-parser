@@ -7,6 +7,7 @@ public class VisualError {
 
     private final String myMessage;
     private final ErrorSeverity mySeverity;
+    private static final String SEPARATOR = ": ";
 
     public VisualError(LogicalException e) {
         this.myMessage = e.toString();
@@ -20,6 +21,12 @@ public class VisualError {
 
     public ErrorSeverity getSeverity() {return this.mySeverity;}
     public Color getColor() {return this.mySeverity.getColor();}
-    public String getMessage() {return this.myMessage;}
+
+    @Override
+    public String toString() {return errorMessage();}
+
+    private String errorMessage() {
+        return this.mySeverity.getLevel() + SEPARATOR + this.myMessage;
+    }
 
 }
