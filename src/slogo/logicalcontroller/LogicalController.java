@@ -23,19 +23,20 @@ import java.util.List;
  * @author Alex Xu and Amjad S.
  */
 public class LogicalController {
-  private static Parser myParser;
+  private Parser myParser;
 
-  private static ModelCollection myModelCollection;
-  private static List<Command> myCommandList;
-  private static List<Variable> myVariableList;
+  private ModelCollection myModelCollection;
+  private List<Command> myCommandList;
+  private List<Variable> myVariableList;
 
-  private LogicalController(){}
+  public LogicalController(){}
+
   /**
    * To be called from the front-end to change the language (also needs to happen the first time).
    * @param language
    * @throws IOException
    */
-  public static void setLanguage(String language) throws IOException {
+  public void setLanguage(String language) throws IOException {
     myParser = new Parser(language);
   }
 
@@ -45,7 +46,7 @@ public class LogicalController {
    * @param command
    * @throws InvalidCommandException
    */
-  public static void handleNewCommand(String command) throws InvalidCommandException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, IOException, ScriptException {
+  public void handleNewCommand(String command) throws InvalidCommandException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, IOException, ScriptException {
     //TODO: Handle input command, try/catch for invalid and route potential error back to
     initializeController("English");
     System.out.println(command);
@@ -78,19 +79,19 @@ public class LogicalController {
       }
     }
 
-    passToVisualController(myModelCollection, myCommandList, myVariableList);
+    //passToVisualController(myModelCollection, myCommandList, myVariableList);
 
 
   }
 
   private void passToVisualController(){
-    VisualController.(myModelCollection, myCommandList, myVariableList);
+    //VisualController.(myModelCollection, myCommandList, myVariableList);
   }
 
   /**
    * Initializes/Resets the Logical Controller.
    */
-  public static void initializeController(){
+  public void initializeController(){
     myModelCollection = new ModelCollection();
     myModelCollection.append(new ModelTurtle());
   }
@@ -99,7 +100,7 @@ public class LogicalController {
    * Overloaded method. Initializes/Resets the Logical Controller. Should be called before logical controller can be used.
    * @param language
    */
-  public static void initializeController(String language) throws IOException {
+  public void initializeController(String language) throws IOException {
     myModelCollection = new ModelCollection();
     myModelCollection.append(new ModelTurtle());
 
