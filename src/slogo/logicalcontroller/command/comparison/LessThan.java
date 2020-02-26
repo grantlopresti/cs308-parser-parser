@@ -11,7 +11,12 @@ public class LessThan extends ComparisonCommand {
 
     @Override
     public void performComparison() {
-
+        if(argument1 < argument2){
+            setReturnValue(1);
+        }
+        else{
+            setReturnValue(0);
+        }
     }
 
 }
