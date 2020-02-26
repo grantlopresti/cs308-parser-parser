@@ -55,7 +55,7 @@ public class VisualController implements VisualInterface {
    * TODO - Update switch to reflection, review tutorials and ask Alex for advice
    */
   @Override
-  public void moveModelObject(ModelCollection modelCollection, Command command) {
+  public static void moveModelObject(ModelCollection modelCollection, Command command) {
     Iterator iter = modelCollection.iterator();
     Object o;
     while (iter.hasNext()) {

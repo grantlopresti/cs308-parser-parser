@@ -3,6 +3,7 @@ package slogo.logicalcontroller;
 import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.command.Parser;
+import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
 import slogo.model.ModelObject;
 import slogo.model.ModelTurtle;
@@ -12,6 +13,7 @@ import javax.script.ScriptException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,9 +24,12 @@ import java.util.List;
  */
 public class LogicalController {
   private static Parser myParser;
-  private static ModelCollection myModelCollection;
 
-  private LogicalController() {}
+  private static ModelCollection myModelCollection;
+  private static List<Command> myCommandList;
+  private static List<Variable> myVariableList;
+
+  private LogicalController(){}
   /**
    * To be called from the front-end to change the language (also needs to happen the first time).
    * @param language
@@ -73,13 +78,13 @@ public class LogicalController {
       }
     }
 
-    passToVisualController();
+    passToVisualController(myModelCollection, myCommandList, myVariableList);
 
 
   }
 
   private void passToVisualController(){
-    VisualController.
+    VisualController.(myModelCollection, myCommandList, myVariableList);
   }
 
   /**
@@ -91,14 +96,17 @@ public class LogicalController {
   }
 
   /**
-   * Overloaded method. Initializes/Resets the Logical Controller.
+   * Overloaded method. Initializes/Resets the Logical Controller. Should be called before logical controller can be used.
    * @param language
    */
   public static void initializeController(String language) throws IOException {
     myModelCollection = new ModelCollection();
     myModelCollection.append(new ModelTurtle());
 
-    myParser = new Parser(language);
+    setLanguage(language);
+
+    myCommandList = new ArrayList<>();
+    myVariableList = new ArrayList<>();
   }
 
 }
