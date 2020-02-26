@@ -2,25 +2,20 @@ package slogo.logicalcontroller;
 
 import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.command.Command;
-import slogo.logicalcontroller.command.Parser;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
-import slogo.model.ModelObject;
 import slogo.model.ModelTurtle;
 import slogo.visualcontroller.VisualController;
 
 import javax.script.ScriptException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
  * Logical controller handles the interaction between the user input from the GUI, the parser, command objects,
  * variables, and changes in the Model package.
- * @author Alex Xu and Amjad S.
+ * @author Alex Xu
  */
 public class LogicalController {
   private Parser myParser;
@@ -66,7 +61,6 @@ public class LogicalController {
     List<String> commandList;
     commandList = Arrays.asList(command.split("\n"));
 
-
     myParser.set(commandList, myModelCollection, myVariables);
 
     while(!myParser.isFinished()){
@@ -75,7 +69,7 @@ public class LogicalController {
       Command currentCommand = myParser.getCommand();
       passToVisualController(currentCommand);
     }
-*/
+
     /*
     for (Object mo : myModelCollection){
       for(Command myCurrentCommand : commandObjectList) {
