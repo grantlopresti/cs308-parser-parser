@@ -6,6 +6,7 @@ import slogo.logicalcontroller.command.Parser;
 import slogo.model.ModelCollection;
 import slogo.model.ModelObject;
 import slogo.model.ModelTurtle;
+import slogo.visualcontroller.VisualController;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -23,7 +24,6 @@ public class LogicalController {
   private static ModelCollection myModelCollection;
 
   private LogicalController() {}
-
   /**
    * To be called from the front-end to change the language (also needs to happen the first time).
    * @param language
@@ -52,10 +52,6 @@ public class LogicalController {
     List<Command> commandObjectList = myParser.getCommands();
 
     for (Object mo : myModelCollection){
-      //if(myCurrentCommand.getCommandCategory().equals(VISUAL_COMMAND_NAME){
-      //  myVisualCommands.add(myCurrentCommand);
-      //}
-      //else{
       for(Command myCurrentCommand : commandObjectList) {
         //Command myCurrentCommand = commandObjectList.get(0);
         ModelObject myModelObject = (ModelObject) mo;
@@ -74,19 +70,16 @@ public class LogicalController {
         System.out.println("After X: " + myModelObject.getX());
 
       }
-      //}
     }
+
+    passToVisualController();
+
 
   }
 
-  /**
-   * Returns the collection of ModelObjects.
-   * @return
-   */
-  //TODO: Not to self: change in the future so that it returns a collection of immutable model objects instead.
-   public ModelCollection getModelCollection(){
-    return myModelCollection;
-   }
+  private void passToVisualController(){
+    VisualController.
+  }
 
   /**
    * Initializes/Resets the Logical Controller.
