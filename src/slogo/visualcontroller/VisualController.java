@@ -12,7 +12,7 @@ import java.util.*;
 public class VisualController {
 
   private double myAnimationRate = 0.0;
-  private final SlogoView mySlogoView;
+  private SlogoView mySlogoView;
 
   // Currently mirroring structure of VisualizationPane.java
   // TODO: Update lines to queues, turtles to map (with ID) - check with Grant in VisPane to match structure
@@ -35,6 +35,14 @@ public class VisualController {
    * @param view is the view in which VisualObjects will be added to the display
    */
   public VisualController(SlogoView view){
+    this.mySlogoView = view;
+  }
+
+  public VisualController() {
+
+  }
+
+  public void setSlogoView(SlogoView view) {
     this.mySlogoView = view;
   }
 
