@@ -16,6 +16,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import slogo.logicalcontroller.LogicalController;
+import slogo.logicalcontroller.command.Command;
 import slogo.view.TurtleImage;
 import slogo.view.subsections.*;
 import slogo.visualcontroller.*;
@@ -31,6 +32,8 @@ public class SlogoView extends Application {
   private BorderPane myBorderPane;
   private UserInputPane myInputPane;
   private VisualizationPane myVisualizationPane;
+  private CommandHistoryTab myCommandsTab;
+
   private LogicalController myLogicalController;
   private VisualController myVisualController;
 
@@ -140,15 +143,13 @@ public class SlogoView extends Application {
   private TabPane getRightPane() {
     TabPane tabPaneRight = new TabPane();
 
-    // Tab data = new DataViewerTab().getTab();
-    // Tab commands = new CommandHistoryTab().getTab();
-    // Tab errors = new ErrorHandlerTab().getTab();
-
-    Tab data = new DataViewerTab().getTab(this.myVisualController.getProperty(VisualProperty.DATA));
-    Tab commands = new CommandHistoryTab().getTab();
+    // Tab data = new DataViewerTab().getTab(this.myVisualController.getProperty(VisualProperty.DATA));
+    Tab data = new DataViewerTab().getTab();
+    data.assignProperty(this.myVisualController.getProperty(VisualProperty.DATA));
+    myCommandsTab = new CommandHistoryTab();
+    Tab commands = myCommandsTab.getTab();
     Tab errors = new ErrorHandlerTab().getTab();
 
-    // data.setContent(new ListView());
     // data.itemsProperty().bind(this.myVisualController.getProperty(VisualProperty.DATA));
     // commands.itemsProperty().bind(this.myVisualController.getProperty(VisualProperty.COMMAND));
     // errors.itemsProperty().bind(this.myVisualController.getProperty(VisualProperty.ERROR));
@@ -186,21 +187,13 @@ public class SlogoView extends Application {
     myBorderPane.setCenter(getCenterPane());
   }
 
-  public void updateVisualCommands(List<VisualCommand> visualCommands) {
+  public void updateVisualCommands(List<VisualCommand> visualCommands) { ;}
 
-  }
+  public void updateVisualErrors(List<VisualLine> visualLines) { ;}
 
-  public void updateVisualErrors(List<VisualLine> visualLines) {
+  public void updateVisualData(List<VisualData> visualData) { ;}
 
-  }
-
-  public void updateVisualData(List<VisualData> visualData) {
-
-  }
-
-  public void updateVisualUserFunctions(List<VisualUserFunction> visualFunctions) {
-
-  }
+  public void updateVisualUserFunctions(List<VisualUserFunction> visualFunctions) { ;}
 
 //  public void doTestUpdate() {
 //    Map<Integer, VisualTurtle> visualTurtles = new HashMap<>();

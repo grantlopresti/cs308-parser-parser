@@ -68,6 +68,11 @@ public abstract class ModelObject implements ModelInterface{
         yCoordinate += calcY(distance);
     }
 
+    public void setPosition(double x, double y){
+        xCoordinate = x;
+        yCoordinate = y;
+    }
+
     /**
      * Overrides method defined in the ModelObject Interface. Sets the heading of the ModelObjects to the specified degree.
      * @param degree to set the ModelObjects heading to
@@ -84,6 +89,24 @@ public abstract class ModelObject implements ModelInterface{
     @Override
     public void turn(double degree) {
         heading += degree;
+        if(heading >= 360){
+            heading = heading - 360;
+        }
+        if(heading < 0){
+            heading = 360 + heading;
+        }
+    }
+
+    public void left(double degree){
+        turn(degree);
+    }
+
+    public void right(double degree){
+        turn(-1*degree);
+    }
+
+    public void setTowards(double x, double y){
+        
     }
 
     /**
@@ -97,6 +120,10 @@ public abstract class ModelObject implements ModelInterface{
     @Override
     public void forward(double value){
         move(value);
+    }
+
+    public void backward(double value){
+        move(-1*value);
     }
 
     private double calcX(double distance){

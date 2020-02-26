@@ -11,6 +11,12 @@ public class Or extends ComparisonCommand {
 
     @Override
     public void performComparison() {
+        if(argument1!= 0  || argument2!= 0){
+            setReturnValue(1);
+        }
+        else{
+            setReturnValue(0);
+        }
 
     }
 }

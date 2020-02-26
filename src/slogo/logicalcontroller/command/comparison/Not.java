@@ -8,6 +8,11 @@ public class Not extends ComparisonCommand {
 
     @Override
     public void performComparison() {
-
+        if(argument1 == 0){
+            setReturnValue(1);
+        }
+        else{
+            setReturnValue(0);
+        }
     }
 }
