@@ -144,6 +144,10 @@ public class SlogoView extends Application {
     Tab commands = new CommandHistoryTab().getTab();
     Tab errors = new ErrorHandlerTab().getTab();
 
+    // data.itemsProperty().bind(this.myVisualController.getProperty(VisualProperty.DATA));
+    // commands.itemsProperty().bind(this.myVisualController.getProperty(VisualProperty.COMMAND));
+    // errors.itemsProperty().bind(this.myVisualController.getProperty(VisualProperty.ERROR));
+
     tabPaneRight.getTabs().addAll(data, commands, errors);
     tabPaneRight.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 
