@@ -3,6 +3,9 @@ package slogo.logicalcontroller.command;
 import java.util.*;
 import java.io.*;
 import java.lang.reflect.*;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptEngine;
+import javax.script.ScriptException;
 
 public class Parser {
 
@@ -12,6 +15,8 @@ public class Parser {
     private Stack<String> values;
     private ArrayList<Command> commandObjs;
     private ResourceBundle resources;
+    private HashMap<String, String> type1;
+    private HashSet<String> type2;
 
     public Parser(String language) throws IOException {
         this.lang = language;
@@ -29,13 +34,14 @@ public class Parser {
         return this.commandObjs;
     }
 
-    public void parse(List<String> lines) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    public void parse(List<String> lines) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, ScriptException {
         for (String line : lines) {
             int numVals = 0;
             int numCommands = 0;
             int compoundVal = 0;
             if (line.trim().length() > 0) {
                 String[] splited = line.split("\\s+");
+                checkMath(splited);
                 boolean prev = false;
                 for(String s: splited){
                     if(!hasValue(s)){
@@ -57,6 +63,57 @@ public class Parser {
             System.out.println(compoundVal);
             unravel(compoundVal);
         }
+
+    }
+
+    public double checkMath(String[] splited) throws ScriptException {
+        System.out.println(Arrays.toString(splited));
+        String op = retMath(splited);
+        String[] operation = op.split("\\s+");
+        type1 = new HashMap<String, String>(){{
+            put("sum", "+");
+            put("difference", "-");
+            put("product", "*");
+            put("quotient", "/");
+            put("remainder", "%");
+            put("minus", "~");
+        }};
+        type2 = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pow","pi"));
+
+        for(int i = 0; i<operation.length; i++){
+            if((type1.keySet()).contains(operation[i])){
+                String temp = operation[i];
+                operation[i] = operation[i+1];
+                operation[i+1] = type1.get(operation[i]);
+                i+=2;
+            }
+            else if(type2.contains(operation[i])){
+                operation[i] = "Math."+operation[i];
+                operation[i+1] = "(" + operation[i+1] + ")";
+                i+=1;
+            }
+        }
+
+        ScriptEngineManager mgr = new ScriptEngineManager();
+        ScriptEngine engine = mgr.getEngineByName("JavaScript");
+        System.out.println(String.join("", operation));
+        double ret = (double)engine.eval(String.join("", operation));
+        return ret;
+    }
+
+    public String retMath(String[] splited){
+
+        HashSet mathTypes = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pow","pi","sum", "+","difference", "-","product","*","quotient","/","remainder", "%","minus","~"));
+
+        String math = "";
+        for(String s: splited){
+            if(mathTypes.contains(s) || s.matches(".*\\d.*")){
+                math+=s + " ";
+            }
+        }
+
+        math = math.substring(0, math.length()-1);
+        return math;
 
     }
 
@@ -121,15 +178,20 @@ public class Parser {
         return this.lang;
     }
 
-    public static void main (String[] args) throws IOException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    public static void main (String[] args) throws IOException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, ScriptException {
         Parser p = new Parser("English");
         List<String> test = new ArrayList<String>();
-        test.add("fd fd fd fd 50");
+        test.add("fd fd fd tan 50");
         p.parse(test);
+        System.out.println(p.getLang());
         ArrayList<Command> testt = p.getCommands();
         for(Command c: testt){
             System.out.println(testt);
         }
+
+
+
+
 
     }
 }
