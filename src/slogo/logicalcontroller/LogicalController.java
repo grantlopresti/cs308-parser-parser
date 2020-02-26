@@ -2,15 +2,14 @@ package slogo.logicalcontroller;
 
 import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.command.Command;
-import slogo.logicalcontroller.command.Parser;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
+import slogo.model.ModelTurtle;
 import slogo.visualcontroller.VisualController;
 
 import javax.script.ScriptException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 import java.util.List;
 
 /**
