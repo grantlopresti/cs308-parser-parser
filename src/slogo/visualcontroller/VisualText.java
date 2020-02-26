@@ -4,11 +4,12 @@ public abstract class VisualText {
 
     public final String myString;
 
-    public VisualText(String myString) {
-        this.myString = myString;
+    public VisualText(String string) {
+        myString = string;
     }
 
-    public String getString() {
-        return this.myString;
+    @Override
+    public String toString() {
+        return myString;
     }
 }

@@ -1,49 +1,59 @@
 package slogo.visualcontroller;
 
-import slogo.logicalcontroller.command.Command;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import javafx.scene.image.ImageView;
+import slogo.exceptions.LogicalException;
+import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
-import slogo.model.ModelObject;
 import slogo.model.ModelTurtle;
-import slogo.view.subsections.VisualizationPane;
+import slogo.view.TurtleImage;
 import slogo.view.windows.SlogoView;
 
 import java.util.*;
 
-public class VisualController {
+public class VisualController implements VisualInterface {
 
   private double myAnimationRate = 0.0;
   private SlogoView mySlogoView;
 
-  // Currently mirroring structure of VisualizationPane.java
-  // TODO: Update lines to queues, turtles to map (with ID) - check with Grant in VisPane to match structure
-  // TODO: Have view controller send data, functions, and errors directly to view? Could send here first for styling
+  // Currently mirroring structure of VisualizationPane.java (change to bindings)
   private Map<Integer, VisualTurtle> myTurtles = new HashMap<>();
   private List<VisualLine> myLines = new ArrayList<>();
-  private List<VisualCommand> myCommands = new ArrayList<>();
-  private List<VisualError> myErrors = new ArrayList<>();
-  private List<VisualUserFunction> myFunctions = new ArrayList<>();
-  private List<VisualData> myData = new ArrayList<>();
 
-  // TODO - Refactor to appropriate location (in command logical controller  package?), may need for reflection
-  enum CommandName {FORWARD, BACKWARD, LEFT, RIGHT;}
-  private static final String FORWARD = "Forward";
-  private static final String BACKWARD = "Backward";
-
+  private SimpleObjectProperty<ObservableList<VisualError>> myErrorsProperty;
+  private SimpleObjectProperty<ObservableList<VisualCommand>> myCommandsProperty;
+  private SimpleObjectProperty<ObservableList<VisualUserFunction>> myFunctionsProperty;
+  private SimpleObjectProperty<ObservableList<VisualData>> myDataProperty;
+  private SimpleObjectProperty<ObservableList<VisualVariable>> myVariablesProperty;
+  private SimpleObjectProperty<ObservableList<VisualFile>> myFilesProperty;
 
   /**
    * Constructor for a VisualController, with its associated SlogoView
    * @param view is the view in which VisualObjects will be added to the display
    */
   public VisualController(SlogoView view){
-    this.mySlogoView = view;
+    mySlogoView = view;
   }
 
   public VisualController() {
+    initProperties();
+  }
 
+  private void initProperties() {
+    myErrorsProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
+    myCommandsProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
+    myFunctionsProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
+    myDataProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
+    myVariablesProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
+    myFilesProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
   }
 
   public void setSlogoView(SlogoView view) {
-    this.mySlogoView = view;
+    mySlogoView = view;
   }
 
   /**
@@ -51,15 +61,18 @@ public class VisualController {
    * @param rate is the new animation rate for adding lines into the view
    * TODO - implement animation rate of object addition via queueing/threading (not threading lol)
    */
+  @Override
   public void setAnimationRate(double rate) {
-    this.myAnimationRate = rate;
+    myAnimationRate = rate;
   }
 
   /**
    * Called by the logical controller to update turtle state and draw shapes in Slogo view
    * @param modelCollection model turtle that is currently being acted on
-   * TODO - Update switch to reflection, review tutorials and ask Alex for advice
+   * TODO - Update switch to reflection based on object type
+   * TODO - Add casting try catch
    */
+  @Override
   public void moveModelObject(ModelCollection modelCollection) {
     Iterator iter = modelCollection.iterator();
     while (iter.hasNext()) {
@@ -69,26 +82,59 @@ public class VisualController {
   }
 
   /**
-   *
-   * @param command
+   * Called by Logical Controller after a successful command execution
+   * @param command String representation of prior command execution
    */
-  public void updateCommands(Command command) {
-
+  @Override
+  public void updateCommands(String command) {
+    FXCollections.reverse(myCommandsProperty.getValue());
+    myCommandsProperty.getValue().add(new VisualCommand(command));
+    FXCollections.reverse(myCommandsProperty.getValue());
   }
 
   /**
-   * TODO Implement error add
+   *
+   * @param e Exception that was just thrown by the logical controller
+   * TODO - Incorporate error severity into logical controller error creation
    */
-  public void updateErrors() {
+  @Override
+  public void updateErrors(LogicalException e) {
+    VisualError error = new VisualError(e);
+    myErrorsProperty.getValue().add(error);
+    mySlogoView.announceError(error);
+  }
 
+  @Override
+  public void updateVariables(Variable v) {
+    myVariablesProperty.getValue().add(new VisualVariable(v));
+  }
+
+  @Override
+  public Property getProperty(VisualProperty type) {
+    switch (type) {
+      case COMMAND:
+        return myCommandsProperty;
+      case DATA:
+        return myDataProperty;
+      case VARIABLE:
+        return myVariablesProperty;
+      case ERROR:
+        return myErrorsProperty;
+      case FUNCTION:
+        return myFunctionsProperty;
+      case FILE:
+        return myFilesProperty;
+      default:
+        throw new IllegalArgumentException();
+    }
   }
 
   private void moveTurtle(ModelTurtle turtle) {
     VisualTurtle visualTurtle = addTurtleToMap(turtle);
+    visualTurtle.setChangeState(true);
     visualTurtle.updateVisualTurtle(turtle);
-    System.out.println(visualTurtle.toString());
     try {
-      mySlogoView.updateVisualTurtles(new ArrayList<VisualTurtle>(List.of(visualTurtle)));
+      mySlogoView.updateVisualTurtles(new ArrayList<>(List.of(visualTurtle)));
       if (turtle.isPenActive())
         appendLine(new VisualLine(visualTurtle));
     } catch (NullPointerException e) {
@@ -103,8 +149,11 @@ public class VisualController {
   }
 
   private VisualTurtle addTurtleToMap(ModelTurtle turtle) {
-    myTurtles.putIfAbsent(turtle.getID(), new VisualTurtle(turtle));
+    myTurtles.putIfAbsent(turtle.getID(), new VisualTurtle());
     return myTurtles.get(turtle.getID());
   }
 
+  public void changeTurtleImage(String newValue) {
+    myTurtles.get(0).setImage(TurtleImage.DOG.getImagePath());
+  }
 }

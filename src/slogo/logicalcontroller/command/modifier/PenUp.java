@@ -3,16 +3,20 @@ package slogo.logicalcontroller.command.modifier;
 import slogo.logicalcontroller.command.Command;
 
 public class PenUp extends ModifierCommand {
-    private double value;
+    private double myValue;
+    private double retValue;
 
-    public PenUp(String inputvalue){
-        value = Double.parseDouble(inputvalue);
+    public PenUp(){
 
+    }
+
+    public double getRetValue(){
+        return this.retValue;
     }
 
     @Override
     public double getValue() {
-        return this.value;
+        return this.myValue;
     }
 
     @Override

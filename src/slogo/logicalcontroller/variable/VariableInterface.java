@@ -5,4 +5,9 @@ package slogo.logicalcontroller.variable;
  * @author Alex Xu
  */
 public interface VariableInterface {
+
+    public String getName();
+
+    public double getValue();
+
 }

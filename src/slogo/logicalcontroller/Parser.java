@@ -27,6 +27,7 @@ public class Parser {
     private ModelCollection model;
     private List<Variable> variables;
     private List<String> command_input;
+    private HashMap<String, String> commandMappings;
 
     /**
      * Constructor for the Parser class that takes in the input language and initializes all the used variables that are required for parsing
@@ -42,6 +43,7 @@ public class Parser {
         FileInputStream fis = new FileInputStream("resources/languages/"+this.lang+".properties");
         resources = new PropertyResourceBundle(fis);
         genCommandArray();
+        System.out.println(commandArray);
 
     }
 
@@ -54,7 +56,9 @@ public class Parser {
     }
 
     public void parse(List<String> lines) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, ScriptException {
-        for (String line : lines) {
+        for (int i = 0; i< lines.size(); i++) {
+            String line = lines.get(i);
+            checkForVCU(lines, i);
             int numVals = 0;
             int numCommands = 0;
             int compoundVal = 0;
@@ -89,6 +93,67 @@ public class Parser {
 
     }
 
+    public void checkForVCU(List<String> lines, int index ) throws ClassNotFoundException, NoSuchMethodException {
+        HashSet vcuTypes = new HashSet<String>(Arrays.asList("repeat","dotimes","make","set","for","if","ifelse","to"));
+        ArrayList<Command> tempret = new ArrayList<Command>();
+        commandMappings = new HashMap<String, String>(){{
+            put("And", "comparison");
+            put("Equal", "comparison");
+            put("GreaterThan", "comparison");
+            put("LessThan", "comparison");
+            put("Not", "comparison");
+            put("NotEqual", "comparison");
+            put("Or", "comparison");
+            put("DoTimes", "controlflow");
+            put("For", "controlflow");
+            put("If", "controlflow");
+            put("IfElse", "controlflow");
+            put("Repeat", "controlflow");
+            put("Backward", "modifier");
+            put("Forward", "modifier");
+            put("Left", "modifier");
+            put("PenDown", "modifier");
+            put("PenUp", "modifier");
+            put("Right", "modifier");
+            put("SetHeading", "modifier");
+            put("SetPosition", "modifier");
+            put("SetTowards", "modifier");
+            put("ShowTurtle", "modifier");
+            put("IsPenDown", "querie");
+            put("IsShowing", "querie");
+            put("XCoordinate", "querie");
+            put("YCoordinate", "querie");
+        }};
+        int startInd = 0;
+        int endInd = 0;
+        boolean doExit = false;
+        while(!doExit){
+            String[] line = (lines.get(index)).split("\\s+");
+            for(int i = 0; i<line.length; i++){
+                if(vcuTypes.contains(line[i])){
+                    if(line[i].equals("repeat")){
+                        parseRepeat();
+                    }
+                    String temp = commandMappings.get(commandArray.get(line[i]));
+                    Class cl = Class.forName("slogo.logicalcontroller.command."+temp+"."+commandArray.get(line[i]));
+                    Constructor con = cl.getConstructor(String.class);
+
+                    //Object obj = con.newInstance(theVal);
+                    //commandObjs.add((Command) obj);
+                }
+            }
+
+        }
+
+
+
+    }
+
+    public void parseRepeat(List<String> commands, int index){
+
+
+    }
+
     public double checkMath(String[] splited) throws ScriptException {
         String op = retMath(splited);
         String[] operation = op.split("\\s+");
@@ -117,15 +182,17 @@ public class Parser {
 
         ScriptEngineManager mgr = new ScriptEngineManager();
         ScriptEngine engine = mgr.getEngineByName("JavaScript");
-        System.out.println(String.join("", operation));
-        double ret = (double)engine.eval(String.join("", operation));
+        String temp = String.join("", operation);
+
+
+        double ret = Double.parseDouble(String.valueOf(engine.eval(temp)));
         return ret;
     }
 
     public void set(List<String> command, ModelCollection modelC, List<Variable> var){
-        this.command_input = command;
-        this.model = modelC;
-        this.variables = var;
+        command_input = command;
+        model = modelC;
+        variables = var;
     }
 
     public boolean isFinished(){
@@ -133,7 +200,7 @@ public class Parser {
     }
 
     public ModelCollection getModel(){
-        return this.model;
+        return model;
     }
 
     public Command getCommand(){
@@ -173,14 +240,14 @@ public class Parser {
         String theVal = null;
         int comVal = cv;
         while(!commands.isEmpty() && !values.isEmpty()){
-            Class cl = Class.forName("slogo.logicalcontroller.command."+commandArray.get(commands.pop()));
+            Class cl = Class.forName("slogo.logicalcontroller.command.modifier."+commandArray.get(commands.pop()));
             Constructor con = cl.getConstructor(String.class);
             theVal = values.pop();
             Object obj = con.newInstance(theVal);
             commandObjs.add((Command) obj);
         }
         while(!commands.isEmpty() && comVal>0){
-            Class cl = Class.forName("slogo.logicalcontroller.command."+commandArray.get(commands.pop()));
+            Class cl = Class.forName("slogo.logicalcontroller.command.modifier."+commandArray.get(commands.pop()));
             Constructor con = cl.getConstructor(String.class);
             Object obj = con.newInstance(theVal);
             commandObjs.add((Command) obj);
@@ -236,9 +303,6 @@ public class Parser {
         test.add("fd 50");
         p.parse(test);
         ArrayList<Command> testt = p.getCommands();
-        for(Command c: testt){
-            System.out.println(c);
-        }
-
+        System.out.println(testt);
     }
 }
