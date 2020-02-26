@@ -27,14 +27,12 @@ public class LogicalController {
 
   private ModelCollection myModelCollection;
   private VisualController myVisualController;
-  private List<Command> myCommandList;
-  private List<Variable> myVariableList;
+  private List<Variable> myVariables;
 
-  public LogicalController(){}
-
-  public LogicalController(ModelCollection model, VisualController control) {
-    this.myModelCollection = model;
-    this.myVisualController = control;
+  public LogicalController(ModelCollection modelCollection, VisualController visualController, List<Variable> variables){
+    this.myModelCollection = modelCollection;
+    this.myVisualController = visualController;
+    this.myVariables = variables;
   }
 
   /**
@@ -53,17 +51,25 @@ public class LogicalController {
    * @throws InvalidCommandException
    */
   public void handleNewCommand(String command) throws InvalidCommandException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, IOException, ScriptException {
-    //TODO: Handle input command, try/catch for invalid and route potential error back to
-    initializeController("English");
     System.out.println(command);
 
     List<String> commandList;
     commandList = Arrays.asList(command.split("\n"));
 
 
-    myParser.parse(commandList);
-    List<Command> commandObjectList = myParser.getCommands();
+    myParser.set(commandList, myModelCollection, myVariables);
 
+    while(!myParser.isFinished()){
+      myParser.executeNextCommand();
+      myModelCollection = myParser.getModel();
+      Command currentCommand = myParser.getCommand();
+      passToVisualController(currentCommand);
+    }
+
+
+
+
+    /*
     for (Object mo : myModelCollection){
       for(Command myCurrentCommand : commandObjectList) {
         //Command myCurrentCommand = commandObjectList.get(0);
@@ -84,36 +90,11 @@ public class LogicalController {
 
       }
     }
-
+    */
     //passToVisualController(myModelCollection, myCommandList, myVariableList);
-
-
   }
 
-  private void passToVisualController(){
-    //VisualController.(myModelCollection, myCommandList, myVariableList);
+  private void passToVisualController(Command command){
+    myVisualController.moveModelObject(myModelCollection, command);
   }
-
-  /**
-   * Initializes/Resets the Logical Controller.
-   */
-  public void initializeController(){
-    myModelCollection = new ModelCollection();
-    myModelCollection.append(new ModelTurtle());
-  }
-
-  /**
-   * Overloaded method. Initializes/Resets the Logical Controller. Should be called before logical controller can be used.
-   * @param language
-   */
-  public void initializeController(String language) throws IOException {
-    myModelCollection = new ModelCollection();
-    myModelCollection.append(new ModelTurtle());
-
-    setLanguage(language);
-
-    myCommandList = new ArrayList<>();
-    myVariableList = new ArrayList<>();
-  }
-
 }

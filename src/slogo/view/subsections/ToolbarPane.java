@@ -28,7 +28,7 @@ import slogo.view.windows.SlogoView;
 import javax.script.ScriptException;
 
 public class ToolbarPane implements SubPane {
-
+  private LogicalController myLogicalController;
   private static final String DEFAULT_LANGUAGE = "English";
   private static final String DEFAULT_TURTLE_IMAGE = "Turtle";
 
@@ -55,8 +55,9 @@ public class ToolbarPane implements SubPane {
   private ComboBox<String> myLanguage = new ComboBox<>(languageOptions);
   private Button myHelpInfo = new Button("Help/Info");
 
-  public ToolbarPane(SlogoView viewer){
+  public ToolbarPane(SlogoView viewer, LogicalController logicalController){
     myViewer = viewer;
+    myLogicalController = logicalController;
   }
 
   @Override
@@ -185,7 +186,7 @@ public class ToolbarPane implements SubPane {
   private void sendCommands(File file) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, IOException, ScriptException {
       String fileContents = getTextFromFile(file);
     try {
-      LogicalController.handleNewCommand(fileContents);
+      myLogicalController.handleNewCommand(fileContents);
     } catch (ClassNotFoundException e) {
       e.printStackTrace();
     } catch (NoSuchMethodException e) {
@@ -201,7 +202,7 @@ public class ToolbarPane implements SubPane {
 
   private void changeLanguage(String language) {
     try {
-      LogicalController.setLanguage(language);
+      myLogicalController.setLanguage(language);
     } catch (IOException e) {
       e.printStackTrace();
     }

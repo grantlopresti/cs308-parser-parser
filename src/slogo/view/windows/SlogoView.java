@@ -67,7 +67,7 @@ public class SlogoView extends Application {
     VBox vbox = new VBox();
 
     //MenuBar menu = new MenuPane().getNode();
-    ToolBar tools = new ToolbarPane(this).getNode();
+    ToolBar tools = new ToolbarPane(this, this.myLogicalController).getNode();
 
     //vbox.getChildren().addAll(menu, tools);
     vbox.getChildren().addAll(tools);
@@ -102,7 +102,7 @@ public class SlogoView extends Application {
   private HBox getProgramInputNode() {
     HBox programInputArea = new HBox();
 
-    myInputPane = new UserInputPane();
+    myInputPane = new UserInputPane(this.myLogicalController);
     TextArea inputArea = myInputPane.getNode();
     inputArea.setPrefSize(WINDOW_WIDTH * 0.5, WINDOW_HEIGHT * 0.15);
     inputArea.setWrapText(true);

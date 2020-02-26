@@ -19,6 +19,7 @@ import java.util.List;
  * NOTE: Not complete and will only be continued to work on if we have time by basic implementation due date.
  */
 public class Manager {
+    public static final String DEFAULT_LANG = "ENGLISH";
     private ModelCollection myModelCollection;
     private List<Variable> myVariables;
     private SlogoView mySlogoView;
@@ -26,7 +27,7 @@ public class Manager {
     private LogicalController myLogicalController;
 
 
-    public Manager(){
+    public Manager() throws IOException {
         createModel();
         createVisualController();
         createLogicalController();
@@ -53,8 +54,9 @@ public class Manager {
         this.mySlogoView = new SlogoView(this.myLogicalController);
     }
 
-    private void createLogicalController() {
-        this.myLogicalController = new LogicalController(this.myModelCollection, this.myVisualController);
+    private void createLogicalController() throws IOException {
+        this.myLogicalController = new LogicalController(this.myModelCollection, this.myVisualController, this.myVariables);
+        this.myLogicalController.setLanguage(DEFAULT_LANG);
     }
 
     private void createVisualController() {
