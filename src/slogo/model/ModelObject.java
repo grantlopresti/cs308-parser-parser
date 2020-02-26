@@ -89,11 +89,12 @@ public abstract class ModelObject implements ModelInterface{
     @Override
     public void turn(double degree) {
         heading += degree;
-        if(heading >= 360){
+
+        while(heading >= 360){
             heading = heading - 360;
         }
-        if(heading < 0){
-            heading = 360 + heading;
+        while(heading < 0){
+            heading = heading + 360;
         }
     }
 
@@ -106,6 +107,21 @@ public abstract class ModelObject implements ModelInterface{
     }
 
     public void setTowards(double x, double y){
+        double relativeX = x - xCoordinate;
+        double relativeY = y - yCoordinate;
+
+        double theta = Math.atan(relativeY / relativeX);
+        double degrees = Math.toDegrees(theta);
+
+        double angle;
+
+        if(relativeY >= 0){
+            angle = degrees;
+        }
+        else{
+            angle = degrees + 180;
+        }
+
         setHeading(angle);
     }
 
