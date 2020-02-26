@@ -140,10 +140,15 @@ public class SlogoView extends Application {
   private TabPane getRightPane() {
     TabPane tabPaneRight = new TabPane();
 
-    Tab data = new DataViewerTab().getTab();
+    // Tab data = new DataViewerTab().getTab();
+    // Tab commands = new CommandHistoryTab().getTab();
+    // Tab errors = new ErrorHandlerTab().getTab();
+
+    Tab data = new DataViewerTab().getTab(this.myVisualController.getProperty(VisualProperty.DATA));
     Tab commands = new CommandHistoryTab().getTab();
     Tab errors = new ErrorHandlerTab().getTab();
 
+    // data.setContent(new ListView());
     // data.itemsProperty().bind(this.myVisualController.getProperty(VisualProperty.DATA));
     // commands.itemsProperty().bind(this.myVisualController.getProperty(VisualProperty.COMMAND));
     // errors.itemsProperty().bind(this.myVisualController.getProperty(VisualProperty.ERROR));

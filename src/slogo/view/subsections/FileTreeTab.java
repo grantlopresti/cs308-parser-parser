@@ -1,5 +1,6 @@
 package slogo.view.subsections;
 
+import javafx.beans.property.Property;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -7,7 +8,7 @@ import javafx.scene.control.TreeView;
 public class FileTreeTab implements SubTab{
 
   @Override
-  public Tab getTab() {
+  public Tab getTab(Property property) {
 
     TreeItem<String> projectsTree = new TreeItem<>("Projects");
     projectsTree.getChildren().addAll(
