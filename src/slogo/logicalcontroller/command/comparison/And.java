@@ -1,22 +1,21 @@
 package slogo.logicalcontroller.command.comparison;
 
-import slogo.logicalcontroller.command.Command;
-
+/**
+ * Model concrete implementation of the Comparison Command type.
+ */
 public class And extends ComparisonCommand {
-    private double value;
 
-    public And(String inputvalue){
-        value = Double.parseDouble(inputvalue);
-
+    public And(String inputValue1, String inputValue2){
+        super(inputValue1, inputValue2);
     }
 
     @Override
-    public double getValue() {
-        return this.value;
-    }
-
-    @Override
-    public String getCommandType() {
-        return "And";
+    public void performComparison(){
+        if(argument1 != 0 && argument2 != 0){
+            setReturnValue(1);
+        }
+        else{
+            setReturnValue(0);
+        }
     }
 }

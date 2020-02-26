@@ -5,18 +5,13 @@ import slogo.logicalcontroller.command.Command;
 public class LessThan extends ComparisonCommand {
     private double value;
 
-    public LessThan(String inputvalue){
-        value = Double.parseDouble(inputvalue);
-
+    public LessThan(String inputValue1, String inputValue2){
+        super(inputValue1, inputValue2);
     }
 
     @Override
-    public double getValue() {
-        return this.value;
+    public void performComparison() {
+
     }
 
-    @Override
-    public String getCommandType() {
-        return "LessThan";
-    }
 }
