@@ -2,6 +2,7 @@ package slogo;
 
 import javafx.application.Platform;
 import javafx.stage.Stage;
+import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.LogicalController;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.variable.Variable;
@@ -13,6 +14,7 @@ import slogo.visualcontroller.VisualController;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import slogo.visualcontroller.VisualError;
 
 /**
  * Purpose of this class is to manage the controllers and the model.
@@ -38,7 +40,7 @@ public class Manager {
     private void startView() {
         Platform.startup(() -> {
             try {
-                this.mySlogoView.start(new Stage());
+                mySlogoView.start(new Stage());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -46,26 +48,26 @@ public class Manager {
     }
 
     private void setViewControllerView() {
-        this.myVisualController.setSlogoView(this.mySlogoView);
+        myVisualController.setSlogoView(mySlogoView);
     }
 
     private void createSlogoView() {
-        this.mySlogoView = new SlogoView(this.myLogicalController, this.myVisualController);
+        mySlogoView = new SlogoView(myLogicalController, myVisualController);
     }
 
     private void createLogicalController() throws IOException {
-        this.myLogicalController = new LogicalController(this.myModelCollection, this.myVisualController, this.myVariables);
-        this.myLogicalController.setLanguage(DEFAULT_LANG);
+        myLogicalController = new LogicalController(myModelCollection, myVisualController, myVariables);
+        myLogicalController.setLanguage(DEFAULT_LANG);
     }
 
     private void createVisualController() {
-        this.myVisualController = new VisualController();
+        myVisualController = new VisualController();
     }
 
     private void createModel() {
-        this.myModelCollection = new ModelCollection();
-        // this.myModelCollection.append(new ModelTurtle());
-        this.myVariables = new ArrayList<Variable>();
+        myModelCollection = new ModelCollection();
+        // myModelCollection.append(new ModelTurtle());
+        myVariables = new ArrayList<Variable>();
     }
 
 }

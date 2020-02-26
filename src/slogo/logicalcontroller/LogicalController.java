@@ -26,11 +26,11 @@ public class LogicalController {
   private List<Variable> myVariables;
 
   public LogicalController(ModelCollection modelCollection, VisualController visualController, List<Variable> variables){
-    this.myModelCollection = modelCollection;
-    this.myVisualController = visualController;
-    this.myModelCollection.append(new ModelTurtle());
-    this.myVisualController.moveModelObject(this.myModelCollection);
-    this.myVariables = variables;
+    myModelCollection = modelCollection;
+    myVisualController = visualController;
+    myModelCollection.append(new ModelTurtle());
+    myVisualController.moveModelObject(myModelCollection);
+    myVariables = variables;
   }
 
   /**
@@ -59,7 +59,8 @@ public class LogicalController {
     }
     myVisualController.moveModelObject(myModelCollection);
     myVisualController.updateCommands(command);
-    myVisualController.updateErrors(new InvalidCommandException("test error"));
+    myVisualController.updateErrors(new InvalidCommandException("Testing Error (thrown from "
+        + "Logical Controller)"));
 
     /*
     List<String> commandList;
