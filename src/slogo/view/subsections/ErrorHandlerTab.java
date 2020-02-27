@@ -17,7 +17,9 @@ public class ErrorHandlerTab extends SubTab {
   @Override
   public Tab getTab(Property property) {
     setProperty(property);
-    return new Tab(TAB_NAME);
+    Tab tab = new Tab(TAB_NAME, myVBox);
+    // tab.getStyleClass().addAll(TAB_ELEMENTS);
+    return tab;
   }
 
 

@@ -7,7 +7,7 @@ import slogo.view.TurtleImage;
 public class VisualTurtle extends VisualObject {
 
   public static final boolean DEFAULT_CHANGE_STATE = false;
-  public static final String DEFAULT_IMAGE = TurtleImage.TURTLE;
+  public static final String DEFAULT_IMAGE = TurtleImage.TURTLE.getImagePath();
   public static final Color DEFAULT_COLOR = Color.PURPLE;
   public static final double DEFAULT_SIZE = 30;
   public static final double DEFAULT_X = 0;

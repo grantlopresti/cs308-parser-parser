@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.EnumSet;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
@@ -21,11 +23,13 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import slogo.exceptions.InvalidXMLConfigException;
 import slogo.logicalcontroller.LogicalController;
 import slogo.view.TurtleImage;
 import slogo.view.windows.SlogoView;
 
 import javax.script.ScriptException;
+import slogo.visualcontroller.VisualError;
 
 public class ToolbarPane implements SubPane {
 
@@ -38,7 +42,7 @@ public class ToolbarPane implements SubPane {
   private Button myLoader = new Button("Load File");
   private Button myLoadAndRun = new Button("Load & Run");
   private ColorPicker myBGColorPicker = new ColorPicker();
-  private ComboBox<String> myTurtleImage = new ComboBox<>(TurtleImage.getLanguages());
+  private ComboBox<String> myTurtleImage = new ComboBox<>();
   private ColorPicker myPenColorPicker = new ColorPicker();
   private Button myClearScreen = new Button("Clear Screen");
   private static final ObservableList<String> languageOptions =
@@ -59,6 +63,9 @@ public class ToolbarPane implements SubPane {
   public ToolbarPane(SlogoView viewer, LogicalController logicalController) {
     myViewer = viewer;
     myLogicalController = logicalController;
+    for (TurtleImage value : TurtleImage.values()){
+      myTurtleImage.getItems().add(value.getName());
+    }
   }
 
   @Override
@@ -90,7 +97,6 @@ public class ToolbarPane implements SubPane {
   private void initializeButtons() throws IOException {
     myLoader.setOnAction(e -> loadFile());
     initializeLoadAndRunButton();
-//    myBGColor.setOnAction();
     myBGColorPicker.setOnAction(t -> {
       Color c = myBGColorPicker.getValue();
       myViewer.setBGColor(c.getRed(), c.getGreen(), c.getBlue());
@@ -98,7 +104,7 @@ public class ToolbarPane implements SubPane {
     setDefaultTurtleImage();
     myTurtleImage.getSelectionModel().selectedItemProperty().addListener((options, oldValue,
         newValue) -> {
-      changeTurtleImage(newValue);
+      myViewer.changeTurtleImage(newValue);
     });
     myPenColorPicker.setOnAction(t -> {
       Color c = myPenColorPicker.getValue();
@@ -115,7 +121,7 @@ public class ToolbarPane implements SubPane {
 
   private void setDefaultTurtleImage() {
     myTurtleImage.setValue(DEFAULT_TURTLE_IMAGE);
-    changeTurtleImage(DEFAULT_TURTLE_IMAGE);
+    myViewer.changeTurtleImage(DEFAULT_TURTLE_IMAGE.toUpperCase());
   }
 
   private void initializeLoadAndRunButton() {
@@ -123,13 +129,13 @@ public class ToolbarPane implements SubPane {
       try {
         loadAndRun();
       } catch (ScriptException ex) {
+        //FIXME: No print stack traces
         ex.printStackTrace();
+        //myViewer.announceError(new VisualError());
       }
     });
   }
 
-  private void changeTurtleImage(Object newValue) {
-  }
 
   private void showHelpWindow() {
     Stage stage = new Stage();

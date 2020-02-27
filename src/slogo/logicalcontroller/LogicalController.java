@@ -3,6 +3,7 @@ package slogo.logicalcontroller;
 import slogo.exceptions.InvalidCommandException;
 import slogo.exceptions.LogicalException;
 import slogo.logicalcontroller.command.Command;
+import slogo.logicalcontroller.variable.BasicVariable;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
 import slogo.model.ModelTurtle;
@@ -55,12 +56,12 @@ public class LogicalController {
       ModelTurtle myModelTurtle = (ModelTurtle) turtle;
       myModelTurtle.move(100);
       myModelTurtle.turn(90);
-      myVisualController.updateCommands("test");
     }
     myVisualController.moveModelObject(myModelCollection);
     myVisualController.updateCommands(command);
     myVisualController.updateErrors(new InvalidCommandException("Testing Error (thrown from "
         + "Logical Controller)"));
+    myVisualController.updateVariables(new BasicVariable("guy", 2));
 
     /*
     List<String> commandList;

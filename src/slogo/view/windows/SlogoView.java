@@ -17,12 +17,13 @@ import javafx.stage.Stage;
 
 import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.LogicalController;
+import slogo.view.TurtleImage;
 import slogo.view.subsections.*;
 import slogo.visualcontroller.*;
 
 public class SlogoView extends Application {
 
-  private static final int WINDOW_WIDTH = 1370;
+  private static final int WINDOW_WIDTH = 1380;
   private static final int WINDOW_HEIGHT = 700;
 
   private static final int VISUALIZER_WIDTH = 800;
@@ -32,6 +33,7 @@ public class SlogoView extends Application {
   private UserInputPane myInputPane;
   private VisualizationPane myVisualizationPane;
   private CommandHistoryTab myCommandsTab;
+  private DataViewerTab myDataTab;
 
   private LogicalController myLogicalController;
   private VisualController myVisualController;
@@ -142,14 +144,14 @@ public class SlogoView extends Application {
   private TabPane getRightPane() {
     TabPane tabPaneRight = new TabPane();
 
+    ErrorHandlerTab errorTab = new ErrorHandlerTab();
+    Tab errors = errorTab.getTab(myVisualController.getProperty(VisualProperty.ERROR));
+
     myCommandsTab = new CommandHistoryTab();
     myCommandsTab.setSlogoView(this);
     Tab commands = myCommandsTab.getTab(myVisualController.getProperty(VisualProperty.COMMAND));
 
-    Tab data = new DataViewerTab().getTab(myVisualController.getProperty(VisualProperty.DATA));
-
-    ErrorHandlerTab errorTab = new ErrorHandlerTab();
-    Tab errors = errorTab.getTab(myVisualController.getProperty(VisualProperty.ERROR));
+    Tab data = new DataViewerTab().getTab(myVisualController.getProperty(VisualProperty.VARIABLE));
 
     tabPaneRight.getTabs().addAll(commands, data, errors);
     tabPaneRight.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
@@ -212,5 +214,9 @@ public class SlogoView extends Application {
   public void setPenColor(double red, double green, double blue) {
     Color customColor = new Color(red,green,blue,1);
     myVisualizationPane.setPenColor(customColor);
+  }
+
+  public void changeTurtleImage(String newValue) {
+    myVisualController.changeTurtleImage(newValue.toUpperCase());
   }
 }

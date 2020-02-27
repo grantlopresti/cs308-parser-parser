@@ -5,10 +5,12 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import javafx.scene.image.ImageView;
 import slogo.exceptions.LogicalException;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
 import slogo.model.ModelTurtle;
+import slogo.view.TurtleImage;
 import slogo.view.windows.SlogoView;
 
 import java.util.*;
@@ -67,7 +69,6 @@ public class VisualController implements VisualInterface {
   /**
    * Called by the logical controller to update turtle state and draw shapes in Slogo view
    * @param modelCollection model turtle that is currently being acted on
-   * TODO - Update switch to reflection based on object type
    * TODO - Add casting try catch
    */
   @Override
@@ -104,7 +105,8 @@ public class VisualController implements VisualInterface {
 
   @Override
   public void updateVariables(Variable v) {
-    myVariablesProperty.getValue().add(new VisualVariable(v));
+    VisualVariable var = new VisualVariable(v);
+    myVariablesProperty.getValue().add(var);
   }
 
   @Override
@@ -147,8 +149,12 @@ public class VisualController implements VisualInterface {
   }
 
   private VisualTurtle addTurtleToMap(ModelTurtle turtle) {
-    myTurtles.putIfAbsent(turtle.getID(), new VisualTurtle(turtle));
+    myTurtles.putIfAbsent(turtle.getID(), new VisualTurtle());
     return myTurtles.get(turtle.getID());
   }
 
+  public void changeTurtleImage(String newValue) {
+    TurtleImage image = TurtleImage.valueOf(newValue);
+    myTurtles.get(0).setImage(image.getImagePath());
+  }
 }
