@@ -12,4 +12,5 @@ public abstract class VisualText {
     public String toString() {
         return this.myString;
     }
+
 }
