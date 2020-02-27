@@ -31,7 +31,7 @@ public class Repeat extends ControlFlowCommand {
 
     public List<Command> getAllRepCommands(){
         this.allRepCommands = new ArrayList<Command>();
-        for(int i = 0; i<Integer.parseInt(String.valueOf(value)); i++){
+        for(int i = 0; i<(int)value; i++){
             this.allRepCommands.addAll(getRepCommand());
         }
 
