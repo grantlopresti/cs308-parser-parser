@@ -124,6 +124,8 @@ public class Parser {
                 String[] splited = line.split("\\s+");
                 String com = returnCommands(splited);
                 double math = checkMath(splited);
+                // double math = checkMath2(splited);
+                System.out.println("math return: " + math);
                 String new_splited_string = com;
                 if(math!=0.0){ new_splited_string = com+" " + math; }
                 String[] new_splited = new_splited_string.split(" ");
@@ -188,14 +190,18 @@ public class Parser {
     private double checkMath2(String[] splitted) throws ScriptException {
         try {
             String text;
+            System.out.println("Checking math2");
             for (int i = 0; i < splitted.length; i ++) {
                 text = splitted[i];
+                System.out.println("text: " + text);
                 if (this.mathSingleParameter.contains(text)) {
+                    System.out.println("text: " + text + " matches parameter 1");
                     Class clazz = Class.forName("slogo.logicalcontroller.command.math." + this.commandMappings.get(text));
                     Constructor constructor = clazz.getConstructor(String.class);
                     MathCommand command = (MathCommand) constructor.newInstance(splitted[i+1]);
                     return command.performMath();
                 } else if (this.mathDoubleParameter.contains(text)) {
+                    System.out.println("text: " + text + " matches parameter 2");
                     Class clazz = Class.forName("slogo.logicalcontroller.command.math." + this.commandMappings.get(text));
                     Constructor constructor = clazz.getConstructor(String.class);
                     MathCommand command = (MathCommand) constructor.newInstance(splitted[i+1], splitted[i+2]);
@@ -214,7 +220,6 @@ public class Parser {
         String[] operation = op.split("\\s+");
         for(int i = 0; i < operation.length; i ++) {
             if ((type1.keySet()).contains(operation[i])) {
-                String temp = operation[i];
                 operation[i] = operation[i + 1];
                 operation[i + 1] = type1.get(operation[i]);
                 i += 2;
