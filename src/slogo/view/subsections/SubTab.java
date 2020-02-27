@@ -20,6 +20,7 @@ public abstract class SubTab {
   protected void setProperty(Property property) {
     myListView = new ListView();
     myListView.itemsProperty().bind(property);
+    myListView.setPrefHeight(620);
     myVBox.getChildren().add(myListView);
   }
 

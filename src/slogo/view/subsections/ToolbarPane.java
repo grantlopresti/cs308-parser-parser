@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
@@ -23,6 +24,7 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import slogo.exceptions.InvalidCommandException;
 import slogo.exceptions.InvalidXMLConfigException;
 import slogo.logicalcontroller.LogicalController;
 import slogo.view.TurtleImage;
@@ -36,6 +38,9 @@ public class ToolbarPane implements SubPane {
   private LogicalController myLogicalController;
   private static final String DEFAULT_LANGUAGE = "English";
   private static final String DEFAULT_TURTLE_IMAGE = "Turtle";
+
+  private static final String myButtonProperties = "properties.buttons";
+  private ResourceBundle myButtonResources;
 
   private SlogoView myViewer;
 
@@ -66,6 +71,7 @@ public class ToolbarPane implements SubPane {
     for (TurtleImage value : TurtleImage.values()){
       myTurtleImage.getItems().add(value.getName());
     }
+    myButtonResources = ResourceBundle.getBundle(myButtonProperties);
   }
 
   @Override
@@ -208,16 +214,9 @@ public class ToolbarPane implements SubPane {
     String fileContents = getTextFromFile(file);
     try {
       myLogicalController.handleNewCommand(fileContents);
-    } catch (ClassNotFoundException e) {
-      e.printStackTrace();
-    } catch (NoSuchMethodException e) {
-      e.printStackTrace();
-    } catch (InstantiationException e) {
-      e.printStackTrace();
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      e.printStackTrace();
+    } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+      myViewer.announceError(new VisualError(new InvalidCommandException("The "
+          + "following command is invald: \n" + fileContents)));
     }
   }
 
