@@ -121,7 +121,7 @@ public class ToolbarPane implements SubPane {
 
   private void setDefaultTurtleImage() {
     myTurtleImage.setValue(DEFAULT_TURTLE_IMAGE);
-    myViewer.changeTurtleImage(DEFAULT_TURTLE_IMAGE);
+    myViewer.changeTurtleImage(DEFAULT_TURTLE_IMAGE.toUpperCase());
   }
 
   private void initializeLoadAndRunButton() {
