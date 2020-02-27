@@ -17,12 +17,13 @@ import javafx.stage.Stage;
 
 import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.LogicalController;
+import slogo.view.TurtleImage;
 import slogo.view.subsections.*;
 import slogo.visualcontroller.*;
 
 public class SlogoView extends Application {
 
-  private static final int WINDOW_WIDTH = 1370;
+  private static final int WINDOW_WIDTH = 1380;
   private static final int WINDOW_HEIGHT = 700;
 
   private static final int VISUALIZER_WIDTH = 800;
@@ -215,8 +216,6 @@ public class SlogoView extends Application {
   }
 
   public void changeTurtleImage(String newValue) {
-
-
-    myVisualController.changeTurtleImage(newValue);
+    myVisualController.changeTurtleImage(newValue.toUpperCase());
   }
 }

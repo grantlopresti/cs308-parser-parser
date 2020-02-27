@@ -154,6 +154,7 @@ public class VisualController implements VisualInterface {
   }
 
   public void changeTurtleImage(String newValue) {
-    myTurtles.get(0).setImage(TurtleImage.DOG.getImagePath());
+    TurtleImage image = TurtleImage.valueOf(newValue);
+    myTurtles.get(0).setImage(image.getImagePath());
   }
 }
