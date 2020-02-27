@@ -6,6 +6,7 @@ public class Quotient extends MathCommand {
     private double value;
 
     public Quotient(String inputvalue){
+        super(inputvalue);
         value = Double.parseDouble(inputvalue);
 
     }

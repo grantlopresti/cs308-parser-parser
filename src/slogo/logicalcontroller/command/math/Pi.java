@@ -6,6 +6,7 @@ public class Pi extends MathCommand {
     private double value;
 
     public Pi(String inputvalue){
+        super(inputvalue);
         value = Double.parseDouble(inputvalue);
 
     }

@@ -6,6 +6,7 @@ public class Sum extends MathCommand {
     private double value;
 
     public Sum(String inputvalue){
+        super(inputvalue);
         value = Double.parseDouble(inputvalue);
 
     }

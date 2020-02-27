@@ -6,6 +6,7 @@ public class NaturalLog extends MathCommand {
     private double value;
 
     public NaturalLog(String inputvalue){
+        super(inputvalue);
         value = Double.parseDouble(inputvalue);
 
     }

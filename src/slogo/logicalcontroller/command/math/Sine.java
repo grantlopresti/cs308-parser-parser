@@ -6,6 +6,7 @@ public class Sine extends MathCommand {
     private double value;
 
     public Sine(String inputvalue){
+        super(inputvalue);
         value = Double.parseDouble(inputvalue);
 
     }

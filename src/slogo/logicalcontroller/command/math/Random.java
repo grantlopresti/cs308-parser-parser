@@ -6,6 +6,7 @@ public class Random extends MathCommand {
     private double value;
 
     public Random(String inputvalue){
+        super(inputvalue);
         value = Double.parseDouble(inputvalue);
 
     }

@@ -6,6 +6,7 @@ public class Cosine extends MathCommand {
     private double value;
 
     public Cosine(String inputvalue){
+        super(inputvalue);
         value = Double.parseDouble(inputvalue);
 
     }

@@ -6,6 +6,7 @@ public class Minus extends MathCommand {
     private double value;
 
     public Minus(String inputvalue){
+        super(inputvalue);
         value = Double.parseDouble(inputvalue);
 
     }

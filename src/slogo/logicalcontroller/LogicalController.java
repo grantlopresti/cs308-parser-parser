@@ -59,9 +59,9 @@ public class LogicalController {
     }
     myVisualController.moveModelObject(myModelCollection);
     myVisualController.updateCommands(command);
-    myVisualController.updateErrors(new InvalidCommandException("Testing Error (thrown from "
-        + "Logical Controller)"));
-    myVisualController.updateVariables(new BasicVariable("guy", 2));
+    //myVisualController.updateErrors(new InvalidCommandException("Testing Error (thrown from "
+    //    + "Logical Controller)"));
+    //myVisualController.updateVariables(new BasicVariable("guy", 2));
 
     /*
     List<String> commandList;
