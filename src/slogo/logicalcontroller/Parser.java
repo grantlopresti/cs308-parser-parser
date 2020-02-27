@@ -132,7 +132,7 @@ public class Parser {
             for(int i = 0; i<line.length; i++){
                 if(vcuTypes.contains(line[i])){
                     if(line[i].equals("repeat")){
-                        parseRepeat();
+                        //parseRepeat();
                     }
                     String temp = commandMappings.get(commandArray.get(line[i]));
                     Class cl = Class.forName("slogo.logicalcontroller.command."+temp+"."+commandArray.get(line[i]));
