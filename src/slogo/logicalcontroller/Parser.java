@@ -187,7 +187,7 @@ public class Parser {
         this.finalCommandObjects.addAll(tempRepeat.getAllRepCommands());
     }
 
-    private double checkMath2(String[] splitted) throws ScriptException {
+    private double checkMath2(String[] splitted) {
         try {
             String text;
             System.out.println("Checking math2");
@@ -208,8 +208,9 @@ public class Parser {
                     return command.performMath();
                 }
             }
-            return 0.0;
+            return Double.parseDouble(splitted[splitted.length-1]);
         } catch (Exception e) {
+            System.out.println("exception in math2");
             throw new ConstructorException();
         }
     }
