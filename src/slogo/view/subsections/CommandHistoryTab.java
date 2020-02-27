@@ -10,8 +10,8 @@ public class CommandHistoryTab extends SubTab {
   private static final String TAB_NAME = "Command History";
   private static final String TAB_ELEMENTS = "command-tab";
 
-  public CommandHistoryTab() {
-    super();
+  public CommandHistoryTab(SlogoView viewer) {
+    super(viewer);
   }
 
   public void setSlogoView(SlogoView viewer) {
@@ -24,6 +24,8 @@ public class CommandHistoryTab extends SubTab {
     tab.getStyleClass().addAll(TAB_ELEMENTS);
     return tab;
   }
+
+
 
 
 

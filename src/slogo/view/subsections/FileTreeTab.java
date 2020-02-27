@@ -1,17 +1,19 @@
 package slogo.view.subsections;
 
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleListProperty;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import slogo.view.windows.SlogoView;
 
 public class FileTreeTab extends SubTab{
 
   private static final String TAB_NAME = "Project List";
   private static final String TAB_ELEMENTS = "project-tab";
 
-  public FileTreeTab() {
-    super();
+  public FileTreeTab(SlogoView viewer) {
+    super(viewer);
   }
 
   @Override

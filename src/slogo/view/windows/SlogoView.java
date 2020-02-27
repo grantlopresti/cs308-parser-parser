@@ -81,7 +81,8 @@ public class SlogoView extends Application {
   private TabPane getLeftPane() {
     TabPane tabPaneLeft = new TabPane();
 
-    Tab definedFunctions = new DefinedFunctionsTab().getTab(myVisualController.getProperty(VisualProperty.FUNCTION));
+    Tab definedFunctions =
+        new DefinedFunctionsTab(this).getTab(myVisualController.getProperty(VisualProperty.FUNCTION));
     //Tab fileTree = new FileTreeTab().getTab(myVisualController.getProperty(VisualProperty.FILE));
 
     tabPaneLeft.getTabs().addAll(definedFunctions); //, fileTree);
@@ -142,14 +143,15 @@ public class SlogoView extends Application {
   private TabPane getRightPane() {
     TabPane tabPaneRight = new TabPane();
 
-    ErrorHandlerTab errorTab = new ErrorHandlerTab();
+    ErrorHandlerTab errorTab = new ErrorHandlerTab(this);
     Tab errors = errorTab.getTab(myVisualController.getProperty(VisualProperty.ERROR));
 
-    myCommandsTab = new CommandHistoryTab();
+    myCommandsTab = new CommandHistoryTab(this);
     myCommandsTab.setSlogoView(this);
     Tab commands = myCommandsTab.getTab(myVisualController.getProperty(VisualProperty.COMMAND));
 
-    Tab data = new DataViewerTab().getTab(myVisualController.getProperty(VisualProperty.VARIABLE));
+    Tab data =
+        new DataViewerTab(this).getTab(myVisualController.getProperty(VisualProperty.VARIABLE));
 
     tabPaneRight.getTabs().addAll(commands, data, errors);
     tabPaneRight.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
@@ -215,6 +217,6 @@ public class SlogoView extends Application {
 
   public void changeTurtleImage(String newValue) {
     myVisualController.changeTurtleImage(newValue.toUpperCase());
-    // myVisualizationPane.
+    //myVisualizationPane.
   }
 }
