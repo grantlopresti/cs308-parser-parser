@@ -150,7 +150,7 @@ public class Parser {
                     }
                     String temp = commandMappings.get(commandArray.get(line[i]));
                     Class cl = Class.forName("slogo.logicalcontroller.command."+temp+"."+commandArray.get(line[i]));
-                    Constructor con = cl.getConstructor(String.class);
+                    Constructor con = cl.getConstructor(String.class, List.class);
 
                     //Object obj = con.newInstance(theVal);
                     //commandObjs.add((Command) obj);
@@ -348,7 +348,8 @@ public class Parser {
 
     public static void main (String[] args) throws IOException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, ScriptException {
         Parser p = new Parser("English");
-        List<String> test = new ArrayList<String>(List.of("fd fd fd fd 50+50"));
+        List<String> test = new ArrayList<String>();
+        test.add("fd fd fd 50+50");
         p.parse(test);
         List<Command> testt = p.getCommands();
         System.out.println(testt);
