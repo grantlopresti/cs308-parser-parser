@@ -5,14 +5,13 @@ import slogo.logicalcontroller.command.Command;
 public class Minus extends MathCommand {
     private double value;
 
-    public Minus(String inputvalue){
-        value = Double.parseDouble(inputvalue);
-
+    public Minus(String input){
+        super(input);
     }
 
     @Override
-    public double getValue() {
-        return this.value;
+    public double performMath() {
+        return this.myArgument1 * -1;
     }
 
     @Override

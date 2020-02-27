@@ -3,16 +3,14 @@ package slogo.logicalcontroller.command.math;
 import slogo.logicalcontroller.command.Command;
 
 public class Tangent extends MathCommand{
-    private double value;
 
-    public Tangent(String inputvalue){
-        value = Double.parseDouble(inputvalue);
-
+    public Tangent(String input){
+        super(input);
     }
 
     @Override
-    public double getValue() {
-        return this.value;
+    public double performMath() {
+        return Math.tan(this.myArgument1);
     }
 
     @Override

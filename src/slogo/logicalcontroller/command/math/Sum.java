@@ -5,14 +5,13 @@ import slogo.logicalcontroller.command.Command;
 public class Sum extends MathCommand {
     private double value;
 
-    public Sum(String inputvalue){
-        value = Double.parseDouble(inputvalue);
-
+    public Sum(String input1, String input2){
+        super(input1, input2);
     }
 
     @Override
-    public double getValue() {
-        return this.value;
+    public double performMath() {
+        return this.myArgument1 + this.myArgument2;
     }
 
     @Override

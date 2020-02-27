@@ -3,16 +3,14 @@ package slogo.logicalcontroller.command.math;
 import slogo.logicalcontroller.command.Command;
 
 public class Pi extends MathCommand {
-    private double value;
 
-    public Pi(String inputvalue){
-        value = Double.parseDouble(inputvalue);
-
+    public Pi(){
+        super();
     }
 
     @Override
-    public double getValue() {
-        return this.value;
+    public double performMath() {
+        return Math.PI;
     }
 
     @Override

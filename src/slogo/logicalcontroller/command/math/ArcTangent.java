@@ -3,15 +3,14 @@ package slogo.logicalcontroller.command.math;
 import slogo.logicalcontroller.command.Command;
 
 public class ArcTangent extends MathCommand {
-    private double value;
 
-    public ArcTangent(String inputvalue){
-        value = Double.parseDouble(inputvalue);
+    public ArcTangent(String input){
+        super(input);
     }
 
     @Override
-    public double getValue() {
-        return this.value;
+    public double performMath() {
+        return Math.atan(myArgument1);
     }
 
     @Override

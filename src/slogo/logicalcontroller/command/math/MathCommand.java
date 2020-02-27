@@ -4,13 +4,31 @@ import slogo.logicalcontroller.command.Command;
 
 /**
  * Abstract class for MathCommand
- * @author Alex Xu
+ * @author Math Smith, Alex Xu
  */
-public abstract class MathCommand implements Command{
+public abstract class MathCommand implements Command {
 
-    public MathCommand(String arg1) {
+    protected double myArgument1;
+    protected double myArgument2;
+
+    public MathCommand() {
 
     }
 
+    public MathCommand(String input1) {
+        this.myArgument1 = Double.parseDouble(input1);
+    }
+
+    public MathCommand(String input1, String input2) {
+        this.myArgument1 = Double.parseDouble(input1);
+        this.myArgument2 = Double.parseDouble(input2);
+    }
+
+    public abstract double performMath();
+
+    @Override
+    public double getValue() {
+        return performMath();
+    }
 
 }
