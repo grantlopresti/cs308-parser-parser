@@ -2,6 +2,7 @@ package slogo.view.subsections;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ResourceBundle;
@@ -21,6 +22,7 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javax.script.ScriptException;
 import slogo.exceptions.InvalidCommandFileException;
 import slogo.exceptions.InvalidLanguageException;
 import slogo.logicalcontroller.LogicalController;
@@ -180,7 +182,13 @@ public class ToolbarPane implements SubPane {
 
   private void sendCommands(File file) {
     String fileContents = getTextFromFile(file);
-    myLogicalController.handleNewCommand(fileContents);
+    try {
+      assert fileContents != null;
+      myLogicalController.handleNewCommand(fileContents);
+    } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | ScriptException | InvocationTargetException | ClassNotFoundException e) {
+      myViewer.announceError(new VisualError(new InvalidCommandFileException("The chosen command "
+          + "file " + fileContents + " contains invalid commands. \n Please try again!")));
+    }
   }
 
   private void changeLanguage(String language) {
