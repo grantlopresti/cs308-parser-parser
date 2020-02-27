@@ -6,6 +6,7 @@ public class Tangent extends MathCommand{
     private double value;
 
     public Tangent(String inputvalue){
+        super(inputvalue);
         value = Double.parseDouble(inputvalue);
 
     }

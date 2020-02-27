@@ -6,6 +6,7 @@ public class Remainder extends MathCommand {
     private double value;
 
     public Remainder(String inputvalue){
+        super(inputvalue);
         value = Double.parseDouble(inputvalue);
 
     }

@@ -6,6 +6,7 @@ public class ArcTangent extends MathCommand {
     private double value;
 
     public ArcTangent(String inputvalue){
+        super(inputvalue);
         value = Double.parseDouble(inputvalue);
     }
 

@@ -6,6 +6,7 @@ public class Power extends MathCommand {
     private double value;
 
     public Power(String inputvalue){
+        super(inputvalue);
         value = Double.parseDouble(inputvalue);
 
     }
