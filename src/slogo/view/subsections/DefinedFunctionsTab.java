@@ -2,14 +2,15 @@ package slogo.view.subsections;
 
 import javafx.beans.property.Property;
 import javafx.scene.control.Tab;
+import slogo.view.windows.SlogoView;
 
 public class DefinedFunctionsTab extends SubTab {
 
   private static final String TAB_NAME = "Defined Functions";
   private static final String TAB_ELEMENTS = "functions-tab";
 
-  public DefinedFunctionsTab() {
-    super();
+  public DefinedFunctionsTab(SlogoView viewer) {
+    super(viewer);
   }
 
   @Override

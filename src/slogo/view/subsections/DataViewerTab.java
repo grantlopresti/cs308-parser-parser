@@ -2,14 +2,15 @@ package slogo.view.subsections;
 
 import javafx.beans.property.Property;
 import javafx.scene.control.Tab;
+import slogo.view.windows.SlogoView;
 
 public class DataViewerTab extends SubTab {
 
   private static final String TAB_NAME = "Data/Variables";
   private static final String TAB_ELEMENTS = "data-tab";
 
-  public DataViewerTab() {
-    super();
+  public DataViewerTab(SlogoView viewer) {
+    super(viewer);
   }
 
   @Override
