@@ -3,7 +3,6 @@ package slogo.logicalcontroller.command.math;
 import slogo.logicalcontroller.command.Command;
 
 public class Sum extends MathCommand {
-    private double value;
 
     public Sum(String input1, String input2){
         super(input1, input2);

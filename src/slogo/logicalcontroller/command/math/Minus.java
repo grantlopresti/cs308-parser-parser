@@ -3,9 +3,8 @@ package slogo.logicalcontroller.command.math;
 import slogo.logicalcontroller.command.Command;
 
 public class Minus extends MathCommand {
-    private double value;
 
-    public Minus(String input){
+    public Minus(String input) {
         super(input);
     }
 
