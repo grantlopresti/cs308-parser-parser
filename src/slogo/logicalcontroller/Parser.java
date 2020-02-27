@@ -1,6 +1,7 @@
 package slogo.logicalcontroller;
 
 import slogo.logicalcontroller.command.Command;
+import slogo.logicalcontroller.command.controlflow.Repeat;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
 
@@ -137,7 +138,7 @@ public class Parser {
 
     // TODO - update return value to have new index (if repeat taken)
     // TODO - accept repeat in any position, not just first position in line
-    private int checkForVCU(int index) throws ClassNotFoundException, NoSuchMethodException {
+    private int checkForVCU(int index) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, ScriptException {
         Set<String> vcuTypes = new HashSet<String>(Arrays.asList("repeat","dotimes","make","set","for","if","ifelse","to"));
         boolean doExit = false;
         while(!doExit){
@@ -161,13 +162,25 @@ public class Parser {
     }
 
     // TODO - assume only one repeat, update to handle multiple
-    private void parseRepeat(String[] repLine, int index){
+    private void parseRepeat(String[] repLine, int index) throws NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
+        String value = repLine[1];
+        int currLine = index+1;
+        List<String> tempRetLines = new ArrayList<String>();
         List<Command> repCommands = new ArrayList<Command>();
-        String[] rpLine = repLine;
-        for (String s: repLine) {
-            // repCommands.addAll()
+        List<Command> commandsToBeAdded = new ArrayList<Command>();
+
+        while((rawCommands.get(currLine)).indexOf("]")==-1){
+            tempRetLines.add((rawCommands.get(currLine)));
+            currLine++;
         }
-        //Repeat repeat = new Repeat(repLine[1]);
+
+        for(String line: tempRetLines){
+            repCommands.addAll(singleLineParse(line));
+        }
+
+        Repeat tempRepeat = new Repeat(value, repCommands);
+
+        this.finalCommandObjects.addAll(tempRepeat.getAllRepCommands());
     }
 
     // TODO - refactor as MathCommands
