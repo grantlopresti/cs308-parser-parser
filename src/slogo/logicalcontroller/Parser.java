@@ -145,19 +145,14 @@ public class Parser {
     private int checkForVCU(int index) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, ScriptException {
         Set<String> vcuTypes = new HashSet<String>(Arrays.asList("repeat","dotimes","make","set","for","if","ifelse","to"));
         boolean doExit = false;
+        int ret = 0;
         while(!doExit){
             String[] line = (rawCommands.get(index)).split("\\s+");
             for(int i = 0; i<line.length; i++){
                 if(vcuTypes.contains(line[i])){
                     if(line[i].equals("repeat")){
-                        parseRepeat(line,index);
+                        index = parseRepeat(line,index);
                     }
-                    String temp = commandMappings.get(commandArray.get(line[i]));
-                    Class cl = Class.forName("slogo.logicalcontroller.command."+temp+"."+commandArray.get(line[i]));
-                    Constructor con = cl.getConstructor(String.class, List.class);
-
-                    //Object obj = con.newInstance(theVal);
-                    //commandObjs.add((Command) obj);
                 }
             }
             doExit = true;
@@ -166,9 +161,10 @@ public class Parser {
     }
 
     // TODO - assume only one repeat, update to handle multiple
-    private void parseRepeat(String[] repLine, int index) throws NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
+    private int parseRepeat(String[] repLine, int index) throws NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
         String value = repLine[1];
         int currLine = index+1;
+        int ret = index;
         List<String> tempRetLines = new ArrayList<String>();
         List<Command> repCommands = new ArrayList<Command>();
         List<Command> commandsToBeAdded = new ArrayList<Command>();
@@ -177,6 +173,7 @@ public class Parser {
             tempRetLines.add((rawCommands.get(currLine)));
             currLine++;
         }
+        ret = currLine;
 
         for(String line: tempRetLines){
             repCommands.addAll(singleLineParse(line));
@@ -185,6 +182,7 @@ public class Parser {
         Repeat tempRepeat = new Repeat(value, repCommands);
 
         this.finalCommandObjects.addAll(tempRepeat.getAllRepCommands());
+        return ret;
     }
 
     private double checkMath2(String[] splitted) {
@@ -238,8 +236,6 @@ public class Parser {
         if(String.valueOf(engine.eval(temp)) == null || (String.valueOf(engine.eval(temp)).equals("")) || (String.valueOf(engine.eval(temp)).equals("null"))){
             return 0.0;
         }
-        System.out.println("The condition");
-        System.out.println(String.valueOf(engine.eval(temp)));
         double ret = Double.parseDouble(String.valueOf(engine.eval(temp)));
         return ret;
     }
