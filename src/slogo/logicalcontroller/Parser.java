@@ -185,7 +185,7 @@ public class Parser {
         this.finalCommandObjects.addAll(tempRepeat.getAllRepCommands());
     }
 
-    private double checkMath(String[] splitted) throws ScriptException {
+    private double checkMath2(String[] splitted) throws ScriptException {
         try {
             String text;
             for (int i = 0; i < splitted.length; i ++) {
@@ -209,22 +209,21 @@ public class Parser {
     }
 
     // TODO - refactor as MathCommands
-    /*
     private double checkMath(String[] splited) throws ScriptException {
         String op = retMath(splited);
-        String[] operations = op.split("\\s+");
-        for(String operation: operations){
-            if((type1.keySet()).contains(operation[i])){
+        String[] operation = op.split("\\s+");
+        for(int i = 0; i < operation.length; i ++) {
+            if ((type1.keySet()).contains(operation[i])) {
                 String temp = operation[i];
-                operation[i] = operation[i+1];
-                operation[i+1] = type1.get(operation[i]);
-                i+=2;
+                operation[i] = operation[i + 1];
+                operation[i + 1] = type1.get(operation[i]);
+                i += 2;
+            } else if (type2.contains(operation[i])) {
+                operation[i] = "Math." + operation[i];
+                operation[i + 1] = "(" + operation[i + 1] + ")";
+                i += 1;
             }
-            else if(type2.contains(operation[i])){
-                operation[i] = "Math."+operation[i];
-                operation[i+1] = "(" + operation[i+1] + ")";
-                i+=1;
-            }
+        }
 
         ScriptEngineManager mgr = new ScriptEngineManager();
         ScriptEngine engine = mgr.getEngineByName("JavaScript");
@@ -237,7 +236,7 @@ public class Parser {
         System.out.println(String.valueOf(engine.eval(temp)));
         double ret = Double.parseDouble(String.valueOf(engine.eval(temp)));
         return ret;
-    } */
+    }
 
     /**
      * Takes in string array of split input string, returns all non math commands
