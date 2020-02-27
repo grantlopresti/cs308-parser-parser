@@ -5,10 +5,12 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import javafx.scene.image.ImageView;
 import slogo.exceptions.LogicalException;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
 import slogo.model.ModelTurtle;
+import slogo.view.TurtleImage;
 import slogo.view.windows.SlogoView;
 
 import java.util.*;
@@ -34,7 +36,7 @@ public class VisualController implements VisualInterface {
    * @param view is the view in which VisualObjects will be added to the display
    */
   public VisualController(SlogoView view){
-    this.mySlogoView = view;
+    mySlogoView = view;
   }
 
   public VisualController() {
@@ -51,7 +53,7 @@ public class VisualController implements VisualInterface {
   }
 
   public void setSlogoView(SlogoView view) {
-    this.mySlogoView = view;
+    mySlogoView = view;
   }
 
   /**
@@ -61,7 +63,7 @@ public class VisualController implements VisualInterface {
    */
   @Override
   public void setAnimationRate(double rate) {
-    this.myAnimationRate = rate;
+    myAnimationRate = rate;
   }
 
   /**
@@ -97,12 +99,14 @@ public class VisualController implements VisualInterface {
    */
   @Override
   public void updateErrors(LogicalException e) {
-    this.myErrorsProperty.getValue().add(new VisualError(e));
+    VisualError error = new VisualError(e);
+    myErrorsProperty.getValue().add(error);
+    mySlogoView.announceError(error);
   }
 
   @Override
   public void updateVariables(Variable v) {
-    this.myVariablesProperty.getValue().add(new VisualVariable(v));
+    myVariablesProperty.getValue().add(new VisualVariable(v));
   }
 
   @Override
@@ -127,10 +131,10 @@ public class VisualController implements VisualInterface {
 
   private void moveTurtle(ModelTurtle turtle) {
     VisualTurtle visualTurtle = addTurtleToMap(turtle);
+    visualTurtle.setChangeState(true);
     visualTurtle.updateVisualTurtle(turtle);
-    System.out.println(visualTurtle.toString());
     try {
-      mySlogoView.updateVisualTurtles(new ArrayList<VisualTurtle>(List.of(visualTurtle)));
+      mySlogoView.updateVisualTurtles(new ArrayList<>(List.of(visualTurtle)));
       if (turtle.isPenActive())
         appendLine(new VisualLine(visualTurtle));
     } catch (NullPointerException e) {
@@ -145,8 +149,11 @@ public class VisualController implements VisualInterface {
   }
 
   private VisualTurtle addTurtleToMap(ModelTurtle turtle) {
-    myTurtles.putIfAbsent(turtle.getID(), new VisualTurtle(turtle));
+    myTurtles.putIfAbsent(turtle.getID(), new VisualTurtle());
     return myTurtles.get(turtle.getID());
   }
 
+  public void changeTurtleImage(String newValue) {
+    myTurtles.get(0).setImage(TurtleImage.DOG.getImagePath());
+  }
 }

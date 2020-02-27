@@ -2,6 +2,7 @@ package slogo.view.subsections;
 
 import javafx.beans.property.Property;
 import javafx.scene.control.Tab;
+import slogo.visualcontroller.VisualError;
 
 
 public class ErrorHandlerTab extends SubTab {
@@ -18,5 +19,6 @@ public class ErrorHandlerTab extends SubTab {
     setProperty(property);
     return new Tab(TAB_NAME);
   }
+
 
 }

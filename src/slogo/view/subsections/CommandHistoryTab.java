@@ -15,7 +15,7 @@ public class CommandHistoryTab extends SubTab {
   }
 
   public void setSlogoView(SlogoView viewer) {
-    this.myViewer = viewer;
+    myViewer = viewer;
   }
 
   public Tab getTab(Property property) {

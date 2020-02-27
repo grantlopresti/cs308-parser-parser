@@ -9,11 +9,13 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.LogicalController;
 import slogo.view.subsections.*;
 import slogo.visualcontroller.*;
@@ -35,8 +37,8 @@ public class SlogoView extends Application {
   private VisualController myVisualController;
 
   public SlogoView (LogicalController logicalController, VisualController visualController) {
-    this.myLogicalController = logicalController;
-    this.myVisualController = visualController;
+    myLogicalController = logicalController;
+    myVisualController = visualController;
   }
 
   @Override
@@ -79,8 +81,8 @@ public class SlogoView extends Application {
   private TabPane getLeftPane() {
     TabPane tabPaneLeft = new TabPane();
 
-    Tab definedFunctions = new DefinedFunctionsTab().getTab(this.myVisualController.getProperty(VisualProperty.FUNCTION));
-    Tab fileTree = new FileTreeTab().getTab(this.myVisualController.getProperty(VisualProperty.FILE));
+    Tab definedFunctions = new DefinedFunctionsTab().getTab(myVisualController.getProperty(VisualProperty.FUNCTION));
+    Tab fileTree = new FileTreeTab().getTab(myVisualController.getProperty(VisualProperty.FILE));
 
     tabPaneLeft.getTabs().addAll(definedFunctions, fileTree);
     tabPaneLeft.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
@@ -159,8 +161,23 @@ public class SlogoView extends Application {
     return new CreditsPane().getNode();
   }
 
-  public void announceError(){
+  public void announceError(VisualError error){
     //TODO: Handle Announcing Errors
+    Alert alert;
+
+    if (error.getSeverity() == ErrorSeverity.CRITICAL) {
+      alert = new Alert(AlertType.ERROR);
+    } else if (error.getSeverity() == ErrorSeverity.MEDIUM){
+      alert = new Alert(AlertType.WARNING);
+    } else {
+      alert = new Alert(AlertType.INFORMATION);
+    }
+
+    alert.setTitle("Alert");
+    alert.setHeaderText(null);
+    alert.setContentText(error.toString());
+
+    alert.showAndWait();
   }
 
   public void setUserInputAreaText(String fileContents) {
@@ -195,5 +212,11 @@ public class SlogoView extends Application {
   public void setPenColor(double red, double green, double blue) {
     Color customColor = new Color(red,green,blue,1);
     myVisualizationPane.setPenColor(customColor);
+  }
+
+  public void changeTurtleImage(String newValue) {
+
+
+    myVisualController.changeTurtleImage(newValue);
   }
 }
