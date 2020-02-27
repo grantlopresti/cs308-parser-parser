@@ -8,14 +8,17 @@ import slogo.visualcontroller.ErrorSeverity;
  */
 public class InvalidXMLConfigException extends LogicalException {
 
+    private static final String message = "Could not configure XML";
+
     public InvalidXMLConfigException() {
         super();
-        myErrorSeverity = ErrorSeverity.CRITICAL;
+        this.myErrorSeverity = ErrorSeverity.CRITICAL;
+        this.myString = message;
     }
 
     @Override
     public ErrorSeverity getErrorSeverity() {
-        return myErrorSeverity;
+        return this.myErrorSeverity;
     }
 
 }

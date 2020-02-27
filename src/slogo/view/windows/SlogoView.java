@@ -47,7 +47,7 @@ public class SlogoView extends Application {
   public void start(Stage stage) throws IOException {
     myBorderPane = new BorderPane();
     myVisualizationPane = new VisualizationPane(VISUALIZER_WIDTH, VISUALIZER_HEIGHT);
-    myInputPane = new UserInputPane(myLogicalController);
+    myInputPane = new UserInputPane(this, myLogicalController);
     Scene scene = new Scene(createGUIBorderPane(), WINDOW_WIDTH, WINDOW_HEIGHT);
     stage.setTitle("Parser Parser - Slogo Project - CS 308");
     scene.getStylesheets().add("stylesheets/defaultStyle.css");
@@ -82,9 +82,9 @@ public class SlogoView extends Application {
     TabPane tabPaneLeft = new TabPane();
 
     Tab definedFunctions = new DefinedFunctionsTab().getTab(myVisualController.getProperty(VisualProperty.FUNCTION));
-    Tab fileTree = new FileTreeTab().getTab(myVisualController.getProperty(VisualProperty.FILE));
+    //Tab fileTree = new FileTreeTab().getTab(myVisualController.getProperty(VisualProperty.FILE));
 
-    tabPaneLeft.getTabs().addAll(definedFunctions, fileTree);
+    tabPaneLeft.getTabs().addAll(definedFunctions); //, fileTree);
     tabPaneLeft.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 
     return tabPaneLeft;
@@ -215,5 +215,6 @@ public class SlogoView extends Application {
 
   public void changeTurtleImage(String newValue) {
     myVisualController.changeTurtleImage(newValue.toUpperCase());
+    // myVisualizationPane.
   }
 }

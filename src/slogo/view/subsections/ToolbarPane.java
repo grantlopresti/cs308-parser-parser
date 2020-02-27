@@ -22,6 +22,9 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javax.script.ScriptException;
+
+import slogo.exceptions.InvalidCommandException;
 import slogo.exceptions.InvalidCommandFileException;
 import slogo.exceptions.InvalidLanguageException;
 import slogo.logicalcontroller.LogicalController;
@@ -199,7 +202,13 @@ public class ToolbarPane implements SubPane {
 
   private void sendCommands(File file) throws NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
     String fileContents = getTextFromFile(file);
-    myLogicalController.handleNewCommand(fileContents);
+    try {
+      assert fileContents != null;
+      myLogicalController.handleNewCommand(fileContents);
+    } catch (Exception e) {
+      myViewer.announceError(new VisualError(new InvalidCommandException("The "
+          + "following command is invald: \n" + fileContents)));
+    }
   }
 
   private void changeLanguage(String language) {
