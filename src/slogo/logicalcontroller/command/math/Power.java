@@ -3,16 +3,14 @@ package slogo.logicalcontroller.command.math;
 import slogo.logicalcontroller.command.Command;
 
 public class Power extends MathCommand {
-    private double value;
 
-    public Power(String inputvalue){
-        value = Double.parseDouble(inputvalue);
-
+    public Power(String base, String exp){
+        super(base, exp);
     }
 
     @Override
-    public double getValue() {
-        return this.value;
+    public double performMath() {
+        return Math.pow(this.myArgument1, this.myArgument2);
     }
 
     @Override

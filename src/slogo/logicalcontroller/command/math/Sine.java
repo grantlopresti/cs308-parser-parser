@@ -3,16 +3,14 @@ package slogo.logicalcontroller.command.math;
 import slogo.logicalcontroller.command.Command;
 
 public class Sine extends MathCommand {
-    private double value;
 
-    public Sine(String inputvalue){
-        value = Double.parseDouble(inputvalue);
-
+    public Sine(String input){
+        super(input);
     }
 
     @Override
-    public double getValue() {
-        return this.value;
+    public double performMath() {
+        return Math.sin(this.myArgument1);
     }
 
     @Override

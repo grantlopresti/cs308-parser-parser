@@ -25,4 +25,6 @@ public class CommandHistoryTab extends SubTab {
     return tab;
   }
 
+
+
 }

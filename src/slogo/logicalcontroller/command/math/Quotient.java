@@ -3,16 +3,14 @@ package slogo.logicalcontroller.command.math;
 import slogo.logicalcontroller.command.Command;
 
 public class Quotient extends MathCommand {
-    private double value;
 
-    public Quotient(String inputvalue){
-        value = Double.parseDouble(inputvalue);
-
+    public Quotient(String in1, String in2){
+        super(in1, in2);
     }
 
     @Override
-    public double getValue() {
-        return this.value;
+    public double performMath() {
+        return this.myArgument1 / this.myArgument2;
     }
 
     @Override

@@ -3,16 +3,14 @@ package slogo.logicalcontroller.command.math;
 import slogo.logicalcontroller.command.Command;
 
 public class NaturalLog extends MathCommand {
-    private double value;
 
-    public NaturalLog(String inputvalue){
-        value = Double.parseDouble(inputvalue);
-
+    public NaturalLog(String input){
+        super(input);
     }
 
     @Override
-    public double getValue() {
-        return this.value;
+    public double performMath() {
+        return Math.log(this.myArgument1);
     }
 
     @Override
