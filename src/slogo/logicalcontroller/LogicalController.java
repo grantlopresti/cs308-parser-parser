@@ -58,7 +58,7 @@ public class LogicalController {
    * @param command
    * @throws InvalidCommandException
    */
-  public void handleNewCommand(String command) throws InvalidCommandException {
+  public void handleNewCommand(String command) throws InvalidCommandException, NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
     //System.out.println(command);
 
     // STEP 1: Parse all commands from the input String

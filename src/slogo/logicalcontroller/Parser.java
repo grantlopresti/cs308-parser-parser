@@ -88,8 +88,11 @@ public class Parser {
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);
             line = checkForBoolean(line);
-            i = checkForVCU(i);
-            this.finalCommandObjects.addAll(singleLineParse(line));
+            int ind = checkForVCU(i);
+            if(ind==i){
+                this.finalCommandObjects.addAll(singleLineParse(line));
+            }
+            i = ind;
         }
     }
 
@@ -142,19 +145,14 @@ public class Parser {
     private int checkForVCU(int index) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, ScriptException {
         Set<String> vcuTypes = new HashSet<String>(Arrays.asList("repeat","dotimes","make","set","for","if","ifelse","to"));
         boolean doExit = false;
+        int ret = 0;
         while(!doExit){
             String[] line = (rawCommands.get(index)).split("\\s+");
             for(int i = 0; i<line.length; i++){
                 if(vcuTypes.contains(line[i])){
                     if(line[i].equals("repeat")){
-                        parseRepeat(line,index);
+                        index = parseRepeat(line,index);
                     }
-                    String temp = commandMappings.get(commandArray.get(line[i]));
-                    Class cl = Class.forName("slogo.logicalcontroller.command."+temp+"."+commandArray.get(line[i]));
-                    Constructor con = cl.getConstructor(String.class, List.class);
-
-                    //Object obj = con.newInstance(theVal);
-                    //commandObjs.add((Command) obj);
                 }
             }
             doExit = true;
@@ -163,9 +161,10 @@ public class Parser {
     }
 
     // TODO - assume only one repeat, update to handle multiple
-    private void parseRepeat(String[] repLine, int index) throws NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
+    private int parseRepeat(String[] repLine, int index) throws NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
         String value = repLine[1];
         int currLine = index+1;
+        int ret = index;
         List<String> tempRetLines = new ArrayList<String>();
         List<Command> repCommands = new ArrayList<Command>();
         List<Command> commandsToBeAdded = new ArrayList<Command>();
@@ -174,6 +173,7 @@ public class Parser {
             tempRetLines.add((rawCommands.get(currLine)));
             currLine++;
         }
+        ret = currLine;
 
         for(String line: tempRetLines){
             repCommands.addAll(singleLineParse(line));
@@ -182,6 +182,7 @@ public class Parser {
         Repeat tempRepeat = new Repeat(value, repCommands);
 
         this.finalCommandObjects.addAll(tempRepeat.getAllRepCommands());
+        return ret;
     }
 
     // TODO - refactor as MathCommands
@@ -209,8 +210,6 @@ public class Parser {
         if(String.valueOf(engine.eval(temp)) == null || (String.valueOf(engine.eval(temp)).equals("")) || (String.valueOf(engine.eval(temp)).equals("null"))){
             return 0.0;
         }
-        System.out.println("The condition");
-        System.out.println(String.valueOf(engine.eval(temp)));
         double ret = Double.parseDouble(String.valueOf(engine.eval(temp)));
         return ret;
     }
@@ -263,7 +262,10 @@ public class Parser {
         String lastValue = "";
         while(!values.isEmpty()){
             lastValue = values.pop();
-            singleLineCommands.add(getConstructor(commands.pop(), lastValue));
+            if(!commands.peek().equals("[") && !commands.peek().equals("]")){
+                singleLineCommands.add(getConstructor(commands.pop(), lastValue));
+            }
+
         }
         while(!commands.isEmpty()){
             singleLineCommands.add(getConstructor(commands.pop(), lastValue));
@@ -279,7 +281,6 @@ public class Parser {
      * @returns Commmand object
      */
     private Command getConstructor(String com, String val) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        System.out.println(com);
         Class cl = Class.forName("slogo.logicalcontroller.command."+commandMappings.get(commandArray.get(com))+"."+commandArray.get(com));
         Constructor con = cl.getConstructor(String.class);
         Command command = (Command) con.newInstance(val);
@@ -350,9 +351,14 @@ public class Parser {
     public static void main (String[] args) throws IOException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, ScriptException {
         Parser p = new Parser("English");
         List<String> test = new ArrayList<String>();
-        test.add("fd fd fd 50+50");
+        test.add("repeat 40 [");
+        test.add("fd 50");
+        test.add("rt 40");
+        test.add("seth 45");
+        test.add("]");
         p.parse(test);
         List<Command> testt = p.getCommands();
         System.out.println(testt);
+        System.out.println(testt.size());
     }
 }

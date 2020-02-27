@@ -2,6 +2,7 @@ package slogo.view.subsections;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ResourceBundle;
@@ -27,6 +28,8 @@ import slogo.logicalcontroller.LogicalController;
 import slogo.view.TurtleImage;
 import slogo.view.windows.SlogoView;
 import slogo.visualcontroller.VisualError;
+
+import javax.script.ScriptException;
 
 public class ToolbarPane implements SubPane {
 
@@ -122,7 +125,23 @@ public class ToolbarPane implements SubPane {
   }
 
   private void initializeLoadAndRunButton() {
-    myLoadAndRun.setOnAction(e -> loadAndRun());
+    myLoadAndRun.setOnAction(e -> {
+      try {
+        loadAndRun();
+      } catch (NoSuchMethodException ex) {
+        ex.printStackTrace();
+      } catch (InstantiationException ex) {
+        ex.printStackTrace();
+      } catch (ScriptException ex) {
+        ex.printStackTrace();
+      } catch (IllegalAccessException ex) {
+        ex.printStackTrace();
+      } catch (InvocationTargetException ex) {
+        ex.printStackTrace();
+      } catch (ClassNotFoundException ex) {
+        ex.printStackTrace();
+      }
+    });
   }
 
 
@@ -160,7 +179,7 @@ public class ToolbarPane implements SubPane {
     myViewer.setUserInputAreaText(fileContents);
   }
 
-  private void loadAndRun() {
+  private void loadAndRun() throws NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
     File file = getUserFile();
     sendCommands(file);
   }
@@ -178,7 +197,7 @@ public class ToolbarPane implements SubPane {
     return fc.showOpenDialog(new Stage());
   }
 
-  private void sendCommands(File file) {
+  private void sendCommands(File file) throws NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
     String fileContents = getTextFromFile(file);
     myLogicalController.handleNewCommand(fileContents);
   }
