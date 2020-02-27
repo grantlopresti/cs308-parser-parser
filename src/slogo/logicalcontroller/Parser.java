@@ -1,7 +1,6 @@
 package slogo.logicalcontroller;
 
 import slogo.logicalcontroller.command.Command;
-import slogo.logicalcontroller.command.controlflow.Repeat;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
 
@@ -21,15 +20,41 @@ public class Parser {
     private Map<String, String> commandArray;
     private Stack<String> commands;
     private Stack<String> values;
-    private ArrayList<Command> commandObjs;
-    private ArrayList<Command> singleLineCommandObjs;
+    private List<Command> finalCommandObjects;
     private ResourceBundle resources;
     private HashMap<String, String> type1;
     private HashSet<String> type2;
     private ModelCollection model;
     private List<Variable> variables;
     private List<String> command_input;
-    private HashMap<String, String> commandMappings;
+    private Map<String, String> commandMappings = new HashMap<String, String>(){{
+        put("And", "comparison");
+        put("Equal", "comparison");
+        put("GreaterThan", "comparison");
+        put("LessThan", "comparison");
+        put("Not", "comparison");
+        put("NotEqual", "comparison");
+        put("Or", "comparison");
+        put("DoTimes", "controlflow");
+        put("For", "controlflow");
+        put("If", "controlflow");
+        put("IfElse", "controlflow");
+        put("Repeat", "controlflow");
+        put("Backward", "modifier");
+        put("Forward", "modifier");
+        put("Left", "modifier");
+        put("PenDown", "modifier");
+        put("PenUp", "modifier");
+        put("Right", "modifier");
+        put("SetHeading", "modifier");
+        put("SetPosition", "modifier");
+        put("SetTowards", "modifier");
+        put("ShowTurtle", "modifier");
+        put("IsPenDown", "querie");
+        put("IsShowing", "querie");
+        put("XCoordinate", "querie");
+        put("YCoordinate", "querie");
+    }};
     private List<String> rawCommands;
 
     /**
@@ -39,15 +64,40 @@ public class Parser {
      */
     public Parser(String language) throws IOException {
         this.lang = language;
-        commandArray = new HashMap<String, String>();
-        commandObjs = new ArrayList<Command>();
         FileInputStream fis = new FileInputStream("resources/languages/"+this.lang+".properties");
-        resources = new PropertyResourceBundle(fis);
-        genCommandArray();
-        System.out.println(commandArray);
+        this.resources = new PropertyResourceBundle(fis);
+        this.commandArray = genCommandArray();
+        this.finalCommandObjects = new ArrayList<Command>();
+        // System.out.println(commandArray);
     }
 
-    public ArrayList<Command> singleLineParse(String linee) throws ScriptException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    /**
+     * Called by SlogoView with lines to parse into executable commmands
+     * @param lines
+     * @throws ClassNotFoundException
+     * @throws NoSuchMethodException
+     * @throws InvocationTargetException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     * @throws ScriptException
+     */
+    public void parse(List<String> lines) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, ScriptException {
+        this.rawCommands = lines;
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
+            line = checkForBoolean(line);
+            i = checkForVCU(i);
+            finalCommandObjects.addAll(singleLineParse(line));
+        }
+    }
+
+    // TODO - simplify boolean from line
+    private String checkForBoolean(String line) {
+
+        return line;
+    }
+
+    private List<Command> singleLineParse(String linee) throws ScriptException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         String line = linee;
         commands = new Stack<String>();
         values = new Stack<String>();
@@ -82,52 +132,14 @@ public class Parser {
         return unravel(compoundVal);
     }
 
-
-    public void parse(List<String> lines) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, ScriptException {
-        this.rawCommands = lines;
-        for (int i = 0; i< lines.size(); i++) {
-            String line = lines.get(i);
-            checkForVCU(i);
-            commandObjs.addAll(singleLineParse(line));
-        }
-
-    }
-
     public void executeNextCommand(){
 
     }
 
-    public void checkForVCU(int index) throws ClassNotFoundException, NoSuchMethodException {
+    // TODO - update return value to have new index (if repeat taken)
+    private int checkForVCU(int index) throws ClassNotFoundException, NoSuchMethodException {
         HashSet vcuTypes = new HashSet<String>(Arrays.asList("repeat","dotimes","make","set","for","if","ifelse","to"));
         ArrayList<Command> tempret = new ArrayList<Command>();
-        commandMappings = new HashMap<String, String>(){{
-            put("And", "comparison");
-            put("Equal", "comparison");
-            put("GreaterThan", "comparison");
-            put("LessThan", "comparison");
-            put("Not", "comparison");
-            put("NotEqual", "comparison");
-            put("Or", "comparison");
-            put("DoTimes", "controlflow");
-            put("For", "controlflow");
-            put("If", "controlflow");
-            put("IfElse", "controlflow");
-            put("Repeat", "controlflow");
-            put("Backward", "modifier");
-            put("Forward", "modifier");
-            put("Left", "modifier");
-            put("PenDown", "modifier");
-            put("PenUp", "modifier");
-            put("Right", "modifier");
-            put("SetHeading", "modifier");
-            put("SetPosition", "modifier");
-            put("SetTowards", "modifier");
-            put("ShowTurtle", "modifier");
-            put("IsPenDown", "querie");
-            put("IsShowing", "querie");
-            put("XCoordinate", "querie");
-            put("YCoordinate", "querie");
-        }};
         int startInd = 0;
         int endInd = 0;
         boolean doExit = false;
@@ -148,9 +160,7 @@ public class Parser {
             }
             doExit = true;
         }
-
-
-
+        return index;
     }
 
     public void parseRepeat(String[] repLine, int index){
@@ -177,13 +187,10 @@ public class Parser {
 
             }
         }
-
         //Repeat repeat = new Repeat(repLine[1]);
-
-
     }
 
-    public double checkMath(String[] splited) throws ScriptException {
+    private double checkMath(String[] splited) throws ScriptException {
         String op = retMath(splited);
         String[] operation = op.split("\\s+");
         type1 = new HashMap<String, String>(){{
@@ -254,7 +261,7 @@ public class Parser {
         return com;
     }
 
-    public String retMath(String[] splited){
+    private String retMath(String[] splited){
 
         HashSet mathTypes = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pow","pi","sum", "+","difference", "-","product","*","quotient","/","remainder", "%","minus","~"));
 
@@ -274,58 +281,26 @@ public class Parser {
         return math;
     }
 
-    public ArrayList<Command> unravel(int cv) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        String theVal = "0";
-        int comVal = cv;
-        singleLineCommandObjs = new ArrayList<Command>();
-        commandMappings = new HashMap<String, String>(){{
-            put("And", "comparison");
-            put("Equal", "comparison");
-            put("GreaterThan", "comparison");
-            put("LessThan", "comparison");
-            put("Not", "comparison");
-            put("NotEqual", "comparison");
-            put("Or", "comparison");
-            put("DoTimes", "controlflow");
-            put("For", "controlflow");
-            put("If", "controlflow");
-            put("IfElse", "controlflow");
-            put("Repeat", "controlflow");
-            put("Backward", "modifier");
-            put("Forward", "modifier");
-            put("Left", "modifier");
-            put("PenDown", "modifier");
-            put("PenUp", "modifier");
-            put("Right", "modifier");
-            put("SetHeading", "modifier");
-            put("SetPosition", "modifier");
-            put("SetTowards", "modifier");
-            put("ShowTurtle", "modifier");
-            put("IsPenDown", "querie");
-            put("IsShowing", "querie");
-            put("XCoordinate", "querie");
-            put("YCoordinate", "querie");
-        }};
-        while(!commands.isEmpty() && !values.isEmpty()){
-            String theCom = commands.pop();
-            System.out.println(theCom);
-            Class cl = Class.forName("slogo.logicalcontroller.command."+commandMappings.get(commandArray.get(theCom))+"."+commandArray.get(theCom));
-            Constructor con = cl.getConstructor(String.class);
-            theVal = values.pop();
-            Command obj = (Command) con.newInstance(theVal);
-            singleLineCommandObjs.add(obj);
+    private List<Command> unravel(int commandsLeft) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        List<Command> singleLineCommands = new ArrayList<Command>();
+        String lastValue = "";
+        while(!values.isEmpty()){
+            lastValue = values.pop();
+            singleLineCommands.add(getConstructor(commands.pop(), lastValue));
         }
-        while(!commands.isEmpty() && comVal>0){
-            String theCom = commands.pop();
-            System.out.println(theCom);
-            Class cl = Class.forName("slogo.logicalcontroller.command."+commandMappings.get(commandArray.get(theCom))+"."+commandArray.get(theCom));
-            Constructor con = cl.getConstructor(String.class);
-            Command obj = (Command) con.newInstance(theVal);
-            singleLineCommandObjs.add(obj);
-            comVal--;
+        while(!commands.isEmpty() && commandsLeft > 0){
+            singleLineCommands.add(getConstructor(commands.pop(), lastValue));
+            commandsLeft--;
         }
+        return singleLineCommands;
+    }
 
-        return singleLineCommandObjs;
+    private Command getConstructor(String com, String val) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        System.out.println(com);
+        Class cl = Class.forName("slogo.logicalcontroller.command."+commandMappings.get(commandArray.get(com))+"."+commandArray.get(com));
+        Constructor con = cl.getConstructor(String.class);
+        Command command = (Command) con.newInstance(val);
+        return command;
     }
 
     private boolean hasValue(String val){
@@ -338,8 +313,7 @@ public class Parser {
         return false;
     }
 
-
-    public String getSymbol(String text){
+    private String getSymbol(String text){
         final String ERROR = "NO MATCH";
         for(String s:commandArray.keySet()){
             if(isMatch(s, commandArray.get(s))){
@@ -349,29 +323,31 @@ public class Parser {
         return ERROR;
     }
 
-    public boolean isMatch(String text, String regex){
+    private boolean isMatch(String text, String regex){
         return regex.matches(text);
     }
 
-    private void genCommandArray() {
+    private Map<String, String> genCommandArray() {
+        Map<String, String> mymap = new HashMap<String, String>();
         for(String key: Collections.list(resources.getKeys())){
             String regex = resources.getString(key);
             if(regex.indexOf("|") != -1){
-                commandArray.put(regex.substring(0, regex.indexOf("|")), key);
-                commandArray.put(regex.substring(regex.indexOf("|")+1), key);
+                mymap.put(regex.substring(0, regex.indexOf("|")), key);
+                mymap.put(regex.substring(regex.indexOf("|")+1), key);
             }
             else{
-                commandArray.put(regex, key);
+                mymap.put(regex, key);
             }
         }
+        return mymap;
     }
 
     /**
      * Returns the final list of commands for the model to execute
      * @return
      */
-    public ArrayList<Command> getCommands(){
-        return this.commandObjs;
+    public List<Command> getCommands(){
+        return this.finalCommandObjects;
     }
 
     public String getLang(){
@@ -380,10 +356,9 @@ public class Parser {
 
     public static void main (String[] args) throws IOException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, ScriptException {
         Parser p = new Parser("English");
-        List<String> test = new ArrayList<String>();
-        test.add("pendownp");
+        List<String> test = new ArrayList<String>(List.of("fd fd fd fd 50+50"));
         p.parse(test);
-        ArrayList<Command> testt = p.getCommands();
+        List<Command> testt = p.getCommands();
         System.out.println(testt);
     }
 }
