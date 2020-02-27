@@ -18,12 +18,17 @@ public class Parser {
 
     private String lang;
     private Map<String, String> commandArray;
-    private Stack<String> commands;
-    private Stack<String> values;
     private List<Command> finalCommandObjects;
     private ResourceBundle resources;
-    private HashMap<String, String> type1;
-    private HashSet<String> type2;
+    private Map<String, String> type1 = new HashMap<String, String>(){{
+        put("sum", "+");
+        put("difference", "-");
+        put("product", "*");
+        put("quotient", "/");
+        put("remainder", "%");
+        put("minus", "~");
+    }};
+    private Set<String> type2 = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pow","pi"));
     private ModelCollection model;
     private List<Variable> variables;
     private List<String> command_input;
@@ -73,13 +78,8 @@ public class Parser {
 
     /**
      * Called by SlogoView with lines to parse into executable commmands
+     * Two stage process, first
      * @param lines
-     * @throws ClassNotFoundException
-     * @throws NoSuchMethodException
-     * @throws InvocationTargetException
-     * @throws InstantiationException
-     * @throws IllegalAccessException
-     * @throws ScriptException
      */
     public void parse(List<String> lines) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, ScriptException {
         this.rawCommands = lines;
@@ -87,7 +87,7 @@ public class Parser {
             String line = lines.get(i);
             line = checkForBoolean(line);
             i = checkForVCU(i);
-            finalCommandObjects.addAll(singleLineParse(line));
+            this.finalCommandObjects.addAll(singleLineParse(line));
         }
     }
 
@@ -99,14 +99,14 @@ public class Parser {
 
     private List<Command> singleLineParse(String linee) throws ScriptException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         String line = linee;
-        commands = new Stack<String>();
-        values = new Stack<String>();
+        Stack<String> commands = new Stack<String>();
+        Stack<String> values = new Stack<String>();
         int numVals = 0;
         int numCommands = 0;
         int compoundVal = 0;
         if (line.trim().length() > 0) {
             String[] splited = line.split("\\s+");
-            String com = retComs(splited);
+            String com = returnCommands(splited);
             double math = checkMath(splited);
             String new_splited_string = com;
             if(math!=0.0){
@@ -115,7 +115,7 @@ public class Parser {
             String[] new_splited = new_splited_string.split(" ");
             boolean prev = false;
             for(String s: new_splited){
-                if(!hasValue(s)){
+                if(!checkHasValue(s)){
                     commands.push(s);
                     prev = true;
                     numCommands++;
@@ -125,11 +125,10 @@ public class Parser {
                 }
             }
         }
-
         if(numCommands>numVals){
             compoundVal = numCommands-numVals;
         }
-        return unravel(compoundVal);
+        return unravel(commands, values);
     }
 
     public void executeNextCommand(){
@@ -137,11 +136,9 @@ public class Parser {
     }
 
     // TODO - update return value to have new index (if repeat taken)
+    // TODO - accept repeat in any position, not just first position in line
     private int checkForVCU(int index) throws ClassNotFoundException, NoSuchMethodException {
-        HashSet vcuTypes = new HashSet<String>(Arrays.asList("repeat","dotimes","make","set","for","if","ifelse","to"));
-        ArrayList<Command> tempret = new ArrayList<Command>();
-        int startInd = 0;
-        int endInd = 0;
+        Set<String> vcuTypes = new HashSet<String>(Arrays.asList("repeat","dotimes","make","set","for","if","ifelse","to"));
         boolean doExit = false;
         while(!doExit){
             String[] line = (rawCommands.get(index)).split("\\s+");
@@ -163,45 +160,20 @@ public class Parser {
         return index;
     }
 
-    public void parseRepeat(String[] repLine, int index){
-        ArrayList<Command> repCommands = new ArrayList<Command>();
+    // TODO - assume only one repeat, update to handle multiple
+    private void parseRepeat(String[] repLine, int index){
+        List<Command> repCommands = new ArrayList<Command>();
         String[] rpLine = repLine;
-        int frontBracks = 1;
-        int endBracks = 0;
-        int endIndex;
-        while(frontBracks!=endBracks){
-            int i;
-            for(i = index; i<rawCommands.size(); i++){
-                if(rawCommands.get(i).indexOf('[')!=-1){
-                    frontBracks++;
-                }
-                else if(rawCommands.get(i).indexOf(']')!=-1){
-                    endBracks++;
-                }
-            }
-            if(frontBracks==endBracks){
-                endIndex = i;
-                break;
-            }
-            else{
-
-            }
+        for (String s: repLine) {
+            // repCommands.addAll()
         }
         //Repeat repeat = new Repeat(repLine[1]);
     }
 
+    // TODO - refactor as MathCommands
     private double checkMath(String[] splited) throws ScriptException {
         String op = retMath(splited);
         String[] operation = op.split("\\s+");
-        type1 = new HashMap<String, String>(){{
-            put("sum", "+");
-            put("difference", "-");
-            put("product", "*");
-            put("quotient", "/");
-            put("remainder", "%");
-            put("minus", "~");
-        }};
-        type2 = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pow","pi"));
         for(int i = 0; i<operation.length; i++){
             if((type1.keySet()).contains(operation[i])){
                 String temp = operation[i];
@@ -229,44 +201,31 @@ public class Parser {
         return ret;
     }
 
-    public void set(List<String> command, ModelCollection modelC, List<Variable> var){
-        command_input = command;
-        model = modelC;
-        variables = var;
-    }
-
-    public boolean isFinished(){
-        return true;
-    }
-
-    public ModelCollection getModel(){
-        return model;
-    }
-
-    public Command getCommand(){
-        return null;
-    }
-
-    public String retComs(String[] splited){
-        HashSet mathTypes = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pow","pi","sum", "+","difference", "-","product","*","quotient","/","remainder", "%","minus","~"));
-
-        String com = "";
+    /**
+     * Takes in string array of split input string, returns all non math commands
+     * @param splited
+     * @return
+     */
+    private String returnCommands(String[] splited){
+        Set<String> mathTypes = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pow","pi","sum", "+","difference", "-","product","*","quotient","/","remainder", "%","minus","~"));
+        StringBuilder sb = new StringBuilder();
         for(String s: splited){
             if(!mathTypes.contains(s) && !s.matches(".*\\d.*")){
-                com+=s + " ";
+                sb.append(s + " ");
             }
         }
-
-        com = com.substring(0, com.length()-1);
-        return com;
+        return sb.substring(0, sb.length()-1);
     }
 
+    /**
+     * Checks for non standard math operations so they can be set
+     * @param splited
+     * @return
+     * TODO - use stringBuilder to cut down on line
+     */
     private String retMath(String[] splited){
+        Set<String> mathTypes = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pow","pi","sum", "+","difference", "-","product","*","quotient","/","remainder", "%","minus","~"));
 
-        HashSet mathTypes = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pow","pi","sum", "+","difference", "-","product","*","quotient","/","remainder", "%","minus","~"));
-
-        String temp = String.join(" ", splited);
-        System.out.println();
         if(!(String.join(" ", splited)).matches(".*\\d.*")){
             return "";
         }
@@ -281,20 +240,30 @@ public class Parser {
         return math;
     }
 
-    private List<Command> unravel(int commandsLeft) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    /**
+     * Called by single line parse to create command list from expanded single line Strings by dual pointer stack
+     * @return
+     */
+    private List<Command> unravel(Stack<String> commands, Stack<String> values) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         List<Command> singleLineCommands = new ArrayList<Command>();
         String lastValue = "";
         while(!values.isEmpty()){
             lastValue = values.pop();
             singleLineCommands.add(getConstructor(commands.pop(), lastValue));
         }
-        while(!commands.isEmpty() && commandsLeft > 0){
+        while(!commands.isEmpty()){
             singleLineCommands.add(getConstructor(commands.pop(), lastValue));
-            commandsLeft--;
         }
         return singleLineCommands;
     }
 
+    /**
+     * Called internally in unravel
+     * Applies reflection on command string to create a command object with a given value
+     * @param com
+     * @param val
+     * @returns Commmand object
+     */
     private Command getConstructor(String com, String val) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         System.out.println(com);
         Class cl = Class.forName("slogo.logicalcontroller.command."+commandMappings.get(commandArray.get(com))+"."+commandArray.get(com));
@@ -303,34 +272,29 @@ public class Parser {
         return command;
     }
 
-    private boolean hasValue(String val){
-        char[] chars = val.toCharArray();
-        for(char c: chars){
-            if(Character.isDigit(c)){
-                return true;
-            }
+    /**
+     * Checks if a given string contains a digit value, or if it only has commands
+     * @param line is a string line from the input
+     * @returns true when the line contains a parseable integer
+     */
+    private boolean checkHasValue(String line){
+        try {
+            double d = Double.parseDouble(line);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
         }
-        return false;
     }
 
-    private String getSymbol(String text){
-        final String ERROR = "NO MATCH";
-        for(String s:commandArray.keySet()){
-            if(isMatch(s, commandArray.get(s))){
-                return commandArray.get(s);
-            }
-        }
-        return ERROR;
-    }
-
-    private boolean isMatch(String text, String regex){
-        return regex.matches(text);
-    }
-
+    /**
+     * Called internally, to create mapping of every input commmand to the command objects
+     * Based on preconfigured language
+     * @return mappings of input commmands to command objects (e.g lt --> Left)
+     */
     private Map<String, String> genCommandArray() {
         Map<String, String> mymap = new HashMap<String, String>();
-        for(String key: Collections.list(resources.getKeys())){
-            String regex = resources.getString(key);
+        for(String key: Collections.list(this.resources.getKeys())){
+            String regex = this.resources.getString(key);
             if(regex.indexOf("|") != -1){
                 mymap.put(regex.substring(0, regex.indexOf("|")), key);
                 mymap.put(regex.substring(regex.indexOf("|")+1), key);
@@ -343,7 +307,8 @@ public class Parser {
     }
 
     /**
-     * Returns the final list of commands for the model to execute
+     * Called by the LogicalController
+     * Returns the final list of commands to be executed on the model
      * @return
      */
     public List<Command> getCommands(){
@@ -352,6 +317,20 @@ public class Parser {
 
     public String getLang(){
         return this.lang;
+    }
+
+    public boolean isFinished(){
+        return true;
+    }
+
+    public ModelCollection getModel(){
+        return this.model;
+    }
+
+    public void set(List<String> command, ModelCollection modelC, List<Variable> var){
+        this.command_input = command;
+        this.model = modelC;
+        this.variables = var;
     }
 
     public static void main (String[] args) throws IOException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, ScriptException {

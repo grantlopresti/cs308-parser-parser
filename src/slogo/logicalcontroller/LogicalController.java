@@ -101,7 +101,4 @@ public class LogicalController {
     //passToVisualController(myModelCollection, myCommandList, myVariableList);
   }
 
-  private void passToVisualController(Command command){
-    myVisualController.moveModelObject(myModelCollection);
-  }
 }
