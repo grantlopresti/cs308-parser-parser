@@ -3,17 +3,14 @@ package slogo.logicalcontroller.command.math;
 import slogo.logicalcontroller.command.Command;
 
 public class Random extends MathCommand {
-    private double value;
 
-    public Random(String inputvalue){
-        super(inputvalue);
-        value = Double.parseDouble(inputvalue);
-
+    public Random(String input){
+        super(input);
     }
 
     @Override
-    public double getValue() {
-        return this.value;
+    public double performMath() {
+        return Math.random() * this.myArgument1;
     }
 
     @Override
