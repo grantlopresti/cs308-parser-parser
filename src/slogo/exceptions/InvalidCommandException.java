@@ -8,19 +8,17 @@ import slogo.visualcontroller.ErrorSeverity;
  */
 public class InvalidCommandException extends LogicalException {
 
+    private static final String message = "Invalid command";
+
     public InvalidCommandException() {
         super();
-        myErrorSeverity = ErrorSeverity.MEDIUM;
+        this.myErrorSeverity = ErrorSeverity.MEDIUM;
+        this.myString = message;
     }
 
     public InvalidCommandException(String message) {
         super(message);
-        myErrorSeverity = ErrorSeverity.MEDIUM;
-    }
-
-    @Override
-    public ErrorSeverity getErrorSeverity() {
-        return myErrorSeverity;
+        this.myErrorSeverity = ErrorSeverity.MEDIUM;
     }
 
 }

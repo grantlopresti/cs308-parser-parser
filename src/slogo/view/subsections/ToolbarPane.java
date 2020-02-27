@@ -23,12 +23,16 @@ import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.script.ScriptException;
+
+import slogo.exceptions.InvalidCommandException;
 import slogo.exceptions.InvalidCommandFileException;
 import slogo.exceptions.InvalidLanguageException;
 import slogo.logicalcontroller.LogicalController;
 import slogo.view.TurtleImage;
 import slogo.view.windows.SlogoView;
 import slogo.visualcontroller.VisualError;
+
+import javax.script.ScriptException;
 
 public class ToolbarPane implements SubPane {
 
@@ -124,7 +128,23 @@ public class ToolbarPane implements SubPane {
   }
 
   private void initializeLoadAndRunButton() {
-    myLoadAndRun.setOnAction(e -> loadAndRun());
+    myLoadAndRun.setOnAction(e -> {
+      try {
+        loadAndRun();
+      } catch (NoSuchMethodException ex) {
+        ex.printStackTrace();
+      } catch (InstantiationException ex) {
+        ex.printStackTrace();
+      } catch (ScriptException ex) {
+        ex.printStackTrace();
+      } catch (IllegalAccessException ex) {
+        ex.printStackTrace();
+      } catch (InvocationTargetException ex) {
+        ex.printStackTrace();
+      } catch (ClassNotFoundException ex) {
+        ex.printStackTrace();
+      }
+    });
   }
 
 
@@ -162,7 +182,7 @@ public class ToolbarPane implements SubPane {
     myViewer.setUserInputAreaText(fileContents);
   }
 
-  private void loadAndRun() {
+  private void loadAndRun() throws NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
     File file = getUserFile();
     sendCommands(file);
   }
@@ -180,14 +200,14 @@ public class ToolbarPane implements SubPane {
     return fc.showOpenDialog(new Stage());
   }
 
-  private void sendCommands(File file) {
+  private void sendCommands(File file) throws NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
     String fileContents = getTextFromFile(file);
     try {
       assert fileContents != null;
       myLogicalController.handleNewCommand(fileContents);
-    } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | ScriptException | InvocationTargetException | ClassNotFoundException e) {
-      myViewer.announceError(new VisualError(new InvalidCommandFileException("The chosen command "
-          + "file " + fileContents + " contains invalid commands. \n Please try again!")));
+    } catch (Exception e) {
+      myViewer.announceError(new VisualError(new InvalidCommandException("The "
+          + "following command is invald: \n" + fileContents)));
     }
   }
 

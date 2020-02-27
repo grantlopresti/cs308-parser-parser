@@ -8,6 +8,7 @@ public class VisualError {
     private final String myMessage;
     private final ErrorSeverity mySeverity;
     private static final String SEPARATOR = ": ";
+    private static final String INTRO = "Error Type: ";
 
     public VisualError(LogicalException e) {
         myMessage = e.getMessage();
@@ -26,7 +27,7 @@ public class VisualError {
     public String toString() {return errorMessage();}
 
     private String errorMessage() {
-        return mySeverity.getLevel() + SEPARATOR + myMessage;
+        return INTRO + mySeverity.getLevel() + SEPARATOR + myMessage;
     }
 
 }
