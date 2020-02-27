@@ -19,4 +19,9 @@ public class SetHeading extends ModifierCommand {
     public String getCommandType() {
         return "SetHeading";
     }
+
+    @Override
+    public String toString(){
+        return (getCommandType() + " " + getValue());
+    }
 }

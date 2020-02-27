@@ -19,4 +19,9 @@ public class IsPenDown extends QuerieCommand {
     public String getCommandType() {
         return "IsPenDown";
     }
+
+    @Override
+    public String toString(){
+        return (getCommandType() + " " + getValue());
+    }
 }

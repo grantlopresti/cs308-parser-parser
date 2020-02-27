@@ -19,4 +19,9 @@ public class Backward extends ModifierCommand {
     public String getCommandType() {
         return "Backward";
     }
+
+    @Override
+    public String toString(){
+        return (getCommandType() + " " + getValue());
+    }
 }
