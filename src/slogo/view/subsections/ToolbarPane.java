@@ -214,7 +214,7 @@ public class ToolbarPane implements SubPane {
     String fileContents = getTextFromFile(file);
     try {
       myLogicalController.handleNewCommand(fileContents);
-    } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+    } catch (Exception e) {
       myViewer.announceError(new VisualError(new InvalidCommandException("The "
           + "following command is invald: \n" + fileContents)));
     }

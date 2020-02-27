@@ -58,30 +58,35 @@ public class LogicalController {
    * @param command
    * @throws InvalidCommandException
    */
-  public void handleNewCommand(String command) throws InvalidCommandException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, IOException, ScriptException {
+  public void handleNewCommand(String command) throws InvalidCommandException {
+    try {
+      // STEP 1: Parse all commands from the input String
+      this.myParser.parse(Arrays.asList(command.split("\n")));
 
-    // STEP 1: Parse all commands from the input String
-    this.myParser.parse(Arrays.asList(command.split("\n")));
+      // STEP 2: Fetch final commands from the parser
+      List<Command> commandList = this.myParser.getCommands();
 
-    // STEP 2: Fetch final commands from the parser
-    List<Command> commandList = this.myParser.getCommands();
-
-    // STEP 3: Execute individual commands on each turtle object using reflection
-    for (Object turtle : myModelCollection){
-      for(Command thisCommand : commandList) {
-        ModelTurtle modelTurtle = (ModelTurtle) turtle;
-        printTurtleState(modelTurtle, "Before");
-        String commandName = thisCommand.getCommandType();
-        Method method = turtle.getClass().getMethod(commandName.toLowerCase(), double.class);
-        double myValue = thisCommand.getValue();
-        method.invoke(turtle, myValue);
-        System.out.println("Command Executed: " + commandName);
-        printTurtleState(modelTurtle, "After");
-        myVisualController.moveModelObject(myModelCollection);
-        myVisualController.updateCommands(command);
+      // STEP 3: Execute individual commands on each turtle object using reflection
+      for (Object turtle : myModelCollection){
+        for(Command thisCommand : commandList) {
+          ModelTurtle modelTurtle = (ModelTurtle) turtle;
+          printTurtleState(modelTurtle, "Before");
+          String commandName = thisCommand.getCommandType();
+          Method method = turtle.getClass().getMethod(commandName.toLowerCase(), double.class);
+          double myValue = thisCommand.getValue();
+          method.invoke(turtle, myValue);
+          System.out.println("Command Executed: " + commandName);
+          printTurtleState(modelTurtle, "After");
+          myVisualController.moveModelObject(myModelCollection);
+          myVisualController.updateCommands(command);
+        }
       }
+      // testLogic(command);
+    } catch (Exception e) {
+      myVisualController.updateErrors(new InvalidCommandException("Testing Error (thrown from "
+                  + "Logical Controller)"));
     }
-    // testLogic(command);
+
   }
 
   private void testLogic(String command) {
