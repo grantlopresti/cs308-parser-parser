@@ -71,10 +71,8 @@ public class SlogoView extends Application {
   private VBox getUpperPane() throws IOException {
     VBox vbox = new VBox();
 
-    //MenuBar menu = new MenuPane().getNode();
     ToolBar tools = new ToolbarPane(this, myLogicalController).getNode();
 
-    //vbox.getChildren().addAll(menu, tools);
     vbox.getChildren().addAll(tools);
 
     return vbox;
@@ -164,7 +162,6 @@ public class SlogoView extends Application {
   }
 
   public void announceError(VisualError error){
-    //TODO: Handle Announcing Errors
     Alert alert;
 
     if (error.getSeverity() == ErrorSeverity.CRITICAL) {

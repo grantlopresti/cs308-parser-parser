@@ -49,7 +49,7 @@ public class LogicalController {
    * @param command
    * @throws InvalidCommandException
    */
-  public void handleNewCommand(String command) throws InvalidCommandException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, IOException, ScriptException {
+  public void handleNewCommand(String command) throws InvalidCommandException {
     //System.out.println(command);
 
     for(Object turtle : myModelCollection){
