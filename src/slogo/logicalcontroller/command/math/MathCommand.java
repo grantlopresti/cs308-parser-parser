@@ -7,4 +7,10 @@ import slogo.logicalcontroller.command.Command;
  * @author Alex Xu
  */
 public abstract class MathCommand implements Command{
+
+    public MathCommand(String arg1) {
+
+    }
+
+
 }

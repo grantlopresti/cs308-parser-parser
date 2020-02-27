@@ -7,7 +7,6 @@ public class ArcTangent extends MathCommand {
 
     public ArcTangent(String inputvalue){
         value = Double.parseDouble(inputvalue);
-
     }
 
     @Override

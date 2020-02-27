@@ -3,15 +3,15 @@ package slogo.logicalcontroller.command.controlflow;
 import slogo.logicalcontroller.command.Command;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Repeat extends ControlFlowCommand {
     private double value;
-    private ArrayList<Command> repCommands;
+    private List<Command> repCommands;
 
-    public Repeat(String inputvalue, ArrayList<Command> repeatCommands){
+    public Repeat(String inputvalue, List<Command> repeatCommands){
         this.value = Double.parseDouble(inputvalue);
         this.repCommands = repeatCommands;
-
     }
 
     @Override
@@ -24,7 +24,7 @@ public class Repeat extends ControlFlowCommand {
         return "Repeat";
     }
 
-    public ArrayList<Command> getRepCommands(){
+    public List<Command> getRepCommands(){
         return this.repCommands;
     }
 }
