@@ -64,12 +64,14 @@ public class VisualTurtle extends VisualObject {
     myCenterY = turtle.getY();
     myHeading = turtle.getHeading();
     myPenThickness = turtle.getPenThickness();
+    System.out.println("Current Head: " + myHeading);
   }
 
   private void updatePriorValues() {
     myPreviousX = myCenterX;
     myPreviousY = myCenterY;
     myPreviousHeading = myHeading;
+    System.out.println("Prior Head: " + myPreviousHeading);
   }
 
   public double getSize() {

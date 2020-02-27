@@ -90,19 +90,12 @@ public class VisualizationPane implements SubPane {
 
       turtleImage.setFitWidth(turtle.getSize());
       turtleImage.setPreserveRatio(true);
-      //turtleImage.setRotate(turtle.getHeading());
 
       setAdjustedX(turtleImage, turtle.getPreviousX());
       setAdjustedY(turtleImage, turtle.getPreviousY());
-      turtleImage.rotateProperty().set(turtle.getHeading()-90);
 
-      if (turtle.hasChangedState()) {
-        Animation turtleAnimation = makeAnimation(turtle, turtleImage);
-        turtleAnimation.play();
-      } else {
-        setAdjustedX(turtleImage, turtle.getCenterX());
-        setAdjustedY(turtleImage, turtle.getCenterY());
-      }
+      Animation turtleAnimation = makeAnimation(turtle, turtleImage);
+      turtleAnimation.play();
 
       Lighting lighting = getLightingEffect(turtle.getColor());
       turtleImage.setEffect(lighting);
@@ -122,7 +115,8 @@ public class VisualizationPane implements SubPane {
     PathTransition pt = new PathTransition(Duration.seconds(4), path, agent);
     // create an animation that rotates the shape
     RotateTransition rt = new RotateTransition(Duration.seconds(3));
-    rt.setByAngle(turtle.getPreviousHeading() - turtle.getHeading());
+    rt.setFromAngle(turtle.getPreviousHeading());
+    rt.setToAngle(turtle.getHeading());
     // put them together in order
     return new SequentialTransition(agent, pt, rt);
   }

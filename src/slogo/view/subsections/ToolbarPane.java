@@ -2,11 +2,8 @@ package slogo.view.subsections;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,13 +21,11 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import slogo.exceptions.InvalidCommandException;
-import slogo.exceptions.InvalidXMLConfigException;
+import slogo.exceptions.InvalidCommandFileException;
+import slogo.exceptions.InvalidLanguageException;
 import slogo.logicalcontroller.LogicalController;
 import slogo.view.TurtleImage;
 import slogo.view.windows.SlogoView;
-
-import javax.script.ScriptException;
 import slogo.visualcontroller.VisualError;
 
 public class ToolbarPane implements SubPane {
@@ -75,7 +70,7 @@ public class ToolbarPane implements SubPane {
   }
 
   @Override
-  public ToolBar getNode() throws IOException {
+  public ToolBar getNode() {
 
     initializeButtons();
 
@@ -100,7 +95,7 @@ public class ToolbarPane implements SubPane {
         myHelpInfo);
   }
 
-  private void initializeButtons() throws IOException {
+  private void initializeButtons() {
     myLoader.setOnAction(e -> loadFile());
     initializeLoadAndRunButton();
     myBGColorPicker.setOnAction(t -> {
@@ -109,9 +104,7 @@ public class ToolbarPane implements SubPane {
     });
     setDefaultTurtleImage();
     myTurtleImage.getSelectionModel().selectedItemProperty().addListener((options, oldValue,
-        newValue) -> {
-      myViewer.changeTurtleImage(newValue);
-    });
+        newValue) -> myViewer.changeTurtleImage(newValue));
     myPenColorPicker.setOnAction(t -> {
       Color c = myPenColorPicker.getValue();
       myViewer.setPenColor(c.getRed(), c.getGreen(), c.getBlue());
@@ -119,9 +112,7 @@ public class ToolbarPane implements SubPane {
     myClearScreen.setOnAction(e -> clearVisualizationScreen());
     setDefaultLanguage();
     myLanguage.getSelectionModel().selectedItemProperty().addListener((options, oldValue,
-        newValue) -> {
-      changeLanguage(newValue);
-    });
+        newValue) -> changeLanguage(newValue));
     myHelpInfo.setOnAction(e -> showHelpWindow());
   }
 
@@ -131,15 +122,7 @@ public class ToolbarPane implements SubPane {
   }
 
   private void initializeLoadAndRunButton() {
-    myLoadAndRun.setOnAction(e -> {
-      try {
-        loadAndRun();
-      } catch (ScriptException ex) {
-        //FIXME: No print stack traces
-        ex.printStackTrace();
-        //myViewer.announceError(new VisualError());
-      }
-    });
+    myLoadAndRun.setOnAction(e -> loadAndRun());
   }
 
 
@@ -177,23 +160,9 @@ public class ToolbarPane implements SubPane {
     myViewer.setUserInputAreaText(fileContents);
   }
 
-  private void loadAndRun() throws ScriptException {
+  private void loadAndRun() {
     File file = getUserFile();
-    try {
-      sendCommands(file);
-    } catch (ClassNotFoundException e) {
-      e.printStackTrace();
-    } catch (NoSuchMethodException e) {
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      e.printStackTrace();
-    } catch (InstantiationException e) {
-      e.printStackTrace();
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    sendCommands(file);
   }
 
   private File getUserFile() {
@@ -209,22 +178,17 @@ public class ToolbarPane implements SubPane {
     return fc.showOpenDialog(new Stage());
   }
 
-  private void sendCommands(File file)
-      throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, IOException, ScriptException {
+  private void sendCommands(File file) {
     String fileContents = getTextFromFile(file);
-    try {
-      myLogicalController.handleNewCommand(fileContents);
-    } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-      myViewer.announceError(new VisualError(new InvalidCommandException("The "
-          + "following command is invald: \n" + fileContents)));
-    }
+    myLogicalController.handleNewCommand(fileContents);
   }
 
   private void changeLanguage(String language) {
     try {
       myLogicalController.setLanguage(language);
     } catch (IOException e) {
-      e.printStackTrace();
+      myViewer.announceError(new VisualError(new InvalidLanguageException("The chosen language: " + language
+          + " is invalid. \n Please try again!")));
     }
   }
 
@@ -233,7 +197,8 @@ public class ToolbarPane implements SubPane {
     try {
       return new String(Files.readAllBytes(filePath));
     } catch (IOException e) {
-      e.printStackTrace();
+      myViewer.announceError(new VisualError(new InvalidCommandFileException("The file path: " + file + " "
+          + "is invalid. \n Please try again!")));
     }
     return null;
   }

@@ -58,7 +58,8 @@ public class LogicalController {
    * @param command
    * @throws InvalidCommandException
    */
-  public void handleNewCommand(String command) throws InvalidCommandException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, IOException, ScriptException {
+  public void handleNewCommand(String command) throws InvalidCommandException {
+    //System.out.println(command);
 
     // STEP 1: Parse all commands from the input String
     this.myParser.parse(Arrays.asList(command.split("\n")));
