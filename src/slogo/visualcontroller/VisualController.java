@@ -69,7 +69,6 @@ public class VisualController implements VisualInterface {
   /**
    * Called by the logical controller to update turtle state and draw shapes in Slogo view
    * @param modelCollection model turtle that is currently being acted on
-   * TODO - Update switch to reflection based on object type
    * TODO - Add casting try catch
    */
   @Override
@@ -106,7 +105,8 @@ public class VisualController implements VisualInterface {
 
   @Override
   public void updateVariables(Variable v) {
-    myVariablesProperty.getValue().add(new VisualVariable(v));
+    VisualVariable var = new VisualVariable(v);
+    myVariablesProperty.getValue().add(var);
   }
 
   @Override

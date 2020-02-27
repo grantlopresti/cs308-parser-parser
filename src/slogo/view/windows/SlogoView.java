@@ -32,6 +32,7 @@ public class SlogoView extends Application {
   private UserInputPane myInputPane;
   private VisualizationPane myVisualizationPane;
   private CommandHistoryTab myCommandsTab;
+  private DataViewerTab myDataTab;
 
   private LogicalController myLogicalController;
   private VisualController myVisualController;
@@ -142,14 +143,14 @@ public class SlogoView extends Application {
   private TabPane getRightPane() {
     TabPane tabPaneRight = new TabPane();
 
+    ErrorHandlerTab errorTab = new ErrorHandlerTab();
+    Tab errors = errorTab.getTab(myVisualController.getProperty(VisualProperty.ERROR));
+
     myCommandsTab = new CommandHistoryTab();
     myCommandsTab.setSlogoView(this);
     Tab commands = myCommandsTab.getTab(myVisualController.getProperty(VisualProperty.COMMAND));
 
-    Tab data = new DataViewerTab().getTab(myVisualController.getProperty(VisualProperty.DATA));
-
-    ErrorHandlerTab errorTab = new ErrorHandlerTab();
-    Tab errors = errorTab.getTab(myVisualController.getProperty(VisualProperty.ERROR));
+    Tab data = new DataViewerTab().getTab(myVisualController.getProperty(VisualProperty.VARIABLE));
 
     tabPaneRight.getTabs().addAll(commands, data, errors);
     tabPaneRight.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
