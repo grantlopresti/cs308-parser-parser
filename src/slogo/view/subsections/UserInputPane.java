@@ -2,16 +2,21 @@ package slogo.view.subsections;
 
 
 import javafx.scene.control.TextArea;
+import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.LogicalController;
+import slogo.view.windows.SlogoView;
+import slogo.visualcontroller.VisualError;
 
 public class UserInputPane implements SubPane {
+  private SlogoView myViewer;
   private LogicalController myLogicalController;
   private TextArea myTextArea;
 
-  public UserInputPane(LogicalController logicalcontroller) {
+  public UserInputPane(SlogoView viewer, LogicalController logicalcontroller) {
     myTextArea = new TextArea();
     myTextArea.setPromptText("Enter Logo Commands Here:");
     myLogicalController = logicalcontroller;
+    myViewer = viewer;
   }
 
   public void setInputArea(String text){
@@ -31,7 +36,8 @@ public class UserInputPane implements SubPane {
       }
     }
     catch (Exception e){
-      e.printStackTrace();
+      myViewer.announceError(new VisualError(new InvalidCommandException("The following command "
+          + "is invalid, please try another!\n" + userCommand)));
     }
   }
 
