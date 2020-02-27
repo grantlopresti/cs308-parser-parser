@@ -17,4 +17,5 @@ public class ArcTangent extends MathCommand {
     public String getCommandType() {
         return "ArcTangent";
     }
+
 }

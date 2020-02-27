@@ -8,6 +8,7 @@ import java.util.List;
 public class Repeat extends ControlFlowCommand {
     private double value;
     private List<Command> repCommands;
+    private List<Command> allRepCommands;
 
     public Repeat(String inputvalue, List<Command> repeatCommands){
         this.value = Double.parseDouble(inputvalue);
@@ -24,7 +25,16 @@ public class Repeat extends ControlFlowCommand {
         return "Repeat";
     }
 
-    public List<Command> getRepCommands(){
+    public List<Command> getRepCommand(){
         return this.repCommands;
+    }
+
+    public List<Command> getAllRepCommands(){
+        this.allRepCommands = new ArrayList<Command>();
+        for(int i = 0; i<Integer.parseInt(String.valueOf(value)); i++){
+            this.allRepCommands.addAll(getRepCommand());
+        }
+
+        return this.allRepCommands;
     }
 }
