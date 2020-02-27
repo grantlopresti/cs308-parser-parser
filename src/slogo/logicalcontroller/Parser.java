@@ -83,6 +83,7 @@ public class Parser {
      * @param lines
      */
     public void parse(List<String> lines) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, ScriptException {
+        this.finalCommandObjects = new ArrayList<Command>();
         this.rawCommands = lines;
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);

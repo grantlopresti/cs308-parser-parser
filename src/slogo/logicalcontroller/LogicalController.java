@@ -6,12 +6,15 @@ import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.variable.BasicVariable;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
+import slogo.model.ModelObject;
 import slogo.model.ModelTurtle;
 import slogo.visualcontroller.VisualController;
 
 import javax.script.ScriptException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -21,6 +24,7 @@ import java.util.List;
  */
 public class LogicalController {
   private Parser myParser;
+  private static final String DEFAULT_LANGUAGE = "ENGLISH";
 
   private ModelCollection myModelCollection;
   private VisualController myVisualController;
@@ -32,6 +36,11 @@ public class LogicalController {
     myModelCollection.append(new ModelTurtle());
     myVisualController.moveModelObject(myModelCollection);
     myVariables = variables;
+    try {
+      this.setLanguage(DEFAULT_LANGUAGE);
+    } catch (Exception e) {
+      System.exit(0);
+    }
   }
 
   /**
@@ -40,7 +49,7 @@ public class LogicalController {
    * @throws IOException
    */
   public void setLanguage(String language) throws IOException {
-    myParser = new Parser(language);
+    this.myParser = new Parser(language);
   }
 
   /**
@@ -50,8 +59,32 @@ public class LogicalController {
    * @throws InvalidCommandException
    */
   public void handleNewCommand(String command) throws InvalidCommandException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, IOException, ScriptException {
-    //System.out.println(command);
 
+    // STEP 1: Parse all commands from the input String
+    this.myParser.parse(Arrays.asList(command.split("\n")));
+
+    // STEP 2: Fetch final commands from the parser
+    List<Command> commandList = this.myParser.getCommands();
+
+    // STEP 3: Execute individual commands on each turtle object using reflection
+    for (Object turtle : myModelCollection){
+      for(Command thisCommand : commandList) {
+        ModelTurtle modelTurtle = (ModelTurtle) turtle;
+        printTurtleState(modelTurtle, "Before");
+        String commandName = thisCommand.getCommandType();
+        Method method = turtle.getClass().getMethod(commandName.toLowerCase(), double.class);
+        double myValue = thisCommand.getValue();
+        method.invoke(turtle, myValue);
+        System.out.println("Command Executed: " + commandName);
+        printTurtleState(modelTurtle, "After");
+        myVisualController.moveModelObject(myModelCollection);
+        myVisualController.updateCommands(command);
+      }
+    }
+    // testLogic(command);
+  }
+
+  private void testLogic(String command) {
     for(Object turtle : myModelCollection){
       ModelTurtle myModelTurtle = (ModelTurtle) turtle;
       myModelTurtle.move(100);
@@ -62,43 +95,11 @@ public class LogicalController {
     //myVisualController.updateErrors(new InvalidCommandException("Testing Error (thrown from "
     //    + "Logical Controller)"));
     //myVisualController.updateVariables(new BasicVariable("guy", 2));
+  }
 
-    /*
-    List<String> commandList;
-    commandList = Arrays.asList(command.split("\n"));
-
-    myParser.set(commandList, myModelCollection, myVariables);
-
-    while(!myParser.isFinished()){
-      myParser.executeNextCommand();
-      myModelCollection = myParser.getModel();
-      Command currentCommand = myParser.getCommand();
-      passToVisualController(currentCommand);
-    }
-
-    /*
-    for (Object mo : myModelCollection){
-      for(Command myCurrentCommand : commandObjectList) {
-        //Command myCurrentCommand = commandObjectList.get(0);
-        ModelObject myModelObject = (ModelObject) mo;
-
-        System.out.println("Before Y " + myModelObject.getY());
-        System.out.println("Before X " + myModelObject.getX());
-
-        String commandName = myCurrentCommand.getCommandType();
-        //Class parameterClass = Class.forName("double");
-        Method method = myModelObject.getClass().getMethod(commandName.toLowerCase(), double.class);
-        double myValue = myCurrentCommand.getValue();
-        method.invoke(myModelObject, myValue);
-
-        System.out.println("Command Executed: " + commandName);
-        System.out.println("After Y: " + myModelObject.getY());
-        System.out.println("After X: " + myModelObject.getX());
-
-      }
-    }
-    */
-    //passToVisualController(myModelCollection, myCommandList, myVariableList);
+  private void printTurtleState(ModelTurtle turtle, String seq) {
+    System.out.println(seq + " Y " + turtle.getY());
+    System.out.println(seq + " X " + turtle.getX());
   }
 
 }
