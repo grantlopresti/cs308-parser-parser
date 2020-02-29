@@ -6,12 +6,12 @@ public class InvalidCommandFileException extends LogicalException {
 
   public InvalidCommandFileException() {
     super();
-    myErrorSeverity = ErrorSeverity.MEDIUM;
+    this.myErrorSeverity = ErrorSeverity.MEDIUM;
   }
 
   public InvalidCommandFileException(String message) {
     super(message);
-    myErrorSeverity = ErrorSeverity.MEDIUM;
+    this.myErrorSeverity = ErrorSeverity.MEDIUM;
   }
 
   @Override

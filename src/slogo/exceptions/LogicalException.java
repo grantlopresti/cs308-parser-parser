@@ -11,7 +11,10 @@ public abstract class LogicalException extends RuntimeException {
         super();
     }
 
-    public LogicalException(String message) {super(message);}
+    public LogicalException(String message) {
+        super(message);
+        this.myString = message;
+    }
 
     public ErrorSeverity getErrorSeverity() {
         return this.myErrorSeverity;

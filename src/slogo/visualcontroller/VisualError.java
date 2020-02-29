@@ -11,23 +11,28 @@ public class VisualError {
     private static final String INTRO = "Error Type: ";
 
     public VisualError(LogicalException e) {
-        myMessage = e.getMessage();
-        mySeverity = e.getErrorSeverity();
+        this.myMessage = e.getMessage();
+        this.mySeverity = e.getErrorSeverity();
+        testErrorPrint();
+    }
+
+    private void testErrorPrint() {
+        System.out.println("Created visual error with message: " + this.toString());
     }
 
     public VisualError(String message, ErrorSeverity severe) {
-        myMessage = message;
-        mySeverity = severe;
+        this.myMessage = message;
+        this.mySeverity = severe;
     }
 
-    public ErrorSeverity getSeverity() {return mySeverity;}
-    public Color getColor() {return mySeverity.getColor();}
+    public ErrorSeverity getSeverity() {return this.mySeverity;}
+    public Color getColor() {return this.mySeverity.getColor();}
 
     @Override
     public String toString() {return errorMessage();}
 
     private String errorMessage() {
-        return INTRO + mySeverity.getLevel() + SEPARATOR + myMessage;
+        return INTRO + mySeverity.getLevel() + SEPARATOR + this.myMessage;
     }
 
 }
