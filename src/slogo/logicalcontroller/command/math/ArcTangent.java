@@ -9,8 +9,8 @@ public class ArcTangent extends MathCommand {
     }
 
     @Override
-    public double performMath() {
-        return Math.atan(myArgument1);
+    public void performMath() {
+        setReturnValue(Math.atan(myArgument1));
     }
 
     @Override

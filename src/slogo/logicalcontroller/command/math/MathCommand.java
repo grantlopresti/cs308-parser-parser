@@ -8,11 +8,11 @@ import slogo.logicalcontroller.command.Command;
  */
 public abstract class MathCommand implements Command {
 
+    private double returnValue;
     protected double myArgument1;
     protected double myArgument2;
 
     public MathCommand() {
-
     }
 
     public MathCommand(String input1) {
@@ -24,11 +24,15 @@ public abstract class MathCommand implements Command {
         this.myArgument2 = Double.parseDouble(input2);
     }
 
-    public abstract double performMath();
+    public abstract void performMath();
+
+    protected void setReturnValue(double value){
+       returnValue = value;
+    }
 
     @Override
     public double getValue() {
-        return performMath();
+        return returnValue;
     }
 
 }

@@ -17,7 +17,7 @@ public abstract class ComparisonCommand implements Command {
     public static final List<Integer> POSSIBLE_VALUES = Arrays.asList(new Integer[]{0, 1});
     public static final int DEFAULT_VALUE = 0;
 
-    protected int returnValue;
+    private int returnValue;
 
     protected double argument1;
     protected double argument2;

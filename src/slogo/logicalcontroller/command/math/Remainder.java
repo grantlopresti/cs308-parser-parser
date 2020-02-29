@@ -9,8 +9,8 @@ public class Remainder extends MathCommand {
     }
 
     @Override
-    public double performMath() {
-        return this.myArgument1 % this.myArgument2;
+    public void performMath() {
+        setReturnValue(this.myArgument1 % this.myArgument2);
     }
 
     @Override
