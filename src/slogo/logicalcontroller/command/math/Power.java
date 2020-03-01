@@ -9,8 +9,8 @@ public class Power extends MathCommand {
     }
 
     @Override
-    public double performMath() {
-        return Math.pow(this.myArgument1, this.myArgument2);
+    public void performMath() {
+        setReturnValue(Math.pow(this.myArgument1, this.myArgument2));
     }
 
     @Override

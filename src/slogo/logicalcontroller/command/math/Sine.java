@@ -9,8 +9,8 @@ public class Sine extends MathCommand {
     }
 
     @Override
-    public double performMath() {
-        return Math.sin(this.myArgument1);
+    public void performMath() {
+        setReturnValue(Math.sin(this.myArgument1));
     }
 
     @Override

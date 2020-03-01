@@ -9,8 +9,8 @@ public class Pi extends MathCommand {
     }
 
     @Override
-    public double performMath() {
-        return Math.PI;
+    public void performMath() {
+        setReturnValue(Math.PI);
     }
 
     @Override

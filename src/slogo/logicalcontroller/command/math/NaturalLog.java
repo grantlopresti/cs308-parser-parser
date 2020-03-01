@@ -9,8 +9,8 @@ public class NaturalLog extends MathCommand {
     }
 
     @Override
-    public double performMath() {
-        return Math.log(this.myArgument1);
+    public void performMath() {
+        setReturnValue(Math.log(this.myArgument1));
     }
 
     @Override

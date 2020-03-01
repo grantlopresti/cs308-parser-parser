@@ -32,8 +32,8 @@ public class LogicalController {
 
   public LogicalController(ModelCollection modelCollection, VisualController visualController, List<Variable> variables){
     myModelCollection = modelCollection;
-    myVisualController = visualController;
     myModelCollection.append(new ModelTurtle());
+    myVisualController = visualController;
     myVisualController.moveModelObject(myModelCollection);
     myVariables = variables;
     try {

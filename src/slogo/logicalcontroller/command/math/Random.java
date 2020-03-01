@@ -9,8 +9,8 @@ public class Random extends MathCommand {
     }
 
     @Override
-    public double performMath() {
-        return Math.random() * this.myArgument1;
+    public void performMath() {
+        setReturnValue(Math.random() * this.myArgument1);
     }
 
     @Override

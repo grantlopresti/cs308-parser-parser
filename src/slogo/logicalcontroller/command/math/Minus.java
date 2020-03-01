@@ -1,7 +1,6 @@
 package slogo.logicalcontroller.command.math;
 
-import slogo.logicalcontroller.command.Command;
-
+//TODO: Difference between Difference and Minus commands?
 public class Minus extends MathCommand {
 
     public Minus(String input) {
@@ -9,8 +8,8 @@ public class Minus extends MathCommand {
     }
 
     @Override
-    public double performMath() {
-        return this.myArgument1 * -1;
+    public void performMath() {
+        setReturnValue(this.myArgument1 * -1);
     }
 
     @Override

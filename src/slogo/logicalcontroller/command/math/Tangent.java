@@ -9,8 +9,8 @@ public class Tangent extends MathCommand{
     }
 
     @Override
-    public double performMath() {
-        return Math.tan(this.myArgument1);
+    public void performMath() {
+        setReturnValue(Math.tan(this.myArgument1));
     }
 
     @Override
