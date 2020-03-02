@@ -7,4 +7,7 @@ import slogo.logicalcontroller.command.Command;
  * @author Alex Xu
  */
 public abstract class ModifierCommand implements Command {
+
+
+
 }
