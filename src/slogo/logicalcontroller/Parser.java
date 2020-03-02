@@ -197,13 +197,15 @@ public class Parser {
                     Class clazz = Class.forName("slogo.logicalcontroller.command.math." + this.commandMappings.get(text));
                     Constructor constructor = clazz.getConstructor(String.class);
                     MathCommand command = (MathCommand) constructor.newInstance(splitted[i+1]);
-                    return command.performMath();
+                    command.performMath();
+                    return command.getValue();
                 } else if (this.mathDoubleParameter.contains(text)) {
                     System.out.println("text: " + text + " matches parameter 2");
                     Class clazz = Class.forName("slogo.logicalcontroller.command.math." + this.commandMappings.get(text));
                     Constructor constructor = clazz.getConstructor(String.class);
                     MathCommand command = (MathCommand) constructor.newInstance(splitted[i+1], splitted[i+2]);
-                    return command.performMath();
+                    command.performMath();
+                    return command.getValue();
                 }
             }
             return Double.parseDouble(splitted[splitted.length-1]);
