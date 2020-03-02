@@ -3,6 +3,8 @@ package slogo.logicalcontroller;
 import slogo.exceptions.ConstructorException;
 import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.command.Command;
+import slogo.logicalcontroller.command.modifier.ModifierCommand;
+import slogo.logicalcontroller.command.modifier.Forward;
 import slogo.logicalcontroller.command.controlflow.Repeat;
 import slogo.logicalcontroller.command.math.MathCommand;
 import slogo.logicalcontroller.variable.Variable;
@@ -25,12 +27,10 @@ public class Parser {
     private List<Command> finalCommandObjects;
     private ResourceBundle resources;
     private List<String> rawCommands;
-
     // TODO - remove these (may not be needed with current structure)
     private ModelCollection model;
     private List<Variable> variables;
     private List<String> command_input;
-
     // TODO - refactor large constructed instance variables as enumerated types
     // ^^ DO THIS PLEASE !!!
     private Map<String, String> type1 = new HashMap<String, String>(){{
@@ -44,6 +44,7 @@ public class Parser {
     private Set<String> type2 = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pow","pi"));
     private Set<String> mathSingleParameter = new HashSet<String>(Arrays.asList(
             "random","sin","cos","tan","atan","log","pi", "minus", "~"));
+    private ArrayList<String> comNeedChecked = new ArrayList<String>(Arrays.asList("repeat","sin","cos","tan","atan","log","pow","pi"));
     private Set<String> mathDoubleParameter = new HashSet<String>(Arrays.asList(
             "pow", "sum", "+", "difference", "-", "product", "*", "quotient", "/", "remainder", "%"));
     private Map<String, String> commandMappings = new HashMap<String, String>(){{
@@ -94,19 +95,30 @@ public class Parser {
      * Two stage process, first
      * @param lines
      */
-    public void parse(List<String> lines) {
-        try {
+    public void parse(List<String> lines) throws NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
+        //try {
             this.finalCommandObjects = new ArrayList<Command>();
             this.rawCommands = lines;
             for (int i = 0; i < lines.size(); i++) {
                 String line = lines.get(i);
+                String type = getType(line);
                 line = checkForBoolean(line);
                 i = checkForVCU(i);
+                System.out.println("The line: " + singleLineParse(line));
                 this.finalCommandObjects.addAll(singleLineParse(line));
             }
-        } catch (Exception e) {
-            throw new InvalidCommandException();
-        }
+        //} catch (Exception e) {
+        //    throw new InvalidCommandException();
+        //}
+    }
+
+    private String getType(String line) {
+        String[] tempsplit = line.split("\\s+");
+
+
+
+
+        return null;
     }
 
     // TODO - simplify boolean from line
@@ -115,8 +127,8 @@ public class Parser {
         return line;
     }
 
-    private List<Command> singleLineParse(String linee) throws ScriptException, ConstructorException {
-        try {
+    private List<Command> singleLineParse(String linee) throws ScriptException, ConstructorException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+        //try {
             String line = linee;
             Stack<String> commands = new Stack<String>();
             Stack<String> values = new Stack<String>();
@@ -135,9 +147,9 @@ public class Parser {
                 }
             }
             return unravel(commands, values);
-        } catch (Exception e) {
-            throw new InvalidCommandException();
-        }
+        //} catch (Exception e) {
+         //   throw new InvalidCommandException();
+        //}
     }
 
     // TODO - update return value to have new index (if repeat taken)
@@ -285,21 +297,25 @@ public class Parser {
      * Called by single line parse to create command list from expanded single line Strings by dual pointer stack
      * @return
      */
-    private List<Command> unravel(Stack<String> commands, Stack<String> values) {
-        try {
+    private List<Command> unravel(Stack<String> commands, Stack<String> values) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        //try {
             List<Command> singleLineCommands = new ArrayList<Command>();
             String lastValue = "";
+            System.out.println("Commands: ");
+            System.out.println(values);
             while(!values.isEmpty()){
                 lastValue = values.pop();
+                System.out.println("LastVal" + lastValue);
                 singleLineCommands.add(getConstructor(commands.pop(), lastValue));
+                System.out.println("Comm" + singleLineCommands);
             }
-            while(!commands.isEmpty()){
+            while(!commands.isEmpty() && values.isEmpty()){
                 singleLineCommands.add(getConstructor(commands.pop(), lastValue));
             }
             return singleLineCommands;
-        } catch (ConstructorException e) {
-            throw new ConstructorException();
-        }
+        //} catch (ConstructorException e) {
+         //   throw new ConstructorException();
+        //}
     }
 
     /**
@@ -309,16 +325,18 @@ public class Parser {
      * @param val
      * @returns Commmand object
      */
-    private Command getConstructor(String com, String val) {
-        try {
-            System.out.println(com);
+    private Command getConstructor(String com, String val) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+       // try {
+            System.out.println("Vallll" + val);
             Class cl = Class.forName("slogo.logicalcontroller.command."+commandMappings.get(commandArray.get(com))+"."+commandArray.get(com));
+            System.out.println("The val: " +  val);
             Constructor con = cl.getConstructor(String.class);
             Command command = (Command) con.newInstance(val);
+            System.out.println("Da command" + command);
             return command;
-        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
-            throw new ConstructorException();
-        }
+        //} catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
+         //   throw new ConstructorException();
+       // }
     }
 
     /**
@@ -382,17 +400,18 @@ public class Parser {
         this.variables = var;
     }
 
-    public static void main (String[] args) {
-        try {
+    public static void main (String[] args) throws IOException, NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
+        //try {
             Parser p = new Parser("English");
             List<String> test = new ArrayList<String>();
-            test.add("fd fd fd 50+50");
+            test.add("fd 50");
             p.parse(test);
+            System.out.println("Made it");
             List<Command> testt = p.getCommands();
             System.out.println(testt);
-        } catch (Exception e) {
-            System.out.println("Exception in main");
-        }
+        //} catch (Exception e) {
+         //   System.out.println("Exception in main");
+        //}
 
     }
 }
