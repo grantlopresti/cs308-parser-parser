@@ -64,5 +64,11 @@ public abstract class ModifierCommand implements Command {
         return className;
     }
 
-
+    /**
+     *To String Method
+     * @return
+     */
+    public String toString(){
+        return (this.getCommandType() + " " + this.getValue());
+    }
 }
