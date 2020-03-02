@@ -9,7 +9,7 @@ import java.util.ResourceBundle;
  * @author Alex Xu
  */
 public abstract class QuerieCommand implements Command {
-    public static final String RESOURCE_BUNDLE_LOCATION = "properties/querieCommands.MyBundle";
+    public static final String RESOURCE_BUNDLE_LOCATION = "src/properties/querieCommands.MyBundle";
 
     private ResourceBundle methodMappings;
     private double returnValue;
