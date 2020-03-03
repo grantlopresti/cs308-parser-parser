@@ -27,12 +27,9 @@ public class Parser {
     private List<Command> finalCommandObjects;
     private ResourceBundle resources;
     private List<String> rawCommands;
-    // TODO - remove these (may not be needed with current structure)
     private ModelCollection model;
     private List<Variable> variables;
     private List<String> command_input;
-    // TODO - refactor large constructed instance variables as enumerated types
-    // ^^ DO THIS PLEASE !!!
     private Map<String, String> type1 = new HashMap<String, String>(){{
         put("sum", "+");
         put("difference", "-");
@@ -87,7 +84,6 @@ public class Parser {
         this.resources = new PropertyResourceBundle(fis);
         this.commandArray = genCommandArray();
         this.finalCommandObjects = new ArrayList<Command>();
-        // System.out.println(commandArray);
     }
 
     /**
