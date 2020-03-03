@@ -33,6 +33,18 @@ public class Parser {
     private List<String> command_input;
     // TODO - refactor large constructed instance variables as enumerated types
     // ^^ DO THIS PLEASE !!!
+    private static final String DEFAULT_PROPERTIES = "properties/";
+    private static final String SLOGO_COMMAND = "slogo.logicalcontroller.command.";
+    private static final String COMMAND_MAP_PROPERTIES = "commandMappings";
+    private static final String MATH_TYPE_ONE_PROPERTIES = "mathTypeOne";
+    private ResourceBundle myCommandMap = ResourceBundle.getBundle(DEFAULT_PROPERTIES + COMMAND_MAP_PROPERTIES);
+    private ResourceBundle myMathTypeOneMap = ResourceBundle.getBundle(DEFAULT_PROPERTIES + MATH_TYPE_ONE_PROPERTIES);
+    private Set<String> type2 = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pow","pi"));
+    private Set<String> mathSingleParameter = new HashSet<String>(Arrays.asList(
+            "random","sin","cos","tan","atan","log","pi", "minus", "~"));
+    private ArrayList<String> comNeedChecked = new ArrayList<String>(Arrays.asList("repeat","sin","cos","tan","atan","log","pow","pi"));
+    private Set<String> mathDoubleParameter = new HashSet<String>(Arrays.asList(
+            "pow", "sum", "+", "difference", "-", "product", "*", "quotient", "/", "remainder", "%"));
     private Map<String, String> type1 = new HashMap<String, String>(){{
         put("sum", "+");
         put("difference", "-");
@@ -40,40 +52,6 @@ public class Parser {
         put("quotient", "/");
         put("remainder", "%");
         put("minus", "~");
-    }};
-    private Set<String> type2 = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pow","pi"));
-    private Set<String> mathSingleParameter = new HashSet<String>(Arrays.asList(
-            "random","sin","cos","tan","atan","log","pi", "minus", "~"));
-    private ArrayList<String> comNeedChecked = new ArrayList<String>(Arrays.asList("repeat","sin","cos","tan","atan","log","pow","pi"));
-    private Set<String> mathDoubleParameter = new HashSet<String>(Arrays.asList(
-            "pow", "sum", "+", "difference", "-", "product", "*", "quotient", "/", "remainder", "%"));
-    private Map<String, String> commandMappings = new HashMap<String, String>(){{
-        put("And", "comparison");
-        put("Equal", "comparison");
-        put("GreaterThan", "comparison");
-        put("LessThan", "comparison");
-        put("Not", "comparison");
-        put("NotEqual", "comparison");
-        put("Or", "comparison");
-        put("DoTimes", "controlflow");
-        put("For", "controlflow");
-        put("If", "controlflow");
-        put("IfElse", "controlflow");
-        put("Repeat", "controlflow");
-        put("Backward", "modifier");
-        put("Forward", "modifier");
-        put("Left", "modifier");
-        put("PenDown", "modifier");
-        put("PenUp", "modifier");
-        put("Right", "modifier");
-        put("SetHeading", "modifier");
-        put("SetPosition", "modifier");
-        put("SetTowards", "modifier");
-        put("ShowTurtle", "modifier");
-        put("IsPenDown", "querie");
-        put("IsShowing", "querie");
-        put("XCoordinate", "querie");
-        put("YCoordinate", "querie");
     }};
 
     /**
@@ -87,7 +65,6 @@ public class Parser {
         this.resources = new PropertyResourceBundle(fis);
         this.commandArray = genCommandArray();
         this.finalCommandObjects = new ArrayList<Command>();
-        // System.out.println(commandArray);
     }
 
     /**
@@ -114,9 +91,6 @@ public class Parser {
 
     private String getType(String line) {
         String[] tempsplit = line.split("\\s+");
-
-
-
 
         return null;
     }
@@ -197,6 +171,8 @@ public class Parser {
         return ret;
     }
 
+    // TODO - implement math objects instead of Math engine
+    @Deprecated
     private double checkMath2(String[] splitted) {
         try {
             String text;
@@ -206,14 +182,14 @@ public class Parser {
                 System.out.println("text: " + text);
                 if (this.mathSingleParameter.contains(text)) {
                     System.out.println("text: " + text + " matches parameter 1");
-                    Class clazz = Class.forName("slogo.logicalcontroller.command.math." + this.commandMappings.get(text));
+                    Class clazz = Class.forName("slogo.logicalcontroller.command.math." + myCommandMap.getString(text));
                     Constructor constructor = clazz.getConstructor(String.class);
                     MathCommand command = (MathCommand) constructor.newInstance(splitted[i+1]);
                     command.performMath();
                     return command.getValue();
                 } else if (this.mathDoubleParameter.contains(text)) {
                     System.out.println("text: " + text + " matches parameter 2");
-                    Class clazz = Class.forName("slogo.logicalcontroller.command.math." + this.commandMappings.get(text));
+                    Class clazz = Class.forName("slogo.logicalcontroller.command.math." + myCommandMap.getString(text));
                     Constructor constructor = clazz.getConstructor(String.class);
                     MathCommand command = (MathCommand) constructor.newInstance(splitted[i+1], splitted[i+2]);
                     command.performMath();
@@ -328,7 +304,9 @@ public class Parser {
     private Command getConstructor(String com, String val) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
        // try {
             System.out.println("Vallll" + val);
-            Class cl = Class.forName("slogo.logicalcontroller.command."+commandMappings.get(commandArray.get(com))+"."+commandArray.get(com));
+
+            // Class cl = Class.forName(SLOGO_COMMAND+commandMappings.get(commandArray.get(com))+"."+commandArray.get(com));
+            Class cl = Class.forName(SLOGO_COMMAND+myCommandMap.getString(commandArray.get(com))+"."+commandArray.get(com));
             System.out.println("The val: " +  val);
             Constructor con = cl.getConstructor(String.class);
             Command command = (Command) con.newInstance(val);
