@@ -13,7 +13,6 @@ public class DataViewerTab extends SubTab {
     super(viewer);
   }
 
-  @Override
   public Tab getTab(Property property) {
     setProperty(property);
     Tab tab = new Tab(TAB_NAME, myVBox);

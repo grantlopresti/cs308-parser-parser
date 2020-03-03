@@ -25,7 +25,7 @@ import slogo.visualcontroller.VisualLine;
 import slogo.visualcontroller.VisualTurtle;
 import slogo.visualcontroller.VisualUserFunction;
 
-public class VisualizationPane implements SubPane {
+public class VisualizationPane {
 
   private static final Color DEFAULT_BG_COLOR = Color.DARKGRAY;
   private static final Color DEFAULT_PEN_COLOR = Color.BLACK;
@@ -49,7 +49,6 @@ public class VisualizationPane implements SubPane {
     groupHeight = height;
   }
 
-  @Override
   public Group getNode() {
     myVisualizer = new Group();
 

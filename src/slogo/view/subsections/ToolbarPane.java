@@ -34,7 +34,7 @@ import slogo.visualcontroller.VisualError;
 
 import javax.script.ScriptException;
 
-public class ToolbarPane implements SubPane {
+public class ToolbarPane {
 
   private LogicalController myLogicalController;
   private static final String DEFAULT_LANGUAGE = "English";
@@ -75,7 +75,6 @@ public class ToolbarPane implements SubPane {
     myButtonResources = ResourceBundle.getBundle(myButtonProperties);
   }
 
-  @Override
   public ToolBar getNode() {
 
     initializeButtons();

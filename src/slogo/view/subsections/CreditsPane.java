@@ -7,9 +7,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 
-public class CreditsPane implements SubPane {
+public class CreditsPane {
 
-  @Override
   public HBox getNode() {
     HBox credits = new HBox();
 

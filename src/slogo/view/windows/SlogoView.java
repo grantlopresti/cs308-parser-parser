@@ -15,9 +15,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.LogicalController;
-import slogo.view.TurtleImage;
 import slogo.view.subsections.*;
 import slogo.visualcontroller.*;
 
@@ -29,7 +27,7 @@ public class SlogoView extends Application {
   private static final int VISUALIZER_WIDTH = 800;
   private static final int VISUALIZER_HEIGHT = 525;
 
-  private BorderPane myBorderPane;
+  private BorderPane myMainPane;
   private UserInputPane myInputPane;
   private VisualizationPane myVisualizationPane;
   private CommandHistoryTab myCommandsTab;
@@ -45,7 +43,7 @@ public class SlogoView extends Application {
 
   @Override
   public void start(Stage stage) throws IOException {
-    myBorderPane = new BorderPane();
+    myMainPane = new BorderPane();
     myVisualizationPane = new VisualizationPane(VISUALIZER_WIDTH, VISUALIZER_HEIGHT);
     myInputPane = new UserInputPane(this, myLogicalController);
     Scene scene = new Scene(createGUIBorderPane(), WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -56,16 +54,16 @@ public class SlogoView extends Application {
   }
 
   public BorderPane createGUIBorderPane() throws IOException {
-    myBorderPane.setTop(getUpperPane());
-    myBorderPane.setLeft(getLeftPane());
+    myMainPane.setTop(getUpperPane());
+    myMainPane.setLeft(getLeftPane());
     Pane myCenterPane = getCenterPane();
-    myBorderPane.setCenter(myCenterPane);
-    myBorderPane.setRight(getRightPane());
-    myBorderPane.setBottom(getBottomPane());
+    myMainPane.setCenter(myCenterPane);
+    myMainPane.setRight(getRightPane());
+    myMainPane.setBottom(getBottomPane());
 
-    myBorderPane.setMaxSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+    myMainPane.setMaxSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-    return myBorderPane;
+    return myMainPane;
   }
 
   private VBox getUpperPane() throws IOException {
@@ -189,7 +187,7 @@ public class SlogoView extends Application {
     for (VisualTurtle turtle : visualTurtles){
       myVisualizationPane.addVisualTurtle(turtle);
     }
-    myBorderPane.setCenter(getCenterPane());
+    myMainPane.setCenter(getCenterPane());
   }
 
   public void updateVisualLines(List<VisualLine> visualLines) {
@@ -197,7 +195,7 @@ public class SlogoView extends Application {
       myVisualizationPane.addVisualLine(line);
     }
     myVisualizationPane.getNode();
-    myBorderPane.setCenter(getCenterPane());
+    myMainPane.setCenter(getCenterPane());
   }
 
   public void setBGColor(double red, double green, double blue) {
@@ -207,7 +205,7 @@ public class SlogoView extends Application {
   public void clearScreen() {
     myVisualizationPane.clearElements();
     myVisualizationPane.resetBGColor();
-    myBorderPane.setCenter(getCenterPane());
+    myMainPane.setCenter(getCenterPane());
   }
 
   public void setPenColor(double red, double green, double blue) {
