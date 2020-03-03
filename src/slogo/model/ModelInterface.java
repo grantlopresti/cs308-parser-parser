@@ -58,7 +58,7 @@ public interface ModelInterface {
      * Sets the Heading to the specified degree
      * @param degree to set the ModelObject heading to
      */
-    public void setHeading(double degree);
+    public double setHeading(double degree);
 
     /**
      * Turns the ModelObject (heading) by the specified degree
@@ -66,5 +66,5 @@ public interface ModelInterface {
      */
     public void turn(double degree);
 
-    public void forward(double value);
+    public double forward(double value);
 }

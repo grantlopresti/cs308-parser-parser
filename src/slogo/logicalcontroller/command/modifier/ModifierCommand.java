@@ -2,9 +2,6 @@ package slogo.logicalcontroller.command.modifier;
 
 import slogo.logicalcontroller.command.Command;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
 /**
@@ -28,6 +25,7 @@ public abstract class ModifierCommand implements Command {
     public ModifierCommand(String input1){
         this();
         argument1 = Double.parseDouble(input1);
+        setReturnValue(Double.parseDouble(input1));
     }
 
     public ModifierCommand(String input1, String input2){
@@ -73,5 +71,13 @@ public abstract class ModifierCommand implements Command {
      */
     public String toString(){
         return (this.getCommandType() + " " + this.getValue());
+    }
+
+    public double getArgument1(){
+        return argument1;
+    }
+
+    public double getArgument2(){
+        return argument2;
     }
 }

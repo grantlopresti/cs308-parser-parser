@@ -11,8 +11,14 @@ public class Repeat extends ControlFlowCommand {
     private List<Command> allRepCommands;
 
     public Repeat(String inputvalue, List<Command> repeatCommands){
+        super(inputvalue);
         this.value = Double.parseDouble(inputvalue);
         this.repCommands = repeatCommands;
+    }
+
+    @Override
+    public void unravelCode() {
+
     }
 
     @Override
