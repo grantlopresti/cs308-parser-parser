@@ -30,7 +30,6 @@ public abstract class MathCommand implements Command {
        returnValue = value;
     }
 
-    @Override
     public double getValue() {
         return returnValue;
     }

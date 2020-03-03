@@ -29,13 +29,6 @@ public abstract class ControlFlowCommand implements Command {
         return body;
     }
 
-    /**
-     * Always returns 0
-     * @return
-     */
-    @Override
-    public double getValue() {return 0;}
-
     @Override
     public String getCommandType() {
         String className = this.getClass().getSimpleName();

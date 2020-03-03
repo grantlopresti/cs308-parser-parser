@@ -2,10 +2,8 @@ package slogo.logicalcontroller;
 
 import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.command.Command;
-import slogo.logicalcontroller.variable.BasicVariable;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
-import slogo.model.ModelTurtle;
 import slogo.visualcontroller.VisualController;
 
 import javax.script.ScriptException;
@@ -66,23 +64,4 @@ public class LogicalController {
       myVisualController.update(newModel, newVariables, latestCommand);
     }
   }
-
-  private void testLogic(String command) {
-    for(Object turtle : myModelCollection){
-      ModelTurtle myModelTurtle = (ModelTurtle) turtle;
-      myModelTurtle.move(100);
-      myModelTurtle.turn(90);
-    }
-    myVisualController.moveModelObject(myModelCollection);
-    myVisualController.updateCommands(command);
-    //myVisualController.updateErrors(new InvalidCommandException("Testing Error (thrown from "
-    //    + "Logical Controller)"));
-    myVisualController.updateVariables(new BasicVariable("guy", 2));
-  }
-
-  private void printTurtleState(ModelTurtle turtle, String seq) {
-    System.out.println(seq + " Y " + turtle.getY());
-    System.out.println(seq + " X " + turtle.getX());
-  }
-
 }
