@@ -66,7 +66,7 @@ public class Manager {
 
     private void createModel() {
         myModelCollection = new ModelCollection();
-        //myModelCollection.append(new ModelTurtle());
+        myModelCollection.append(new ModelTurtle());
         myVariables = new ArrayList<Variable>();
     }
 

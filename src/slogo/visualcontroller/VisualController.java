@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 
 import javafx.scene.image.ImageView;
 import slogo.exceptions.LogicalException;
+import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
 import slogo.model.ModelTurtle;
@@ -66,12 +67,18 @@ public class VisualController implements VisualInterface {
     myAnimationRate = rate;
   }
 
+  @Override
+  public void update(ModelCollection model, List<Variable> variableList, Command latestCommand) {
+    moveModelObject(model);
+    updateVariables(variableList);
+  }
+
   /**
    * Called by the logical controller to update turtle state and draw shapes in Slogo view
    * @param modelCollection model turtle that is currently being acted on
    * TODO - Add casting try catch
    */
-  @Override
+
   public void moveModelObject(ModelCollection modelCollection) {
     Iterator iter = modelCollection.iterator();
     while (iter.hasNext()) {
@@ -84,7 +91,7 @@ public class VisualController implements VisualInterface {
    * Called by Logical Controller after a successful command execution
    * @param command String representation of prior command execution
    */
-  @Override
+
   public void updateCommands(String command) {
     FXCollections.reverse(myCommandsProperty.getValue());
     myCommandsProperty.getValue().add(new VisualCommand(command));
@@ -103,7 +110,7 @@ public class VisualController implements VisualInterface {
     mySlogoView.announceError(error);
   }
 
-  @Override
+
   public void updateVariables(Variable v) {
     VisualVariable var = new VisualVariable(v);
     myVariablesProperty.getValue().add(var);
