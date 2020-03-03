@@ -45,18 +45,22 @@ public class ModelTurtle extends ModelObject {
         return myPen.getThickness();
     }
 
-    public void penUp(){
+    public double penUp(){
         myPen.penUp();
+        return 0;
     }
-    public void penDown(){
+    public double penDown(){
         myPen.penDown();
+        return 1;
     }
 
-    public void showTurtle(){
+    public double showTurtle(){
         isShowing = true;
+        return 1;
     }
-    public void hideTurtle(){
+    public double hideTurtle(){
         isShowing = false;
+        return 0;
     }
 
     public boolean isShowing(){

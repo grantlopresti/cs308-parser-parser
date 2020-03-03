@@ -1,22 +1,13 @@
 package slogo.logicalcontroller.command.controlflow;
 
-import slogo.logicalcontroller.command.Command;
-
 public class If extends ControlFlowCommand {
-    private double value;
 
-    public If(String inputvalue){
-        value = Double.parseDouble(inputvalue);
-
+    public If(String rawInput) {
+        super(rawInput);
     }
 
     @Override
-    public double getValue() {
-        return this.value;
-    }
+    public void unravelCode() {
 
-    @Override
-    public String getCommandType() {
-        return "If";
     }
 }
