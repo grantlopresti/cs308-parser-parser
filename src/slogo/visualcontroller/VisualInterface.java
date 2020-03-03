@@ -17,18 +17,10 @@ public interface VisualInterface {
      */
     public void setAnimationRate(double rate);
 
-    /**
-     * Called by the logical controller to update turtle state and draw shapes in Slogo view
-     *
-     * @param modelCollection collection of model objects
-     */
-    public void moveModelObject(ModelCollection modelCollection);
-
-    public void updateCommands(String command);
+    public void update(ModelCollection model, List<Variable> variableList, Command latestCommand);
 
     public void updateErrors(LogicalException e);
 
-    public void updateVariables(Variable v);
 
     public Property getProperty(VisualProperty type);
 

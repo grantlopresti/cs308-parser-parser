@@ -1,19 +1,16 @@
 package slogo.logicalcontroller;
 
 import slogo.exceptions.InvalidCommandException;
-import slogo.exceptions.LogicalException;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.variable.BasicVariable;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
-import slogo.model.ModelObject;
 import slogo.model.ModelTurtle;
 import slogo.visualcontroller.VisualController;
 
 import javax.script.ScriptException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,8 +20,9 @@ import java.util.List;
  * @author Alex Xu
  */
 public class LogicalController {
-  private Parser myParser;
   private static final String DEFAULT_LANGUAGE = "ENGLISH";
+
+  private Parser myParser;
 
   private ModelCollection myModelCollection;
   private VisualController myVisualController;
@@ -32,7 +30,6 @@ public class LogicalController {
 
   public LogicalController(ModelCollection modelCollection, VisualController visualController, List<Variable> variables){
     myModelCollection = modelCollection;
-    myModelCollection.append(new ModelTurtle());
     myVisualController = visualController;
     myVisualController.moveModelObject(myModelCollection);
     myVariables = variables;
@@ -49,7 +46,7 @@ public class LogicalController {
    * @throws IOException
    */
   public void setLanguage(String language) throws IOException {
-    this.myParser = new Parser(language);
+    this.myParser = new Parser(language);                         //TODO: Might need to change.
   }
 
   /**
@@ -58,35 +55,16 @@ public class LogicalController {
    * @param command
    * @throws InvalidCommandException
    */
-  public void handleNewCommand(String command) throws InvalidCommandException {
-    try {
-      // STEP 1: Parse all commands from the input String
-      this.myParser.parse(Arrays.asList(command.split("\n")));
+  public void handleNewCommand(String command) throws InvalidCommandException, NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
+    myParser.parse(Arrays.asList(command.split("\n")));
+    while(!myParser.isFinished()){
+      myParser.executeNextCommand();
+      Command latestCommand = myParser.getLatestCommand();
+      ModelCollection newModel = myParser.getModel();
+      List<Variable> newVariables = myParser.getVariables();
 
-      // STEP 2: Fetch final commands from the parser
-      List<Command> commandList = this.myParser.getCommands();
-
-      // STEP 3: Execute individual commands on each turtle object using reflection
-      for (Object turtle : myModelCollection){
-        for(Command thisCommand : commandList) {
-          ModelTurtle modelTurtle = (ModelTurtle) turtle;
-          printTurtleState(modelTurtle, "Before");
-          String commandName = thisCommand.getCommandType();
-          Method method = turtle.getClass().getMethod(commandName.toLowerCase(), double.class);
-          double myValue = thisCommand.getValue();
-          method.invoke(turtle, myValue);
-          System.out.println("Command Executed: " + commandName);
-          printTurtleState(modelTurtle, "After");
-          myVisualController.moveModelObject(myModelCollection);
-          myVisualController.updateCommands(command);
-        }
-      }
-      // testLogic(command);
-    } catch (Exception e) {
-      myVisualController.updateErrors(new InvalidCommandException("Testing Error (thrown from "
-                  + "Logical Controller)"));
+      myVisualController.update(newModel, newVariables, latestCommand);
     }
-
   }
 
   private void testLogic(String command) {
