@@ -1,12 +1,13 @@
 package slogo.logicalcontroller;
 
 import slogo.exceptions.ConstructorException;
-import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.command.Command;
-import slogo.logicalcontroller.command.modifier.ModifierCommand;
-import slogo.logicalcontroller.command.modifier.Forward;
+import slogo.logicalcontroller.command.comparison.ComparisonCommand;
+import slogo.logicalcontroller.command.controlflow.ControlFlowCommand;
 import slogo.logicalcontroller.command.controlflow.Repeat;
 import slogo.logicalcontroller.command.math.MathCommand;
+import slogo.logicalcontroller.command.modifier.ModifierCommand;
+import slogo.logicalcontroller.command.querie.QuerieCommand;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
 
@@ -89,6 +90,87 @@ public class Parser {
         //}
     }
 
+    // TODO - Fill in method stubs, using refactored parser process
+
+    /**
+     * Traverses array of raw commands, finds next non constant line
+     * @return
+     */
+    private int findNextLine() {
+        return 0;
+    }
+
+    /**
+     * Input single line of text, output index of last commandkeyword
+     * @return
+     */
+    private int findLastCommand(String line) {
+        return 5;
+    }
+
+    /**
+     * Translates raw user inputted command (in arbitrary language) to Key in properties file
+     * @param command
+     * @return
+     */
+    private String translateCommand(String command) {
+        return "";
+    }
+
+    /**
+     * Use properties file to translate command Key into superclass for reflections
+     * @param command
+     * @return
+     */
+    private String getCommandSuperclass(String command) {
+        return "";
+    }
+
+    /**
+     * Construct command using reflection based on given arguments
+     * @param superclass
+     * @param command
+     * @param arguments
+     * @return
+     */
+    private Command createCommand(String superclass, String command, List<String> arguments) {
+        return null;
+    }
+
+    /**
+     *
+     * @param command use refleciton on command superclass to route command to appropriate helper method
+     * @return list of strings to replace that command in the UserInput
+     */
+    private List<String> executeCommand(Command command) {
+        return new ArrayList<String>();
+    }
+
+    /**
+     * Set of executable commands on specific objects
+     * @param command
+     * @return
+     */
+    private List<String> executeModifier(ModifierCommand command) {
+        return new ArrayList<String>();
+    }
+
+    private List<String> executeComparison(ComparisonCommand command) {
+        return new ArrayList<String>();
+    }
+
+    private List<String> executeControlFlow(ControlFlowCommand command) {
+        return new ArrayList<String>();
+    }
+
+    private List<String> executeMath(MathCommand command) {
+        return new ArrayList<String>();
+    }
+
+    private List<String> executeQuerie(QuerieCommand command) {
+        return new ArrayList<String>();
+    }
+
     private String getType(String line) {
         String[] tempsplit = line.split("\\s+");
 
@@ -116,7 +198,7 @@ public class Parser {
                 if(math!=0.0){ new_splited_string = com+" " + math; }
                 String[] new_splited = new_splited_string.split(" ");
                 for(String s: new_splited){
-                    if(!checkHasValue(s)){ commands.push(s); }
+                    if(!checkHasNumber(s)){ commands.push(s); }
                     else{ values.push(s); }
                 }
             }
@@ -177,24 +259,20 @@ public class Parser {
         try {
             String text;
             System.out.println("Checking math2");
+            Stack<String> operator = new Stack<String>();
+            Stack<Double> argument = new Stack<Double>();
+            for (int i = splitted.length-1; i >= 0; i --) {
+                text = splitted[i];
+                // if(checkHasNumber(text)) {argument.push()};
+            }
             for (int i = 0; i < splitted.length; i ++) {
                 text = splitted[i];
                 System.out.println("text: " + text);
-                if (this.mathSingleParameter.contains(text)) {
-                    System.out.println("text: " + text + " matches parameter 1");
-                    Class clazz = Class.forName("slogo.logicalcontroller.command.math." + myCommandMap.getString(text));
-                    Constructor constructor = clazz.getConstructor(String.class);
-                    MathCommand command = (MathCommand) constructor.newInstance(splitted[i+1]);
-                    command.performMath();
-                    return command.getValue();
-                } else if (this.mathDoubleParameter.contains(text)) {
-                    System.out.println("text: " + text + " matches parameter 2");
-                    Class clazz = Class.forName("slogo.logicalcontroller.command.math." + myCommandMap.getString(text));
-                    Constructor constructor = clazz.getConstructor(String.class);
-                    MathCommand command = (MathCommand) constructor.newInstance(splitted[i+1], splitted[i+2]);
-                    command.performMath();
-                    return command.getValue();
-                }
+                Class clazz = Class.forName("slogo.logicalcontroller.command.math." + myCommandMap.getString(text));
+                Constructor constructor = clazz.getConstructor(String.class);
+                MathCommand command = (MathCommand) constructor.newInstance(splitted[i+1]);
+                command.performMath();
+                return command.getValue();
             }
             return Double.parseDouble(splitted[splitted.length-1]);
         } catch (Exception e) {
@@ -322,7 +400,7 @@ public class Parser {
      * @param line is a string line from the input
      * @returns true when the line contains a parseable integer
      */
-    private boolean checkHasValue(String line){
+    private boolean checkHasNumber(String line){
         try {
             double d = Double.parseDouble(line);
             return true;
