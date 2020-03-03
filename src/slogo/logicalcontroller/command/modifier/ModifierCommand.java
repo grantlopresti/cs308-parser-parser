@@ -2,9 +2,6 @@ package slogo.logicalcontroller.command.modifier;
 
 import slogo.logicalcontroller.command.Command;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
 /**
@@ -13,7 +10,7 @@ import java.util.ResourceBundle;
  * @author Alex Xu
  */
 public abstract class ModifierCommand implements Command {
-    //public static final String RESOURCE_BUNDLE_LOCATION = "properties/modifierCommands.MyBundle";
+    public static final String RESOURCE_BUNDLE_LOCATION = "src/properties/modifierCommands.MyBundle";
 
     private ResourceBundle methodMappings;
     private double returnValue;
@@ -22,17 +19,13 @@ public abstract class ModifierCommand implements Command {
     protected double argument2;
 
     public ModifierCommand(){
-        try {
-            methodMappings = new PropertyResourceBundle(new FileInputStream("src/properties/modifierCommands.properties"));
-        } catch (IOException e) {
-            System.out.println("File not found exception");
-        }
+        methodMappings = ResourceBundle.getBundle(RESOURCE_BUNDLE_LOCATION);
     }
 
     public ModifierCommand(String input1){
         this();
         argument1 = Double.parseDouble(input1);
-        System.out.println("Arg 1:" + argument1);
+        setReturnValue(Double.parseDouble(input1));
     }
 
     public ModifierCommand(String input1, String input2){
@@ -78,5 +71,13 @@ public abstract class ModifierCommand implements Command {
      */
     public String toString(){
         return (this.getCommandType() + " " + this.getValue());
+    }
+
+    public double getArgument1(){
+        return argument1;
+    }
+
+    public double getArgument2(){
+        return argument2;
     }
 }

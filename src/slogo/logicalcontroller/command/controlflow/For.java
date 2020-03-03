@@ -1,22 +1,13 @@
 package slogo.logicalcontroller.command.controlflow;
 
-import slogo.logicalcontroller.command.Command;
-
 public class For extends ControlFlowCommand {
-    private double value;
 
-    public For(String inputvalue){
-        value = Double.parseDouble(inputvalue);
-
+    public For(String rawInput) {
+        super(rawInput);
     }
 
     @Override
-    public double getValue() {
-        return this.value;
-    }
+    public void unravelCode() {
 
-    @Override
-    public String getCommandType() {
-        return "For";
     }
 }

@@ -68,9 +68,14 @@ public abstract class ModelObject implements ModelInterface{
         yCoordinate += calcY(distance);
     }
 
-    public void setPosition(double x, double y){
+    public double setPosition(double x, double y){
+        double prevX = xCoordinate;
+        double prevY = yCoordinate;
+
         xCoordinate = x;
         yCoordinate = y;
+
+        return calcDistance(prevX -x, prevY -y);
     }
 
     /**
@@ -78,8 +83,11 @@ public abstract class ModelObject implements ModelInterface{
      * @param degree to set the ModelObjects heading to
      */
     @Override
-    public void setHeading(double degree) {
+    public double setHeading(double degree) {
+        double prevHeading = heading;
         heading = degree;
+
+        return heading-prevHeading;
     }
 
     /**
@@ -98,15 +106,19 @@ public abstract class ModelObject implements ModelInterface{
         }
     }
 
-    public void left(double degree){
+    public double left(double degree){
         turn(degree);
+        return degree;
     }
 
-    public void right(double degree){
+    public double right(double degree){
         turn(-1*degree);
+        return degree;
     }
 
-    public void setTowards(double x, double y){
+    public double setTowards(double x, double y){
+        double prevHeading = heading;
+
         double relativeX = x - xCoordinate;
         double relativeY = y - yCoordinate;
 
@@ -123,6 +135,8 @@ public abstract class ModelObject implements ModelInterface{
         }
 
         setHeading(angle);
+
+        return Math.abs(heading - prevHeading);
     }
 
     /**
@@ -134,12 +148,14 @@ public abstract class ModelObject implements ModelInterface{
     }
 
     @Override
-    public void forward(double value){
+    public double forward(double value){
         move(value);
+        return value;
     }
 
-    public void backward(double value){
+    public double backward(double value){
         move(-1*value);
+        return value;
     }
 
     private double calcX(double distance){
@@ -152,5 +168,9 @@ public abstract class ModelObject implements ModelInterface{
         double radians = Math.toRadians(heading);
         double sinValue = Math.sin(radians);
         return distance*sinValue;
+    }
+
+    private double calcDistance(double x, double y){
+        return Math.sqrt(x*x + y*y);
     }
 }
