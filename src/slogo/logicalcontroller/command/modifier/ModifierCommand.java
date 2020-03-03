@@ -17,18 +17,23 @@ public abstract class ModifierCommand implements Command {
     protected double argument1;
     protected double argument2;
 
+    private int numArguments;
+
     public ModifierCommand(){
         methodMappings = ResourceBundle.getBundle(RESOURCE_BUNDLE_LOCATION);
+        numArguments = 0;
     }
 
     public ModifierCommand(String input1){
         this();
         argument1 = Double.parseDouble(input1);
+        numArguments = 1;
     }
 
     public ModifierCommand(String input1, String input2){
         this(input1);
         argument2 = Double.parseDouble(input2);
+        numArguments = 2;
     }
 
     /**
@@ -56,10 +61,20 @@ public abstract class ModifierCommand implements Command {
 
     /**
      *To String Method
-     * @return
+     * @return                                      //TODO: May need to refactor this to avoid multiple if statements
      */
     public String toString(){
-        return (this.getCommandType() + " " + argument1 + " " + argument2);
+        String returnString = this.getCommandType();
+
+        if(numArguments >= 1){
+            returnString = returnString + " " + argument1;
+        }
+        else if(numArguments >= 2){
+            returnString = returnString + " " + argument2;
+        }
+
+        return returnString;
+        
     }
 
     public double getArgument1(){
