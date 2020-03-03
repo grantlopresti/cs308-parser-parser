@@ -1,50 +1,72 @@
 package slogo.view;
 
-
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
-import slogo.view.subsections.SubTab;
+import javafx.util.Pair;
+import slogo.view.subsections.ListTab;
 
 
 /**
- * Class that encapsulates possible SubTab options and how they are created/chosen so other classes,
+ * Class that encapsulates possible Bet options and how they are created/chosen so other classes,
  * especially the Game logic, does not need to be aware of the implementation details.
  *
- * @author Grant LoPresti
+ * @author Robert C. Duvall
  */
 public class SubTabFactory {
+  private static final String PACKAGE = SubTabFactory.class.getPackageName();
+  // where to find resource data, note you can use java's package syntax
+  public static final String REFLECTION_RESOURCES = PACKAGE + ".resources.possibleTabs";
+  // bets player can make
+  private List<String> myPossibleBets;
+  // bets constructor data
+  private List<Pair<String, Integer>> myBetData;
 
-  private ResourceBundle myBetTypeResources;
-  private static final String tabResourcePath = "src.properties.tabs";
-  private List<String> POSSIBLE_TABS;
-
-  public SubTabFactory(){
-    myBetTypeResources = ResourceBundle.getBundle(tabResourcePath);
-    POSSIBLE_TABS = Collections.list(myBetTypeResources.getKeys());
-  }
-
-  private SubTab makeTab(String TabSubClass)
-      throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-    String className = "game.roulette.bets." + TabSubClass;
-    Class clazz = Class.forName(className);
-    //Object bet = clazz.getConstructor().newInstance(myBetTypeResources.getString(TabSubClass).split(","));
-    Object bet = clazz.getConstructor().newInstance();
-    return (SubTab) bet;
-  }
 
   /**
-   * Prompt the user to make a bet from a menu of choices.
+   * Create default factory
    */
-  public SubTab promptForTab (String tabType) {
-    int whichTab = POSSIBLE_TABS.indexOf(tabType);
+  public SubTabFactory () {
+    myPossibleBets = new ArrayList<>();
+    myBetData = new ArrayList<>();
+    // initialize list contents from resource file data
+    ResourceBundle reflectionResources = ResourceBundle.getBundle(REFLECTION_RESOURCES);
+    for (String key : Collections.list(reflectionResources.getKeys())) {
+      myPossibleBets.add(key);
+      // divide the data into separate pieces
+      //String[] data = reflectionResources.getString(key).split(",");
+      //myBetData.add(new Pair<>(data[0], Integer.parseInt(data[1])));
+    }
+  }
+
+/*
+  public SubTab promptForBet () {
+    System.out.println("You can make one of the following types of bets:");
+    for (int k = 0; k < myPossibleBets.size(); k += 1) {
+      System.out.println(String.format("%d) %s", (k + 1), myPossibleBets.get(k)));
+    }
+    int whichBet = ConsoleReader.promptRange("Please make a choice", 1, myPossibleBets.size()) - 1;
+    return makeBet(myPossibleBets.get(whichBet), myBetData.get(whichBet));
+  }
+*/
+
+
+  // make concrete class from the given class name and initial data
+  public ListTab makeTab (String className) throws IllegalStateException {
     try {
-      return makeTab(POSSIBLE_TABS.get(whichTab));
-    } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
-      //FIXME: Yes, we know this is dumb
-      e.printStackTrace();
-      return null;
+      Pair<String, Integer> data = myBetData.get(myPossibleBets.indexOf(className));
+      // use reflection to get a Constructor to call
+      Class<?> clazz = Class.forName(PACKAGE + "." + className);
+      Constructor<?> ctor = clazz.getDeclaredConstructor(String.class, Integer.TYPE);
+      // use constructor and data to create an instance
+      return (ListTab)ctor.newInstance(data.getKey(), data.getValue());
+      // OR:
+      //return (Bet)Class.forName(className).getDeclaredConstructor(String.class, Integer.TYPE).newInstance(data.getKey(), data.getValue());
+    } catch (Exception e) {
+      // something went wrong, let someone know so they can deal with it
+      throw new IllegalStateException("ERROR: unable to create proper bet", e);
     }
   }
 }

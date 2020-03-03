@@ -29,7 +29,7 @@ import slogo.exceptions.InvalidCommandFileException;
 import slogo.exceptions.InvalidLanguageException;
 import slogo.logicalcontroller.LogicalController;
 import slogo.view.TurtleImage;
-import slogo.view.windows.SlogoView;
+import slogo.view.windows.SlogoInterface;
 import slogo.visualcontroller.VisualError;
 
 import javax.script.ScriptException;
@@ -43,7 +43,7 @@ public class ToolbarPane {
   private static final String myButtonProperties = "properties.buttons";
   private ResourceBundle myButtonResources;
 
-  private SlogoView myViewer;
+  private SlogoInterface myViewer;
 
   private Button myLoader = new Button("Load File");
   private Button myLoadAndRun = new Button("Load & Run");
@@ -66,7 +66,7 @@ public class ToolbarPane {
   private ComboBox<String> myLanguage = new ComboBox<>(languageOptions);
   private Button myHelpInfo = new Button("Help/Info");
 
-  public ToolbarPane(SlogoView viewer, LogicalController logicalController) {
+  public ToolbarPane(SlogoInterface viewer, LogicalController logicalController) {
     myViewer = viewer;
     myLogicalController = logicalController;
     for (TurtleImage value : TurtleImage.values()){
@@ -130,17 +130,7 @@ public class ToolbarPane {
     myLoadAndRun.setOnAction(e -> {
       try {
         loadAndRun();
-      } catch (NoSuchMethodException ex) {
-        ex.printStackTrace();
-      } catch (InstantiationException ex) {
-        ex.printStackTrace();
-      } catch (ScriptException ex) {
-        ex.printStackTrace();
-      } catch (IllegalAccessException ex) {
-        ex.printStackTrace();
-      } catch (InvocationTargetException ex) {
-        ex.printStackTrace();
-      } catch (ClassNotFoundException ex) {
+      } catch (NoSuchMethodException | InstantiationException | ScriptException | IllegalAccessException | InvocationTargetException | ClassNotFoundException ex) {
         ex.printStackTrace();
       }
     });

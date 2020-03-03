@@ -8,7 +8,7 @@ import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
 import slogo.model.ModelTurtle;
-import slogo.view.windows.SlogoView;
+import slogo.view.windows.SlogoInterface;
 import slogo.visualcontroller.VisualController;
 
 import java.io.IOException;
@@ -24,7 +24,8 @@ public class Manager {
     public static final String DEFAULT_LANG = "ENGLISH";
     private ModelCollection myModelCollection;
     private List<Variable> myVariables;
-    private SlogoView mySlogoView;
+    //private SlogoView mySlogoView;
+    private SlogoInterface mySlogoView;
     private VisualController myVisualController;
     private LogicalController myLogicalController;
 
@@ -52,7 +53,8 @@ public class Manager {
     }
 
     private void createSlogoView() {
-        mySlogoView = new SlogoView(myLogicalController, myVisualController);
+        //mySlogoView = new SlogoView(myLogicalController, myVisualController);
+        mySlogoView = new SlogoInterface(myLogicalController, myVisualController);
     }
 
     private void createLogicalController() throws IOException {
