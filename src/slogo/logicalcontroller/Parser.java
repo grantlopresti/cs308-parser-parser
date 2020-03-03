@@ -27,7 +27,6 @@ public class Parser {
     private List<Command> finalCommandObjects;
     private ResourceBundle resources;
     private List<String> rawCommands;
-    // TODO - remove these (may not be needed with current structure)
     private ModelCollection model;
     private List<Variable> variables;
     private List<String> command_input;
