@@ -12,6 +12,8 @@ public abstract class MathCommand implements Command {
     protected double myArgument1;
     protected double myArgument2;
 
+    private String userInput;
+
     public MathCommand() {
     }
 
@@ -24,6 +26,11 @@ public abstract class MathCommand implements Command {
         this.myArgument2 = Double.parseDouble(input2);
     }
 
+    public void setUserInput(String input){
+        userInput = input;
+    }
+
+
     public abstract void performMath();
 
     protected void setReturnValue(double value){
@@ -32,6 +39,11 @@ public abstract class MathCommand implements Command {
 
     public double getValue() {
         return returnValue;
+    }
+
+    @Override
+    public String toString(){
+        return userInput;
     }
 
 }

@@ -12,6 +12,7 @@ public abstract class QuerieCommand implements Command {
     public static final String RESOURCE_BUNDLE_LOCATION = "src/properties/querieCommands.MyBundle";
 
     private ResourceBundle methodMappings;
+    private String userInput;
 
     public QuerieCommand(){
         methodMappings = ResourceBundle.getBundle(RESOURCE_BUNDLE_LOCATION);
@@ -25,12 +26,10 @@ public abstract class QuerieCommand implements Command {
         return methodMappings.getString(key);
     }
 
-    /**
-     * Always returns 0
-     * @return
-     */
-    @Override
-    public double getValue() {return 0;}
+    public void setUserInput(String input){
+        userInput = input;
+    }
+
 
     @Override
     public String getCommandType() {
@@ -45,5 +44,10 @@ public abstract class QuerieCommand implements Command {
     public String getCommandCategory(){
         String className = this.getClass().getSuperclass().getSimpleName();
         return className;
+    }
+
+    @Override
+    public String toString(){
+        return userInput;
     }
 }
