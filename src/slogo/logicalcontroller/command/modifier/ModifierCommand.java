@@ -13,10 +13,11 @@ public abstract class ModifierCommand implements Command {
     public static final String RESOURCE_BUNDLE_LOCATION = "src/properties/modifierCommands.MyBundle";
 
     private ResourceBundle methodMappings;
-    private double returnValue;
 
     protected double argument1;
     protected double argument2;
+
+    private String userInput;
 
     public ModifierCommand(){
         methodMappings = ResourceBundle.getBundle(RESOURCE_BUNDLE_LOCATION);
@@ -25,7 +26,6 @@ public abstract class ModifierCommand implements Command {
     public ModifierCommand(String input1){
         this();
         argument1 = Double.parseDouble(input1);
-        setReturnValue(Double.parseDouble(input1));
     }
 
     public ModifierCommand(String input1, String input2){
@@ -33,8 +33,8 @@ public abstract class ModifierCommand implements Command {
         argument2 = Double.parseDouble(input2);
     }
 
-    protected void setReturnValue(double value){
-        returnValue = value;
+    public void setUserInput(String input){
+        userInput = input;
     }
 
     /**
@@ -43,11 +43,6 @@ public abstract class ModifierCommand implements Command {
     public String getMethodName(){
         String key = this.getCommandType();
         return methodMappings.getString(key);
-    }
-
-    @Override
-    public double getValue() {
-        return this.returnValue;
     }
 
     @Override
@@ -70,7 +65,7 @@ public abstract class ModifierCommand implements Command {
      * @return
      */
     public String toString(){
-        return (this.getCommandType() + " " + this.getValue());
+        return userInput;
     }
 
     public double getArgument1(){
