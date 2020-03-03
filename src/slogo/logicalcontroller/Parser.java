@@ -29,6 +29,7 @@ public class Parser {
     private ResourceBundle resources;
     private List<String> rawCommands;
     private ModelCollection model;
+    private Map<String, String> langMap;
     private List<Variable> variables;
     private List<String> command_input;
     // TODO - refactor large constructed instance variables as enumerated types
@@ -96,6 +97,12 @@ public class Parser {
      * @return
      */
     private int findNextLine() {
+        for(int i = 0; i< rawCommands.size(); i++){
+            String s = rawCommands.get(i);
+            if(s.split("\\s+").length >0){
+                return i;
+            }
+        }
         return 0;
     }
 
@@ -104,7 +111,17 @@ public class Parser {
      * @return
      */
     private int findLastCommand(String line) {
-        return 5;
+        String[] lineElems = line.split("\\s+");
+
+        for(int i = lineElems.length-1; i>=0; i--){
+            if(lineElems[i].matches(".*\\d.*")){
+                continue;
+            }
+            else{
+                return i;
+            }
+        }
+        return -1;
     }
 
     /**
@@ -113,6 +130,9 @@ public class Parser {
      * @return
      */
     private String translateCommand(String command) {
+
+        
+
         return "";
     }
 
@@ -171,7 +191,7 @@ public class Parser {
     }
 
     private String getType(String line) {
-        String[] tempsplit = line.split("\\s+");
+
 
         return null;
     }
@@ -425,6 +445,7 @@ public class Parser {
                 mymap.put(regex, key);
             }
         }
+        langMap = mymap;
         return mymap;
     }
 

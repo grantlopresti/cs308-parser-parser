@@ -59,12 +59,12 @@ public class LogicalController {
   public void handleNewCommand(String command) throws InvalidCommandException, NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
     myParser.parse(Arrays.asList(command.split("\n")));
     while(!myParser.isFinished()){
-      myParser.executeNextCommand();
-      Command latestCommand = myParser.getLatestCommand();
+      //myParser.executeNextCommand();
+      //Command latestCommand = myParser.getLatestCommand();
       ModelCollection newModel = myParser.getModel();
-      List<Variable> newVariables = myParser.getVariables();
+      //List<Variable> newVariables = myParser.getVariables();
 
-      myVisualController.update(newModel, newVariables, latestCommand);
+      //myVisualController.update(newModel, newVariables, latestCommand);
     }
   }
 }
