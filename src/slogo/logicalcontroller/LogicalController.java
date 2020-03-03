@@ -2,6 +2,8 @@ package slogo.logicalcontroller;
 
 import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.command.Command;
+import slogo.logicalcontroller.command.modifier.Forward;
+import slogo.logicalcontroller.variable.BasicVariable;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
 import slogo.visualcontroller.VisualController;
@@ -29,7 +31,8 @@ public class LogicalController {
   public LogicalController(ModelCollection modelCollection, VisualController visualController, List<Variable> variables){
     myModelCollection = modelCollection;
     myVisualController = visualController;
-    myVisualController.moveModelObject(myModelCollection);
+    // TODO - update visualController initial state to empty lists to get first turtle to show
+    // myVisualController.moveModelObject(myModelCollection);
     myVariables = variables;
     try {
       this.setLanguage(DEFAULT_LANGUAGE);
