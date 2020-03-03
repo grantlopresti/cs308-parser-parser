@@ -2,6 +2,7 @@ package slogo.logicalcontroller;
 
 import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.command.Command;
+import slogo.logicalcontroller.command.modifier.Forward;
 import slogo.logicalcontroller.variable.BasicVariable;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
@@ -31,7 +32,8 @@ public class LogicalController {
   public LogicalController(ModelCollection modelCollection, VisualController visualController, List<Variable> variables){
     myModelCollection = modelCollection;
     myVisualController = visualController;
-    myVisualController.moveModelObject(myModelCollection);
+    // TODO - update visualController initial state to empty lists to get first turtle to show
+    // myVisualController.moveModelObject(myModelCollection);
     myVariables = variables;
     try {
       this.setLanguage(DEFAULT_LANGUAGE);
@@ -73,11 +75,15 @@ public class LogicalController {
       myModelTurtle.move(100);
       myModelTurtle.turn(90);
     }
+    // TODO - test and verify that this works
+    myVisualController.update(myModelCollection, List.of(new BasicVariable("guy", 2)), new Forward("50"));
+    /*
     myVisualController.moveModelObject(myModelCollection);
     myVisualController.updateCommands(command);
-    //myVisualController.updateErrors(new InvalidCommandException("Testing Error (thrown from "
-    //    + "Logical Controller)"));
     myVisualController.updateVariables(new BasicVariable("guy", 2));
+     */
+    myVisualController.updateErrors(new InvalidCommandException("Testing Error (thrown from "
+            + "Logical Controller)"));
   }
 
   private void printTurtleState(ModelTurtle turtle, String seq) {
