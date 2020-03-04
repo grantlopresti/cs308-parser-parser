@@ -9,7 +9,7 @@ public class Product extends MathCommand {
     }
 
     @Override
-    public void performMath() {
+    protected void performMath() {
         setReturnValue(this.myArgument1 * this.myArgument2);
     }
 

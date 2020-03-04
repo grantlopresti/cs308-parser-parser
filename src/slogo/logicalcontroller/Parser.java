@@ -2,6 +2,8 @@ package slogo.logicalcontroller;
 
 import slogo.exceptions.InvalidCommandException;
 import slogo.exceptions.NoCommandFound;
+import slogo.exceptions.ReflectionException;
+import slogo.exceptions.ResourceBundleCreationException;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.command.comparison.ComparisonCommand;
 import slogo.logicalcontroller.command.controlflow.ControlFlowCommand;
@@ -18,6 +20,7 @@ import java.lang.reflect.*;
 
 /**
  * Purpose of this class is to parse incoming commands from the console and from a text file that the user will have an option to read in.
+ * @author Amjad S
  */
 public class Parser implements BundleInterface {
 
@@ -31,18 +34,31 @@ public class Parser implements BundleInterface {
     private boolean myFinished;
 
     /**
-     * Constructor for the Parser class that takes in the input language and initializes all the used variables that are required for parsing
+     * Constructor for the Parser class that takes in the input language and initializes all the used variables that are required for parsing.
      * @param language
-     * @throws IOException
      */
     public Parser(String language) throws IOException {
         setLanguage(language);
     }
 
+    /**
+     * Reads in the language of the appropriate resource file and loads it into a resource bundle for future use.
+     * @param language
+     */
+
     public void setLanguage(String language) throws IOException {
         this.myLanguage = language;
-        this.myLanguageResources = BundleInterface.createResourceBundle(nameLanguageFile());
+        try {
+            this.myLanguageResources = BundleInterface.createResourceBundle(nameLanguageFile());
+        } catch (IOException e) {
+            throw new ResourceBundleCreationException();
+        }
     }
+
+    /**
+     * Method to find out name of the resource file, based on whatever language the user selected
+     * @return String representing the file path of the resource file
+     */
 
     private String nameLanguageFile() {
         return "resources/languages/" + this.myLanguage + ".properties";
@@ -54,20 +70,14 @@ public class Parser implements BundleInterface {
      * @param lines
      */
     public void parse(List<String> lines) {
-        try {
-            this.myFinished = false;
-            this.finalCommandObjects = new ArrayList<Command>();
-            this.myUserInput = new UserInput(lines, this.myLanguageResources);
-            for (int i = 0; i < lines.size(); i++) {
-                this.finalCommandObjects.addAll(singleLineParse(lines.get(i)));
-            }
-        } catch (Exception e) {
-            throw new InvalidCommandException();
+        this.finalCommandObjects = new ArrayList<Command>();
+        this.myUserInput = new UserInput(lines, this.myLanguageResources);
+        for (int i = 0; i < lines.size(); i++) {
+            this.finalCommandObjects.addAll(singleLineParse(lines.get(i)));
         }
     }
 
     /**
-     *
      * @param command use reflection on command superclass to route command to appropriate helper method
      * @return list of strings to replace that command in the UserInput
      */
@@ -78,11 +88,14 @@ public class Parser implements BundleInterface {
             Method method = this.getClass().getDeclaredMethod(name, superclazz); //Command.class
             Object o = method.invoke(this, command);
             return (List<String>) o;
-        } catch (Exception e) {
-            throw new InvalidCommandException("Could not execute command");
+        } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException | NullPointerException e) {
+            throw new ReflectionException("Unable to apply Reflection");
         }
     }
 
+    /**
+     * Method to find and execute the next command in the arraylist of raw commands. Represents one step of the turtle.
+     */
     // TODO - fill in method body
     public void executeNextCommand(){
         ;

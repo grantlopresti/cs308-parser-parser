@@ -8,7 +8,7 @@ public class Minus extends MathCommand {
     }
 
     @Override
-    public void performMath() {
+    protected void performMath() {
         setReturnValue(this.myArgument1 * -1);
     }
 
