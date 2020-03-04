@@ -19,11 +19,13 @@ public abstract class MathCommand implements Command {
 
     public MathCommand(String input1) {
         this.myArgument1 = Double.parseDouble(input1);
+        performMath();
     }
 
     public MathCommand(String input1, String input2) {
         this.myArgument1 = Double.parseDouble(input1);
         this.myArgument2 = Double.parseDouble(input2);
+        performMath();
     }
 
     public void setUserInput(String input){
@@ -31,7 +33,7 @@ public abstract class MathCommand implements Command {
     }
 
 
-    public abstract void performMath();
+    protected abstract void performMath();
 
     protected void setReturnValue(double value){
        returnValue = value;

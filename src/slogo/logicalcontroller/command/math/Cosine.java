@@ -9,7 +9,7 @@ public class Cosine extends MathCommand {
     }
 
     @Override
-    public void performMath() {
+    protected void performMath() {
         setReturnValue(Math.cos(myArgument1));
     }
 

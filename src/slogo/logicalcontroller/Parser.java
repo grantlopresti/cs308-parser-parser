@@ -332,9 +332,9 @@ public class Parser {
             repCommands.addAll(singleLineParse(line));
         }
 
-        Repeat tempRepeat = new Repeat(value, repCommands);
+        // Repeat tempRepeat = new Repeat(value, repCommands);
 
-        this.finalCommandObjects.addAll(tempRepeat.getAllRepCommands());
+        // this.finalCommandObjects.addAll(tempRepeat.getAllRepCommands());
         return ret;
     }
 
