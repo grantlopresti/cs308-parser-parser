@@ -19,6 +19,7 @@ import java.lang.reflect.*;
 
 /**
  * Purpose of this class is to parse incoming commands from the console and from a text file that the user will have an option to read in.
+ * @author Amjad S
  */
 public class Parser {
 
@@ -30,22 +31,37 @@ public class Parser {
     private ResourceBundle myLanguageResources;
 
     /**
-     * Constructor for the Parser class that takes in the input language and initializes all the used variables that are required for parsing
+     * Constructor for the Parser class that takes in the input language and initializes all the used variables that are required for parsing.
      * @param language
-     * @throws IOException
      */
     public Parser(String language){
         setLanguage(language);
     }
+
+    /**
+     * Reads in the language of the appropriate resource file and loads it into a resource bundle for future use.
+     * @param language
+     */
 
     public void setLanguage(String language) {
         this.myLanguage = language;
         this.myLanguageResources = createResourceBundle(nameLanguageFile());
     }
 
+    /**
+     * Method to find out name of the resource file, based on whatever language the user selected
+     * @return String representing the file path of the resource file
+     */
+
     private String nameLanguageFile() {
         return "resources/languages/" + this.myLanguage + ".properties";
     }
+
+    /**
+     * Creates the new resource bundle object from the file that was previously loaded in.
+     * @param filename
+     * @return ResourceBundle object of the selected language.
+     */
 
     // TODO - refactor as static method
     private ResourceBundle createResourceBundle(String filename){
@@ -70,7 +86,6 @@ public class Parser {
     }
 
     /**
-     *
      * @param command use reflection on command superclass to route command to appropriate helper method
      * @return list of strings to replace that command in the UserInput
      */
@@ -87,6 +102,9 @@ public class Parser {
         }
     }
 
+    /**
+     * Method to find and execute the next command in the arraylist of raw commands. Represents one step of the turtle.
+     */
     // TODO - fill in method body
     public void executeNextCommand(){
 
