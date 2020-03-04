@@ -30,7 +30,6 @@ public abstract class QuerieCommand implements Command {
         userInput = input;
     }
 
-
     @Override
     public String getCommandType() {
         String className = this.getClass().getSimpleName();

@@ -41,8 +41,7 @@ public abstract class ComparisonCommand implements Command {
             returnValue = DEFAULT_VALUE;
         }
     }
-
-    @Override
+    
     public double getValue() {
         return this.returnValue;
     }
