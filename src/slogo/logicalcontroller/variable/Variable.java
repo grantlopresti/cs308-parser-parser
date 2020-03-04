@@ -6,7 +6,7 @@ package slogo.logicalcontroller.variable;
  */
 public abstract class Variable implements VariableInterface {
 
-    private static final String SEPARATOR = " : ";
+    public static final String SEPARATOR = ":";
 
     protected String myName;
     protected double myValue;
