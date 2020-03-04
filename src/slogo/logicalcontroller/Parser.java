@@ -70,11 +70,7 @@ public class Parser implements BundleInterface {
      * @param lines
      */
     public void parse(List<String> lines) {
-        this.finalCommandObjects = new ArrayList<Command>();
         this.myUserInput = new UserInput(lines, this.myLanguageResources);
-        for (int i = 0; i < lines.size(); i++) {
-            this.finalCommandObjects.addAll(singleLineParse(lines.get(i)));
-        }
     }
 
     /**
@@ -96,9 +92,10 @@ public class Parser implements BundleInterface {
     /**
      * Method to find and execute the next command in the arraylist of raw commands. Represents one step of the turtle.
      */
-    // TODO - fill in method body
     public void executeNextCommand(){
-        ;
+        this.myLatestCommand = this.myUserInput.getNextCommand();
+        List<String> myList = this.executeCommand(this.myLatestCommand);
+        this.myUserInput.setCodeReplacement(myList);
     }
 
     /**
@@ -147,7 +144,7 @@ public class Parser implements BundleInterface {
     public List<Variable> getVariables() {return this.myVariableList; }
 
     public boolean isFinished(){
-        return true;
+        return this.myUserInput.isFinished();
     }
 
     public ModelCollection getModel(){

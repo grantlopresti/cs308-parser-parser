@@ -54,7 +54,17 @@ public class UserInput implements UserInputInterface, BundleInterface {
         } catch (NoCommandFound e) {
             throw new NoCommandFound("Could not generate command");
         }
+    }
 
+    // TODO - add to interface
+    public boolean isFinished() {
+        try {
+            this.myLineIndex = findNextLine();
+            this.myCommandIndex = findLastCommand(this.myLineIndex);
+            return false;
+        } catch (NoCommandFound e) {
+            return true;
+        }
     }
 
     // TODO - how to handle multi line replacements vs. single line?
@@ -64,7 +74,6 @@ public class UserInput implements UserInputInterface, BundleInterface {
         String replace = code.get(0);
         String lineUpdate = this.myUserInput.get(this.myLineIndex) + replace;
         this.myUserInput.set(this.myLineIndex, lineUpdate);
-        traverseUserInput();
     }
 
     @Override
@@ -104,6 +113,7 @@ public class UserInput implements UserInputInterface, BundleInterface {
     // TODO - assume all parameters go until end of line? Truncating line prematurely? (maybe good enough)
     // TODO - assume that parameters are space separated (good enough assumption)
     private List<String> getArguments(int line, int index, int params) {
+        traverseUserInput();
         index ++;
         String input = this.myUserInput.get(line);
         String[] words = input.split("\\s");
@@ -114,7 +124,6 @@ public class UserInput implements UserInputInterface, BundleInterface {
         System.out.print("Printing arguments: ");
         for (String s: sub) {System.out.print(s + " ");}
         this.myUserInput.set(line, input);
-        traverseUserInput();
         return new ArrayList<String>(List.of(sub));
     }
 
@@ -129,7 +138,7 @@ public class UserInput implements UserInputInterface, BundleInterface {
     private String removeArguments(String input, String[] sub) {
         StringBuilder sb = new StringBuilder(input);
         String remove = spaceSeparatedString(sub);
-        sb.replace(input.length()-remove.length()-1, input.length(), "");
+        sb.replace(Math.max(input.length()-remove.length()-2, 0), input.length()-1, "");
         System.out.printf("input truncated from: %s \nto: %s \n", input, sb.toString());
         return sb.toString();
     }
