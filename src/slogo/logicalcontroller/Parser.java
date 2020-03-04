@@ -171,13 +171,12 @@ public class Parser {
             Constructor ctor = clazz.getConstructor(List.class);
             return (Command) ctor.newInstance(arguments);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new InvalidCommandException("Could not create command");
         }
     }
 
     private String createCommandPath(String superclass, String command) {
-        String path = String.format("%s%s.%s \n", SLOGO_COMMAND, superclass, command);
+        String path = String.format("%s%s.%s", SLOGO_COMMAND, superclass, command);
         System.out.printf("returning path: %s \n", path);
         return path;
     }
