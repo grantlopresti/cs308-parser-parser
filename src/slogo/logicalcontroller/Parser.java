@@ -67,7 +67,7 @@ public class Parser {
     }
 
     private String nameLanguageFile() {
-        return "resources/languages/"+this.myLanguage + ".properties";
+        return "resources/languages/" + this.myLanguage + ".properties";
     }
 
     private ResourceBundle createResourceBundle(String filename) throws IOException {
@@ -112,7 +112,14 @@ public class Parser {
 
     // TODO - refactor to accept any value from language properties (this.myLanguageResources)
     private boolean isValidCommand(String s) {
-        return true;
+        Enumeration<String> resourceEnumeration = this.myLanguageResources.getKeys();
+        String key; String value;
+        while (resourceEnumeration.hasMoreElements()) {
+            key = resourceEnumeration.nextElement();
+            value = this.myLanguageResources.getString(key);
+            if (value.contains(s)) {return true;}
+        }
+        return false;
     }
 
     /**
@@ -123,7 +130,9 @@ public class Parser {
     private int findLastCommand(String line) {
         String[] lineElems = line.split("\\s+");
         for(int i = lineElems.length-1; i>=0; i--){
+            System.out.println("Made it here");
             if(isValidCommand(lineElems[i])) {
+                System.out.println("Last Valid Command @:" + i);
                 return i;
             }
         }
@@ -538,6 +547,14 @@ public class Parser {
     }
 
     private int countParameters(String translated) {
+        ResourceBundle myBundle = this.myParameterMap;
+        Enumeration<String> resourceEnumeration = myBundle.getKeys();
+        String key; String value;
+        while (resourceEnumeration.hasMoreElements()) {
+            key = resourceEnumeration.nextElement();
+            value = myBundle.getString(key);
+            System.out.printf("%s=%s\n", key, value);
+        }
         return Integer.parseInt(this.myParameterMap.getString(translated));
     }
 
@@ -569,7 +586,7 @@ public class Parser {
     }
 
     private static void testCommandCycle() throws IOException {
-        String language = "Russian";
+        String language = "English";
         Parser p = new Parser(language);
         // TODO - take user input, return command and arguments
         List<String> userInput = new ArrayList<String>(List.of("40", "vpered vpered 50"));
@@ -581,8 +598,9 @@ public class Parser {
         String command = "vpered";
         List<String> arguments = new ArrayList<String>(List.of("50"));
         String translated = p.translateCommand(command);
+        System.out.printf("translated %s to %s in %s", command, translated, language);
         int params = p.countParameters(translated);
-        System.out.printf("translated %s to %s in %s, requires %d parameters", command, translated, language, params);
+        System.out.printf("requires %d parameters", params);
         String superclass = p.getCommandSuperclass(translated);
         Command c = p.createCommand(superclass, translated, arguments);
         List<String> myList = p.executeCommand(c);
