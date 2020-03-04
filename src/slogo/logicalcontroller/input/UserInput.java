@@ -195,7 +195,11 @@ public class UserInput implements UserInputInterface, BundleInterface {
      * @return
      */
     private Command createCommand(String superclass, String command, List<String> arguments) {
-        System.out.printf("createCommand in UserInput.java from commmand: %s \n", command);
+        System.out.printf("attempting to createCommand in UserInput.java from command: %s \n", command);
+        System.out.printf("arguments (%d): ", arguments.size());
+        for (String s: arguments) {
+            System.out.printf("%s \n", s);
+        }
         try {
             Class clazz = Class.forName(createCommandPath(superclass, command));
             Constructor ctor = clazz.getConstructor(List.class);
@@ -207,7 +211,7 @@ public class UserInput implements UserInputInterface, BundleInterface {
 
     private String createCommandPath(String superclass, String command) {
         String path = String.format("%s%s.%s", SLOGO_COMMAND, superclass, command);
-        // System.out.printf("returning path: %s \n", path);
+        System.out.printf("returning path: %s \n", path);
         return path;
     }
 

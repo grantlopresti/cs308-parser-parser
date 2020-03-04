@@ -123,7 +123,7 @@ public class Parser implements BundleInterface {
     }
 
     private List<String> executeMathCommand(MathCommand command) {
-        return new ArrayList<String>();
+        return new ArrayList<String>(List.of(command.execute()));
     }
 
     private List<String> executeQuerieCommand(QuerieCommand command) {

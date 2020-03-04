@@ -70,7 +70,7 @@ public class LogicalController {
       }
     } catch (Exception e) {
       e.printStackTrace();
-      System.out.println("error in handle new command");
+      System.out.println("error in LogicalController.handleNewCommand");
     }
     System.out.println("Parser is finished! Yay!");
   }
