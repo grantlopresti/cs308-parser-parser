@@ -568,6 +568,7 @@ public class Parser {
     private static void testCommandCycle() throws IOException {
         String language = "Russian";
         Parser p = new Parser(language);
+        // TODO - take user input, return command and arguments
         String command = "vpered";
         List<String> arguments = new ArrayList<String>(List.of("50"));
         String translated = p.translateCommand(command);
