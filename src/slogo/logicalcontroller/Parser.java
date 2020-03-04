@@ -2,6 +2,7 @@ package slogo.logicalcontroller;
 
 import slogo.exceptions.InvalidCommandException;
 import slogo.exceptions.NoCommandFound;
+import slogo.exceptions.ReflectionException;
 import slogo.exceptions.ResourceBundleCreationException;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.command.comparison.ComparisonCommand;
@@ -46,7 +47,11 @@ public class Parser implements BundleInterface {
 
     public void setLanguage(String language) throws IOException {
         this.myLanguage = language;
-        this.myLanguageResources = BundleInterface.createResourceBundle(nameLanguageFile());
+        try {
+            this.myLanguageResources = BundleInterface.createResourceBundle(nameLanguageFile());
+        } catch (IOException e) {
+            throw new ResourceBundleCreationException();
+        }
     }
 
     /**
@@ -64,15 +69,10 @@ public class Parser implements BundleInterface {
      * @param lines
      */
     public void parse(List<String> lines) {
-        try {
-            this.myFinished = false;
-            this.finalCommandObjects = new ArrayList<Command>();
-            this.myUserInput = new UserInput(lines, this.myLanguageResources);
-            for (int i = 0; i < lines.size(); i++) {
-                this.finalCommandObjects.addAll(singleLineParse(lines.get(i)));
-            }
-        } catch (Exception e) {
-            throw new InvalidCommandException();
+        this.finalCommandObjects = new ArrayList<Command>();
+        this.myUserInput = new UserInput(lines, this.myLanguageResources);
+        for (int i = 0; i < lines.size(); i++) {
+            this.finalCommandObjects.addAll(singleLineParse(lines.get(i)));
         }
     }
 
@@ -87,8 +87,8 @@ public class Parser implements BundleInterface {
             Method method = this.getClass().getDeclaredMethod(name, superclazz); //Command.class
             Object o = method.invoke(this, command);
             return (List<String>) o;
-        } catch (Exception e) {
-            throw new InvalidCommandException("Could not execute command");
+        } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException | NullPointerException e) {
+            throw new ReflectionException("Unable to apply Reflection");
         }
     }
 
