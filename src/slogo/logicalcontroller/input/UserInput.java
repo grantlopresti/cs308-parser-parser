@@ -151,6 +151,7 @@ public class UserInput implements UserInputInterface, BundleInterface {
             key = resourceEnumeration.nextElement();
             value = bundle.getString(key);
             if (value.contains(s)) {return true;}
+            // FIX THIS LINE
             // if (keyContains(s, value)) {return true;}
         }
         return false;
@@ -176,6 +177,7 @@ public class UserInput implements UserInputInterface, BundleInterface {
      * @param command
      * @return
      * TODO - what to do if command not found? - throw no command exception
+     * TODO - use regular expression mappings to populate this as well
      */
     private String translateCommand(String command) {
         Enumeration<String> resourceEnumeration = this.myResources.getKeys();
@@ -183,6 +185,7 @@ public class UserInput implements UserInputInterface, BundleInterface {
         while (resourceEnumeration.hasMoreElements()) {
             key = resourceEnumeration.nextElement();
             value = this.myResources.getString(key);
+            // FIX THIS LINE
             if (value.contains(command)) {return key;}
         }
         return "";
