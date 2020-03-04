@@ -190,14 +190,16 @@ public class Parser {
         try {
             String superclazz = command.getClass().getSuperclass().getSimpleName();
             System.out.printf("superclazz: %s \n", superclazz);
-            String methodName = "execute" + superclazz;
-            Method guy = this.getClass().getDeclaredMethod(methodName, Command.class);
-            System.out.println(guy);
+            String name = "execute" + superclazz;
+            System.out.printf("name: %s \n", name);
+            Method method = this.getClass().getDeclaredMethod(name, Command.class); // command.getClass());
+            System.out.printf("METHOD: %s \n", method);
+            Object o = method.invoke(command);
+            return new ArrayList<String>();
+            // return (List<String>) o;
         } catch (Exception e) {
             throw new InvalidCommandException("Could not execute command");
         }
-
-        return new ArrayList<String>();
     }
 
     //TODO Change the catch statements to throw the right exceptions
@@ -227,7 +229,7 @@ public class Parser {
      * @return
      */
     private List<String> executeModifierCommand(Command command) {
-        return new ArrayList<String>();
+        return new ArrayList<String>(List.of("Hello, I just executed a modifier command :)", "I hope this worked", "Slogo is fun"));
     }
 
     private List<String> executeComparisonCommand(Command command) {
@@ -575,7 +577,10 @@ public class Parser {
         String translated = p.translateCommand(command);
         String superclass = p.getCommandSuperclass(translated);
         Command c = p.createCommand(superclass, translated, arguments);
-        p.executeCommand(c);
+        List<String> myList = p.executeCommand(c);
+        for (String s: myList) {
+            System.out.print(s);
+        }
     }
 
     public static void main (String[] args) throws IOException {
