@@ -1,7 +1,9 @@
 package slogo.logicalcontroller.command.modifier;
 
+import java.util.List;
+
 public class SetPosition extends ModifierCommand {
-    public SetPosition(String inputValue1, String inputValue2){
-        super(inputValue1, inputValue2);
+    public SetPosition(List<String> args){
+        super(args.get(0), args.get(1));
     }
 }

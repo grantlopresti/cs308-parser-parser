@@ -1,8 +1,10 @@
 package slogo.logicalcontroller.command.modifier;
 
+import java.util.List;
+
 public class SetTowards extends ModifierCommand {
 
-    public SetTowards(String inputValue1, String inputValue2){
-        super(inputValue1, inputValue2);
+    public SetTowards(List<String> args){
+        super(args.get(0), args.get(1));
     }
 }

@@ -1,6 +1,7 @@
 package slogo.logicalcontroller;
 
 import slogo.exceptions.ConstructorException;
+import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.command.comparison.ComparisonCommand;
 import slogo.logicalcontroller.command.controlflow.ControlFlowCommand;
@@ -165,7 +166,20 @@ public class Parser {
      * @return
      */
     private Command createCommand(String superclass, String command, List<String> arguments) {
-        return null;
+        try {
+            Class clazz = Class.forName(createCommandPath(superclass, command));
+            Constructor ctor = clazz.getConstructor(List.class);
+            return (Command) ctor.newInstance(arguments);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new InvalidCommandException("Could not create command");
+        }
+    }
+
+    private String createCommandPath(String superclass, String command) {
+        String path = String.format("%s%s.%s \n", SLOGO_COMMAND, superclass, command);
+        System.out.printf("returning path: %s \n", path);
+        return path;
     }
 
     /**
@@ -510,15 +524,24 @@ public class Parser {
     }
 
     private static void testSuperclassMap(Parser p) {
-        String command = "Forward";
+        String command = "SetHeading";
         String clazz = p.getCommandSuperclass(command);
         System.out.printf("%s --> %s \n", command, clazz);
+    }
+
+    private static void testCommandCreation(Parser p) {
+        String superclass = "modifier";
+        String command = "Forward";
+        List<String> arguments = new ArrayList<String>(List.of("50"));
+        Command c = p.createCommand(superclass, command, arguments);
+        System.out.printf("command.toString(): %s \n", c.toString());
     }
 
     public static void main (String[] args) throws IOException {
         Parser p = new Parser("English");
         testTranslate(p);
         testSuperclassMap(p);
+        testCommandCreation(p);
         // testAmjad();
     }
 }
