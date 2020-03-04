@@ -25,16 +25,15 @@ import javax.script.ScriptException;
 public class Parser {
 
     private String myLanguage;
-    private ResourceBundle myLanguageResources;
-    private static Map<String, String> myCommandSuperclassMap;
     private List<Command> finalCommandObjects;
-    private List<String> rawCommands;
+    private List<String> myUserInput;
     private ModelCollection model;
     private List<Variable> variables;
     private List<String> command_input;
     private static final String SLOGO_COMMAND = "slogo.logicalcontroller.command.";
     private FileInputStream fis1 = new FileInputStream("src/properties/commandSuperclass.properties");
     private ResourceBundle myCommandMap = new PropertyResourceBundle(fis1);
+    private ResourceBundle myLanguageResources;
     private Set<String> type2 = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pow","pi"));
     private Set<String> mathSingleParameter = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pi", "minus", "~"));
     private ArrayList<String> comNeedChecked = new ArrayList<String>(Arrays.asList("repeat","sin","cos","tan","atan","log","pow","pi"));
@@ -55,7 +54,6 @@ public class Parser {
      */
     public Parser(String language) throws IOException {
         setLanguage(language);
-        this.myCommandSuperclassMap = createCommandSuperclassMap();
     }
 
     public void setLanguage(String language) throws IOException {
@@ -75,7 +73,7 @@ public class Parser {
     public void parse(List<String> lines) throws NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
         //try {
             this.finalCommandObjects = new ArrayList<Command>();
-            this.rawCommands = lines;
+            this.myUserInput = lines;
             for (int i = 0; i < lines.size(); i++) {
                 String line = lines.get(i);
                 String type = getType(line);
@@ -94,18 +92,23 @@ public class Parser {
      * @return
      */
     private int findNextLine() {
-        for(int i = 0; i< rawCommands.size(); i++){
-            String s = rawCommands.get(i);
-            if(s.split("\\s+").length >0){
+        for(int i = 0; i < this.myUserInput.size(); i++){
+            String s = this.myUserInput.get(i);
+            if(s.split("\\s+").length > 1){
                 return i;
             }
         }
         return 0;
     }
 
+    private boolean isValidCommand(String s) {
+        return true;
+    }
+
     /**
      * Input single line of text, output index of last commandkeyword
      * @return
+     * TODO - refactor to accept any value from language properties
      */
     private int findLastCommand(String line) {
         String[] lineElems = line.split("\\s+");
@@ -196,7 +199,7 @@ public class Parser {
     //TODO Change the catch statements to throw the right exceptions
     public void executeNextCommand(){
         try {
-            singleLineParse(rawCommands.get(findNextLine()));
+            singleLineParse(myUserInput.get(findNextLine()));
         } catch (ScriptException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -282,7 +285,7 @@ public class Parser {
         boolean doExit = false;
         int ret = 0;
         while(!doExit){
-            String[] line = (rawCommands.get(index)).split("\\s+");
+            String[] line = (myUserInput.get(index)).split("\\s+");
             for(int i = 0; i<line.length; i++){
                 if(vcuTypes.contains(line[i])){
                     if(line[i].equals("repeat")){
@@ -304,8 +307,8 @@ public class Parser {
         List<Command> repCommands = new ArrayList<Command>();
         List<Command> commandsToBeAdded = new ArrayList<Command>();
 
-        while(!(rawCommands.get(currLine)).contains("]")){
-            tempRetLines.add((rawCommands.get(currLine)));
+        while(!(myUserInput.get(currLine)).contains("]")){
+            tempRetLines.add((myUserInput.get(currLine)));
             currLine++;
         }
         ret = currLine;
@@ -446,12 +449,13 @@ public class Parser {
      * @param val
      * @returns Commmand object
      */
+    @Deprecated
     private Command getConstructor(String com, String val) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
        // try {
             System.out.println("Vallll" + val);
 
             // Class cl = Class.forName(SLOGO_COMMAND+commandMappings.get(commandArray.get(com))+"."+commandArray.get(com));
-            Class cl = Class.forName(SLOGO_COMMAND+myCommandMap.getString(myCommandSuperclassMap.get(com))+"."+ myCommandSuperclassMap.get(com));
+            Class cl = Class.forName(SLOGO_COMMAND); //+myCommandMap.getString(myCommandSuperclassMap.get(com))+"."+ myCommandSuperclassMap.get(com));
             System.out.println("The val: " +  val);
             Constructor con = cl.getConstructor(String.class);
             Command command = (Command) con.newInstance(val);
@@ -477,9 +481,9 @@ public class Parser {
     }
 
     /**
-     * Called internally, to create mapping of every input commmand to the command objects
+     * Called internally, to create mapping of every input command to the command objects
      * Based on preconfigured language
-     * @return mappings of input commmands to command objects (e.g lt --> Left)
+     * @return mappings of input commands to command objects (e.g lt --> Left)
      */
     private Map<String, String> createCommandSuperclassMap() {
         Map<String, String> mymap = new HashMap<String, String>();
@@ -517,6 +521,14 @@ public class Parser {
         this.command_input = command;
         this.model = modelC;
         this.variables = var;
+    }
+
+    private void setUserInput(List<String> userInput) {
+        this.myUserInput = userInput;
+    }
+
+    private List<String> getUserInput() {
+        return this.myUserInput;
     }
 
     private static void testAmjad() throws IOException, NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
@@ -557,10 +569,15 @@ public class Parser {
     }
 
     private static void testCommandCycle() throws IOException {
-        List<String> userInput = new ArrayList<String>(List.of("vpered 50"));
         String language = "Russian";
         Parser p = new Parser(language);
         // TODO - take user input, return command and arguments
+        List<String> userInput = new ArrayList<String>(List.of("40", "vpered 50"));
+        p.setUserInput(userInput);
+        int lineIndex = p.findNextLine();
+        int commandIndex = p.findLastCommand(p.getUserInput().get(lineIndex));
+        System.out.printf("found next command @line %d \n", lineIndex);
+        System.out.printf("found last command @index %d \n", commandIndex);
         String command = "vpered";
         List<String> arguments = new ArrayList<String>(List.of("50"));
         String translated = p.translateCommand(command);
@@ -573,7 +590,7 @@ public class Parser {
     }
 
     public static void main (String[] args) throws IOException, NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
-        //testCommandCycle();
-         testAmjad();
+        testCommandCycle();
+         //testAmjad();
     }
 }
