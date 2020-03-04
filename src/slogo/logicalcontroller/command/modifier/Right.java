@@ -7,4 +7,9 @@ public class Right extends ModifierCommand {
     public Right(List<String> args){
         super(args.get(0));
     }
+
+    @Override
+    public String execute() {
+        return Double.toString(this.argument1);
+    }
 }

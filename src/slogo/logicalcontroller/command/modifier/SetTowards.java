@@ -7,4 +7,9 @@ public class SetTowards extends ModifierCommand {
     public SetTowards(List<String> args){
         super(args.get(0), args.get(1));
     }
+
+    @Override
+    public String execute() {
+        return null;
+    }
 }
