@@ -1,10 +1,13 @@
 package slogo.view.subsections;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -51,6 +54,7 @@ public class ToolbarPane implements SubPane {
   private ComboBox<String> myTurtleImage = new ComboBox<>();
   private ColorPicker myPenColorPicker = new ColorPicker();
   private Button myClearScreen = new Button("Clear Screen");
+  private FileInputStream fis1 = new FileInputStream("src/properties/buttons.properties");
   private static final ObservableList<String> languageOptions =
       FXCollections.observableArrayList(
           "English",
@@ -66,13 +70,13 @@ public class ToolbarPane implements SubPane {
   private ComboBox<String> myLanguage = new ComboBox<>(languageOptions);
   private Button myHelpInfo = new Button("Help/Info");
 
-  public ToolbarPane(SlogoView viewer, LogicalController logicalController) {
+  public ToolbarPane(SlogoView viewer, LogicalController logicalController) throws IOException {
     myViewer = viewer;
     myLogicalController = logicalController;
     for (TurtleImage value : TurtleImage.values()){
       myTurtleImage.getItems().add(value.getName());
     }
-    myButtonResources = ResourceBundle.getBundle(myButtonProperties);
+    myButtonResources = new PropertyResourceBundle(fis1);
   }
 
   @Override

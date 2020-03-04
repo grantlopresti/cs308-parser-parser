@@ -32,17 +32,13 @@ public class Parser {
     private ModelCollection model;
     private List<Variable> variables;
     private List<String> command_input;
-    // TODO - refactor large constructed instance variables as properties/enumerated types
-    private static final String DEFAULT_PROPERTIES = "properties/";
     private static final String SLOGO_COMMAND = "slogo.logicalcontroller.command.";
-    private static final String COMMAND_MAP_PROPERTIES = "commandSuperclass";
-    private ResourceBundle myCommandMap = ResourceBundle.getBundle(DEFAULT_PROPERTIES + COMMAND_MAP_PROPERTIES);
+    private FileInputStream fis1 = new FileInputStream("src/properties/commandSuperclass.properties");
+    private ResourceBundle myCommandMap = new PropertyResourceBundle(fis1);
     private Set<String> type2 = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pow","pi"));
-    private Set<String> mathSingleParameter = new HashSet<String>(Arrays.asList(
-            "random","sin","cos","tan","atan","log","pi", "minus", "~"));
+    private Set<String> mathSingleParameter = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pi", "minus", "~"));
     private ArrayList<String> comNeedChecked = new ArrayList<String>(Arrays.asList("repeat","sin","cos","tan","atan","log","pow","pi"));
-    private Set<String> mathDoubleParameter = new HashSet<String>(Arrays.asList(
-            "pow", "sum", "+", "difference", "-", "product", "*", "quotient", "/", "remainder", "%"));
+    private Set<String> mathDoubleParameter = new HashSet<String>(Arrays.asList("pow", "sum", "+", "difference", "-", "product", "*", "quotient", "/", "remainder", "%"));
     private Map<String, String> type1 = new HashMap<String, String>(){{
         put("sum", "+");
         put("difference", "-");
@@ -85,7 +81,6 @@ public class Parser {
                 String type = getType(line);
                 line = checkForBoolean(line);
                 i = checkForVCU(i);
-                System.out.println("The line: " + singleLineParse(line));
                 this.finalCommandObjects.addAll(singleLineParse(line));
             }
         //} catch (Exception e) {
@@ -524,8 +519,7 @@ public class Parser {
         this.variables = var;
     }
 
-    private static void testAmjad() {
-        try {
+    private static void testAmjad() throws IOException, NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
             Parser p = new Parser("English");
             List<String> test = new ArrayList<String>();
             test.add("fd 50");
@@ -533,9 +527,6 @@ public class Parser {
             System.out.println("Made it");
             List<Command> testt = p.getCommands();
             System.out.println(testt);
-        } catch (Exception e) {
-            System.out.println("Exception in testAmjad");
-        }
     }
 
     private static String testTranslate(Parser p, String language, String command) {
@@ -581,8 +572,8 @@ public class Parser {
         }
     }
 
-    public static void main (String[] args) throws IOException {
-        testCommandCycle();
-        // testAmjad();
+    public static void main (String[] args) throws IOException, NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
+        //testCommandCycle();
+         testAmjad();
     }
 }
