@@ -7,7 +7,7 @@ public class Not extends ComparisonCommand {
     }
 
     @Override
-    public void performComparison() {
+    protected void performComparison() {
         if(argument1 == 0){
             setReturnValue(1);
         }

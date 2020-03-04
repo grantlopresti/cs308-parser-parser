@@ -9,7 +9,7 @@ public class Random extends MathCommand {
     }
 
     @Override
-    public void performMath() {
+    protected void performMath() {
         setReturnValue(Math.random() * this.myArgument1);
     }
 

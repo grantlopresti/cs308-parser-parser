@@ -10,7 +10,7 @@ public class GreaterThan extends ComparisonCommand {
     }
 
     @Override
-    public void performComparison() {
+    protected void performComparison() {
         if(argument1 > argument2){
             setReturnValue(1);
         }

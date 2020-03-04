@@ -9,7 +9,7 @@ public class Pi extends MathCommand {
     }
 
     @Override
-    public void performMath() {
+    protected void performMath() {
         setReturnValue(Math.PI);
     }
 

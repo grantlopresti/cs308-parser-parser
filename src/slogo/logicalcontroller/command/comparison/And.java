@@ -10,7 +10,7 @@ public class And extends ComparisonCommand {
     }
 
     @Override
-    public void performComparison(){
+    protected void performComparison(){
         if(argument1 != 0 && argument2 != 0){
             setReturnValue(1);
         }

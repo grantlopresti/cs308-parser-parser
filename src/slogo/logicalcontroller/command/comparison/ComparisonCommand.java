@@ -24,14 +24,16 @@ public abstract class ComparisonCommand implements Command {
 
     public ComparisonCommand(String input1){
         argument1 = Double.parseDouble(input1);
+        performComparison();
     }
 
     public ComparisonCommand(String input1, String input2){
-        this(input1);
+        argument1 = Double.parseDouble(input1);
         argument2 = Double.parseDouble(input2);
+        performComparison();
     }
 
-    public abstract void performComparison();
+    protected abstract void performComparison();
 
     protected void setReturnValue(int value){
         if(POSSIBLE_VALUES.contains(value)){

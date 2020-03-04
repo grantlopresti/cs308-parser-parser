@@ -9,7 +9,7 @@ public class ArcTangent extends MathCommand {
     }
 
     @Override
-    public void performMath() {
+    protected void performMath() {
         setReturnValue(Math.atan(myArgument1));
     }
 
