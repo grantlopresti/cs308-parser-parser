@@ -130,9 +130,7 @@ public class Parser {
     private int findLastCommand(String line) {
         String[] lineElems = line.split("\\s+");
         for(int i = lineElems.length-1; i>=0; i--){
-            System.out.println("Made it here");
             if(isValidCommand(lineElems[i])) {
-                System.out.println("Last Valid Command @:" + i);
                 return i;
             }
         }
@@ -238,6 +236,7 @@ public class Parser {
      * @return
      */
     private List<String> executeModifierCommand(ModifierCommand command) {
+        System.out.printf("Executing command %s with argument %.2f\n", command.getClass().getSimpleName(), command.getArgument1());
         return new ArrayList<String>(List.of("Hello, I just executed a modifier command :)\n", "I hope this worked\n", "Slogo is fun\n"));
     }
 
@@ -547,15 +546,18 @@ public class Parser {
     }
 
     private int countParameters(String translated) {
-        ResourceBundle myBundle = this.myParameterMap;
-        Enumeration<String> resourceEnumeration = myBundle.getKeys();
-        String key; String value;
-        while (resourceEnumeration.hasMoreElements()) {
-            key = resourceEnumeration.nextElement();
-            value = myBundle.getString(key);
-            System.out.printf("%s=%s\n", key, value);
-        }
         return Integer.parseInt(this.myParameterMap.getString(translated));
+    }
+
+    private List<String> getArguments(int line, int index, int params) {
+        index ++;
+        String input = this.myUserInput.get(line);
+        String[] words = input.split("\\s");
+        int stop = index+params;
+        String[] sub = Arrays.copyOfRange(words, index, stop);
+        System.out.println("Printing arguments: ");
+        for (String s: sub) {System.out.println(s);}
+        return new ArrayList<String>(List.of(sub));
     }
 
     private static String testTranslate(Parser p, String language, String command) {
@@ -586,21 +588,20 @@ public class Parser {
     }
 
     private static void testCommandCycle() throws IOException {
-        String language = "English";
+        String language = "Russian";
         Parser p = new Parser(language);
-        // TODO - take user input, return command and arguments
-        List<String> userInput = new ArrayList<String>(List.of("40", "vpered vpered 50"));
+        List<String> userInput = new ArrayList<String>(List.of("40", "60", "75", "vpered vpered 50"));
         p.setUserInput(userInput);
         int lineIndex = p.findNextLine();
-        int commandIndex = 1; // p.findLastCommand(p.getUserInput().get(lineIndex));
+        int commandIndex = p.findLastCommand(p.getUserInput().get(lineIndex));
         System.out.printf("found next command @line %d \n", lineIndex);
         System.out.printf("found last command @index %d \n", commandIndex);
         String command = "vpered";
-        List<String> arguments = new ArrayList<String>(List.of("50"));
         String translated = p.translateCommand(command);
         System.out.printf("translated %s to %s in %s", command, translated, language);
         int params = p.countParameters(translated);
         System.out.printf("requires %d parameters", params);
+        List<String> arguments = p.getArguments(lineIndex, commandIndex, params); //new ArrayList<String>(List.of("50"));
         String superclass = p.getCommandSuperclass(translated);
         Command c = p.createCommand(superclass, translated, arguments);
         List<String> myList = p.executeCommand(c);
