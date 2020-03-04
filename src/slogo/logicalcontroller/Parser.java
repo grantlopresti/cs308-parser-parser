@@ -81,7 +81,6 @@ public class Parser {
                 String type = getType(line);
                 line = checkForBoolean(line);
                 i = checkForVCU(i);
-                System.out.println("The line: " + singleLineParse(line));
                 this.finalCommandObjects.addAll(singleLineParse(line));
             }
         //} catch (Exception e) {
@@ -522,8 +521,7 @@ public class Parser {
         this.variables = var;
     }
 
-    private static void testAmjad() {
-        try {
+    private static void testAmjad() throws IOException, NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
             Parser p = new Parser("English");
             List<String> test = new ArrayList<String>();
             test.add("fd 50");
@@ -531,9 +529,6 @@ public class Parser {
             System.out.println("Made it");
             List<Command> testt = p.getCommands();
             System.out.println(testt);
-        } catch (Exception e) {
-            System.out.println("Exception in testAmjad");
-        }
     }
 
     private static String testTranslate(Parser p, String language, String command) {
@@ -574,8 +569,8 @@ public class Parser {
         p.executeCommand(c);
     }
 
-    public static void main (String[] args) throws IOException {
-        testCommandCycle();
-        // testAmjad();
+    public static void main (String[] args) throws IOException, NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
+        //testCommandCycle();
+         testAmjad();
     }
 }
