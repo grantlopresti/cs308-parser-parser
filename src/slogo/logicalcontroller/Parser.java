@@ -23,13 +23,12 @@ import javax.script.ScriptException;
  */
 public class Parser {
 
-    private String lang;
+    private String myLanguage;
+    private ResourceBundle myLanguageResources;
     private Map<String, String> commandArray;
     private List<Command> finalCommandObjects;
-    private ResourceBundle resources;
     private List<String> rawCommands;
     private ModelCollection model;
-    private Map<String, String> langMap;
     private List<Variable> variables;
     private List<String> command_input;
     // TODO - refactor large constructed instance variables as enumerated types
@@ -61,11 +60,17 @@ public class Parser {
      * @throws IOException
      */
     public Parser(String language) throws IOException {
-        this.lang = language;
-        FileInputStream fis = new FileInputStream("resources/languages/"+this.lang+".properties");
-        this.resources = new PropertyResourceBundle(fis);
+        setLanguage(language);
         this.commandArray = genCommandArray();
-        this.finalCommandObjects = new ArrayList<Command>();
+    }
+
+    public void setLanguage(String language) throws IOException {
+        this.myLanguage = language;
+        this.myLanguageResources = new PropertyResourceBundle(createFileStream());
+    }
+
+    private FileInputStream createFileStream() throws FileNotFoundException {
+        return new FileInputStream("resources/languages/"+this.myLanguage +".properties");
     }
 
     /**
@@ -91,7 +96,6 @@ public class Parser {
     }
 
     // TODO - Fill in method stubs, using refactored parser process
-
     /**
      * Traverses array of raw commands, finds next non constant line
      * @return
@@ -130,9 +134,13 @@ public class Parser {
      * @return
      */
     private String translateCommand(String command) {
-
-
-
+        Enumeration<String> resourceEnumeration = this.myLanguageResources.getKeys();
+        String key; String value;
+        while (resourceEnumeration.hasMoreElements()) {
+            key = resourceEnumeration.nextElement();
+            value = this.myLanguageResources.getString(key);
+            if (value.contains(command)) {return key;}
+        }
         return "";
     }
 
@@ -435,8 +443,8 @@ public class Parser {
      */
     private Map<String, String> genCommandArray() {
         Map<String, String> mymap = new HashMap<String, String>();
-        for(String key: Collections.list(this.resources.getKeys())){
-            String regex = this.resources.getString(key);
+        for(String key: Collections.list(this.myLanguageResources.getKeys())){
+            String regex = this.myLanguageResources.getString(key);
             if(regex.indexOf("|") != -1){
                 mymap.put(regex.substring(0, regex.indexOf("|")), key);
                 mymap.put(regex.substring(regex.indexOf("|")+1), key);
@@ -445,7 +453,6 @@ public class Parser {
                 mymap.put(regex, key);
             }
         }
-        langMap = mymap;
         return mymap;
     }
 
@@ -456,10 +463,6 @@ public class Parser {
      */
     public List<Command> getCommands(){
         return this.finalCommandObjects;
-    }
-
-    public String getLang(){
-        return this.lang;
     }
 
     public boolean isFinished(){
@@ -476,8 +479,8 @@ public class Parser {
         this.variables = var;
     }
 
-    public static void main (String[] args) throws IOException, NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
-        //try {
+    private static void testAmjad() {
+        try {
             Parser p = new Parser("English");
             List<String> test = new ArrayList<String>();
             test.add("fd 50");
@@ -485,9 +488,40 @@ public class Parser {
             System.out.println("Made it");
             List<Command> testt = p.getCommands();
             System.out.println(testt);
-        //} catch (Exception e) {
-         //   System.out.println("Exception in main");
-        //}
+        } catch (Exception e) {
+            System.out.println("Exception in testAmjad");
+        }
+    }
 
+    private static void testTranslate(Parser p) {
+        try {
+            String language = "French";
+            String command = "derriere";
+            String key = p.translateCommand(command);
+            p.setLanguage(language);
+            System.out.printf("Translated %s to %s in %s", command, key, language);
+        } catch (Exception e) {
+            System.out.println("Exception in testTranslate");
+        }
+
+    }
+
+    private static void testMax() {
+        try {
+            Parser p = new Parser("English");
+            testTranslate(p);
+        } catch (Exception e) {
+            System.out.println("Exception in testMax");
+        }
+
+    }
+
+    public static void main (String[] args) {
+        try {
+            // testAmjad();
+            testMax();
+        } catch (Exception e) {
+           System.out.println("Exception in main");
+        }
     }
 }
