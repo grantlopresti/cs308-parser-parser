@@ -2,7 +2,7 @@ package slogo.logicalcontroller.variable;
 
 /**
  * Interface that defines what Variable objects are expected to do/return.
- * @author Alex Xu
+ * @author Alex Xu and Max S.
  */
 public interface VariableInterface {
 
