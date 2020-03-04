@@ -79,23 +79,18 @@ public class Parser {
      * Two stage process, first
      * @param lines
      */
-    public void parse(List<String> lines) throws NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
-        //try {
+    public void parse(List<String> lines) {
+        try {
             this.finalCommandObjects = new ArrayList<Command>();
             this.myUserInput = lines;
             for (int i = 0; i < lines.size(); i++) {
-                String line = lines.get(i);
-                String type = getType(line);
-                line = checkForBoolean(line);
-                i = checkForVCU(i);
-                this.finalCommandObjects.addAll(singleLineParse(line));
+                this.finalCommandObjects.addAll(singleLineParse(lines.get(i)));
             }
-        //} catch (Exception e) {
-        //    throw new InvalidCommandException();
-        //}
+        } catch (Exception e) {
+            throw new InvalidCommandException();
+        }
     }
 
-    // TODO - Fill in method stubs, using refactored parser process
     /**
      * Traverses array of raw commands, finds next non constant line
      * @return
@@ -209,25 +204,8 @@ public class Parser {
         }
     }
 
-    //TODO Change the catch statements to throw the right exceptions
     public void executeNextCommand(){
-        try {
-            singleLineParse(myUserInput.get(findNextLine()));
-        } catch (ScriptException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
-
-
+        singleLineParse(myUserInput.get(findNextLine()));
     }
 
     /**
@@ -261,35 +239,8 @@ public class Parser {
         return null;
     }
 
-    // TODO - simplify boolean from line
-    private String checkForBoolean(String line) {
-
-        return line;
-    }
-
-    private List<Command> singleLineParse(String linee) throws ScriptException, ConstructorException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        //try {
-            String line = linee;
-            Stack<String> commands = new Stack<String>();
-            Stack<String> values = new Stack<String>();
-            if (line.trim().length() > 0) {
-                String[] splited = line.split("\\s+");
-                String com = returnCommands(splited);
-                double math = checkMath(splited);
-                // double math = checkMath2(splited);
-                System.out.println("math return: " + math);
-                String new_splited_string = com;
-                if(math!=0.0){ new_splited_string = com+" " + math; }
-                String[] new_splited = new_splited_string.split(" ");
-                for(String s: new_splited){
-                    if(!checkHasNumber(s)){ commands.push(s); }
-                    else{ values.push(s); }
-                }
-            }
-            return unravel(commands, values);
-        //} catch (Exception e) {
-         //   throw new InvalidCommandException();
-        //}
+    private List<Command> singleLineParse(String linee) {
+        return new ArrayList<Command>();
     }
 
     // TODO - update return value to have new index (if repeat taken)
@@ -335,149 +286,6 @@ public class Parser {
 
         this.finalCommandObjects.addAll(tempRepeat.getAllRepCommands());
         return ret;
-    }
-
-    // TODO - implement math objects instead of Math engine
-    @Deprecated
-    private double checkMath2(String[] splitted) {
-        try {
-            String text;
-            System.out.println("Checking math2");
-            Stack<String> operator = new Stack<String>();
-            Stack<Double> argument = new Stack<Double>();
-            for (int i = splitted.length-1; i >= 0; i --) {
-                text = splitted[i];
-                // if(checkHasNumber(text)) {argument.push()};
-            }
-            for (int i = 0; i < splitted.length; i ++) {
-                text = splitted[i];
-                System.out.println("text: " + text);
-                Class clazz = Class.forName("slogo.logicalcontroller.command.math." + myCommandMap.getString(text));
-                Constructor constructor = clazz.getConstructor(String.class);
-                MathCommand command = (MathCommand) constructor.newInstance(splitted[i+1]);
-                command.performMath();
-                return command.getValue();
-            }
-            return Double.parseDouble(splitted[splitted.length-1]);
-        } catch (Exception e) {
-            System.out.println("exception in math2");
-            throw new ConstructorException();
-        }
-    }
-
-    // TODO - refactor as MathCommands
-    private double checkMath(String[] splited) throws ScriptException {
-        String op = retMath(splited);
-        String[] operation = op.split("\\s+");
-        for(int i = 0; i < operation.length; i ++) {
-            if ((type1.keySet()).contains(operation[i])) {
-                operation[i] = operation[i + 1];
-                operation[i + 1] = type1.get(operation[i]);
-                i += 2;
-            } else if (type2.contains(operation[i])) {
-                operation[i] = "Math." + operation[i];
-                operation[i + 1] = "(" + operation[i + 1] + ")";
-                i += 1;
-            }
-        }
-
-        ScriptEngineManager mgr = new ScriptEngineManager();
-        ScriptEngine engine = mgr.getEngineByName("JavaScript");
-        String temp = String.join("", operation);
-
-        if(String.valueOf(engine.eval(temp)) == null || (String.valueOf(engine.eval(temp)).equals("")) || (String.valueOf(engine.eval(temp)).equals("null"))){
-            return 0.0;
-        }
-        double ret = Double.parseDouble(String.valueOf(engine.eval(temp)));
-        return ret;
-    }
-
-    /**
-     * Takes in string array of split input string, returns all non math commands
-     * @param splited
-     * @return
-     */
-    private String returnCommands(String[] splited){
-        Set<String> mathTypes = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pow","pi","sum", "+","difference", "-","product","*","quotient","/","remainder", "%","minus","~"));
-        StringBuilder sb = new StringBuilder();
-        for(String s: splited){
-            if(!mathTypes.contains(s) && !s.matches(".*\\d.*")){
-                sb.append(s + " ");
-            }
-        }
-        return sb.substring(0, sb.length()-1);
-    }
-
-    /**
-     * Checks for non standard math operations so they can be set
-     * @param splited
-     * @return
-     * TODO - use stringBuilder to cut down on line
-     */
-    private String retMath(String[] splited){
-        Set<String> mathTypes = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pow","pi","sum", "+","difference", "-","product","*","quotient","/","remainder", "%","minus","~"));
-
-        if(!(String.join(" ", splited)).matches(".*\\d.*")){
-            return "";
-        }
-        String math = "";
-        for(String s: splited){
-            if(mathTypes.contains(s) || s.matches(".*\\d.*")){
-                math+=s + " ";
-            }
-        }
-
-        math = math.substring(0, math.length()-1);
-        return math;
-    }
-
-    /**
-     * Called by single line parse to create command list from expanded single line Strings by dual pointer stack
-     * @return
-     */
-    private List<Command> unravel(Stack<String> commands, Stack<String> values) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        //try {
-            List<Command> singleLineCommands = new ArrayList<Command>();
-            String lastValue = "";
-            System.out.println("Commands: ");
-            System.out.println(values);
-            while(!values.isEmpty()){
-                lastValue = values.pop();
-                System.out.println("LastVal" + lastValue);
-                singleLineCommands.add(getConstructor(commands.pop(), lastValue));
-                System.out.println("Comm" + singleLineCommands);
-            }
-            while(!commands.isEmpty() && values.isEmpty()){
-                singleLineCommands.add(getConstructor(commands.pop(), lastValue));
-            }
-            return singleLineCommands;
-        //} catch (ConstructorException e) {
-         //   throw new ConstructorException();
-        //}
-    }
-
-    /**
-     * Called internally in unravel
-     * Applies reflection on command string to create a command object with a given value
-     * @param com
-     * @param val
-     * @returns Commmand object
-     */
-    @Deprecated
-    private Command getConstructor(String com, String val) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-       // try {
-            System.out.println("Vallll" + val);
-
-            // Class cl = Class.forName(SLOGO_COMMAND+commandMappings.get(commandArray.get(com))+"."+commandArray.get(com));
-            Class cl = Class.forName(SLOGO_COMMAND); //+myCommandMap.getString(myCommandSuperclassMap.get(com))+"."+ myCommandSuperclassMap.get(com));
-            System.out.println("The val: " +  val);
-            Constructor con = cl.getConstructor(String.class);
-            Command command = (Command) con.newInstance(val);
-            System.out.println("Da command" + command);
-            return command;
-        //} catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
-         //   throw new ConstructorException();
-       // }
     }
 
     /**
@@ -558,33 +366,6 @@ public class Parser {
         System.out.println("Printing arguments: ");
         for (String s: sub) {System.out.println(s);}
         return new ArrayList<String>(List.of(sub));
-    }
-
-    private static String testTranslate(Parser p, String language, String command) {
-        try {
-            p.setLanguage(language);
-            String key = p.translateCommand(command);
-            System.out.printf("Translated %s to %s in %s \n", command, key, language);
-            return key;
-        } catch (Exception e) {
-            System.out.println("Exception in testTranslate");
-            throw new InvalidCommandException("Could not translate commmand");
-        }
-    }
-
-    private static void testSuperclassMap(Parser p) {
-        String command = "SetHeading";
-        String clazz = p.getCommandSuperclass(command);
-        System.out.printf("%s --> %s \n", command, clazz);
-    }
-
-    private static Command testCommandCreation(Parser p) {
-        String superclass = "modifier";
-        String command = "SetHeading";
-        List<String> arguments = new ArrayList<String>(List.of("50", "42"));
-        Command c = p.createCommand(superclass, command, arguments);
-        System.out.printf("command.toString(): %s \n", c.toString());
-        return c;
     }
 
     private static void testCommandCycle() throws IOException {
