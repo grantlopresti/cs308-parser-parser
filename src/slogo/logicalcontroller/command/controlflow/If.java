@@ -1,13 +1,39 @@
 package slogo.logicalcontroller.command.controlflow;
 
-public class If extends ControlFlowCommand {
+import java.util.ArrayList;
+import java.util.List;
 
-    public If(String rawInput) {
+/**
+ * Implements the IF Factory Design Pattern
+ * @author Alex Xu
+ */
+public class If extends ControlFlowCommand {
+    private int myConditional;
+
+    public If(double conditional, List<String> rawInput){
         super(rawInput);
+        myConditional = (int)Math.round(conditional);
     }
 
     @Override
     public void unravelCode() {
+        List<String> result;
+        if(isTrue()){
+            result = this.getBody();
+        }
+        else{
+            result = new ArrayList<>();
+            result.add("0");                            //TODO: Note to self: Magic Number - Is this needed? -Alex
+        }
+        setUnraveledCode(result);
+    }
 
+    private boolean isTrue(){
+        if(myConditional == 0){
+            return false;
+        }
+        else{
+            return true;
+        }
     }
 }

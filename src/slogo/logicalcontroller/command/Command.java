@@ -1,6 +1,6 @@
 package slogo.logicalcontroller.command;
 
-
+//TODO: Refactor into two different classes because there are commands that interact with the model, and there are commands that don't. - Alex
 public interface Command {
 
     /**

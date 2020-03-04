@@ -1,5 +1,8 @@
 package slogo.logicalcontroller.command.controlflow;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Implements the DOTIMES Factory Design Pattern
  * @author Alex Xu
@@ -7,20 +10,27 @@ package slogo.logicalcontroller.command.controlflow;
 public class DoTimes extends ControlFlowCommand {
     private int repeatCount;
 
-    public DoTimes(int argument, String rawInput){
+    /**
+     * Constructor for the DOTIMES command. Takes in a number of repeats (rounded to nearest integer)
+     * @param repeat
+     * @param rawInput
+     */
+    public DoTimes(double repeat, List<String> rawInput){
         super(rawInput);
-        repeatCount = argument;
+        repeatCount = (int)Math.round(repeat);
     }
 
     @Override
-    public void unravelCode() {
-        String myBody = this.getBody();
-        String result = "";
+    protected void unravelCode() {
+        List<String> myBody = this.getBody();
+        List<String> result = new ArrayList<>();
 
         for(int i = 0; i<repeatCount; i++){
-            result += "SET :variable " + (i+1);
-            result += myBody;
+            result.add("SET :variable " + (i+1));
+            result.addAll(myBody);
         }
-
+        setUnraveledCode(result);
     }
+
+
 }
