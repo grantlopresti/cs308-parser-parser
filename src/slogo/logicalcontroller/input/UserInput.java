@@ -44,12 +44,9 @@ public class UserInput implements UserInputInterface, BundleInterface {
         try {
             this.myLineIndex = findNextLine();
             this.myCommandIndex = findLastCommand(this.myLineIndex);
-            System.out.printf("found next command @line %d \n", this.myLineIndex);
-            System.out.printf("found last command @index %d \n", this.myCommandIndex);
             String translated = translateCommand(this.myCommand);
             System.out.printf("translated %s to %s \n", this.myCommand, translated);
             int params = countParameters(translated);
-            System.out.printf("requires %d parameters \n", params);
             List<String> arguments = getArguments(this.myLineIndex, this.myCommandIndex, params);
             String superclass = getCommandSuperclass(translated);
             Command c = createCommand(superclass, translated, arguments);
@@ -61,6 +58,7 @@ public class UserInput implements UserInputInterface, BundleInterface {
 
     // TODO - add to interface
     public boolean isFinished() {
+        System.out.println("checking if user input is finished");
         try {
             this.myLineIndex = findNextLine();
             this.myCommandIndex = findLastCommand(this.myLineIndex);
@@ -85,6 +83,7 @@ public class UserInput implements UserInputInterface, BundleInterface {
 
     // TODO - handle edge case of no more lines (raise flag when no more next lines and no more last commands?)
     private int findNextLine() {
+        System.out.printf("looking for nextLine on input: %s \n", this.myUserInput.get(0));
         for(int i = 0; i < this.myUserInput.size(); i++){
             String s = this.myUserInput.get(i);
             if(s.split("\\s+").length > 1){
@@ -96,6 +95,7 @@ public class UserInput implements UserInputInterface, BundleInterface {
 
     // TODO - handle no more commands in the line
     public int findLastCommand(int index) {
+        System.out.printf("looking for lastCommand on input: %s \n", this.myUserInput.get(0));
         String line = this.myUserInput.get(index);
         String[] words = line.split("\\s+");
         for(int i = words.length-1; i>=0; i--){
@@ -114,15 +114,13 @@ public class UserInput implements UserInputInterface, BundleInterface {
     // TODO - how to handle multiple line parameters (param number is constant, could be bracketed parameter]
     // TODO - assume that parameters are space separated (good enough assumption)
     private List<String> getArguments(int lineIndex, int commandIndex, int params) {
-        traverseUserInput();
+        // traverseUserInput();
         int stop = commandIndex+1+params;
         String input = this.myUserInput.get(lineIndex);
         String[] words = input.split("\\s");
         String[] args = Arrays.copyOfRange(words, commandIndex+1, stop);
         this.myPrefix = spaceSeparatedString(Arrays.copyOfRange(words, 0, commandIndex));
         this.mySuffix = spaceSeparatedString(Arrays.copyOfRange(words, stop, words.length));
-        System.out.print("Printing arguments: ");
-        for (String s: args) {System.out.println(s + " ");}
         this.myUserInput.set(lineIndex, input);
         return new ArrayList<String>(List.of(args));
     }
@@ -142,7 +140,6 @@ public class UserInput implements UserInputInterface, BundleInterface {
         for (String s: fullCommand) {
             sb.append(s + SPACE);
         }
-        System.out.printf("space separated string: %s \n", sb.toString());
         return sb.deleteCharAt(sb.length()-1).toString();
     }
 
@@ -198,6 +195,7 @@ public class UserInput implements UserInputInterface, BundleInterface {
      * @return
      */
     private Command createCommand(String superclass, String command, List<String> arguments) {
+        System.out.printf("createCommand in UserInput.java from commmand: %s \n", command);
         try {
             Class clazz = Class.forName(createCommandPath(superclass, command));
             Constructor ctor = clazz.getConstructor(List.class);
@@ -209,7 +207,7 @@ public class UserInput implements UserInputInterface, BundleInterface {
 
     private String createCommandPath(String superclass, String command) {
         String path = String.format("%s%s.%s", SLOGO_COMMAND, superclass, command);
-        System.out.printf("returning path: %s \n", path);
+        // System.out.printf("returning path: %s \n", path);
         return path;
     }
 
