@@ -37,8 +37,10 @@ public class Parser {
     private static final String SLOGO_COMMAND = "slogo.logicalcontroller.command.";
     private static final String COMMAND_MAP_PROPERTIES = "commandMappings";
     private static final String MATH_TYPE_ONE_PROPERTIES = "mathTypeOne";
-    private ResourceBundle myCommandMap = ResourceBundle.getBundle(DEFAULT_PROPERTIES + COMMAND_MAP_PROPERTIES);
-    private ResourceBundle myMathTypeOneMap = ResourceBundle.getBundle(DEFAULT_PROPERTIES + MATH_TYPE_ONE_PROPERTIES);
+    private FileInputStream fis1 = new FileInputStream("src/properties/"+COMMAND_MAP_PROPERTIES+".properties");
+    private ResourceBundle myCommandMap = new PropertyResourceBundle(fis1);
+    private FileInputStream fis2 = new FileInputStream("src/properties/math/"+MATH_TYPE_ONE_PROPERTIES+".properties");
+    private ResourceBundle myMathTypeOneMap = new PropertyResourceBundle(fis2);
     private Set<String> type2 = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pow","pi"));
     private Set<String> mathSingleParameter = new HashSet<String>(Arrays.asList(
             "random","sin","cos","tan","atan","log","pi", "minus", "~"));
