@@ -18,4 +18,10 @@ public interface UserInputInterface {
      */
     public void setCodeReplacement(List<String> code);
 
+    /**
+     * Signals to Logical Controller (through Parser), that all code has been executed
+     * @return that no more commands exist in the user input to parse
+     */
+    public boolean isFinished();
+
 }

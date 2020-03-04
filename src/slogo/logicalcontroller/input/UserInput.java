@@ -59,7 +59,7 @@ public class UserInput implements UserInputInterface, BundleInterface {
         }
     }
 
-    // TODO - add to interface
+    @Override
     public boolean isFinished() {
         System.out.println("checking if user input is finished");
         try {
@@ -84,7 +84,6 @@ public class UserInput implements UserInputInterface, BundleInterface {
         System.out.printf("code replaced to: %s", this.myUserInput.get(this.myLineIndex));
     }
 
-    // TODO - handle edge case of no more lines (raise flag when no more next lines and no more last commands?)
     private int findNextLine() {
         System.out.printf("looking for nextLine on input: %s \n", this.myUserInput.get(0));
         for(int i = 0; i < this.myUserInput.size(); i++){
@@ -96,8 +95,7 @@ public class UserInput implements UserInputInterface, BundleInterface {
         throw new NoCommandFound();
     }
 
-    // TODO - handle no more commands in the line
-    public int findLastCommand(int index) {
+    private int findLastCommand(int index) {
         System.out.printf("looking for lastCommand on input: %s \n", this.myUserInput.get(0));
         String line = this.myUserInput.get(index);
         String[] words = line.split("\\s+");
