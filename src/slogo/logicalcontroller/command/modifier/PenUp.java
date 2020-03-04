@@ -8,4 +8,9 @@ public class PenUp extends ModifierCommand {
     public PenUp(List<String> args){
         super(""+RETURN_VALUE);
     }
+
+    @Override
+    public String execute() {
+        return null;
+    }
 }
