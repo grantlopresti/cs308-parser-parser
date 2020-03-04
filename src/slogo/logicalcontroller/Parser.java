@@ -103,7 +103,14 @@ public class Parser {
 
     // TODO - refactor to accept any value from language properties (this.myLanguageResources)
     private boolean isValidCommand(String s) {
-        return true;
+        Enumeration<String> resourceEnumeration = this.myLanguageResources.getKeys();
+        String key; String value;
+        while (resourceEnumeration.hasMoreElements()) {
+            key = resourceEnumeration.nextElement();
+            value = this.myLanguageResources.getString(key);
+            if (value.contains(s)) {return true;}
+        }
+        return false;
     }
 
     /**
@@ -114,7 +121,9 @@ public class Parser {
     private int findLastCommand(String line) {
         String[] lineElems = line.split("\\s+");
         for(int i = lineElems.length-1; i>=0; i--){
+            System.out.println("Made it here");
             if(isValidCommand(lineElems[i])) {
+                System.out.println("Last Valid Command @:" + i);
                 return i;
             }
         }
@@ -556,10 +565,10 @@ public class Parser {
     }
 
     private static void testCommandCycle() throws IOException {
-        String language = "Russian";
+        String language = "English";
         Parser p = new Parser(language);
         // TODO - take user input, return command and arguments
-        List<String> userInput = new ArrayList<String>(List.of("40", "vpered 50"));
+        List<String> userInput = new ArrayList<String>(List.of("40", "fd fd fd rt 50 + xcor"));
         p.setUserInput(userInput);
         int lineIndex = p.findNextLine();
         int commandIndex = p.findLastCommand(p.getUserInput().get(lineIndex));
