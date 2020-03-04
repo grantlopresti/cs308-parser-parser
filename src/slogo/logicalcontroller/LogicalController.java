@@ -60,7 +60,7 @@ public class LogicalController {
     myParser.parse(Arrays.asList(command.split("\n")));
     while(!myParser.isFinished()){
       //myParser.executeNextCommand();
-      //Command latestCommand = myParser.getLatestCommand();
+      //Command latestCommand = myParser.getLatestCommand();          //TODO: Make sure to mention Invariants in our design analysis
       ModelCollection newModel = myParser.getModel();
       //List<Variable> newVariables = myParser.getVariables();
 
