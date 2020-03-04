@@ -8,4 +8,9 @@ public class ShowTurtle extends ModifierCommand {
     public ShowTurtle(List<String> args){
         super(""+RETURN_VALUE);
     }
+
+    @Override
+    public String execute() {
+        return null;
+    }
 }

@@ -13,7 +13,7 @@ import java.util.ResourceBundle;
  * Takes in 0, 1, or 2 input commands.
  * @author Alex Xu
  */
-public abstract class ModifierCommand implements Command {
+public abstract class ModifierCommand implements Command, ModifierInterface {
     public static final String RESOURCE_BUNDLE_LOCATION = "src/properties/modifierCommands.MyBundle";
 
     private FileInputStream fis;
@@ -89,4 +89,8 @@ public abstract class ModifierCommand implements Command {
     public double getArgument2(){
         return argument2;
     }
+
+    @Override
+    public abstract String execute();
+
 }
