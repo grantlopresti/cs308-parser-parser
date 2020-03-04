@@ -188,15 +188,11 @@ public class Parser {
      */
     private List<String> executeCommand(Command command) {
         try {
-            String superclazz = command.getClass().getSuperclass().getSimpleName();
-            System.out.printf("superclazz: %s \n", superclazz);
-            String name = "execute" + superclazz;
-            System.out.printf("name: %s \n", name);
-            Method method = this.getClass().getDeclaredMethod(name, Command.class); // command.getClass());
-            System.out.printf("METHOD: %s \n", method);
-            Object o = method.invoke(command);
-            return new ArrayList<String>();
-            // return (List<String>) o;
+            Class superclazz = command.getClass().getSuperclass();
+            String name = "execute" + superclazz.getSimpleName();
+            Method method = this.getClass().getDeclaredMethod(name, superclazz); //Command.class
+            Object o = method.invoke(this, command);
+            return (List<String>) o;
         } catch (Exception e) {
             throw new InvalidCommandException("Could not execute command");
         }
@@ -228,23 +224,23 @@ public class Parser {
      * @param command
      * @return
      */
-    private List<String> executeModifierCommand(Command command) {
-        return new ArrayList<String>(List.of("Hello, I just executed a modifier command :)", "I hope this worked", "Slogo is fun"));
+    private List<String> executeModifierCommand(ModifierCommand command) {
+        return new ArrayList<String>(List.of("Hello, I just executed a modifier command :)\n", "I hope this worked\n", "Slogo is fun\n"));
     }
 
-    private List<String> executeComparisonCommand(Command command) {
+    private List<String> executeComparisonCommand(ComparisonCommand command) {
         return new ArrayList<String>();
     }
 
-    private List<String> executeControlFlowCommand(Command command) {
+    private List<String> executeControlFlowCommand(ControlFlowCommand command) {
         return new ArrayList<String>();
     }
 
-    private List<String> executeMathCommand(Command command) {
+    private List<String> executeMathCommand(MathCommand command) {
         return new ArrayList<String>();
     }
 
-    private List<String> executeQuerieCommand(Command command) {
+    private List<String> executeQuerieCommand(QuerieCommand command) {
         return new ArrayList<String>();
     }
 
