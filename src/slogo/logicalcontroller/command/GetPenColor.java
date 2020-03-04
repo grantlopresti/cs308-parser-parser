@@ -7,7 +7,7 @@ public class GetPenColor implements Command{
         value = Double.parseDouble(inputvalue);
 
     }
-    
+
     public double getValue() {
         return this.value;
     }
