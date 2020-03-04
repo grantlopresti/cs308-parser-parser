@@ -1,11 +1,7 @@
 package slogo.logicalcontroller;
 
 import slogo.exceptions.InvalidCommandException;
-import slogo.exceptions.NoCommandFound;
 import slogo.logicalcontroller.command.Command;
-import slogo.logicalcontroller.command.modifier.Forward;
-import slogo.logicalcontroller.input.UserInput;
-import slogo.logicalcontroller.variable.MakeVariable;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
 import slogo.visualcontroller.VisualController;
@@ -13,7 +9,6 @@ import slogo.visualcontroller.VisualController;
 import javax.script.ScriptException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,7 +36,7 @@ public class LogicalController {
     // TODO - update visualController initial state to empty lists to get first turtle to show
     this.myVisualController.update(this.myModelCollection, this.myVariables, null);
     try {
-      this.setLanguage(DEFAULT_LANGUAGE);
+      myParser= new Parser(DEFAULT_LANGUAGE, modelCollection);
     } catch (Exception e) {
       System.exit(0);
     }
@@ -53,7 +48,7 @@ public class LogicalController {
    * @throws IOException
    */
   public void setLanguage(String language) throws IOException {
-    this.myParser = new Parser(language, this.myModelCollection);                         //TODO: Might need to change.
+    myParser.setLanguage(language);
   }
 
   /**
