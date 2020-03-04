@@ -38,14 +38,8 @@ public class Manager {
         startView();
     }
 
-    private void startView() {
-        Platform.startup(() -> {
-            try {
-                mySlogoView.start(new Stage());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+    private void startView() throws IOException {
+        mySlogoView.start(new Stage());
     }
 
     private void setViewControllerView() {
@@ -53,7 +47,6 @@ public class Manager {
     }
 
     private void createSlogoView() {
-        //mySlogoView = new SlogoView(myLogicalController, myVisualController);
         mySlogoView = new SlogoInterface(myLogicalController, myVisualController);
     }
 

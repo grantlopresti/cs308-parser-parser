@@ -2,21 +2,36 @@ package slogo.view.windows;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.ResourceBundle;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import slogo.logicalcontroller.LogicalController;
 import slogo.view.SubTabFactory;
 import slogo.view.subsections.ListTab;
+import slogo.view.subsections.ToolbarPane;
+import slogo.view.subsections.UserInputPane;
+import slogo.view.subsections.VisualizationPane;
+import slogo.visualcontroller.ErrorSeverity;
 import slogo.visualcontroller.VisualController;
 import slogo.visualcontroller.VisualError;
 import slogo.visualcontroller.VisualLine;
@@ -25,30 +40,43 @@ import slogo.visualcontroller.VisualTurtle;
 
 public class SlogoInterface extends Application {
 
-  private static final int WINDOW_WIDTH = 1380;
-  private static final int WINDOW_HEIGHT = 700;
-
   private static final int VISUALIZER_WIDTH = 800;
   private static final int VISUALIZER_HEIGHT = 525;
+  public static final int RIGHT_PANE_WIDTH = 350;
+  public static final int LEFT_PANE_WIDTH = 350;
+
+  private static final int WINDOW_WIDTH = LEFT_PANE_WIDTH + VISUALIZER_WIDTH + RIGHT_PANE_WIDTH;
+  private static final int WINDOW_HEIGHT = 700;
+
+  public static final String PROJECT_TITLE = "Parser Parser - Slogo Project - CS 308";
+  public static final String DEFAULT_STYLESHEET = "stylesheets/defaultStyle.css";
+  public static final String CREATORS_CREDIT = "Created by: Alex Xu, Amjad Syedibrahim, Grant LoPresti, and Max Smith";
+  public static final String CLASS_CREDIT = "CS 308 - Spring 2020 - Duvall";
+  public static final String PROJECT_CREDIT = "Slogo - Parser Team 10";
+
+  //FIXME: Delete these and replace with XML reading
+  public static final String[] INITIAL_LEFT_TAB_NAMES = new String[]{
+      "UserDefinedFunctionsTab",
+      "ErrorHandlerTab",
+      "FileViewerTab"
+  };
+  public static final String[] INITIAL_RIGHT_TAB_NAMES = new String[]{
+      "CommandHistoryTab",
+      "VariableViewerTab",
+      "DataViewerTab",
+  };
 
   //Main Sections
   private BorderPane myMainPane;
-  private Pane myToolbarPane;
+  private ToolBar myToolbarPane;
   private TabPane myLeftPane;
-  private Pane myCenterPane;
+  private BorderPane myCenterPane;
   private TabPane myRightPane;
   private Pane myCreditsPane;
 
   //SubPanes
-  private Pane myVisualizationPane;
-  private Pane myInputPane;
-
-  //SubTabs
-  private ListTab myCommandsTab;
-  private ListTab myDataTab;
-  private ListTab myFunctionsTab;
-  private ListTab myErrorsTab;
-  private ListTab myTurtlesTab;
+  private VisualizationPane myVisualizationPane;
+  private UserInputPane myInputPane;
 
   //Controllers
   private LogicalController myLogicalController;
@@ -57,16 +85,29 @@ public class SlogoInterface extends Application {
   //Factories
   private SubTabFactory mySubTabFactory;
 
+  private ResourceBundle myTabTypeResources;
+  private ResourceBundle myInitialLeftTabResources;
+  private ResourceBundle myInitialRightTabResources;
+
+  private static final String TabResourcePath = "slogo.view.resources.possibleTabs";
+  private static final String InitialLeftTabResourcePath = "slogo.view.resources.InitialLeftTabs";
+  private static final String InitialRightTabResourcePath = "slogo.view.resources.InitialRightTabs";
+
+
   public SlogoInterface(LogicalController logicalController, VisualController visualController) {
     myLogicalController = logicalController;
     myVisualController = visualController;
+
+    myTabTypeResources = ResourceBundle.getBundle(TabResourcePath);
+    myInitialLeftTabResources = ResourceBundle.getBundle(InitialLeftTabResourcePath);
+    myInitialRightTabResources = ResourceBundle.getBundle(InitialRightTabResourcePath);
   }
 
   @Override
   public void start(Stage stage) throws IOException {
     Scene scene = new Scene(createMainPane(), WINDOW_WIDTH, WINDOW_HEIGHT);
-    stage.setTitle("Parser Parser - Slogo Project - CS 308");
-    scene.getStylesheets().add("stylesheets/defaultStyle.css");
+    stage.setTitle(PROJECT_TITLE);
+    scene.getStylesheets().add(DEFAULT_STYLESHEET);
     stage.setScene(scene);
     stage.show();
   }
@@ -89,42 +130,87 @@ public class SlogoInterface extends Application {
   private void createSubPanes() {
     mySubTabFactory = new SubTabFactory();
 
-    myToolbarPane = new Pane();
+    createToolbarPane();
     createLeftPane();
-    myCenterPane = new Pane();
+    createCenterPane();
     createRightPane();
     createCreditsPane();
   }
 
+  private void createToolbarPane() {
+    myToolbarPane = new ToolbarPane(this, myLogicalController).getNode();
+  }
+
+  private void createCenterPane() {
+    myCenterPane = new BorderPane();
+
+    myVisualizationPane = new VisualizationPane(VISUALIZER_WIDTH, VISUALIZER_HEIGHT);
+    Group visualization = myVisualizationPane.getNode();
+    HBox programInputArea = getProgramInputNode();
+
+    myCenterPane.setCenter(visualization);
+    myCenterPane.setBottom(programInputArea);
+  }
+
+  private HBox getProgramInputNode() {
+    HBox programInputArea = new HBox();
+
+    myInputPane = new UserInputPane(this, myLogicalController);
+    TextArea inputArea = myInputPane.getNode();
+    inputArea.setPrefSize(WINDOW_WIDTH * 0.5, WINDOW_HEIGHT * 0.15);
+    inputArea.setWrapText(true);
+
+    VBox buttonArea = getButtonsVBox();
+
+    programInputArea.getChildren().addAll(inputArea, buttonArea);
+    programInputArea.setAlignment(Pos.CENTER);
+
+    return programInputArea;
+  }
+
+  private VBox getButtonsVBox() {
+    VBox buttonArea = new VBox();
+    Button runButton = new Button("Run");
+    runButton.setId("run-button");
+    runButton.setMinSize(60, WINDOW_HEIGHT * 0.10);
+    runButton.setPrefWidth(120);
+    runButton.setOnAction(e -> {
+      myInputPane.sendUserCommand();
+    });
+
+    Button clearButton = new Button("Clear");
+    clearButton.setId("run-button");
+    clearButton.setMinSize(60, WINDOW_HEIGHT * 0.05);
+    clearButton.setPrefWidth(120);
+    clearButton.setOnAction(e -> {
+      myInputPane.clear();
+    });
+
+    buttonArea.getChildren().addAll(runButton, clearButton);
+    return buttonArea;
+  }
+
   private void createLeftPane() {
+    myLeftPane = new TabPane();
+
     //FIXME: Initial settings should be obtained from XML File
-    String[] initialTabNames = new String[]{"TurtleOptionsTab", "DefinedFunctionsTab", };
-    ListTab[] initialTabs = new ListTab[initialTabNames.length];
-    for (int i = 0; i < initialTabNames.length; i++){
-      //initialTabs[i] = mySubTabFactory.makeTab(initialTabNames[i]);
+    for (String initialTabName : INITIAL_LEFT_TAB_NAMES){
+      myLeftPane.getTabs().add(mySubTabFactory.makeTab(this, myVisualController, initialTabName));
     }
+
+    myLeftPane.setPrefWidth(LEFT_PANE_WIDTH);
   }
 
   private void createRightPane() {
-    //FIXME: Initial settings should be obtained from XML File
-    String[] initialTabNames = new String[]{"CommandHistoryTab", "DataViewerTab", "ErrorHandlerTab"};
-    ListTab[] initialTabs = new ListTab[initialTabNames.length];
-    for (int i = 0; i < initialTabNames.length; i++){
-      //initialTabs[i] = mySubTabFactory.makeTab(initialTabNames[i]);
-    }
-
     myRightPane = new TabPane();
 
-    myErrorsTab = new ListTab(this, "Error Handler");
-    myErrorsTab.setProperty(myVisualController.getProperty(VisualProperty.ERROR));
+    //FIXME: Initial settings should be obtained from XML File
+    String[] initialTabNames = new String[]{"CommandHistoryTab", "DataViewerTab", "ErrorHandlerTab"};
+    for (String initialTabName : INITIAL_RIGHT_TAB_NAMES){
+      myRightPane.getTabs().add(mySubTabFactory.makeTab(this, myVisualController, initialTabName));
+    }
 
-    myCommandsTab = new ListTab(this, "Command History");
-    myCommandsTab.setProperty(myVisualController.getProperty(VisualProperty.COMMAND));
-
-    myDataTab = new ListTab(this, "Variables/Data");
-    myDataTab.setProperty(myVisualController.getProperty(VisualProperty.VARIABLE));
-
-    myRightPane.getTabs().addAll(myCommandsTab, myErrorsTab, myDataTab);
+    myRightPane.setPrefWidth(RIGHT_PANE_WIDTH);
     //myRightPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 
   }
@@ -139,11 +225,11 @@ public class SlogoInterface extends Application {
     HBox.setHgrow(creditsSpacingRight, Priority.ALWAYS);
 
     myCreditsPane.getChildren().addAll(
-        new Label("Slogo - Parser Team 10"),
+        new Label(PROJECT_CREDIT),
         creditsSpacingLeft,
-        new Label("Created by: Alex Xu, Amjad Syedibrahim, Grant LoPresti, and Max Smith"),
+        new Label(CREATORS_CREDIT),
         creditsSpacingRight,
-        new Label("CS 308 - Spring 2020 - Duvall")
+        new Label(CLASS_CREDIT)
     );
 
     ((HBox)myCreditsPane).setAlignment(Pos.CENTER);
@@ -152,26 +238,63 @@ public class SlogoInterface extends Application {
 
 
   public void announceError(VisualError error) {
+    Alert alert;
+
+    if (error.getSeverity() == ErrorSeverity.CRITICAL) {
+      alert = new Alert(AlertType.ERROR);
+    } else if (error.getSeverity() == ErrorSeverity.MEDIUM){
+      alert = new Alert(AlertType.WARNING);
+    } else {
+      alert = new Alert(AlertType.INFORMATION);
+    }
+
+    alert.setTitle("Alert");
+    alert.setHeaderText(null);
+    alert.setContentText(error.toString());
+
+    alert.showAndWait();
+  }
+
+  public void setUserInputAreaText(String fileContents) {
+    myInputPane.setInputArea(fileContents);
   }
 
   public void updateVisualTurtles(ArrayList<VisualTurtle> visualTurtles) {
+    for (VisualTurtle turtle : visualTurtles){
+      myVisualizationPane.addVisualTurtle(turtle);
+    }
+    //TODO: UPDATE CENTER
+    myMainPane.setCenter(myCenterPane);
   }
 
-  public void updateVisualLines(ArrayList<VisualLine> visualLines) {
-  }
-
-  public void setUserInputAreaText(String toString) {
+  public void updateVisualLines(List<VisualLine> visualLines) {
+    for (VisualLine line : visualLines){
+      myVisualizationPane.addVisualLine(line);
+    }
+    myVisualizationPane.getNode();
+    //TODO: UPDATE CENTER
+    myMainPane.setCenter(myCenterPane);
   }
 
   public void setBGColor(double red, double green, double blue) {
-  }
-
-  public void changeTurtleImage(String newValue) {
-  }
-
-  public void setPenColor(double red, double green, double blue) {
+    myVisualizationPane.setBGColor(red, green, blue);
   }
 
   public void clearScreen() {
+    myVisualizationPane.clearElements();
+    myVisualizationPane.resetBGColor();
+    //TODO: UPDATE CENTER
+    myMainPane.setCenter(myCenterPane);
+  }
+
+  public void setPenColor(double red, double green, double blue) {
+    Color customColor = new Color(red,green,blue,1);
+    myVisualizationPane.setPenColor(customColor);
+  }
+
+  public void changeTurtleImage(String newValue) {
+    myVisualController.changeTurtleImage(newValue.toUpperCase());
+    //TODO: UPDATE CENTER
+    //myVisualizationPane.
   }
 }

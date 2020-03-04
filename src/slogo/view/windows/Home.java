@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import slogo.Manager;
 
 public class Home extends Application {
 
@@ -68,8 +69,7 @@ public class Home extends Application {
 
   @FXML
   private void launchSim() throws IOException {
-    // SlogoView mainView = new SlogoView();
-    // mainView.start(new Stage());
+    new Manager();
   }
 
 }

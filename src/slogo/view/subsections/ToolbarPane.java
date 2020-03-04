@@ -15,6 +15,7 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Separator;
 import javafx.scene.control.ToolBar;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -34,7 +35,7 @@ import slogo.visualcontroller.VisualError;
 
 import javax.script.ScriptException;
 
-public class ToolbarPane {
+public class ToolbarPane extends ToolBar {
 
   private LogicalController myLogicalController;
   private static final String DEFAULT_LANGUAGE = "English";
