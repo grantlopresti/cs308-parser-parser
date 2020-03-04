@@ -3,6 +3,7 @@ package slogo.logicalcontroller;
 import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.variable.Variable;
+import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelCollection;
 import slogo.visualcontroller.VisualController;
 
@@ -24,12 +25,12 @@ public class LogicalController {
 
   private ModelCollection myModelCollection;
   private VisualController myVisualController;
-  private List<Variable> myVariables;
+  private VariableList myVariables;
 
   private LogicalController(){
   };
 
-  public LogicalController(ModelCollection modelCollection, VisualController visualController, List<Variable> variables){
+  public LogicalController(ModelCollection modelCollection, VisualController visualController, VariableList variables){
     this.myModelCollection = modelCollection;
     this.myVisualController = visualController;
     this.myVariables = variables;
@@ -65,7 +66,7 @@ public class LogicalController {
         this.myParser.executeNextCommand();
         Command latestCommand = this.myParser.getLatestCommand();
         ModelCollection newModel = this.myParser.getModel();
-        List<Variable> newVariables = this.myParser.getVariables();
+        VariableList newVariables = this.myParser.getVariables();
         this.myVisualController.update(newModel, newVariables, latestCommand);
       }
     } catch (Exception e) {

@@ -12,6 +12,7 @@ import slogo.logicalcontroller.command.modifier.ModifierCommand;
 import slogo.logicalcontroller.command.querie.QuerieCommand;
 import slogo.logicalcontroller.input.UserInput;
 import slogo.logicalcontroller.variable.Variable;
+import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelCollection;
 
 import java.util.*;
@@ -26,7 +27,7 @@ public class Parser implements BundleInterface {
 
     private String myLanguage;
     private List<Command> finalCommandObjects;
-    private List<Variable> myVariableList;
+    private VariableList myVariableList;
     private UserInput myUserInput;
     private ModelCollection myModelCollection;
     private ResourceBundle myLanguageResources;
@@ -141,7 +142,7 @@ public class Parser implements BundleInterface {
         return this.myLatestCommand;
     }
 
-    public List<Variable> getVariables() {return this.myVariableList; }
+    public VariableList getVariables() {return this.myVariableList; }
 
     public boolean isFinished(){
         return this.myUserInput.isFinished();
