@@ -9,6 +9,7 @@ import slogo.logicalcontroller.command.controlflow.Repeat;
 import slogo.logicalcontroller.command.math.MathCommand;
 import slogo.logicalcontroller.command.modifier.ModifierCommand;
 import slogo.logicalcontroller.command.querie.QuerieCommand;
+import slogo.logicalcontroller.input.UserInput;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
 
@@ -26,7 +27,7 @@ public class Parser {
 
     private String myLanguage;
     private List<Command> finalCommandObjects;
-    private List<String> myUserInput;
+    private UserInput myUserInput;
     private ModelCollection model;
     private List<Variable> variables;
     private List<String> command_input;
@@ -36,24 +37,11 @@ public class Parser {
     private static ResourceBundle myCommandMap;
     private static ResourceBundle myParameterMap;
     private ResourceBundle myLanguageResources;
-    private Set<String> type2 = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pow","pi"));
-    private Set<String> mathSingleParameter = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pi", "minus", "~"));
-    private ArrayList<String> comNeedChecked = new ArrayList<String>(Arrays.asList("repeat","sin","cos","tan","atan","log","pow","pi"));
-    private Set<String> mathDoubleParameter = new HashSet<String>(Arrays.asList("pow", "sum", "+", "difference", "-", "product", "*", "quotient", "/", "remainder", "%"));
-    private Map<String, String> type1 = new HashMap<String, String>(){{
-        put("sum", "+");
-        put("difference", "-");
-        put("product", "*");
-        put("quotient", "/");
-        put("remainder", "%");
-        put("minus", "~");
-    }};
 
     /**
      * Constructor for the Parser class that takes in the input language and initializes all the used variables that are required for parsing
      * @param language
      * @throws IOException
-     * TODO - add filenames to static variables up top
      */
     public Parser(String language) throws IOException {
         setLanguage(language);
@@ -82,54 +70,13 @@ public class Parser {
     public void parse(List<String> lines) {
         try {
             this.finalCommandObjects = new ArrayList<Command>();
-            this.myUserInput = lines;
+            this.myUserInput = new UserInput(lines, this.myLanguageResources);
             for (int i = 0; i < lines.size(); i++) {
                 this.finalCommandObjects.addAll(singleLineParse(lines.get(i)));
             }
         } catch (Exception e) {
             throw new InvalidCommandException();
         }
-    }
-
-    /**
-     * Traverses array of raw commands, finds next non constant line
-     * @return
-     */
-    private int findNextLine() {
-        for(int i = 0; i < this.myUserInput.size(); i++){
-            String s = this.myUserInput.get(i);
-            if(s.split("\\s+").length > 1){
-                return i;
-            }
-        }
-        return 0;
-    }
-
-    // TODO - refactor to accept any value from language properties (this.myLanguageResources)
-    private boolean isValidCommand(String s) {
-        Enumeration<String> resourceEnumeration = this.myLanguageResources.getKeys();
-        String key; String value;
-        while (resourceEnumeration.hasMoreElements()) {
-            key = resourceEnumeration.nextElement();
-            value = this.myLanguageResources.getString(key);
-            if (value.contains(s)) {return true;}
-        }
-        return false;
-    }
-
-    /**
-     * Input single line of text, output index of last commandkeyword
-     * @return
-     *
-     */
-    private int findLastCommand(String line) {
-        String[] lineElems = line.split("\\s+");
-        for(int i = lineElems.length-1; i>=0; i--){
-            if(isValidCommand(lineElems[i])) {
-                return i;
-            }
-        }
-        return -1;
     }
 
     /**
@@ -204,8 +151,9 @@ public class Parser {
         }
     }
 
+    // TODO - fill in method body
     public void executeNextCommand(){
-        singleLineParse(myUserInput.get(findNextLine()));
+        ;
     }
 
     /**
@@ -234,33 +182,8 @@ public class Parser {
         return new ArrayList<String>();
     }
 
-    private String getType(String line) {
-
-        return null;
-    }
-
     private List<Command> singleLineParse(String linee) {
         return new ArrayList<Command>();
-    }
-
-    // TODO - update return value to have new index (if repeat taken)
-    // TODO - accept repeat in any position, not just first position in line
-    private int checkForVCU(int index) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, ScriptException {
-        Set<String> vcuTypes = new HashSet<String>(Arrays.asList("repeat","dotimes","make","set","for","if","ifelse","to"));
-        boolean doExit = false;
-        int ret = 0;
-        while(!doExit){
-            String[] line = (myUserInput.get(index)).split("\\s+");
-            for(int i = 0; i<line.length; i++){
-                if(vcuTypes.contains(line[i])){
-                    if(line[i].equals("repeat")){
-                        index = parseRepeat(line,index);
-                    }
-                }
-            }
-            doExit = true;
-        }
-        return index;
     }
 
     // TODO - assume only one repeat, update to handle multiple
@@ -272,8 +195,8 @@ public class Parser {
         List<Command> repCommands = new ArrayList<Command>();
         List<Command> commandsToBeAdded = new ArrayList<Command>();
 
-        while(!(myUserInput.get(currLine)).contains("]")){
-            tempRetLines.add((myUserInput.get(currLine)));
+        while(!(this.myUserInput.getLine(currLine)).contains("]")){
+            tempRetLines.add((this.myUserInput.getLine(currLine)));
             currLine++;
         }
         ret = currLine;
@@ -303,26 +226,6 @@ public class Parser {
     }
 
     /**
-     * Called internally, to create mapping of every input command to the command objects
-     * Based on preconfigured language
-     * @return mappings of input commands to command objects (e.g lt --> Left)
-     */
-    private Map<String, String> createCommandSuperclassMap() {
-        Map<String, String> mymap = new HashMap<String, String>();
-        for(String key: Collections.list(this.myLanguageResources.getKeys())){
-            String regex = this.myLanguageResources.getString(key);
-            if(regex.indexOf("|") != -1){
-                mymap.put(regex.substring(0, regex.indexOf("|")), key);
-                mymap.put(regex.substring(regex.indexOf("|")+1), key);
-            }
-            else{
-                mymap.put(regex, key);
-            }
-        }
-        return mymap;
-    }
-
-    /**
      * Called by the LogicalController
      * Returns the final list of commands to be executed on the model
      * @return
@@ -346,10 +249,10 @@ public class Parser {
     }
 
     private void setUserInput(List<String> userInput) {
-        this.myUserInput = userInput;
+        this.myUserInput = new UserInput(userInput, this.myLanguageResources);
     }
 
-    private List<String> getUserInput() {
+    private UserInput getUserInput() {
         return this.myUserInput;
     }
 
@@ -359,7 +262,7 @@ public class Parser {
 
     private List<String> getArguments(int line, int index, int params) {
         index ++;
-        String input = this.myUserInput.get(line);
+        String input = this.myUserInput.getLine(line);
         String[] words = input.split("\\s");
         int stop = index+params;
         String[] sub = Arrays.copyOfRange(words, index, stop);
@@ -373,8 +276,8 @@ public class Parser {
         Parser p = new Parser(language);
         List<String> userInput = new ArrayList<String>(List.of("40", "60", "75", "vpered vpered 50"));
         p.setUserInput(userInput);
-        int lineIndex = p.findNextLine();
-        int commandIndex = p.findLastCommand(p.getUserInput().get(lineIndex));
+        int lineIndex = p.getUserInput().findNextLine();
+        int commandIndex = p.getUserInput().findLastCommand(lineIndex);
         System.out.printf("found next command @line %d \n", lineIndex);
         System.out.printf("found last command @index %d \n", commandIndex);
         String command = "vpered";
