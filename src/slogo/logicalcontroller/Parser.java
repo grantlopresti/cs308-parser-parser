@@ -101,6 +101,7 @@ public class Parser {
         return 0;
     }
 
+    // TODO - refactor to accept any value from language properties (this.myLanguageResources)
     private boolean isValidCommand(String s) {
         return true;
     }
@@ -108,16 +109,12 @@ public class Parser {
     /**
      * Input single line of text, output index of last commandkeyword
      * @return
-     * TODO - refactor to accept any value from language properties
+     *
      */
     private int findLastCommand(String line) {
         String[] lineElems = line.split("\\s+");
-
         for(int i = lineElems.length-1; i>=0; i--){
-            if(lineElems[i].matches(".*\\d.*")){
-                continue;
-            }
-            else{
+            if(isValidCommand(lineElems[i])) {
                 return i;
             }
         }
