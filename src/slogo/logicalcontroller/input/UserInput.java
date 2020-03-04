@@ -1,8 +1,6 @@
 package slogo.logicalcontroller.input;
 
-import java.util.Enumeration;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class UserInput implements UserInputInterface {
 
@@ -40,6 +38,18 @@ public class UserInput implements UserInputInterface {
     @Override
     public String getLine(int index) {
         return this.myUserInput.get(index);
+    }
+
+    @Override
+    public List<String> getArguments(int line, int index, int params) {
+        index ++;
+        String input = this.myUserInput.get(line);
+        String[] words = input.split("\\s");
+        int stop = index+params;
+        String[] sub = Arrays.copyOfRange(words, index, stop);
+        System.out.println("Printing arguments: ");
+        for (String s: sub) {System.out.println(s);}
+        return new ArrayList<String>(List.of(sub));
     }
 
     private boolean isValidCommand(String s) {

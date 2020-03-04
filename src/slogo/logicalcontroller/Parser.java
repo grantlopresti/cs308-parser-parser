@@ -260,17 +260,6 @@ public class Parser {
         return Integer.parseInt(this.myParameterMap.getString(translated));
     }
 
-    private List<String> getArguments(int line, int index, int params) {
-        index ++;
-        String input = this.myUserInput.getLine(line);
-        String[] words = input.split("\\s");
-        int stop = index+params;
-        String[] sub = Arrays.copyOfRange(words, index, stop);
-        System.out.println("Printing arguments: ");
-        for (String s: sub) {System.out.println(s);}
-        return new ArrayList<String>(List.of(sub));
-    }
-
     private static void testCommandCycle() throws IOException {
         String language = "Russian";
         Parser p = new Parser(language);
@@ -285,7 +274,7 @@ public class Parser {
         System.out.printf("translated %s to %s in %s", command, translated, language);
         int params = p.countParameters(translated);
         System.out.printf("requires %d parameters", params);
-        List<String> arguments = p.getArguments(lineIndex, commandIndex, params); //new ArrayList<String>(List.of("50"));
+        List<String> arguments = p.getUserInput().getArguments(lineIndex, commandIndex, params);
         String superclass = p.getCommandSuperclass(translated);
         Command c = p.createCommand(superclass, translated, arguments);
         List<String> myList = p.executeCommand(c);

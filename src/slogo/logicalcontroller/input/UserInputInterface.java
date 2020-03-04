@@ -1,5 +1,7 @@
 package slogo.logicalcontroller.input;
 
+import java.util.List;
+
 public interface UserInputInterface {
 
     /**
@@ -21,5 +23,14 @@ public interface UserInputInterface {
      * @return the line that we want
      */
     public String getLine(int index);
+
+    /**
+     *
+     * @param line is the line number
+     * @param index is the index in the line to process
+     * @param params is the parameter count to traverse
+     * @returns the list of arguments to process
+     */
+    public List<String> getArguments(int line, int index, int params);
 
 }
