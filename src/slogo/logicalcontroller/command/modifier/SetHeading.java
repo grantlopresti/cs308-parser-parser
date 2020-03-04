@@ -1,7 +1,9 @@
 package slogo.logicalcontroller.command.modifier;
 
+import java.util.List;
+
 public class SetHeading extends ModifierCommand {
-    public SetHeading(String inputValue){
-        super(inputValue);
+    public SetHeading(List<String> args){
+        super(args.get(0));
     }
 }

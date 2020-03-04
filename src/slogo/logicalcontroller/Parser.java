@@ -1,6 +1,7 @@
 package slogo.logicalcontroller;
 
 import slogo.exceptions.ConstructorException;
+import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.command.comparison.ComparisonCommand;
 import slogo.logicalcontroller.command.controlflow.ControlFlowCommand;
@@ -23,23 +24,19 @@ import javax.script.ScriptException;
  */
 public class Parser {
 
-    private String lang;
-    private Map<String, String> commandArray;
+    private String myLanguage;
+    private ResourceBundle myLanguageResources;
+    private static Map<String, String> myCommandSuperclassMap;
     private List<Command> finalCommandObjects;
-    private ResourceBundle resources;
     private List<String> rawCommands;
     private ModelCollection model;
-    private Map<String, String> langMap;
     private List<Variable> variables;
     private List<String> command_input;
-    // TODO - refactor large constructed instance variables as enumerated types
-    // ^^ DO THIS PLEASE !!!
+    // TODO - refactor large constructed instance variables as properties/enumerated types
     private static final String DEFAULT_PROPERTIES = "properties/";
     private static final String SLOGO_COMMAND = "slogo.logicalcontroller.command.";
-    private static final String COMMAND_MAP_PROPERTIES = "commandMappings";
-    private static final String MATH_TYPE_ONE_PROPERTIES = "mathTypeOne";
+    private static final String COMMAND_MAP_PROPERTIES = "commandSuperclass";
     private ResourceBundle myCommandMap = ResourceBundle.getBundle(DEFAULT_PROPERTIES + COMMAND_MAP_PROPERTIES);
-    private ResourceBundle myMathTypeOneMap = ResourceBundle.getBundle(DEFAULT_PROPERTIES + MATH_TYPE_ONE_PROPERTIES);
     private Set<String> type2 = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pow","pi"));
     private Set<String> mathSingleParameter = new HashSet<String>(Arrays.asList(
             "random","sin","cos","tan","atan","log","pi", "minus", "~"));
@@ -61,11 +58,17 @@ public class Parser {
      * @throws IOException
      */
     public Parser(String language) throws IOException {
-        this.lang = language;
-        FileInputStream fis = new FileInputStream("resources/languages/"+this.lang+".properties");
-        this.resources = new PropertyResourceBundle(fis);
-        this.commandArray = genCommandArray();
-        this.finalCommandObjects = new ArrayList<Command>();
+        setLanguage(language);
+        this.myCommandSuperclassMap = createCommandSuperclassMap();
+    }
+
+    public void setLanguage(String language) throws IOException {
+        this.myLanguage = language;
+        this.myLanguageResources = new PropertyResourceBundle(createFileStream());
+    }
+
+    private FileInputStream createFileStream() throws FileNotFoundException {
+        return new FileInputStream("resources/languages/"+this.myLanguage + ".properties");
     }
 
     /**
@@ -91,7 +94,6 @@ public class Parser {
     }
 
     // TODO - Fill in method stubs, using refactored parser process
-
     /**
      * Traverses array of raw commands, finds next non constant line
      * @return
@@ -128,11 +130,16 @@ public class Parser {
      * Translates raw user inputted command (in arbitrary language) to Key in properties file
      * @param command
      * @return
+     * TODO - what to do if command not found? - throw no command exception
      */
     private String translateCommand(String command) {
-
-
-
+        Enumeration<String> resourceEnumeration = this.myLanguageResources.getKeys();
+        String key; String value;
+        while (resourceEnumeration.hasMoreElements()) {
+            key = resourceEnumeration.nextElement();
+            value = this.myLanguageResources.getString(key);
+            if (value.contains(command)) {return key;}
+        }
         return "";
     }
 
@@ -142,6 +149,12 @@ public class Parser {
      * @return
      */
     private String getCommandSuperclass(String command) {
+        Enumeration<String> resourceEnumeration = this.myCommandMap.getKeys();
+        String key;
+        while (resourceEnumeration.hasMoreElements()) {
+            key = resourceEnumeration.nextElement();
+            if (key.equals(command)) {return this.myCommandMap.getString(key);}
+        }
         return "";
     }
 
@@ -153,16 +166,59 @@ public class Parser {
      * @return
      */
     private Command createCommand(String superclass, String command, List<String> arguments) {
-        return null;
+        try {
+            Class clazz = Class.forName(createCommandPath(superclass, command));
+            Constructor ctor = clazz.getConstructor(List.class);
+            return (Command) ctor.newInstance(arguments);
+        } catch (Exception e) {
+            throw new InvalidCommandException("Could not create command");
+        }
+    }
+
+    private String createCommandPath(String superclass, String command) {
+        String path = String.format("%s%s.%s", SLOGO_COMMAND, superclass, command);
+        System.out.printf("returning path: %s \n", path);
+        return path;
     }
 
     /**
      *
-     * @param command use refleciton on command superclass to route command to appropriate helper method
+     * @param command use reflection on command superclass to route command to appropriate helper method
      * @return list of strings to replace that command in the UserInput
      */
     private List<String> executeCommand(Command command) {
+        String superclazz = command.getClass().getSuperclass().getSimpleName();
+        System.out.printf("superclazz: %s \n", superclazz);
+        Method[] methods = this.getClass().getDeclaredMethods();
+        for (Method m: methods) {
+            // System.out.println(m);
+            System.out.println(m.toString());
+            if (m.toString().contains(superclazz)) {
+                System.out.println(m);
+            }
+        }
         return new ArrayList<String>();
+    }
+
+    //TODO Change the catch statements to throw the right exceptions
+    public void executeNextCommand(){
+        try {
+            singleLineParse(rawCommands.get(findNextLine()));
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     /**
@@ -170,28 +226,27 @@ public class Parser {
      * @param command
      * @return
      */
-    private List<String> executeModifier(ModifierCommand command) {
+    private List<String> executeModifier(Command command) {
         return new ArrayList<String>();
     }
 
-    private List<String> executeComparison(ComparisonCommand command) {
+    private List<String> executeComparison(Command command) {
         return new ArrayList<String>();
     }
 
-    private List<String> executeControlFlow(ControlFlowCommand command) {
+    private List<String> executeControlFlow(Command command) {
         return new ArrayList<String>();
     }
 
-    private List<String> executeMath(MathCommand command) {
+    private List<String> executeMath(Command command) {
         return new ArrayList<String>();
     }
 
-    private List<String> executeQuerie(QuerieCommand command) {
+    private List<String> executeQuerie(Command command) {
         return new ArrayList<String>();
     }
 
     private String getType(String line) {
-
 
         return null;
     }
@@ -403,7 +458,7 @@ public class Parser {
             System.out.println("Vallll" + val);
 
             // Class cl = Class.forName(SLOGO_COMMAND+commandMappings.get(commandArray.get(com))+"."+commandArray.get(com));
-            Class cl = Class.forName(SLOGO_COMMAND+myCommandMap.getString(commandArray.get(com))+"."+commandArray.get(com));
+            Class cl = Class.forName(SLOGO_COMMAND+myCommandMap.getString(myCommandSuperclassMap.get(com))+"."+ myCommandSuperclassMap.get(com));
             System.out.println("The val: " +  val);
             Constructor con = cl.getConstructor(String.class);
             Command command = (Command) con.newInstance(val);
@@ -433,10 +488,10 @@ public class Parser {
      * Based on preconfigured language
      * @return mappings of input commmands to command objects (e.g lt --> Left)
      */
-    private Map<String, String> genCommandArray() {
+    private Map<String, String> createCommandSuperclassMap() {
         Map<String, String> mymap = new HashMap<String, String>();
-        for(String key: Collections.list(this.resources.getKeys())){
-            String regex = this.resources.getString(key);
+        for(String key: Collections.list(this.myLanguageResources.getKeys())){
+            String regex = this.myLanguageResources.getString(key);
             if(regex.indexOf("|") != -1){
                 mymap.put(regex.substring(0, regex.indexOf("|")), key);
                 mymap.put(regex.substring(regex.indexOf("|")+1), key);
@@ -445,7 +500,6 @@ public class Parser {
                 mymap.put(regex, key);
             }
         }
-        langMap = mymap;
         return mymap;
     }
 
@@ -456,10 +510,6 @@ public class Parser {
      */
     public List<Command> getCommands(){
         return this.finalCommandObjects;
-    }
-
-    public String getLang(){
-        return this.lang;
     }
 
     public boolean isFinished(){
@@ -476,8 +526,8 @@ public class Parser {
         this.variables = var;
     }
 
-    public static void main (String[] args) throws IOException, NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
-        //try {
+    private static void testAmjad() {
+        try {
             Parser p = new Parser("English");
             List<String> test = new ArrayList<String>();
             test.add("fd 50");
@@ -485,9 +535,51 @@ public class Parser {
             System.out.println("Made it");
             List<Command> testt = p.getCommands();
             System.out.println(testt);
-        //} catch (Exception e) {
-         //   System.out.println("Exception in main");
-        //}
+        } catch (Exception e) {
+            System.out.println("Exception in testAmjad");
+        }
+    }
 
+    private static String testTranslate(Parser p, String language, String command) {
+        try {
+            p.setLanguage(language);
+            String key = p.translateCommand(command);
+            System.out.printf("Translated %s to %s in %s \n", command, key, language);
+            return key;
+        } catch (Exception e) {
+            System.out.println("Exception in testTranslate");
+            throw new InvalidCommandException("Could not translate commmand");
+        }
+    }
+
+    private static void testSuperclassMap(Parser p) {
+        String command = "SetHeading";
+        String clazz = p.getCommandSuperclass(command);
+        System.out.printf("%s --> %s \n", command, clazz);
+    }
+
+    private static Command testCommandCreation(Parser p) {
+        String superclass = "modifier";
+        String command = "SetHeading";
+        List<String> arguments = new ArrayList<String>(List.of("50", "42"));
+        Command c = p.createCommand(superclass, command, arguments);
+        System.out.printf("command.toString(): %s \n", c.toString());
+        return c;
+    }
+
+    private static void testCommandCycle() throws IOException {
+        String language = "Russian";
+        Parser p = new Parser(language);
+        String command = "vpered";
+        List<String> arguments = new ArrayList<String>(List.of("50"));
+        String translated = p.translateCommand(command);
+        String superclass = p.getCommandSuperclass(translated);
+        Command c = p.createCommand(superclass, translated, arguments);
+        p.executeCommand(c);
+    }
+
+    public static void main (String[] args) throws IOException {
+        testCommandCycle();
+        // testAmjad();
     }
 }

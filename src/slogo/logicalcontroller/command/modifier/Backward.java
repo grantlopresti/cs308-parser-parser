@@ -1,8 +1,10 @@
 package slogo.logicalcontroller.command.modifier;
 
+import java.util.List;
+
 public class Backward extends ModifierCommand {
 
-    public Backward(String inputValue){
-        super(inputValue);
+    public Backward(List<String> args){
+        super(args.get(0));
     }
 }

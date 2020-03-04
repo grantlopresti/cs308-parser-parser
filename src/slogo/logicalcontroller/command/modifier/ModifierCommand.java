@@ -2,6 +2,10 @@ package slogo.logicalcontroller.command.modifier;
 
 import slogo.logicalcontroller.command.Command;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
 /**
@@ -12,6 +16,7 @@ import java.util.ResourceBundle;
 public abstract class ModifierCommand implements Command {
     public static final String RESOURCE_BUNDLE_LOCATION = "src/properties/modifierCommands.MyBundle";
 
+    private FileInputStream fis;
     private ResourceBundle methodMappings;
 
     protected double argument1;
@@ -20,7 +25,16 @@ public abstract class ModifierCommand implements Command {
     private String userInput;
 
     public ModifierCommand(){
-        methodMappings = ResourceBundle.getBundle(RESOURCE_BUNDLE_LOCATION);
+        try {
+            fis = new FileInputStream("src/properties/modifierCommands.properties");
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found exception");
+        }
+        try {
+            methodMappings = new PropertyResourceBundle(fis);
+        } catch (IOException e) {
+            System.out.println("IO Exception");
+        }
     }
 
     public ModifierCommand(String input1){
