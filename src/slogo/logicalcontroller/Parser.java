@@ -31,8 +31,10 @@ public class Parser {
     private List<Variable> variables;
     private List<String> command_input;
     private static final String SLOGO_COMMAND = "slogo.logicalcontroller.command.";
-    private FileInputStream fis1 = new FileInputStream("src/properties/commandSuperclass.properties");
-    private ResourceBundle myCommandMap = new PropertyResourceBundle(fis1);
+    private static final String SUPERCLASS_PROPERTIES = "src/properties/commandSuperclass.properties";
+    private static final String PARAMETER_PROPERTIES = "src/properties/parameterMappings.properties";
+    private static ResourceBundle myCommandMap;
+    private static ResourceBundle myParameterMap;
     private ResourceBundle myLanguageResources;
     private Set<String> type2 = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pow","pi"));
     private Set<String> mathSingleParameter = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pi", "minus", "~"));
@@ -51,18 +53,25 @@ public class Parser {
      * Constructor for the Parser class that takes in the input language and initializes all the used variables that are required for parsing
      * @param language
      * @throws IOException
+     * TODO - add filenames to static variables up top
      */
     public Parser(String language) throws IOException {
         setLanguage(language);
+        this.myCommandMap = createResourceBundle(SUPERCLASS_PROPERTIES);
+        this.myParameterMap = createResourceBundle(PARAMETER_PROPERTIES);
     }
 
     public void setLanguage(String language) throws IOException {
         this.myLanguage = language;
-        this.myLanguageResources = new PropertyResourceBundle(createFileStream());
+        this.myLanguageResources = createResourceBundle(nameLanguageFile());
     }
 
-    private FileInputStream createFileStream() throws FileNotFoundException {
-        return new FileInputStream("resources/languages/"+this.myLanguage + ".properties");
+    private String nameLanguageFile() {
+        return "resources/languages/"+this.myLanguage + ".properties";
+    }
+
+    private ResourceBundle createResourceBundle(String filename) throws IOException {
+        return new PropertyResourceBundle(new FileInputStream(filename));
     }
 
     /**
@@ -528,6 +537,11 @@ public class Parser {
         return this.myUserInput;
     }
 
+    // TODO - implement with resource bundle
+    private int countParameters(String translated) {
+        return 1;
+    }
+
     private static String testTranslate(Parser p, String language, String command) {
         try {
             p.setLanguage(language);
@@ -559,15 +573,16 @@ public class Parser {
         String language = "Russian";
         Parser p = new Parser(language);
         // TODO - take user input, return command and arguments
-        List<String> userInput = new ArrayList<String>(List.of("40", "vpered 50"));
+        List<String> userInput = new ArrayList<String>(List.of("40", "vpered vpered 50"));
         p.setUserInput(userInput);
         int lineIndex = p.findNextLine();
-        int commandIndex = p.findLastCommand(p.getUserInput().get(lineIndex));
+        int commandIndex = 1; // p.findLastCommand(p.getUserInput().get(lineIndex));
         System.out.printf("found next command @line %d \n", lineIndex);
         System.out.printf("found last command @index %d \n", commandIndex);
         String command = "vpered";
         List<String> arguments = new ArrayList<String>(List.of("50"));
         String translated = p.translateCommand(command);
+        int params = p.countParameters(translated);
         String superclass = p.getCommandSuperclass(translated);
         Command c = p.createCommand(superclass, translated, arguments);
         List<String> myList = p.executeCommand(c);
