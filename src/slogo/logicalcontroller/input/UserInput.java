@@ -23,9 +23,11 @@ public class UserInput implements UserInputInterface, BundleInterface {
 
     private static final String SUPERCLASS_PROPERTIES = "src/properties/commandSuperclass.properties";
     private static final String PARAMETER_PROPERTIES = "src/properties/parameterCount.properties";
+    private static final String REPLACE_PROPERTIES = "src/properties/lineReplace.properties";
     private static final String SLOGO_COMMAND = "slogo.logicalcontroller.command.";
     private static ResourceBundle myCommandMap;
     private static ResourceBundle myParameterMap;
+    private static ResourceBundle myReplaceMap;
 
     public UserInput(List<String> userInput, ResourceBundle bundle) {
         this.myUserInput = userInput;
@@ -33,6 +35,7 @@ public class UserInput implements UserInputInterface, BundleInterface {
         try {
             this.myCommandMap = BundleInterface.createResourceBundle(SUPERCLASS_PROPERTIES);
             this.myParameterMap = BundleInterface.createResourceBundle(PARAMETER_PROPERTIES);
+            this.myReplaceMap = BundleInterface.createResourceBundle(REPLACE_PROPERTIES);
         } catch (IOException e) {
             // TODO - FIX THIS
             e.printStackTrace();
