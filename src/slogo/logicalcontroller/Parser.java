@@ -187,16 +187,16 @@ public class Parser {
      * @return list of strings to replace that command in the UserInput
      */
     private List<String> executeCommand(Command command) {
-        String superclazz = command.getClass().getSuperclass().getSimpleName();
-        System.out.printf("superclazz: %s \n", superclazz);
-        Method[] methods = this.getClass().getDeclaredMethods();
-        for (Method m: methods) {
-            // System.out.println(m);
-            System.out.println(m.toString());
-            if (m.toString().contains(superclazz)) {
-                System.out.println(m);
-            }
+        try {
+            String superclazz = command.getClass().getSuperclass().getSimpleName();
+            System.out.printf("superclazz: %s \n", superclazz);
+            String methodName = "execute" + superclazz;
+            Method guy = this.getClass().getDeclaredMethod(methodName, Command.class);
+            System.out.println(guy);
+        } catch (Exception e) {
+            throw new InvalidCommandException("Could not execute command");
         }
+
         return new ArrayList<String>();
     }
 
@@ -226,23 +226,23 @@ public class Parser {
      * @param command
      * @return
      */
-    private List<String> executeModifier(Command command) {
+    private List<String> executeModifierCommand(Command command) {
         return new ArrayList<String>();
     }
 
-    private List<String> executeComparison(Command command) {
+    private List<String> executeComparisonCommand(Command command) {
         return new ArrayList<String>();
     }
 
-    private List<String> executeControlFlow(Command command) {
+    private List<String> executeControlFlowCommand(Command command) {
         return new ArrayList<String>();
     }
 
-    private List<String> executeMath(Command command) {
+    private List<String> executeMathCommand(Command command) {
         return new ArrayList<String>();
     }
 
-    private List<String> executeQuerie(Command command) {
+    private List<String> executeQuerieCommand(Command command) {
         return new ArrayList<String>();
     }
 
