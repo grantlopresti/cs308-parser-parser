@@ -161,12 +161,14 @@ public class Parser implements BundleInterface {
             Parser p = new Parser(language);
             List<String> userInput = new ArrayList<String>(List.of("40", "60", "75", "vpered vpered 50"));
             UserInput myInput = new UserInput(userInput, p.getLanguageResources());
-            Command c = myInput.getNextCommand();
-            List<String> myList = p.executeCommand(c);
-            for (String s: myList) {
-                System.out.print(s);
-            }
-            myInput.setCodeReplacement(myList);
+            // while (myInput.hasNext()) {
+                Command c = myInput.getNextCommand();
+                List<String> myList = p.executeCommand(c);
+                for (String s: myList) {
+                    System.out.print(s);
+                }
+                myInput.setCodeReplacement(myList);
+            // }
         } catch (NoCommandFound e) {
             System.out.println("Parser finished parsing lines");
         }

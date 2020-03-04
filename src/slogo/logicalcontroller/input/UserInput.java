@@ -67,6 +67,11 @@ public class UserInput implements UserInputInterface, BundleInterface {
         traverseUserInput();
     }
 
+    @Override
+    public boolean hasNext() {
+        return true;
+    }
+
     // TODO - handle edge case of no more lines (raise flag when no more next lines and no more last commands?)
     private int findNextLine() {
         for(int i = 0; i < this.myUserInput.size(); i++){
