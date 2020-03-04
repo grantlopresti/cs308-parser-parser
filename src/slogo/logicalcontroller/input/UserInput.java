@@ -146,20 +146,20 @@ public class UserInput implements UserInputInterface, BundleInterface {
 
     private boolean isValidCommand(String s) {
         ResourceBundle bundle = this.myResources;
-        Enumeration<String> resourceEnumeration = bundle.getKeys();
-        String key; String value; Set<String> options;
-        while (resourceEnumeration.hasMoreElements()) {
-            key = resourceEnumeration.nextElement();
-            value = bundle.getString(key);
-            if (value.contains(s)) {return true;}
-            // FIX THIS LINE
-            // if (keyContains(s, value)) {return true;}
+        for(String key: Collections.list(bundle.getKeys())){
+            String regex = bundle.getString(key);
+            String[] regexElems = regex.split("\\|");
+            if(regexElems[0].equals(s) || ((regexElems.length >1) && regexElems[1].equals(s))){
+                return true;
+            }
         }
         return false;
     }
 
     // TODO - implement rgular expression mathcing to fix false triggering of errors
     private boolean keyContains(String s, String value) {
+        System.out.println("String s: " + s);
+        System.out.println("Value v: " + value);
         Set<String> options = new HashSet<String>();
         options.addAll(List.of(value.split("\\\\?|")));
         options.addAll(List.of(value.split("|\\\\")));
@@ -181,13 +181,13 @@ public class UserInput implements UserInputInterface, BundleInterface {
      * TODO - use regular expression mappings to populate this as well
      */
     private String translateCommand(String command) {
-        Enumeration<String> resourceEnumeration = this.myResources.getKeys();
-        String key; String value;
-        while (resourceEnumeration.hasMoreElements()) {
-            key = resourceEnumeration.nextElement();
-            value = this.myResources.getString(key);
-            // FIX THIS LINE
-            if (value.contains(command)) {return key;}
+        ResourceBundle bundle = this.myResources;
+        for(String key: Collections.list(bundle.getKeys())){
+            String regex = bundle.getString(key);
+            String[] regexElems = regex.split("\\|");
+            if(regexElems[0].equals(command) || ((regexElems.length >1) && regexElems[1].equals(command))){
+                return key;
+            }
         }
         return "";
     }
