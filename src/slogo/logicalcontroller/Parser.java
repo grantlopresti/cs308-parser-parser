@@ -194,7 +194,8 @@ public class Parser {
                 System.out.println("text: " + text);
                 if (this.mathSingleParameter.contains(text)) {
                     System.out.println("text: " + text + " matches parameter 1");
-                    Class clazz = Class.forName("slogo.logicalcontroller.command.math." + this.commandMappings.get(text));
+                    String path = "slogo.logicalcontroller.command.math." + this.commandMappings.get(text);
+                    Class clazz = Class.forName(path);
                     Constructor constructor = clazz.getConstructor(String.class);
                     MathCommand command = (MathCommand) constructor.newInstance(splitted[i+1]);
                     return command.performMath();
@@ -310,7 +311,9 @@ public class Parser {
     private Command getConstructor(String com, String val) {
         try {
             System.out.println(com);
-            Class cl = Class.forName("slogo.logicalcontroller.command."+commandMappings.get(commandArray.get(com))+"."+commandArray.get(com));
+            String path = "slogo.logicalcontroller.command."+commandMappings.get(commandArray.get(com))+"."+commandArray.get(com);
+            System.out.printf("path: %s \n", path);
+            Class cl = Class.forName(path);
             Constructor con = cl.getConstructor(String.class);
             Command command = (Command) con.newInstance(val);
             return command;
