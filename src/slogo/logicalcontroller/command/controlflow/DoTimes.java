@@ -24,4 +24,9 @@ public class DoTimes extends ControlFlowCommand {
 
     }
 
+    @Override
+    public double getValue() {
+        return repeatCount;
+    }
+
 }
