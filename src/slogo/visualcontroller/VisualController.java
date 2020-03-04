@@ -72,7 +72,7 @@ public class VisualController implements VisualInterface {
   @Override
   public void update(ModelCollection model, List<Variable> variableList, Command command) {
     moveModelObject(model, command);
-    updateVariables(variableList);
+    // updateVariables(variableList);
     // updateCommands(Command.toString());
   }
 

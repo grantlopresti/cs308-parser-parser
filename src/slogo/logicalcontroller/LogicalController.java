@@ -53,7 +53,7 @@ public class LogicalController {
    * @throws IOException
    */
   public void setLanguage(String language) throws IOException {
-    this.myParser = new Parser(language);                         //TODO: Might need to change.
+    this.myParser = new Parser(language, this.myModelCollection);                         //TODO: Might need to change.
   }
 
   /**
@@ -63,14 +63,19 @@ public class LogicalController {
    * @throws InvalidCommandException
    */
   public void handleNewCommand(String fullUserInput) throws InvalidCommandException, NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
-    System.out.printf("recieved user input: %s \n", fullUserInput);
-    this.myParser.parse(Arrays.asList(fullUserInput.split("\n")));
-    while(!this.myParser.isFinished()){
-      this.myParser.executeNextCommand();
-      Command latestCommand = this.myParser.getLatestCommand();
-      ModelCollection newModel = this.myParser.getModel();
-      List<Variable> newVariables = this.myParser.getVariables();
-      this.myVisualController.update(newModel, newVariables, latestCommand);
+    try {
+      System.out.printf("recieved user input: %s \n", fullUserInput);
+      this.myParser.parse(Arrays.asList(fullUserInput.split("\n")));
+      while(!this.myParser.isFinished()){
+        this.myParser.executeNextCommand();
+        Command latestCommand = this.myParser.getLatestCommand();
+        ModelCollection newModel = this.myParser.getModel();
+        List<Variable> newVariables = this.myParser.getVariables();
+        this.myVisualController.update(newModel, newVariables, latestCommand);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.out.println("error in handle new command");
     }
     System.out.println("Parser is finished! Yay!");
   }
