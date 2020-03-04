@@ -566,6 +566,7 @@ public class Parser {
     }
 
     private static void testCommandCycle() throws IOException {
+        List<String> userInput = new ArrayList<String>(List.of("vpered 50"));
         String language = "Russian";
         Parser p = new Parser(language);
         // TODO - take user input, return command and arguments
