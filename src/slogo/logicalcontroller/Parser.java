@@ -531,16 +531,6 @@ public class Parser {
         return this.myUserInput;
     }
 
-    private static void testAmjad() throws IOException, NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
-            Parser p = new Parser("English");
-            List<String> test = new ArrayList<String>();
-            test.add("fd 50");
-            p.parse(test);
-            System.out.println("Made it");
-            List<Command> testt = p.getCommands();
-            System.out.println(testt);
-    }
-
     private static String testTranslate(Parser p, String language, String command) {
         try {
             p.setLanguage(language);
@@ -589,8 +579,7 @@ public class Parser {
         }
     }
 
-    public static void main (String[] args) throws IOException, NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
+    public static void main (String[] args) throws IOException {
         testCommandCycle();
-         //testAmjad();
     }
 }
