@@ -3,7 +3,7 @@ package slogo.logicalcontroller;
 import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.command.modifier.Forward;
-import slogo.logicalcontroller.variable.BasicVariable;
+import slogo.logicalcontroller.variable.MakeVariable;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
 import slogo.visualcontroller.VisualController;
@@ -59,12 +59,11 @@ public class LogicalController {
   public void handleNewCommand(String command) throws InvalidCommandException, NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
     myParser.parse(Arrays.asList(command.split("\n")));
     while(!myParser.isFinished()){
-      //myParser.executeNextCommand();
-      //Command latestCommand = myParser.getLatestCommand();          //TODO: Make sure to mention Invariants in our design analysis
+      myParser.executeNextCommand();
+      Command latestCommand = myParser.getLatestCommand();
       ModelCollection newModel = myParser.getModel();
-      //List<Variable> newVariables = myParser.getVariables();
-
-      //myVisualController.update(newModel, newVariables, latestCommand);
+      List<Variable> newVariables = myParser.getVariables();
+      myVisualController.update(newModel, newVariables, latestCommand);
     }
   }
 }

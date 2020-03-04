@@ -25,24 +25,21 @@ import javax.script.ScriptException;
 public class Parser {
 
     private String myLanguage;
-    private ResourceBundle myLanguageResources;
-    private static Map<String, String> myCommandSuperclassMap;
     private List<Command> finalCommandObjects;
-    private List<String> rawCommands;
+    private List<String> myUserInput;
     private ModelCollection model;
     private List<Variable> variables;
     private List<String> command_input;
-    // TODO - refactor large constructed instance variables as properties/enumerated types
-    private static final String DEFAULT_PROPERTIES = "properties/";
     private static final String SLOGO_COMMAND = "slogo.logicalcontroller.command.";
-    private static final String COMMAND_MAP_PROPERTIES = "commandSuperclass";
-    private ResourceBundle myCommandMap = ResourceBundle.getBundle(DEFAULT_PROPERTIES + COMMAND_MAP_PROPERTIES);
+    private static final String SUPERCLASS_PROPERTIES = "src/properties/commandSuperclass.properties";
+    private static final String PARAMETER_PROPERTIES = "src/properties/parameterCount.properties";
+    private static ResourceBundle myCommandMap;
+    private static ResourceBundle myParameterMap;
+    private ResourceBundle myLanguageResources;
     private Set<String> type2 = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pow","pi"));
-    private Set<String> mathSingleParameter = new HashSet<String>(Arrays.asList(
-            "random","sin","cos","tan","atan","log","pi", "minus", "~"));
+    private Set<String> mathSingleParameter = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pi", "minus", "~"));
     private ArrayList<String> comNeedChecked = new ArrayList<String>(Arrays.asList("repeat","sin","cos","tan","atan","log","pow","pi"));
-    private Set<String> mathDoubleParameter = new HashSet<String>(Arrays.asList(
-            "pow", "sum", "+", "difference", "-", "product", "*", "quotient", "/", "remainder", "%"));
+    private Set<String> mathDoubleParameter = new HashSet<String>(Arrays.asList("pow", "sum", "+", "difference", "-", "product", "*", "quotient", "/", "remainder", "%"));
     private Map<String, String> type1 = new HashMap<String, String>(){{
         put("sum", "+");
         put("difference", "-");
@@ -56,19 +53,25 @@ public class Parser {
      * Constructor for the Parser class that takes in the input language and initializes all the used variables that are required for parsing
      * @param language
      * @throws IOException
+     * TODO - add filenames to static variables up top
      */
     public Parser(String language) throws IOException {
         setLanguage(language);
-        this.myCommandSuperclassMap = createCommandSuperclassMap();
+        this.myCommandMap = createResourceBundle(SUPERCLASS_PROPERTIES);
+        this.myParameterMap = createResourceBundle(PARAMETER_PROPERTIES);
     }
 
     public void setLanguage(String language) throws IOException {
         this.myLanguage = language;
-        this.myLanguageResources = new PropertyResourceBundle(createFileStream());
+        this.myLanguageResources = createResourceBundle(nameLanguageFile());
     }
 
-    private FileInputStream createFileStream() throws FileNotFoundException {
-        return new FileInputStream("resources/languages/"+this.myLanguage + ".properties");
+    private String nameLanguageFile() {
+        return "resources/languages/"+this.myLanguage + ".properties";
+    }
+
+    private ResourceBundle createResourceBundle(String filename) throws IOException {
+        return new PropertyResourceBundle(new FileInputStream(filename));
     }
 
     /**
@@ -79,13 +82,12 @@ public class Parser {
     public void parse(List<String> lines) throws NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
         //try {
             this.finalCommandObjects = new ArrayList<Command>();
-            this.rawCommands = lines;
+            this.myUserInput = lines;
             for (int i = 0; i < lines.size(); i++) {
                 String line = lines.get(i);
                 String type = getType(line);
                 line = checkForBoolean(line);
                 i = checkForVCU(i);
-                System.out.println("The line: " + singleLineParse(line));
                 this.finalCommandObjects.addAll(singleLineParse(line));
             }
         //} catch (Exception e) {
@@ -99,27 +101,38 @@ public class Parser {
      * @return
      */
     private int findNextLine() {
-        for(int i = 0; i< rawCommands.size(); i++){
-            String s = rawCommands.get(i);
-            if(s.split("\\s+").length >0){
+        for(int i = 0; i < this.myUserInput.size(); i++){
+            String s = this.myUserInput.get(i);
+            if(s.split("\\s+").length > 1){
                 return i;
             }
         }
         return 0;
     }
 
+    // TODO - refactor to accept any value from language properties (this.myLanguageResources)
+    private boolean isValidCommand(String s) {
+        Enumeration<String> resourceEnumeration = this.myLanguageResources.getKeys();
+        String key; String value;
+        while (resourceEnumeration.hasMoreElements()) {
+            key = resourceEnumeration.nextElement();
+            value = this.myLanguageResources.getString(key);
+            if (value.contains(s)) {return true;}
+        }
+        return false;
+    }
+
     /**
      * Input single line of text, output index of last commandkeyword
      * @return
+     *
      */
     private int findLastCommand(String line) {
         String[] lineElems = line.split("\\s+");
-
         for(int i = lineElems.length-1; i>=0; i--){
-            if(lineElems[i].matches(".*\\d.*")){
-                continue;
-            }
-            else{
+            System.out.println("Made it here");
+            if(isValidCommand(lineElems[i])) {
+                System.out.println("Last Valid Command @:" + i);
                 return i;
             }
         }
@@ -187,23 +200,21 @@ public class Parser {
      * @return list of strings to replace that command in the UserInput
      */
     private List<String> executeCommand(Command command) {
-        String superclazz = command.getClass().getSuperclass().getSimpleName();
-        System.out.printf("superclazz: %s \n", superclazz);
-        Method[] methods = this.getClass().getDeclaredMethods();
-        for (Method m: methods) {
-            // System.out.println(m);
-            System.out.println(m.toString());
-            if (m.toString().contains(superclazz)) {
-                System.out.println(m);
-            }
+        try {
+            Class superclazz = command.getClass().getSuperclass();
+            String name = "execute" + superclazz.getSimpleName();
+            Method method = this.getClass().getDeclaredMethod(name, superclazz); //Command.class
+            Object o = method.invoke(this, command);
+            return (List<String>) o;
+        } catch (Exception e) {
+            throw new InvalidCommandException("Could not execute command");
         }
-        return new ArrayList<String>();
     }
 
     //TODO Change the catch statements to throw the right exceptions
     public void executeNextCommand(){
         try {
-            singleLineParse(rawCommands.get(findNextLine()));
+            singleLineParse(myUserInput.get(findNextLine()));
         } catch (ScriptException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -226,23 +237,23 @@ public class Parser {
      * @param command
      * @return
      */
-    private List<String> executeModifier(Command command) {
+    private List<String> executeModifierCommand(ModifierCommand command) {
+        return new ArrayList<String>(List.of("Hello, I just executed a modifier command :)\n", "I hope this worked\n", "Slogo is fun\n"));
+    }
+
+    private List<String> executeComparisonCommand(ComparisonCommand command) {
         return new ArrayList<String>();
     }
 
-    private List<String> executeComparison(Command command) {
+    private List<String> executeControlFlowCommand(ControlFlowCommand command) {
         return new ArrayList<String>();
     }
 
-    private List<String> executeControlFlow(Command command) {
+    private List<String> executeMathCommand(MathCommand command) {
         return new ArrayList<String>();
     }
 
-    private List<String> executeMath(Command command) {
-        return new ArrayList<String>();
-    }
-
-    private List<String> executeQuerie(Command command) {
+    private List<String> executeQuerieCommand(QuerieCommand command) {
         return new ArrayList<String>();
     }
 
@@ -289,7 +300,7 @@ public class Parser {
         boolean doExit = false;
         int ret = 0;
         while(!doExit){
-            String[] line = (rawCommands.get(index)).split("\\s+");
+            String[] line = (myUserInput.get(index)).split("\\s+");
             for(int i = 0; i<line.length; i++){
                 if(vcuTypes.contains(line[i])){
                     if(line[i].equals("repeat")){
@@ -311,8 +322,8 @@ public class Parser {
         List<Command> repCommands = new ArrayList<Command>();
         List<Command> commandsToBeAdded = new ArrayList<Command>();
 
-        while(!(rawCommands.get(currLine)).contains("]")){
-            tempRetLines.add((rawCommands.get(currLine)));
+        while(!(myUserInput.get(currLine)).contains("]")){
+            tempRetLines.add((myUserInput.get(currLine)));
             currLine++;
         }
         ret = currLine;
@@ -453,12 +464,13 @@ public class Parser {
      * @param val
      * @returns Commmand object
      */
+    @Deprecated
     private Command getConstructor(String com, String val) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
        // try {
             System.out.println("Vallll" + val);
 
             // Class cl = Class.forName(SLOGO_COMMAND+commandMappings.get(commandArray.get(com))+"."+commandArray.get(com));
-            Class cl = Class.forName(SLOGO_COMMAND+myCommandMap.getString(myCommandSuperclassMap.get(com))+"."+ myCommandSuperclassMap.get(com));
+            Class cl = Class.forName(SLOGO_COMMAND); //+myCommandMap.getString(myCommandSuperclassMap.get(com))+"."+ myCommandSuperclassMap.get(com));
             System.out.println("The val: " +  val);
             Constructor con = cl.getConstructor(String.class);
             Command command = (Command) con.newInstance(val);
@@ -484,9 +496,9 @@ public class Parser {
     }
 
     /**
-     * Called internally, to create mapping of every input commmand to the command objects
+     * Called internally, to create mapping of every input command to the command objects
      * Based on preconfigured language
-     * @return mappings of input commmands to command objects (e.g lt --> Left)
+     * @return mappings of input commands to command objects (e.g lt --> Left)
      */
     private Map<String, String> createCommandSuperclassMap() {
         Map<String, String> mymap = new HashMap<String, String>();
@@ -526,18 +538,16 @@ public class Parser {
         this.variables = var;
     }
 
-    private static void testAmjad() {
-        try {
-            Parser p = new Parser("English");
-            List<String> test = new ArrayList<String>();
-            test.add("fd 50");
-            p.parse(test);
-            System.out.println("Made it");
-            List<Command> testt = p.getCommands();
-            System.out.println(testt);
-        } catch (Exception e) {
-            System.out.println("Exception in testAmjad");
-        }
+    private void setUserInput(List<String> userInput) {
+        this.myUserInput = userInput;
+    }
+
+    private List<String> getUserInput() {
+        return this.myUserInput;
+    }
+
+    private int countParameters(String translated) {
+        return Integer.parseInt(this.myParameterMap.getString(translated));
     }
 
     private static String testTranslate(Parser p, String language, String command) {
@@ -568,18 +578,29 @@ public class Parser {
     }
 
     private static void testCommandCycle() throws IOException {
-        String language = "Russian";
+        String language = "English";
         Parser p = new Parser(language);
+        // TODO - take user input, return command and arguments
+        List<String> userInput = new ArrayList<String>(List.of("40", "vpered vpered 50"));
+        p.setUserInput(userInput);
+        int lineIndex = p.findNextLine();
+        int commandIndex = 1; // p.findLastCommand(p.getUserInput().get(lineIndex));
+        System.out.printf("found next command @line %d \n", lineIndex);
+        System.out.printf("found last command @index %d \n", commandIndex);
         String command = "vpered";
         List<String> arguments = new ArrayList<String>(List.of("50"));
         String translated = p.translateCommand(command);
+        int params = p.countParameters(translated);
+        System.out.printf("translated %s to %s in %s, requires %d parameters", command, translated, language, params);
         String superclass = p.getCommandSuperclass(translated);
         Command c = p.createCommand(superclass, translated, arguments);
-        p.executeCommand(c);
+        List<String> myList = p.executeCommand(c);
+        for (String s: myList) {
+            System.out.print(s);
+        }
     }
 
     public static void main (String[] args) throws IOException {
         testCommandCycle();
-        // testAmjad();
     }
 }
