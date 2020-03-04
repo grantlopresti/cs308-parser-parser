@@ -8,7 +8,6 @@ public class MakeVariable implements Command {
 
     }
 
-    @Override
     public double getValue() {
         return this.value;
     }
