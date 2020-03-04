@@ -168,7 +168,7 @@ public class Parser implements BundleInterface {
                     System.out.print(s);
                 }
                 myInput.setCodeReplacement(myList);
-            // }
+            // it}
         } catch (NoCommandFound e) {
             System.out.println("Parser finished parsing lines");
         }
