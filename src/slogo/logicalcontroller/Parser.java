@@ -200,6 +200,27 @@ public class Parser {
         return new ArrayList<String>();
     }
 
+    //TODO Change the catch statements to throw the right exceptions
+    public void executeNextCommand(){
+        try {
+            singleLineParse(rawCommands.get(findNextLine()));
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
     /**
      * Set of executable commands on specific objects
      * @param command
