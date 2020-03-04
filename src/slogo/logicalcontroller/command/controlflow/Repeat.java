@@ -21,7 +21,6 @@ public class Repeat extends ControlFlowCommand {
 
     }
 
-    @Override
     public double getValue() {
         return this.value;
     }
