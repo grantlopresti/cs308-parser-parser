@@ -8,4 +8,9 @@ public class PenDown extends ModifierCommand {
     public PenDown(List<String> args){
         super(""+RETURN_VALUE);
     }
+
+    @Override
+    public String execute() {
+        return null;
+    }
 }

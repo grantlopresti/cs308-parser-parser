@@ -1,8 +1,7 @@
 package slogo.logicalcontroller;
 
 import slogo.exceptions.InvalidCommandException;
-import slogo.exceptions.ReflectionException;
-import slogo.exceptions.ResourceBundleCreationException;
+import slogo.exceptions.NoCommandFound;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.command.comparison.ComparisonCommand;
 import slogo.logicalcontroller.command.controlflow.ControlFlowCommand;
@@ -21,7 +20,7 @@ import java.lang.reflect.*;
  * Purpose of this class is to parse incoming commands from the console and from a text file that the user will have an option to read in.
  * @author Amjad S
  */
-public class Parser {
+public class Parser implements BundleInterface {
 
     private String myLanguage;
     private List<Command> finalCommandObjects;
@@ -29,12 +28,13 @@ public class Parser {
     private UserInput myUserInput;
     private ModelCollection myModelCollection;
     private ResourceBundle myLanguageResources;
+    private boolean myFinished;
 
     /**
      * Constructor for the Parser class that takes in the input language and initializes all the used variables that are required for parsing.
      * @param language
      */
-    public Parser(String language){
+    public Parser(String language) throws IOException {
         setLanguage(language);
     }
 
@@ -45,7 +45,7 @@ public class Parser {
 
     public void setLanguage(String language) {
         this.myLanguage = language;
-        this.myLanguageResources = createResourceBundle(nameLanguageFile());
+        this.myLanguageResources = BundleInterface.createResourceBundle(nameLanguageFile());
     }
 
     /**
@@ -78,10 +78,15 @@ public class Parser {
      * @param lines
      */
     public void parse(List<String> lines) {
-        this.finalCommandObjects = new ArrayList<Command>();
-        this.myUserInput = new UserInput(lines, this.myLanguageResources);
-        for (int i = 0; i < lines.size(); i++) {
-            this.finalCommandObjects.addAll(singleLineParse(lines.get(i)));
+        try {
+            this.myFinished = false;
+            this.finalCommandObjects = new ArrayList<Command>();
+            this.myUserInput = new UserInput(lines, this.myLanguageResources);
+            for (int i = 0; i < lines.size(); i++) {
+                this.finalCommandObjects.addAll(singleLineParse(lines.get(i)));
+            }
+        } catch (Exception e) {
+            throw new InvalidCommandException();
         }
     }
 
@@ -93,12 +98,11 @@ public class Parser {
         try {
             Class superclazz = command.getClass().getSuperclass();
             String name = "execute" + superclazz.getSimpleName();
-            System.out.println("Name of name: " + name + "Name of the superclass: " + superclazz.getSimpleName());
             Method method = this.getClass().getDeclaredMethod(name, superclazz); //Command.class
             Object o = method.invoke(this, command);
             return (List<String>) o;
-        } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException | NullPointerException e) {
-            throw new ReflectionException("Unable to apply Reflection");
+        } catch (Exception e) {
+            throw new InvalidCommandException("Could not execute command");
         }
     }
 
@@ -107,7 +111,7 @@ public class Parser {
      */
     // TODO - fill in method body
     public void executeNextCommand(){
-
+        ;
     }
 
     /**
@@ -117,7 +121,7 @@ public class Parser {
      */
     private List<String> executeModifierCommand(ModifierCommand command) {
         System.out.printf("Executing command %s with argument %.2f\n", command.getClass().getSimpleName(), command.getArgument1());
-        return new ArrayList<String>(List.of("Hello, I just executed a modifier command :)\n", "I hope this worked\n", "Slogo is fun\n"));
+        return new ArrayList<String>(List.of(command.execute()));
     }
 
     private List<String> executeComparisonCommand(ComparisonCommand command) {
@@ -177,19 +181,28 @@ public class Parser {
         return this.myLanguageResources;
     }
 
-    private static void testCommandCycle(){
-        String language = "Russian";
-        Parser p = new Parser(language);
-        List<String> userInput = new ArrayList<String>(List.of("40", "60", "75", "vpered vpered 50"));
-        UserInput myInput = new UserInput(userInput, p.getLanguageResources());
-        Command c = myInput.getNextCommand();
-        List<String> myList = p.executeCommand(c);
-        for (String s: myList) {
-            System.out.print(s);
+    // TODO - incorporate command cycle into parser for real time processing
+    private static void testCommandCycle() throws IOException {
+        try {
+            String language = "Russian";
+            Parser p = new Parser(language);
+            List<String> userInput = new ArrayList<String>(List.of("40", "60", "75", "vpered vpered 50"));
+            UserInput myInput = new UserInput(userInput, p.getLanguageResources());
+            // while (myInput.hasNext()) {
+            Command c = myInput.getNextCommand();
+            List<String> myList = p.executeCommand(c);
+            for (String s: myList) {
+                System.out.print(s);
+            }
+            myInput.setCodeReplacement(myList);
+            // it}
+        } catch (NoCommandFound e) {
+            System.out.println("Parser finished parsing lines");
         }
+
     }
 
-    public static void main (String[] args){
+    public static void main (String[] args) throws IOException {
         testCommandCycle();
     }
 }
