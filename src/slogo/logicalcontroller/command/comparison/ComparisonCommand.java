@@ -42,7 +42,6 @@ public abstract class ComparisonCommand implements Command {
         }
     }
 
-    @Override
     public double getValue() {
         return this.returnValue;
     }

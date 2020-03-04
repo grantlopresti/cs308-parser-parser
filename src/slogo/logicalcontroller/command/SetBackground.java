@@ -8,7 +8,6 @@ public class SetBackground implements Command {
 
     }
 
-    @Override
     public double getValue() {
         return this.value;
     }
