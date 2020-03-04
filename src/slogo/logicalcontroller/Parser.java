@@ -35,7 +35,7 @@ public class Parser {
     // TODO - refactor large constructed instance variables as properties/enumerated types
     private static final String DEFAULT_PROPERTIES = "properties/";
     private static final String SLOGO_COMMAND = "slogo.logicalcontroller.command.";
-    private static final String COMMAND_MAP_PROPERTIES = "commandMappings";
+    private static final String COMMAND_MAP_PROPERTIES = "commandSuperclass";
     private ResourceBundle myCommandMap = ResourceBundle.getBundle(DEFAULT_PROPERTIES + COMMAND_MAP_PROPERTIES);
     private Set<String> type2 = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pow","pi"));
     private Set<String> mathSingleParameter = new HashSet<String>(Arrays.asList(
@@ -183,10 +183,20 @@ public class Parser {
 
     /**
      *
-     * @param command use refleciton on command superclass to route command to appropriate helper method
+     * @param command use reflection on command superclass to route command to appropriate helper method
      * @return list of strings to replace that command in the UserInput
      */
     private List<String> executeCommand(Command command) {
+        String superclazz = command.getClass().getSuperclass().getSimpleName();
+        System.out.printf("superclazz: %s \n", superclazz);
+        Method[] methods = this.getClass().getDeclaredMethods();
+        for (Method m: methods) {
+            // System.out.println(m);
+            System.out.println(m.toString());
+            if (m.toString().contains(superclazz)) {
+                System.out.println(m);
+            }
+        }
         return new ArrayList<String>();
     }
 
@@ -195,28 +205,27 @@ public class Parser {
      * @param command
      * @return
      */
-    private List<String> executeModifier(ModifierCommand command) {
+    private List<String> executeModifier(Command command) {
         return new ArrayList<String>();
     }
 
-    private List<String> executeComparison(ComparisonCommand command) {
+    private List<String> executeComparison(Command command) {
         return new ArrayList<String>();
     }
 
-    private List<String> executeControlFlow(ControlFlowCommand command) {
+    private List<String> executeControlFlow(Command command) {
         return new ArrayList<String>();
     }
 
-    private List<String> executeMath(MathCommand command) {
+    private List<String> executeMath(Command command) {
         return new ArrayList<String>();
     }
 
-    private List<String> executeQuerie(QuerieCommand command) {
+    private List<String> executeQuerie(Command command) {
         return new ArrayList<String>();
     }
 
     private String getType(String line) {
-
 
         return null;
     }
@@ -510,15 +519,15 @@ public class Parser {
         }
     }
 
-    private static void testTranslate(Parser p) {
+    private static String testTranslate(Parser p, String language, String command) {
         try {
-            String language = "Italian";
             p.setLanguage(language);
-            String command = "impostadirezione";
             String key = p.translateCommand(command);
             System.out.printf("Translated %s to %s in %s \n", command, key, language);
+            return key;
         } catch (Exception e) {
             System.out.println("Exception in testTranslate");
+            throw new InvalidCommandException("Could not translate commmand");
         }
     }
 
@@ -528,19 +537,28 @@ public class Parser {
         System.out.printf("%s --> %s \n", command, clazz);
     }
 
-    private static void testCommandCreation(Parser p) {
+    private static Command testCommandCreation(Parser p) {
         String superclass = "modifier";
-        String command = "Forward";
-        List<String> arguments = new ArrayList<String>(List.of("50"));
+        String command = "SetHeading";
+        List<String> arguments = new ArrayList<String>(List.of("50", "42"));
         Command c = p.createCommand(superclass, command, arguments);
         System.out.printf("command.toString(): %s \n", c.toString());
+        return c;
+    }
+
+    private static void testCommandCycle() throws IOException {
+        String language = "Russian";
+        Parser p = new Parser(language);
+        String command = "vpered";
+        List<String> arguments = new ArrayList<String>(List.of("50"));
+        String translated = p.translateCommand(command);
+        String superclass = p.getCommandSuperclass(translated);
+        Command c = p.createCommand(superclass, translated, arguments);
+        p.executeCommand(c);
     }
 
     public static void main (String[] args) throws IOException {
-        Parser p = new Parser("English");
-        testTranslate(p);
-        testSuperclassMap(p);
-        testCommandCreation(p);
+        testCommandCycle();
         // testAmjad();
     }
 }
