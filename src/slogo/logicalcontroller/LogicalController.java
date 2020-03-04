@@ -1,8 +1,10 @@
 package slogo.logicalcontroller;
 
 import slogo.exceptions.InvalidCommandException;
+import slogo.exceptions.NoCommandFound;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.command.modifier.Forward;
+import slogo.logicalcontroller.input.UserInput;
 import slogo.logicalcontroller.variable.MakeVariable;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
@@ -11,6 +13,7 @@ import slogo.visualcontroller.VisualController;
 import javax.script.ScriptException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,6 +30,9 @@ public class LogicalController {
   private ModelCollection myModelCollection;
   private VisualController myVisualController;
   private List<Variable> myVariables;
+
+  private LogicalController(){
+  };
 
   public LogicalController(ModelCollection modelCollection, VisualController visualController, List<Variable> variables){
     myModelCollection = modelCollection;
@@ -53,11 +59,11 @@ public class LogicalController {
   /**
    * Code that interacts with the GUI, and receives strings as commands
    * Assumption is that there is only one ModelObject (Turtle)
-   * @param command
+   * @param fullUserInput
    * @throws InvalidCommandException
    */
-  public void handleNewCommand(String command) throws InvalidCommandException, NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
-    myParser.parse(Arrays.asList(command.split("\n")));
+  public void handleNewCommand(String fullUserInput) throws InvalidCommandException, NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
+    myParser.parse(Arrays.asList(fullUserInput.split("\n")));
     while(!myParser.isFinished()){
       myParser.executeNextCommand();
       //Command latestCommand = myParser.getLatestCommand();
@@ -66,4 +72,14 @@ public class LogicalController {
       //myVisualController.update(newModel, newVariables, latestCommand);
     }
   }
+
+  //TODO: Below is just for testing purposes, for the Parser functionality.
+  public static void main (String[] args) throws IOException, NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
+    LogicalController test = new LogicalController();
+    test.setLanguage(DEFAULT_LANGUAGE);
+
+    String userInput = "fd fd 50 \n left 10";
+    test.handleNewCommand(userInput);
+  }
+
 }
