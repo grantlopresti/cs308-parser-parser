@@ -502,9 +502,7 @@ public class Parser {
             String language = "Italian";
             p.setLanguage(language);
             String command = "impostadirezione";
-            System.out.println("trying to translate command");
             String key = p.translateCommand(command);
-            System.out.printf("translated command to: %s \n", key);
             System.out.printf("Translated %s to %s in %s \n", command, key, language);
         } catch (Exception e) {
             System.out.println("Exception in testTranslate");
