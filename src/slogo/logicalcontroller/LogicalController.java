@@ -60,11 +60,10 @@ public class LogicalController {
     myParser.parse(Arrays.asList(command.split("\n")));
     while(!myParser.isFinished()){
       myParser.executeNextCommand();
-      //Command latestCommand = myParser.getLatestCommand();
+      Command latestCommand = myParser.getLatestCommand();
       ModelCollection newModel = myParser.getModel();
-      //List<Variable> newVariables = myParser.getVariables();
-
-      //myVisualController.update(newModel, newVariables, latestCommand);
+      List<Variable> newVariables = myParser.getVariables();
+      myVisualController.update(newModel, newVariables, latestCommand);
     }
   }
 }
