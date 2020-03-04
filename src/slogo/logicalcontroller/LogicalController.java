@@ -36,7 +36,7 @@ public class LogicalController {
     // TODO - update visualController initial state to empty lists to get first turtle to show
     this.myVisualController.update(this.myModelCollection, this.myVariables, null);
     try {
-      this.setLanguage(DEFAULT_LANGUAGE);
+      myParser= new Parser(DEFAULT_LANGUAGE, modelCollection);
     } catch (Exception e) {
       System.exit(0);
     }
