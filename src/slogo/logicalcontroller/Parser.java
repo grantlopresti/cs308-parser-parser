@@ -154,8 +154,6 @@ public class Parser implements BundleInterface {
         return this.myModelCollection;
     }
 
-
-
     private void setUserInput(List<String> userInput) {
         this.myUserInput = new UserInput(userInput, this.myLanguageResources);
     }
@@ -175,14 +173,11 @@ public class Parser implements BundleInterface {
             Parser p = new Parser(language);
             List<String> userInput = new ArrayList<String>(List.of("40", "60", "75", "vpered vpered 50"));
             UserInput myInput = new UserInput(userInput, p.getLanguageResources());
-            // while (myInput.hasNext()) {
             p.myLatestCommand = myInput.getNextCommand();
             List<String> myList = p.executeCommand(p.myLatestCommand);
             for (String s: myList) {
                 System.out.print(s);
             }
-            myInput.setCodeReplacement(myList);
-            // it}
         } catch (NoCommandFound e) {
             System.out.println("Parser finished parsing lines");
         }
