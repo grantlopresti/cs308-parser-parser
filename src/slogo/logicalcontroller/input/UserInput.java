@@ -1,6 +1,7 @@
 package slogo.logicalcontroller.input;
 
 import slogo.exceptions.InvalidCommandException;
+import slogo.exceptions.NoCommandFound;
 import slogo.logicalcontroller.BundleInterface;
 import slogo.logicalcontroller.command.Command;
 
@@ -37,26 +38,36 @@ public class UserInput implements UserInputInterface, BundleInterface {
 
     @Override
     public Command getNextCommand() {
-        this.myLineIndex = findNextLine();
-        this.myCommandIndex = findLastCommand(this.myLineIndex);
-        System.out.printf("found next command @line %d \n", this.myLineIndex);
-        System.out.printf("found last command @index %d \n", this.myCommandIndex);
-        String translated = translateCommand(this.myCommand);
-        System.out.printf("translated %s to %s \n", this.myCommand, translated);
-        int params = countParameters(translated);
-        System.out.printf("requires %d parameters \n", params);
-        List<String> arguments = getArguments(this.myLineIndex, this.myCommandIndex, params);
-        String superclass = getCommandSuperclass(translated);
-        Command c = createCommand(superclass, translated, arguments);
-        return c;
+        try {
+            this.myLineIndex = findNextLine();
+            this.myCommandIndex = findLastCommand(this.myLineIndex);
+            System.out.printf("found next command @line %d \n", this.myLineIndex);
+            System.out.printf("found last command @index %d \n", this.myCommandIndex);
+            String translated = translateCommand(this.myCommand);
+            System.out.printf("translated %s to %s \n", this.myCommand, translated);
+            int params = countParameters(translated);
+            System.out.printf("requires %d parameters \n", params);
+            List<String> arguments = getArguments(this.myLineIndex, this.myCommandIndex, params);
+            String superclass = getCommandSuperclass(translated);
+            Command c = createCommand(superclass, translated, arguments);
+            return c;
+        } catch (NoCommandFound e) {
+            throw new NoCommandFound("Could not generate command");
+        }
+
     }
 
+    // TODO - how to handle multi line replacements vs. single line?
+    // FOR NOW - assuming single line replace (only modifiers and math will work)
     @Override
     public void setCodeReplacement(List<String> code) {
-
+        String replace = code.get(0);
+        String lineUpdate = this.myUserInput.get(this.myLineIndex) + replace;
+        this.myUserInput.set(this.myLineIndex, lineUpdate);
+        traverseUserInput();
     }
 
-    // TODO - handle edge case of no more lines
+    // TODO - handle edge case of no more lines (raise flag when no more next lines and no more last commands?)
     private int findNextLine() {
         for(int i = 0; i < this.myUserInput.size(); i++){
             String s = this.myUserInput.get(i);
@@ -64,7 +75,7 @@ public class UserInput implements UserInputInterface, BundleInterface {
                 return i;
             }
         }
-        return NONE_FOUND;
+        throw new NoCommandFound();
     }
 
     // TODO - handle no more commands in the line
@@ -77,22 +88,54 @@ public class UserInput implements UserInputInterface, BundleInterface {
                 return i;
             }
         }
-        return NONE_FOUND;
+        throw new NoCommandFound();
     }
 
     private String getLine(int index) {
         return this.myUserInput.get(index);
     }
 
+    // TODO - how to handle multiple line parameters (param number is constant, could be bracketed parameter]
+    // TODO - assume all parameters go until end of line? Truncating line prematurely? (maybe good enough)
+    // TODO - assume that parameters are space separated (good enough assumption)
     private List<String> getArguments(int line, int index, int params) {
         index ++;
         String input = this.myUserInput.get(line);
         String[] words = input.split("\\s");
         int stop = index+params;
         String[] sub = Arrays.copyOfRange(words, index, stop);
+        String[] fullCommand = Arrays.copyOfRange(words, index-1, stop);
+        input = removeArguments(input, fullCommand);
         System.out.print("Printing arguments: ");
         for (String s: sub) {System.out.print(s + " ");}
+        this.myUserInput.set(line, input);
+        traverseUserInput();
         return new ArrayList<String>(List.of(sub));
+    }
+
+    private void traverseUserInput() {
+        System.out.println("Traversing user input: ");
+        for (String s: this.myUserInput) {
+            System.out.println(s);
+        }
+    }
+
+    // TODO - refactor these two into static methods (may change for multiline commands)
+    private String removeArguments(String input, String[] sub) {
+        StringBuilder sb = new StringBuilder(input);
+        String remove = spaceSeparatedString(sub);
+        sb.replace(input.length()-remove.length()-1, input.length(), "");
+        System.out.printf("input truncated from: %s \nto: %s \n", input, sb.toString());
+        return sb.toString();
+    }
+
+    private String spaceSeparatedString(String[] fullCommand) {
+        StringBuilder sb = new StringBuilder();
+        for (String s: fullCommand) {
+            sb.append(s + " ");
+        }
+        System.out.printf("space separated string: %s \n", sb.toString());
+        return sb.substring(0, sb.length()-2);
     }
 
     private boolean isValidCommand(String s) {
