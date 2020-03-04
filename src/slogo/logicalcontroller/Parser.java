@@ -27,6 +27,7 @@ public class Parser implements BundleInterface {
     private UserInput myUserInput;
     private ModelCollection myModelCollection;
     private ResourceBundle myLanguageResources;
+    private Command myLatestCommand;
     private boolean myFinished;
 
     /**
@@ -127,7 +128,7 @@ public class Parser implements BundleInterface {
     }
 
     public Command getLatestCommand() {
-        return this.myUserInput.getNextCommand();
+        return this.myLatestCommand;
     }
 
     public List<Variable> getVariables() {return this.myVariableList; }
@@ -162,8 +163,8 @@ public class Parser implements BundleInterface {
             List<String> userInput = new ArrayList<String>(List.of("40", "60", "75", "vpered vpered 50"));
             UserInput myInput = new UserInput(userInput, p.getLanguageResources());
             // while (myInput.hasNext()) {
-            Command c = myInput.getNextCommand();
-            List<String> myList = p.executeCommand(c);
+            p.myLatestCommand = myInput.getNextCommand();
+            List<String> myList = p.executeCommand(p.myLatestCommand);
             for (String s: myList) {
                 System.out.print(s);
             }
