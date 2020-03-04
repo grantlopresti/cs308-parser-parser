@@ -16,7 +16,10 @@ public class UserInput implements UserInputInterface, BundleInterface {
     private int myLineIndex;
     private int myCommandIndex;
     private String myCommand;
+    private String myPrefix;
+    private String mySuffix;
     private static final int NONE_FOUND = -1;
+    private static final String SPACE = " ";
 
     private static final String SUPERCLASS_PROPERTIES = "src/properties/commandSuperclass.properties";
     private static final String PARAMETER_PROPERTIES = "src/properties/parameterCount.properties";
@@ -71,14 +74,13 @@ public class UserInput implements UserInputInterface, BundleInterface {
     // FOR NOW - assuming single line replace (only modifiers and math will work)
     @Override
     public void setCodeReplacement(List<String> code) {
-        String replace = code.get(0);
-        String lineUpdate = this.myUserInput.get(this.myLineIndex) + replace;
-        this.myUserInput.set(this.myLineIndex, lineUpdate);
-    }
-
-    @Override
-    public boolean hasNext() {
-        return true;
+        StringBuilder sb = new StringBuilder(this.myPrefix);
+        for (String s: code) {
+            sb.append(SPACE + s);
+        }
+        sb.append(SPACE + this.mySuffix);
+        this.myUserInput.set(this.myLineIndex, sb.toString().trim());
+        System.out.printf("code replaced to: %s", this.myUserInput.get(this.myLineIndex));
     }
 
     // TODO - handle edge case of no more lines (raise flag when no more next lines and no more last commands?)
@@ -110,21 +112,19 @@ public class UserInput implements UserInputInterface, BundleInterface {
     }
 
     // TODO - how to handle multiple line parameters (param number is constant, could be bracketed parameter]
-    // TODO - assume all parameters go until end of line? Truncating line prematurely? (maybe good enough)
     // TODO - assume that parameters are space separated (good enough assumption)
-    private List<String> getArguments(int line, int index, int params) {
+    private List<String> getArguments(int lineIndex, int commandIndex, int params) {
         traverseUserInput();
-        index ++;
-        String input = this.myUserInput.get(line);
+        int stop = commandIndex+1+params;
+        String input = this.myUserInput.get(lineIndex);
         String[] words = input.split("\\s");
-        int stop = index+params;
-        String[] sub = Arrays.copyOfRange(words, index, stop);
-        String[] fullCommand = Arrays.copyOfRange(words, index-1, stop);
-        input = removeArguments(input, fullCommand);
+        String[] args = Arrays.copyOfRange(words, commandIndex+1, stop);
+        this.myPrefix = spaceSeparatedString(Arrays.copyOfRange(words, 0, commandIndex));
+        this.mySuffix = spaceSeparatedString(Arrays.copyOfRange(words, stop, words.length));
         System.out.print("Printing arguments: ");
-        for (String s: sub) {System.out.print(s + " ");}
-        this.myUserInput.set(line, input);
-        return new ArrayList<String>(List.of(sub));
+        for (String s: args) {System.out.println(s + " ");}
+        this.myUserInput.set(lineIndex, input);
+        return new ArrayList<String>(List.of(args));
     }
 
     private void traverseUserInput() {
@@ -134,22 +134,16 @@ public class UserInput implements UserInputInterface, BundleInterface {
         }
     }
 
-    // TODO - refactor these two into static methods (may change for multiline commands)
-    private String removeArguments(String input, String[] sub) {
-        StringBuilder sb = new StringBuilder(input);
-        String remove = spaceSeparatedString(sub);
-        sb.replace(Math.max(input.length()-remove.length()-2, 0), input.length()-1, "");
-        System.out.printf("input truncated from: %s \nto: %s \n", input, sb.toString());
-        return sb.toString();
-    }
-
     private String spaceSeparatedString(String[] fullCommand) {
+        if (fullCommand.length == 0) {
+            return "";
+        }
         StringBuilder sb = new StringBuilder();
         for (String s: fullCommand) {
-            sb.append(s + " ");
+            sb.append(s + SPACE);
         }
         System.out.printf("space separated string: %s \n", sb.toString());
-        return sb.substring(0, sb.length()-2);
+        return sb.deleteCharAt(sb.length()-1).toString();
     }
 
     private boolean isValidCommand(String s) {

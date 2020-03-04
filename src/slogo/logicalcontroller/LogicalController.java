@@ -71,6 +71,7 @@ public class LogicalController {
       //List<Variable> newVariables = myParser.getVariables();
       //myVisualController.update(newModel, newVariables, latestCommand);
     }
+    System.out.println("Parser is finished! Yay!");
   }
 
   //TODO: Below is just for testing purposes, for the Parser functionality.
