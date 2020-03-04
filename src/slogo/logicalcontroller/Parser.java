@@ -2,6 +2,7 @@ package slogo.logicalcontroller;
 
 import slogo.exceptions.InvalidCommandException;
 import slogo.exceptions.NoCommandFound;
+import slogo.exceptions.ResourceBundleCreationException;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.command.comparison.ComparisonCommand;
 import slogo.logicalcontroller.command.controlflow.ControlFlowCommand;
@@ -43,7 +44,7 @@ public class Parser implements BundleInterface {
      * @param language
      */
 
-    public void setLanguage(String language) {
+    public void setLanguage(String language) throws IOException {
         this.myLanguage = language;
         this.myLanguageResources = BundleInterface.createResourceBundle(nameLanguageFile());
     }
@@ -55,21 +56,6 @@ public class Parser implements BundleInterface {
 
     private String nameLanguageFile() {
         return "resources/languages/" + this.myLanguage + ".properties";
-    }
-
-    /**
-     * Creates the new resource bundle object from the file that was previously loaded in.
-     * @param filename
-     * @return ResourceBundle object of the selected language.
-     */
-
-    // TODO - refactor as static method
-    private ResourceBundle createResourceBundle(String filename){
-        try {
-            return new PropertyResourceBundle(new FileInputStream(filename));
-        } catch (IOException e) {
-            throw new ResourceBundleCreationException();
-        }
     }
 
     /**
