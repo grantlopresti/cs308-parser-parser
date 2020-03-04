@@ -183,7 +183,6 @@ public class Parser implements BundleInterface {
         } catch (NoCommandFound e) {
             System.out.println("Parser finished parsing lines");
         }
-
     }
 
     public static void main (String[] args) throws IOException {

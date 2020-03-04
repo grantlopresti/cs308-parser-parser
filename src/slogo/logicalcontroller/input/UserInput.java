@@ -146,13 +146,29 @@ public class UserInput implements UserInputInterface, BundleInterface {
     private boolean isValidCommand(String s) {
         ResourceBundle bundle = this.myResources;
         Enumeration<String> resourceEnumeration = bundle.getKeys();
-        String key; String value;
+        String key; String value; Set<String> options;
         while (resourceEnumeration.hasMoreElements()) {
             key = resourceEnumeration.nextElement();
             value = bundle.getString(key);
             if (value.contains(s)) {return true;}
+            // if (keyContains(s, value)) {return true;}
         }
         return false;
+    }
+
+    // TODO - implement rgular expression mathcing to fix false triggering of errors
+    private boolean keyContains(String s, String value) {
+        Set<String> options = new HashSet<String>();
+        options.addAll(List.of(value.split("\\\\?|")));
+        options.addAll(List.of(value.split("|\\\\")));
+        options.addAll(List.of(value.split("|")));
+        Iterator iter = options.iterator();
+        while (iter.hasNext()) {
+            System.out.println(iter.next());
+        }
+        boolean bool = options.contains(s);
+        System.out.printf("value %s contains key %s is %b\n", value, s, bool);
+        return bool;
     }
 
     /**
