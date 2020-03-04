@@ -3,7 +3,7 @@ package slogo.logicalcontroller;
 import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.command.modifier.Forward;
-import slogo.logicalcontroller.variable.BasicVariable;
+import slogo.logicalcontroller.variable.MakeVariable;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
 import slogo.visualcontroller.VisualController;
