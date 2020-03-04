@@ -1,6 +1,8 @@
 package slogo.logicalcontroller;
 
 import slogo.exceptions.InvalidCommandException;
+import slogo.exceptions.ReflectionException;
+import slogo.exceptions.ResourceBundleCreationException;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.command.comparison.ComparisonCommand;
 import slogo.logicalcontroller.command.controlflow.ControlFlowCommand;
@@ -32,11 +34,11 @@ public class Parser {
      * @param language
      * @throws IOException
      */
-    public Parser(String language) throws IOException {
+    public Parser(String language){
         setLanguage(language);
     }
 
-    public void setLanguage(String language) throws IOException {
+    public void setLanguage(String language) {
         this.myLanguage = language;
         this.myLanguageResources = createResourceBundle(nameLanguageFile());
     }
@@ -46,8 +48,12 @@ public class Parser {
     }
 
     // TODO - refactor as static method
-    private ResourceBundle createResourceBundle(String filename) throws IOException {
-        return new PropertyResourceBundle(new FileInputStream(filename));
+    private ResourceBundle createResourceBundle(String filename){
+        try {
+            return new PropertyResourceBundle(new FileInputStream(filename));
+        } catch (IOException e) {
+            throw new ResourceBundleCreationException();
+        }
     }
 
     /**
@@ -56,14 +62,10 @@ public class Parser {
      * @param lines
      */
     public void parse(List<String> lines) {
-        try {
-            this.finalCommandObjects = new ArrayList<Command>();
-            this.myUserInput = new UserInput(lines, this.myLanguageResources);
-            for (int i = 0; i < lines.size(); i++) {
-                this.finalCommandObjects.addAll(singleLineParse(lines.get(i)));
-            }
-        } catch (Exception e) {
-            throw new InvalidCommandException();
+        this.finalCommandObjects = new ArrayList<Command>();
+        this.myUserInput = new UserInput(lines, this.myLanguageResources);
+        for (int i = 0; i < lines.size(); i++) {
+            this.finalCommandObjects.addAll(singleLineParse(lines.get(i)));
         }
     }
 
@@ -76,17 +78,18 @@ public class Parser {
         try {
             Class superclazz = command.getClass().getSuperclass();
             String name = "execute" + superclazz.getSimpleName();
+            System.out.println("Name of name: " + name + "Name of the superclass: " + superclazz.getSimpleName());
             Method method = this.getClass().getDeclaredMethod(name, superclazz); //Command.class
             Object o = method.invoke(this, command);
             return (List<String>) o;
-        } catch (Exception e) {
-            throw new InvalidCommandException("Could not execute command");
+        } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException | NullPointerException e) {
+            throw new ReflectionException("Unable to apply Reflection");
         }
     }
 
     // TODO - fill in method body
     public void executeNextCommand(){
-        ;
+
     }
 
     /**
@@ -156,7 +159,7 @@ public class Parser {
         return this.myLanguageResources;
     }
 
-    private static void testCommandCycle() throws IOException {
+    private static void testCommandCycle(){
         String language = "Russian";
         Parser p = new Parser(language);
         List<String> userInput = new ArrayList<String>(List.of("40", "60", "75", "vpered vpered 50"));
@@ -168,7 +171,7 @@ public class Parser {
         }
     }
 
-    public static void main (String[] args) throws IOException {
+    public static void main (String[] args){
         testCommandCycle();
     }
 }
