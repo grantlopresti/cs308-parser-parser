@@ -1,11 +1,9 @@
 package slogo.logicalcontroller;
 
-import slogo.exceptions.ConstructorException;
 import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.command.comparison.ComparisonCommand;
 import slogo.logicalcontroller.command.controlflow.ControlFlowCommand;
-import slogo.logicalcontroller.command.controlflow.Repeat;
 import slogo.logicalcontroller.command.math.MathCommand;
 import slogo.logicalcontroller.command.modifier.ModifierCommand;
 import slogo.logicalcontroller.command.querie.QuerieCommand;
@@ -16,9 +14,6 @@ import slogo.model.ModelCollection;
 import java.util.*;
 import java.io.*;
 import java.lang.reflect.*;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptEngine;
-import javax.script.ScriptException;
 
 /**
  * Purpose of this class is to parse incoming commands from the console and from a text file that the user will have an option to read in.
@@ -27,15 +22,9 @@ public class Parser {
 
     private String myLanguage;
     private List<Command> finalCommandObjects;
+    private List<Variable> myVariableList;
     private UserInput myUserInput;
-    private ModelCollection model;
-    private List<Variable> variables;
-    private List<String> command_input;
-    private static final String SLOGO_COMMAND = "slogo.logicalcontroller.command.";
-    private static final String SUPERCLASS_PROPERTIES = "src/properties/commandSuperclass.properties";
-    private static final String PARAMETER_PROPERTIES = "src/properties/parameterCount.properties";
-    private static ResourceBundle myCommandMap;
-    private static ResourceBundle myParameterMap;
+    private ModelCollection myModelCollection;
     private ResourceBundle myLanguageResources;
 
     /**
@@ -45,8 +34,6 @@ public class Parser {
      */
     public Parser(String language) throws IOException {
         setLanguage(language);
-        this.myCommandMap = createResourceBundle(SUPERCLASS_PROPERTIES);
-        this.myParameterMap = createResourceBundle(PARAMETER_PROPERTIES);
     }
 
     public void setLanguage(String language) throws IOException {
@@ -58,6 +45,7 @@ public class Parser {
         return "resources/languages/" + this.myLanguage + ".properties";
     }
 
+    // TODO - refactor as static method
     private ResourceBundle createResourceBundle(String filename) throws IOException {
         return new PropertyResourceBundle(new FileInputStream(filename));
     }
@@ -77,61 +65,6 @@ public class Parser {
         } catch (Exception e) {
             throw new InvalidCommandException();
         }
-    }
-
-    /**
-     * Translates raw user inputted command (in arbitrary language) to Key in properties file
-     * @param command
-     * @return
-     * TODO - what to do if command not found? - throw no command exception
-     */
-    private String translateCommand(String command) {
-        Enumeration<String> resourceEnumeration = this.myLanguageResources.getKeys();
-        String key; String value;
-        while (resourceEnumeration.hasMoreElements()) {
-            key = resourceEnumeration.nextElement();
-            value = this.myLanguageResources.getString(key);
-            if (value.contains(command)) {return key;}
-        }
-        return "";
-    }
-
-    /**
-     * Use properties file to translate command Key into superclass for reflections
-     * @param command
-     * @return
-     */
-    private String getCommandSuperclass(String command) {
-        Enumeration<String> resourceEnumeration = this.myCommandMap.getKeys();
-        String key;
-        while (resourceEnumeration.hasMoreElements()) {
-            key = resourceEnumeration.nextElement();
-            if (key.equals(command)) {return this.myCommandMap.getString(key);}
-        }
-        return "";
-    }
-
-    /**
-     * Construct command using reflection based on given arguments
-     * @param superclass
-     * @param command
-     * @param arguments
-     * @return
-     */
-    private Command createCommand(String superclass, String command, List<String> arguments) {
-        try {
-            Class clazz = Class.forName(createCommandPath(superclass, command));
-            Constructor ctor = clazz.getConstructor(List.class);
-            return (Command) ctor.newInstance(arguments);
-        } catch (Exception e) {
-            throw new InvalidCommandException("Could not create command");
-        }
-    }
-
-    private String createCommandPath(String superclass, String command) {
-        String path = String.format("%s%s.%s", SLOGO_COMMAND, superclass, command);
-        System.out.printf("returning path: %s \n", path);
-        return path;
     }
 
     /**
@@ -186,45 +119,6 @@ public class Parser {
         return new ArrayList<Command>();
     }
 
-    // TODO - assume only one repeat, update to handle multiple
-    private int parseRepeat(String[] repLine, int index) throws NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
-        String value = repLine[1];
-        int currLine = index+1;
-        int ret = index;
-        List<String> tempRetLines = new ArrayList<String>();
-        List<Command> repCommands = new ArrayList<Command>();
-        List<Command> commandsToBeAdded = new ArrayList<Command>();
-
-        while(!(this.myUserInput.getLine(currLine)).contains("]")){
-            tempRetLines.add((this.myUserInput.getLine(currLine)));
-            currLine++;
-        }
-        ret = currLine;
-
-        for(String line: tempRetLines){
-            repCommands.addAll(singleLineParse(line));
-        }
-
-        Repeat tempRepeat = new Repeat(value, repCommands);
-
-        this.finalCommandObjects.addAll(tempRepeat.getAllRepCommands());
-        return ret;
-    }
-
-    /**
-     * Checks if a given string contains a digit value, or if it only has commands
-     * @param line is a string line from the input
-     * @returns true when the line contains a parseable integer
-     */
-    private boolean checkHasNumber(String line){
-        try {
-            double d = Double.parseDouble(line);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
     /**
      * Called by the LogicalController
      * Returns the final list of commands to be executed on the model
@@ -234,19 +128,21 @@ public class Parser {
         return this.finalCommandObjects;
     }
 
+    public Command getLatestCommand() {
+        return this.myUserInput.getNextCommand();
+    }
+
+    public List<Variable> getVariables() {return this.myVariableList; }
+
     public boolean isFinished(){
         return true;
     }
 
     public ModelCollection getModel(){
-        return this.model;
+        return this.myModelCollection;
     }
 
-    public void set(List<String> command, ModelCollection modelC, List<Variable> var){
-        this.command_input = command;
-        this.model = modelC;
-        this.variables = var;
-    }
+
 
     private void setUserInput(List<String> userInput) {
         this.myUserInput = new UserInput(userInput, this.myLanguageResources);
@@ -256,27 +152,16 @@ public class Parser {
         return this.myUserInput;
     }
 
-    private int countParameters(String translated) {
-        return Integer.parseInt(this.myParameterMap.getString(translated));
+    public ResourceBundle getLanguageResources() {
+        return this.myLanguageResources;
     }
 
     private static void testCommandCycle() throws IOException {
         String language = "Russian";
         Parser p = new Parser(language);
         List<String> userInput = new ArrayList<String>(List.of("40", "60", "75", "vpered vpered 50"));
-        p.setUserInput(userInput);
-        int lineIndex = p.getUserInput().findNextLine();
-        int commandIndex = p.getUserInput().findLastCommand(lineIndex);
-        System.out.printf("found next command @line %d \n", lineIndex);
-        System.out.printf("found last command @index %d \n", commandIndex);
-        String command = "vpered";
-        String translated = p.translateCommand(command);
-        System.out.printf("translated %s to %s in %s", command, translated, language);
-        int params = p.countParameters(translated);
-        System.out.printf("requires %d parameters", params);
-        List<String> arguments = p.getUserInput().getArguments(lineIndex, commandIndex, params);
-        String superclass = p.getCommandSuperclass(translated);
-        Command c = p.createCommand(superclass, translated, arguments);
+        UserInput myInput = new UserInput(userInput, p.getLanguageResources());
+        Command c = myInput.getNextCommand();
         List<String> myList = p.executeCommand(c);
         for (String s: myList) {
             System.out.print(s);
