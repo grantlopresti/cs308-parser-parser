@@ -32,17 +32,13 @@ public class Parser {
     private ModelCollection model;
     private List<Variable> variables;
     private List<String> command_input;
-    // TODO - refactor large constructed instance variables as properties/enumerated types
-    private static final String DEFAULT_PROPERTIES = "properties/";
     private static final String SLOGO_COMMAND = "slogo.logicalcontroller.command.";
-    private static final String COMMAND_MAP_PROPERTIES = "commandSuperclass";
-    private ResourceBundle myCommandMap = ResourceBundle.getBundle(DEFAULT_PROPERTIES + COMMAND_MAP_PROPERTIES);
+    private FileInputStream fis1 = new FileInputStream("src/properties/commandSuperclass.properties");
+    private ResourceBundle myCommandMap = new PropertyResourceBundle(fis1);
     private Set<String> type2 = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pow","pi"));
-    private Set<String> mathSingleParameter = new HashSet<String>(Arrays.asList(
-            "random","sin","cos","tan","atan","log","pi", "minus", "~"));
+    private Set<String> mathSingleParameter = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pi", "minus", "~"));
     private ArrayList<String> comNeedChecked = new ArrayList<String>(Arrays.asList("repeat","sin","cos","tan","atan","log","pow","pi"));
-    private Set<String> mathDoubleParameter = new HashSet<String>(Arrays.asList(
-            "pow", "sum", "+", "difference", "-", "product", "*", "quotient", "/", "remainder", "%"));
+    private Set<String> mathDoubleParameter = new HashSet<String>(Arrays.asList("pow", "sum", "+", "difference", "-", "product", "*", "quotient", "/", "remainder", "%"));
     private Map<String, String> type1 = new HashMap<String, String>(){{
         put("sum", "+");
         put("difference", "-");
