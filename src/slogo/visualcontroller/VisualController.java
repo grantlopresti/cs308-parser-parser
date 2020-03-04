@@ -72,7 +72,7 @@ public class VisualController implements VisualInterface {
   @Override
   public void update(ModelCollection model, List<Variable> variableList, Command command) {
     moveModelObject(model, command);
-    updateVariables(variableList);
+    // updateVariables(variableList);
     // updateCommands(Command.toString());
   }
 
@@ -91,7 +91,11 @@ public class VisualController implements VisualInterface {
   @Override
   public void changeTurtleImage(String newValue) {
     TurtleImage image = TurtleImage.valueOf(newValue);
-    myTurtles.get(0).setImage(image.getImagePath());
+    System.out.println("changing Turtle Image");
+    for (Integer i : myTurtles.keySet()) {
+      System.out.printf("INDEX: ", i);
+      myTurtles.get(i).setImage(image.getImagePath());
+    }
   }
 
   @Override
@@ -121,7 +125,7 @@ public class VisualController implements VisualInterface {
     }
   }
 
-  // TODO: leberage command knowledge to dictate turtle motion (rotations specifically)
+  // TODO: leverage command knowledge to dictate turtle motion (rotations specifically)
   private void moveModelObject(ModelCollection modelCollection, Command command) {
     Iterator iter = modelCollection.iterator();
     while (iter.hasNext()) {

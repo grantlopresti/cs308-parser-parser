@@ -16,7 +16,10 @@ public class UserInput implements UserInputInterface, BundleInterface {
     private int myLineIndex;
     private int myCommandIndex;
     private String myCommand;
+    private String myPrefix;
+    private String mySuffix;
     private static final int NONE_FOUND = -1;
+    private static final String SPACE = " ";
 
     private static final String SUPERCLASS_PROPERTIES = "src/properties/commandSuperclass.properties";
     private static final String PARAMETER_PROPERTIES = "src/properties/parameterCount.properties";
@@ -41,12 +44,9 @@ public class UserInput implements UserInputInterface, BundleInterface {
         try {
             this.myLineIndex = findNextLine();
             this.myCommandIndex = findLastCommand(this.myLineIndex);
-            System.out.printf("found next command @line %d \n", this.myLineIndex);
-            System.out.printf("found last command @index %d \n", this.myCommandIndex);
             String translated = translateCommand(this.myCommand);
             System.out.printf("translated %s to %s \n", this.myCommand, translated);
             int params = countParameters(translated);
-            System.out.printf("requires %d parameters \n", params);
             List<String> arguments = getArguments(this.myLineIndex, this.myCommandIndex, params);
             String superclass = getCommandSuperclass(translated);
             Command c = createCommand(superclass, translated, arguments);
@@ -58,6 +58,7 @@ public class UserInput implements UserInputInterface, BundleInterface {
 
     // TODO - add to interface
     public boolean isFinished() {
+        System.out.println("checking if user input is finished");
         try {
             this.myLineIndex = findNextLine();
             this.myCommandIndex = findLastCommand(this.myLineIndex);
@@ -71,18 +72,18 @@ public class UserInput implements UserInputInterface, BundleInterface {
     // FOR NOW - assuming single line replace (only modifiers and math will work)
     @Override
     public void setCodeReplacement(List<String> code) {
-        String replace = code.get(0);
-        String lineUpdate = this.myUserInput.get(this.myLineIndex) + replace;
-        this.myUserInput.set(this.myLineIndex, lineUpdate);
-    }
-
-    @Override
-    public boolean hasNext() {
-        return true;
+        StringBuilder sb = new StringBuilder(this.myPrefix);
+        for (String s: code) {
+            sb.append(SPACE + s);
+        }
+        sb.append(SPACE + this.mySuffix);
+        this.myUserInput.set(this.myLineIndex, sb.toString().trim());
+        System.out.printf("code replaced to: %s", this.myUserInput.get(this.myLineIndex));
     }
 
     // TODO - handle edge case of no more lines (raise flag when no more next lines and no more last commands?)
     private int findNextLine() {
+        System.out.printf("looking for nextLine on input: %s \n", this.myUserInput.get(0));
         for(int i = 0; i < this.myUserInput.size(); i++){
             String s = this.myUserInput.get(i);
             if(s.split("\\s+").length > 1){
@@ -94,6 +95,7 @@ public class UserInput implements UserInputInterface, BundleInterface {
 
     // TODO - handle no more commands in the line
     public int findLastCommand(int index) {
+        System.out.printf("looking for lastCommand on input: %s \n", this.myUserInput.get(0));
         String line = this.myUserInput.get(index);
         String[] words = line.split("\\s+");
         for(int i = words.length-1; i>=0; i--){
@@ -110,21 +112,17 @@ public class UserInput implements UserInputInterface, BundleInterface {
     }
 
     // TODO - how to handle multiple line parameters (param number is constant, could be bracketed parameter]
-    // TODO - assume all parameters go until end of line? Truncating line prematurely? (maybe good enough)
     // TODO - assume that parameters are space separated (good enough assumption)
-    private List<String> getArguments(int line, int index, int params) {
-        traverseUserInput();
-        index ++;
-        String input = this.myUserInput.get(line);
+    private List<String> getArguments(int lineIndex, int commandIndex, int params) {
+        // traverseUserInput();
+        int stop = commandIndex+1+params;
+        String input = this.myUserInput.get(lineIndex);
         String[] words = input.split("\\s");
-        int stop = index+params;
-        String[] sub = Arrays.copyOfRange(words, index, stop);
-        String[] fullCommand = Arrays.copyOfRange(words, index-1, stop);
-        input = removeArguments(input, fullCommand);
-        System.out.print("Printing arguments: ");
-        for (String s: sub) {System.out.print(s + " ");}
-        this.myUserInput.set(line, input);
-        return new ArrayList<String>(List.of(sub));
+        String[] args = Arrays.copyOfRange(words, commandIndex+1, stop);
+        this.myPrefix = spaceSeparatedString(Arrays.copyOfRange(words, 0, commandIndex));
+        this.mySuffix = spaceSeparatedString(Arrays.copyOfRange(words, stop, words.length));
+        this.myUserInput.set(lineIndex, input);
+        return new ArrayList<String>(List.of(args));
     }
 
     private void traverseUserInput() {
@@ -134,22 +132,15 @@ public class UserInput implements UserInputInterface, BundleInterface {
         }
     }
 
-    // TODO - refactor these two into static methods (may change for multiline commands)
-    private String removeArguments(String input, String[] sub) {
-        StringBuilder sb = new StringBuilder(input);
-        String remove = spaceSeparatedString(sub);
-        sb.replace(Math.max(input.length()-remove.length()-2, 0), input.length()-1, "");
-        System.out.printf("input truncated from: %s \nto: %s \n", input, sb.toString());
-        return sb.toString();
-    }
-
     private String spaceSeparatedString(String[] fullCommand) {
+        if (fullCommand.length == 0) {
+            return "";
+        }
         StringBuilder sb = new StringBuilder();
         for (String s: fullCommand) {
-            sb.append(s + " ");
+            sb.append(s + SPACE);
         }
-        System.out.printf("space separated string: %s \n", sb.toString());
-        return sb.substring(0, sb.length()-2);
+        return sb.deleteCharAt(sb.length()-1).toString();
     }
 
     private boolean isValidCommand(String s) {
@@ -204,6 +195,7 @@ public class UserInput implements UserInputInterface, BundleInterface {
      * @return
      */
     private Command createCommand(String superclass, String command, List<String> arguments) {
+        System.out.printf("createCommand in UserInput.java from commmand: %s \n", command);
         try {
             Class clazz = Class.forName(createCommandPath(superclass, command));
             Constructor ctor = clazz.getConstructor(List.class);
@@ -215,7 +207,7 @@ public class UserInput implements UserInputInterface, BundleInterface {
 
     private String createCommandPath(String superclass, String command) {
         String path = String.format("%s%s.%s", SLOGO_COMMAND, superclass, command);
-        System.out.printf("returning path: %s \n", path);
+        // System.out.printf("returning path: %s \n", path);
         return path;
     }
 

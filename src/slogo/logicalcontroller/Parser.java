@@ -37,15 +37,15 @@ public class Parser implements BundleInterface {
      * Constructor for the Parser class that takes in the input language and initializes all the used variables that are required for parsing.
      * @param language
      */
-    public Parser(String language) throws IOException {
+    public Parser(String language, ModelCollection model) throws IOException {
         setLanguage(language);
+        this.myModelCollection = model;
     }
 
     /**
      * Reads in the language of the appropriate resource file and loads it into a resource bundle for future use.
      * @param language
      */
-
     public void setLanguage(String language) throws IOException {
         this.myLanguage = language;
         try {
@@ -167,7 +167,7 @@ public class Parser implements BundleInterface {
     private static void testCommandCycle() throws IOException {
         try {
             String language = "Russian";
-            Parser p = new Parser(language);
+            Parser p = new Parser(language, new ModelCollection());
             List<String> userInput = new ArrayList<String>(List.of("40", "60", "75", "vpered vpered 50"));
             UserInput myInput = new UserInput(userInput, p.getLanguageResources());
             p.myLatestCommand = myInput.getNextCommand();
@@ -175,6 +175,7 @@ public class Parser implements BundleInterface {
             for (String s: myList) {
                 System.out.print(s);
             }
+            myInput.setCodeReplacement(myList);
         } catch (NoCommandFound e) {
             System.out.println("Parser finished parsing lines");
         }

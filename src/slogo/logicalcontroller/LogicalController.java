@@ -30,11 +30,11 @@ public class LogicalController {
   };
 
   public LogicalController(ModelCollection modelCollection, VisualController visualController, List<Variable> variables){
-    myModelCollection = modelCollection;
-    myVisualController = visualController;
+    this.myModelCollection = modelCollection;
+    this.myVisualController = visualController;
+    this.myVariables = variables;
     // TODO - update visualController initial state to empty lists to get first turtle to show
-    // myVisualController.moveModelObject(myModelCollection);
-    myVariables = variables;
+    this.myVisualController.update(this.myModelCollection, this.myVariables, null);
     try {
       this.setLanguage(DEFAULT_LANGUAGE);
     } catch (Exception e) {
@@ -58,14 +58,21 @@ public class LogicalController {
    * @throws InvalidCommandException
    */
   public void handleNewCommand(String fullUserInput) throws InvalidCommandException, NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
-    myParser.parse(Arrays.asList(fullUserInput.split("\n")));
-    while(!myParser.isFinished()){
-      myParser.executeNextCommand();
-      Command latestCommand = myParser.getLatestCommand();
-      ModelCollection newModel = myParser.getModel();
-      List<Variable> newVariables = myParser.getVariables();
-      myVisualController.update(newModel, newVariables, latestCommand);
+    try {
+      System.out.printf("recieved user input: %s \n", fullUserInput);
+      this.myParser.parse(Arrays.asList(fullUserInput.split("\n")));
+      while(!this.myParser.isFinished()){
+        this.myParser.executeNextCommand();
+        Command latestCommand = this.myParser.getLatestCommand();
+        ModelCollection newModel = this.myParser.getModel();
+        List<Variable> newVariables = this.myParser.getVariables();
+        this.myVisualController.update(newModel, newVariables, latestCommand);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.out.println("error in handle new command");
     }
+    System.out.println("Parser is finished! Yay!");
   }
 
   //TODO: Below is just for testing purposes, for the Parser functionality.
