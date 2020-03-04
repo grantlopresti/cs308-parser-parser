@@ -25,20 +25,17 @@ public class Parser {
 
     private String myLanguage;
     private ResourceBundle myLanguageResources;
-    private Map<String, String> commandArray;
+    private static Map<String, String> myCommandSuperclassMap;
     private List<Command> finalCommandObjects;
     private List<String> rawCommands;
     private ModelCollection model;
     private List<Variable> variables;
     private List<String> command_input;
-    // TODO - refactor large constructed instance variables as enumerated types
-    // ^^ DO THIS PLEASE !!!
+    // TODO - refactor large constructed instance variables as properties/enumerated types
     private static final String DEFAULT_PROPERTIES = "properties/";
     private static final String SLOGO_COMMAND = "slogo.logicalcontroller.command.";
     private static final String COMMAND_MAP_PROPERTIES = "commandMappings";
-    private static final String MATH_TYPE_ONE_PROPERTIES = "mathTypeOne";
     private ResourceBundle myCommandMap = ResourceBundle.getBundle(DEFAULT_PROPERTIES + COMMAND_MAP_PROPERTIES);
-    private ResourceBundle myMathTypeOneMap = ResourceBundle.getBundle(DEFAULT_PROPERTIES + MATH_TYPE_ONE_PROPERTIES);
     private Set<String> type2 = new HashSet<String>(Arrays.asList("random","sin","cos","tan","atan","log","pow","pi"));
     private Set<String> mathSingleParameter = new HashSet<String>(Arrays.asList(
             "random","sin","cos","tan","atan","log","pi", "minus", "~"));
@@ -61,7 +58,7 @@ public class Parser {
      */
     public Parser(String language) throws IOException {
         setLanguage(language);
-        this.commandArray = genCommandArray();
+        this.myCommandSuperclassMap = createCommandSuperclassMap();
     }
 
     public void setLanguage(String language) throws IOException {
@@ -70,7 +67,7 @@ public class Parser {
     }
 
     private FileInputStream createFileStream() throws FileNotFoundException {
-        return new FileInputStream("resources/languages/"+this.myLanguage +".properties");
+        return new FileInputStream("resources/languages/"+this.myLanguage + ".properties");
     }
 
     /**
@@ -132,6 +129,7 @@ public class Parser {
      * Translates raw user inputted command (in arbitrary language) to Key in properties file
      * @param command
      * @return
+     * TODO - what to do if command not found? - throw no command exception
      */
     private String translateCommand(String command) {
         Enumeration<String> resourceEnumeration = this.myLanguageResources.getKeys();
@@ -150,6 +148,12 @@ public class Parser {
      * @return
      */
     private String getCommandSuperclass(String command) {
+        Enumeration<String> resourceEnumeration = this.myCommandMap.getKeys();
+        String key;
+        while (resourceEnumeration.hasMoreElements()) {
+            key = resourceEnumeration.nextElement();
+            if (key.equals(command)) {return this.myCommandMap.getString(key);}
+        }
         return "";
     }
 
@@ -411,7 +415,7 @@ public class Parser {
             System.out.println("Vallll" + val);
 
             // Class cl = Class.forName(SLOGO_COMMAND+commandMappings.get(commandArray.get(com))+"."+commandArray.get(com));
-            Class cl = Class.forName(SLOGO_COMMAND+myCommandMap.getString(commandArray.get(com))+"."+commandArray.get(com));
+            Class cl = Class.forName(SLOGO_COMMAND+myCommandMap.getString(myCommandSuperclassMap.get(com))+"."+ myCommandSuperclassMap.get(com));
             System.out.println("The val: " +  val);
             Constructor con = cl.getConstructor(String.class);
             Command command = (Command) con.newInstance(val);
@@ -441,7 +445,7 @@ public class Parser {
      * Based on preconfigured language
      * @return mappings of input commmands to command objects (e.g lt --> Left)
      */
-    private Map<String, String> genCommandArray() {
+    private Map<String, String> createCommandSuperclassMap() {
         Map<String, String> mymap = new HashMap<String, String>();
         for(String key: Collections.list(this.myLanguageResources.getKeys())){
             String regex = this.myLanguageResources.getString(key);
@@ -495,33 +499,28 @@ public class Parser {
 
     private static void testTranslate(Parser p) {
         try {
-            String language = "French";
-            String command = "derriere";
-            String key = p.translateCommand(command);
+            String language = "Italian";
             p.setLanguage(language);
-            System.out.printf("Translated %s to %s in %s", command, key, language);
+            String command = "impostadirezione";
+            System.out.println("trying to translate command");
+            String key = p.translateCommand(command);
+            System.out.printf("translated command to: %s \n", key);
+            System.out.printf("Translated %s to %s in %s \n", command, key, language);
         } catch (Exception e) {
             System.out.println("Exception in testTranslate");
         }
-
     }
 
-    private static void testMax() {
-        try {
-            Parser p = new Parser("English");
-            testTranslate(p);
-        } catch (Exception e) {
-            System.out.println("Exception in testMax");
-        }
-
+    private static void testSuperclassMap(Parser p) {
+        String command = "Forward";
+        String clazz = p.getCommandSuperclass(command);
+        System.out.printf("%s --> %s \n", command, clazz);
     }
 
-    public static void main (String[] args) {
-        try {
-            // testAmjad();
-            testMax();
-        } catch (Exception e) {
-           System.out.println("Exception in main");
-        }
+    public static void main (String[] args) throws IOException {
+        Parser p = new Parser("English");
+        testTranslate(p);
+        testSuperclassMap(p);
+        // testAmjad();
     }
 }
