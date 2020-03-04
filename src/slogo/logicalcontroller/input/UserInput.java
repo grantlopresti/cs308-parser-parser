@@ -1,6 +1,7 @@
 package slogo.logicalcontroller.input;
 
 import slogo.exceptions.InvalidCommandException;
+import slogo.logicalcontroller.BundleInterface;
 import slogo.logicalcontroller.command.Command;
 
 import java.io.FileInputStream;
@@ -8,7 +9,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.*;
 
-public class UserInput implements UserInputInterface {
+public class UserInput implements UserInputInterface, BundleInterface {
 
     private List<String> myUserInput;
     private ResourceBundle myResources;
@@ -23,17 +24,12 @@ public class UserInput implements UserInputInterface {
         this.myUserInput = userInput;
         this.myResources = bundle;
         try {
-            this.myCommandMap = createResourceBundle(SUPERCLASS_PROPERTIES);
-            this.myParameterMap = createResourceBundle(PARAMETER_PROPERTIES);
+            this.myCommandMap = BundleInterface.createResourceBundle(SUPERCLASS_PROPERTIES);
+            this.myParameterMap = BundleInterface.createResourceBundle(PARAMETER_PROPERTIES);
         } catch (IOException e) {
             // TODO - FIX THIS
             e.printStackTrace();
         }
-    }
-
-    // TODO - refactor as static method
-    private ResourceBundle createResourceBundle(String filename) throws IOException {
-        return new PropertyResourceBundle(new FileInputStream(filename));
     }
 
     @Override

@@ -18,7 +18,7 @@ import java.lang.reflect.*;
 /**
  * Purpose of this class is to parse incoming commands from the console and from a text file that the user will have an option to read in.
  */
-public class Parser {
+public class Parser implements BundleInterface {
 
     private String myLanguage;
     private List<Command> finalCommandObjects;
@@ -38,16 +38,11 @@ public class Parser {
 
     public void setLanguage(String language) throws IOException {
         this.myLanguage = language;
-        this.myLanguageResources = createResourceBundle(nameLanguageFile());
+        this.myLanguageResources = BundleInterface.createResourceBundle(nameLanguageFile());
     }
 
     private String nameLanguageFile() {
         return "resources/languages/" + this.myLanguage + ".properties";
-    }
-
-    // TODO - refactor as static method
-    private ResourceBundle createResourceBundle(String filename) throws IOException {
-        return new PropertyResourceBundle(new FileInputStream(filename));
     }
 
     /**
