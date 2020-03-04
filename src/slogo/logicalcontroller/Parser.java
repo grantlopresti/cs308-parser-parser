@@ -5,6 +5,7 @@ import slogo.exceptions.NoCommandFound;
 import slogo.exceptions.ReflectionException;
 import slogo.exceptions.ResourceBundleCreationException;
 import slogo.logicalcontroller.command.Command;
+import slogo.logicalcontroller.command.MakeVariable;
 import slogo.logicalcontroller.command.comparison.ComparisonCommand;
 import slogo.logicalcontroller.command.controlflow.ControlFlowCommand;
 import slogo.logicalcontroller.command.math.MathCommand;
@@ -124,9 +125,7 @@ public class Parser implements BundleInterface {
         return new ArrayList<String>();
     }
 
-    private List<Command> singleLineParse(String linee) {
-        return new ArrayList<Command>();
-    }
+    private List<String> executeVariables(MakeVariable command) {return new ArrayList<String>();}
 
     /**
      * Called by the LogicalController
