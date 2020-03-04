@@ -158,23 +158,6 @@ public class UserInput implements UserInputInterface, BundleInterface {
         return false;
     }
 
-    // TODO - implement rgular expression mathcing to fix false triggering of errors
-    private boolean keyContains(String s, String value) {
-        System.out.println("String s: " + s);
-        System.out.println("Value v: " + value);
-        Set<String> options = new HashSet<String>();
-        options.addAll(List.of(value.split("\\\\?|")));
-        options.addAll(List.of(value.split("|\\\\")));
-        options.addAll(List.of(value.split("|")));
-        Iterator iter = options.iterator();
-        while (iter.hasNext()) {
-            System.out.println(iter.next());
-        }
-        boolean bool = options.contains(s);
-        System.out.printf("value %s contains key %s is %b\n", value, s, bool);
-        return bool;
-    }
-
     /**
      * Translates raw user inputted command (in arbitrary language) to Key in properties file
      * @param command
