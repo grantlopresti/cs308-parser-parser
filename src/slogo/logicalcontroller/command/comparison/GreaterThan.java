@@ -2,21 +2,18 @@ package slogo.logicalcontroller.command.comparison;
 
 import slogo.logicalcontroller.command.Command;
 
-public class GreaterThan extends ComparisonCommand {
-    private double value;
+import java.util.List;
 
-    public GreaterThan(String inputValue1, String inputValue2){
-        super(inputValue1, inputValue2);
+public class GreaterThan extends ComparisonCommand {
+
+    public GreaterThan(List<String> args){
+        super(args.get(0), args.get(1));
     }
 
     @Override
-    protected void performComparison() {
-        if(argument1 > argument2){
-            setReturnValue(1);
-        }
-        else{
-            setReturnValue(0);
-        }
+    public String execute() {
+        boolean bool = this.argument1 > this.argument2;
+        return Boolean.toString(bool);
     }
 
 }

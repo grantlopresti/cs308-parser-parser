@@ -115,7 +115,7 @@ public class Parser implements BundleInterface {
     }
 
     private List<String> executeComparisonCommand(ComparisonCommand command) {
-        return new ArrayList<String>();
+        return new ArrayList<String>(List.of(command.execute()));
     }
 
     private List<String> executeControlFlowCommand(ControlFlowCommand command) {

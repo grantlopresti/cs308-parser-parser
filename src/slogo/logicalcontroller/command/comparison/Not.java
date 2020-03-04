@@ -1,18 +1,17 @@
 package slogo.logicalcontroller.command.comparison;
 
+import java.util.List;
+
 public class Not extends ComparisonCommand {
 
-    public Not(String inputValue){
-        super(inputValue);
+    public Not(List<String> args){
+        super(args.get(0));
     }
 
     @Override
-    protected void performComparison() {
-        if(argument1 == 0){
-            setReturnValue(1);
-        }
-        else{
-            setReturnValue(0);
-        }
+    public String execute() {
+        boolean bool = this.argument1 == 0;
+        return Boolean.toString(bool);
     }
+
 }
