@@ -32,7 +32,7 @@ public class Parser {
     private List<String> command_input;
     private static final String SLOGO_COMMAND = "slogo.logicalcontroller.command.";
     private static final String SUPERCLASS_PROPERTIES = "src/properties/commandSuperclass.properties";
-    private static final String PARAMETER_PROPERTIES = "src/properties/parameterMappings.properties";
+    private static final String PARAMETER_PROPERTIES = "src/properties/parameterCount.properties";
     private static ResourceBundle myCommandMap;
     private static ResourceBundle myParameterMap;
     private ResourceBundle myLanguageResources;
@@ -537,9 +537,8 @@ public class Parser {
         return this.myUserInput;
     }
 
-    // TODO - implement with resource bundle
     private int countParameters(String translated) {
-        return 1;
+        return Integer.parseInt(this.myParameterMap.getString(translated));
     }
 
     private static String testTranslate(Parser p, String language, String command) {
@@ -583,6 +582,7 @@ public class Parser {
         List<String> arguments = new ArrayList<String>(List.of("50"));
         String translated = p.translateCommand(command);
         int params = p.countParameters(translated);
+        System.out.printf("translated %s to %s in %s, requires %d parameters", command, translated, language, params);
         String superclass = p.getCommandSuperclass(translated);
         Command c = p.createCommand(superclass, translated, arguments);
         List<String> myList = p.executeCommand(c);
