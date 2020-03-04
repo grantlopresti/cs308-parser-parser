@@ -14,6 +14,7 @@ import slogo.logicalcontroller.command.querie.QuerieCommand;
 import slogo.logicalcontroller.input.UserInput;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
+import slogo.model.ModelTurtle;
 
 import java.util.*;
 import java.io.*;
@@ -106,7 +107,11 @@ public class Parser implements BundleInterface {
      */
     private List<String> executeModifierCommand(ModifierCommand command) {
         System.out.printf("Executing command %s with argument %.2f\n", command.getClass().getSimpleName(), command.getArgument1());
-        return new ArrayList<String>(List.of(command.execute()));
+        for (Object o : this.myModelCollection){
+            ModelTurtle turtle = (ModelTurtle) o;
+            command.execute(turtle);
+        }
+        return new ArrayList<String>(List.of(command.codeReplace()));
     }
 
     private List<String> executeComparisonCommand(ComparisonCommand command) {

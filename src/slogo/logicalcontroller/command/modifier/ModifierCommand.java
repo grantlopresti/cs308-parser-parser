@@ -1,10 +1,12 @@
 package slogo.logicalcontroller.command.modifier;
 
 import slogo.logicalcontroller.command.Command;
+import slogo.model.ModelTurtle;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
@@ -91,6 +93,9 @@ public abstract class ModifierCommand implements Command, ModifierInterface {
     }
 
     @Override
-    public abstract String execute();
+    public abstract void execute(ModelTurtle turtle);
+
+    @Override
+    public abstract String codeReplace();
 
 }
