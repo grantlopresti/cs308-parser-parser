@@ -7,11 +7,11 @@ import slogo.logicalcontroller.variable.VariableList;
  * Command to evaluate variables
  * @author Amjad S.
  */
-public class EvalulateVariable {
+public class EvaluateVariable {
 
     double varToBeRet;
 
-    public EvalulateVariable(String name, VariableList variableList){
+    public EvaluateVariable(String name, VariableList variableList){
 
         for(Object v: variableList){
             if(variableList.isSameVariable(name, (Variable) v)){
