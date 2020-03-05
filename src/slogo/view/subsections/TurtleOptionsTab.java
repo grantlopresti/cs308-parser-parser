@@ -63,6 +63,8 @@ public class TurtleOptionsTab extends Tab {
         myTurtleChoices,
         new Text("Pen Color:"),
         myPenColorPicker,
+        new Separator(),
+        new Text("Visual Turtle Movement:"),
         myBonusCommandGrid
     );
     setContent(myOrganizer);
@@ -75,11 +77,15 @@ public class TurtleOptionsTab extends Tab {
     Map bonusButtons = new HashMap<String, Button>();
 
     Button forwardButton = new Button("Forward");
-    forwardButton.setId("bonus-button");
+    forwardButton.setOnMouseClicked(e -> myViewer.sendUserCommand("forward 50"));
     Button backButton = new Button("Back");
+    backButton.setOnMouseClicked(e -> myViewer.sendUserCommand("back 50"));
     Button rightButton = new Button("Turn Right");
+    rightButton.setOnMouseClicked(e -> myViewer.sendUserCommand("right 90"));
     Button leftButton = new Button("Turn Left");
+    leftButton.setOnMouseClicked(e -> myViewer.sendUserCommand("left 90"));
     Button resetButton = new Button("Reset");
+    resetButton.setOnMouseClicked(e -> myViewer.sendUserCommand("reset"));
 
     GridPane.setHalignment(resetButton, HPos.CENTER);
     GridPane.setHalignment(backButton, HPos.CENTER);

@@ -83,12 +83,15 @@ public class Parser implements BundleInterface {
     private List<String> executeCommand(Command command) {
         try {
             Class superclazz = command.getClass().getSuperclass();
+            System.out.printf("superclazz: %s \n", superclazz);
             String name = "execute" + superclazz.getSimpleName();
+            System.out.printf("name: %s \n", name);
             Method method = this.getClass().getDeclaredMethod(name, superclazz); //Command.class
+            System.out.printf("method: %s \n", method);
             Object o = method.invoke(this, command);
             return (List<String>) o;
         } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException | NullPointerException e) {
-            throw new ReflectionException("Unable to apply Reflection");
+            throw new ReflectionException("Unable to apply Reflection " + e.getMessage());
         }
     }
 
@@ -106,7 +109,7 @@ public class Parser implements BundleInterface {
         String replace = "";
         for (Object o : this.myModelCollection){
             ModelTurtle turtle = (ModelTurtle) o;
-            // replace = command.execute(turtle);
+            replace = command.execute(turtle);
         }
         return new ArrayList<String>(List.of(replace));
     }

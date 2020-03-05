@@ -25,6 +25,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import slogo.exceptions.InvalidCommandException;
 import slogo.exceptions.ResourceBundleCreationException;
 import slogo.logicalcontroller.BundleInterface;
 import slogo.logicalcontroller.LogicalController;
@@ -164,7 +165,7 @@ public class SlogoView extends Application {
   private HBox getProgramInputNode() {
     HBox programInputArea = new HBox();
 
-    myInputPane = new UserInputPane(this, myLogicalController);
+    myInputPane = new UserInputPane();
     TextArea inputArea = myInputPane.getNode();
     inputArea.setPrefSize(WINDOW_WIDTH * 0.5, WINDOW_HEIGHT * 0.15);
     inputArea.setWrapText(true);
@@ -184,7 +185,7 @@ public class SlogoView extends Application {
     runButton.setMinSize(60, WINDOW_HEIGHT * 0.10);
     runButton.setPrefWidth(120);
     runButton.setOnAction(e -> {
-      myInputPane.sendUserCommand();
+      sendUserCommand(myInputPane.getCommand());
     });
 
     Button clearButton = new Button("Clear");
@@ -197,6 +198,21 @@ public class SlogoView extends Application {
 
     buttonArea.getChildren().addAll(runButton, clearButton);
     return buttonArea;
+  }
+
+  public void sendUserCommand(String userCommand) {
+    try {
+      if (!userCommand.equals("")) {
+        myLogicalController.handleNewCommand(userCommand);
+      } else {
+        announceError(new VisualError(new InvalidCommandException("This command has no "
+            + "body")));
+      }
+    }
+    catch (Exception e){
+      announceError(new VisualError(new InvalidCommandException("The following command "
+          + "is invalid, please try another!\n" + userCommand)));
+    }
   }
 
   private void createLeftPane() {
