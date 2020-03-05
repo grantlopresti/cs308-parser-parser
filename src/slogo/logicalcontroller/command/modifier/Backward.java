@@ -13,6 +13,11 @@ public class Backward extends ModifierCommand {
     }
 
     @Override
+    public String toString() {
+        return "back " + this.argument1;
+    }
+
+    @Override
     public void execute(ModelTurtle turtle) {
         try {
             String name = this.getMethodName();

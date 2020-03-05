@@ -13,6 +13,11 @@ public class Left extends ModifierCommand {
     }
 
     @Override
+    public String toString() {
+        return "left " + this.argument1;
+    }
+
+    @Override
     public void execute(ModelTurtle turtle) {
         try {
             String name = this.getMethodName();

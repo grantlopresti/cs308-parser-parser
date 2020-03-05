@@ -34,7 +34,7 @@ public class LogicalController {
     this.myVisualController = visualController;
     this.myVariables = variables;
     // TODO - update visualController initial state to empty lists to get first turtle to show
-    this.myVisualController.update(this.myModelCollection, this.myVariables, null);
+    // this.myVisualController.update(this.myModelCollection, this.myVariables, null);
     try {
       myParser= new Parser(DEFAULT_LANGUAGE, modelCollection);
     } catch (Exception e) {

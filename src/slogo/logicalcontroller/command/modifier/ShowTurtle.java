@@ -14,6 +14,11 @@ public class ShowTurtle extends ModifierCommand {
     }
 
     @Override
+    public String toString() {
+        return "showTurtle";
+    }
+
+    @Override
     public void execute(ModelTurtle turtle) {
         try {
             String name = this.getMethodName();

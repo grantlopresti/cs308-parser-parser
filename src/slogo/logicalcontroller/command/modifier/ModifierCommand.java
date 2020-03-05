@@ -76,13 +76,8 @@ public abstract class ModifierCommand implements Command, ModifierInterface {
         return className;
     }
 
-    /**
-     *To String Method
-     * @return
-     */
-    public String toString(){
-        return userInput;
-    }
+    @Override
+    public abstract String toString();
 
     public double getArgument1(){
         return argument1;

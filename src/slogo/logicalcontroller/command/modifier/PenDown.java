@@ -14,6 +14,11 @@ public class PenDown extends ModifierCommand {
     }
 
     @Override
+    public String toString() {
+        return "penDown";
+    }
+
+    @Override
     public void execute(ModelTurtle turtle) {
         try {
             String name = this.getMethodName();

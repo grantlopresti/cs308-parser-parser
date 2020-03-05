@@ -12,6 +12,11 @@ public class SetPosition extends ModifierCommand {
     }
 
     @Override
+    public String toString() {
+        return "setPosition " + this.argument1 + " " + this.argument2;
+    }
+
+    @Override
     public void execute(ModelTurtle turtle) {
         try {
             String name = this.getMethodName();

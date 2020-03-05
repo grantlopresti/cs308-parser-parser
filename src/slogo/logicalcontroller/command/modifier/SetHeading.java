@@ -12,6 +12,11 @@ public class SetHeading extends ModifierCommand {
     }
 
     @Override
+    public String toString() {
+        return "setHeading " + this.argument1;
+    }
+
+    @Override
     public void execute(ModelTurtle turtle) {
         try {
             String name = this.getMethodName();

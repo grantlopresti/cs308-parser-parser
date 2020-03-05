@@ -13,6 +13,11 @@ public class SetTowards extends ModifierCommand {
     }
 
     @Override
+    public String toString() {
+        return "setTowards " + this.argument1 + this.argument2;
+    }
+
+    @Override
     public void execute(ModelTurtle turtle) {
         try {
             String name = this.getMethodName();
