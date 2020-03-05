@@ -8,7 +8,6 @@ public class ID implements Command {
 
     }
 
-    @Override
     public double getValue() {
         return myValue;
     }

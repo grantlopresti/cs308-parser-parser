@@ -1,5 +1,5 @@
 # Group Discussion
-## ms724, as878, gjl13, awx
+## ms724, as878, gjl13, aqx
 
 ### Introduction and Background
 Grant teaches Turtle in Python and Scratch to little kids, CS308 is required and very interesting

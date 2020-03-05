@@ -1,22 +1,37 @@
 package slogo.logicalcontroller.command.modifier;
 
-import slogo.logicalcontroller.command.Command;
+import slogo.exceptions.InvalidCommandException;
+import slogo.model.ModelTurtle;
+
+import java.lang.reflect.Method;
+import java.util.List;
 
 public class Left extends ModifierCommand {
-    private double value;
 
-    public Left(String inputvalue){
-        value = Double.parseDouble(inputvalue);
+    public Left(List<String> args){
+        super(args.get(0));
+    }
+
+    @Override
+    public String toString() {
+        return "left " + this.argument1;
+    }
+
+    @Override
+    public void execute(ModelTurtle turtle) {
+        try {
+            String name = this.getMethodName();
+            Method method = turtle.getClass().getMethod(name.toLowerCase(), double.class);
+            Double value = this.getArgument1();
+            method.invoke(turtle, value);
+        } catch (Exception e) {
+            throw new InvalidCommandException();
+        }
 
     }
 
     @Override
-    public double getValue() {
-        return this.value;
-    }
-
-    @Override
-    public String getCommandType() {
-        return "Left";
+    public String codeReplace() {
+        return Double.toString(this.argument1);
     }
 }

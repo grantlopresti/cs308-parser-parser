@@ -8,7 +8,6 @@ public class MakeUserInstruction implements Command {
 
     }
 
-    @Override
     public double getValue() {
         return this.value;
     }

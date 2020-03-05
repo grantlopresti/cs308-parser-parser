@@ -1,16 +1,17 @@
 package slogo.logicalcontroller.command.math;
 
-import slogo.logicalcontroller.command.Command;
+import java.util.List;
 
+//TODO: Difference between Difference and Minus commands?
 public class Minus extends MathCommand {
 
-    public Minus(String input) {
-        super(input);
+    public Minus(List<String> input){
+        super(input.get(0));
     }
 
     @Override
-    public double performMath() {
-        return this.myArgument1 * -1;
+    public String execute() {
+        return Double.toString(-1 * this.myArgument1);
     }
 
     @Override

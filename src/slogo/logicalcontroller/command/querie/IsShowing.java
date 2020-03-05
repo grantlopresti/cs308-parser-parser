@@ -1,22 +1,19 @@
 package slogo.logicalcontroller.command.querie;
 
-import slogo.logicalcontroller.command.Command;
+import slogo.model.ModelTurtle;
 
 public class IsShowing extends QuerieCommand {
-    private double value;
+    public IsShowing(){
+        super();
+    }
 
-    public IsShowing(String inputvalue){
-        value = Double.parseDouble(inputvalue);
+    @Override
+    public void execute(ModelTurtle turtle) {
 
     }
 
     @Override
-    public double getValue() {
-        return this.value;
-    }
-
-    @Override
-    public String getCommandType() {
-        return "IsShowing";
+    public String codeReplace() {
+        return null;
     }
 }

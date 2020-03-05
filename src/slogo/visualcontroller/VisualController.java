@@ -6,7 +6,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import slogo.exceptions.LogicalException;
+import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.variable.Variable;
+import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelCollection;
 import slogo.model.ModelTurtle;
 import slogo.view.TurtleImage;
@@ -51,6 +53,7 @@ public class VisualController implements VisualInterface {
     myFilesProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
   }
 
+  @Override
   public void setSlogoView(SlogoView view) {
     mySlogoView = view;
   }
@@ -65,29 +68,12 @@ public class VisualController implements VisualInterface {
     myAnimationRate = rate;
   }
 
-  /**
-   * Called by the logical controller to update turtle state and draw shapes in Slogo view
-   * @param modelCollection model turtle that is currently being acted on
-   * TODO - Add casting try catch
-   */
+  // TODO - implement commands updating as strings
   @Override
-  public void moveModelObject(ModelCollection modelCollection) {
-    Iterator iter = modelCollection.iterator();
-    while (iter.hasNext()) {
-      ModelTurtle turtle = (ModelTurtle) iter.next();
-      moveTurtle(turtle);
-    }
-  }
-
-  /**
-   * Called by Logical Controller after a successful command execution
-   * @param command String representation of prior command execution
-   */
-  @Override
-  public void updateCommands(String command) {
-    FXCollections.reverse(myCommandsProperty.getValue());
-    myCommandsProperty.getValue().add(new VisualCommand(command));
-    FXCollections.reverse(myCommandsProperty.getValue());
+  public void update(ModelCollection model, VariableList variableList, Command command) {
+    moveModelObject(model, command);
+    // updateVariables(variableList);
+    updateCommands(command);
   }
 
   /**
@@ -103,9 +89,13 @@ public class VisualController implements VisualInterface {
   }
 
   @Override
-  public void updateVariables(Variable v) {
-    VisualVariable var = new VisualVariable(v);
-    myVariablesProperty.getValue().add(var);
+  public void changeTurtleImage(String newValue) {
+    TurtleImage image = TurtleImage.valueOf(newValue);
+    System.out.println("changing Turtle Image");
+    for (Integer i : myTurtles.keySet()) {
+      System.out.printf("INDEX: ", i);
+      myTurtles.get(i).setImage(image.getImagePath());
+    }
   }
 
   @Override
@@ -126,6 +116,28 @@ public class VisualController implements VisualInterface {
       default:
         throw new IllegalArgumentException();
     }
+  }
+
+  private void updateVariables(VariableList variableList) {
+    myVariablesProperty.getValue().clear();
+    for (Object v: variableList) {
+      myVariablesProperty.getValue().add(new VisualVariable((Variable)v));
+    }
+  }
+
+  // TODO: leverage command knowledge to dictate turtle motion (rotations specifically)
+  private void moveModelObject(ModelCollection modelCollection, Command command) {
+    Iterator iter = modelCollection.iterator();
+    while (iter.hasNext()) {
+      ModelTurtle turtle = (ModelTurtle) iter.next();
+      moveTurtle(turtle);
+    }
+  }
+
+  private void updateCommands(Command command) {
+    FXCollections.reverse(myCommandsProperty.getValue());
+    myCommandsProperty.getValue().add(new VisualCommand(command));
+    FXCollections.reverse(myCommandsProperty.getValue());
   }
 
   private void moveTurtle(ModelTurtle turtle) {
@@ -152,8 +164,4 @@ public class VisualController implements VisualInterface {
     return myTurtles.get(turtle.getID());
   }
 
-  public void changeTurtleImage(String newValue) {
-    TurtleImage image = TurtleImage.valueOf(newValue);
-    myTurtles.get(0).setImage(image.getImagePath());
-  }
 }

@@ -1,40 +1,33 @@
 package slogo.logicalcontroller.command.controlflow;
 
-import slogo.logicalcontroller.command.Command;
-
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implements the REPEAT Factory Design Pattern
+ * @author Alex Xu
+ */
 public class Repeat extends ControlFlowCommand {
-    private double value;
-    private List<Command> repCommands;
-    private List<Command> allRepCommands;
+    private int repeatCount;
 
-    public Repeat(String inputvalue, List<Command> repeatCommands){
-        this.value = Double.parseDouble(inputvalue);
-        this.repCommands = repeatCommands;
+    /**
+     * Constructor for the Repeat object, takes in the number of repeats desired, rounds to nearest integer.
+     * @param rawInput
+     */
+    public Repeat(List<List<String>> rawInput){
+        super(rawInput.get(1));
+        repeatCount = (int)Math.round(Double.parseDouble(rawInput.get(0).get(0)));
     }
 
     @Override
-    public double getValue() {
-        return this.value;
-    }
+    protected void unravelCode() {
+        List<String> myBody = this.getBody();
+        List<String> result = new ArrayList<>();
+        result.add("SET :repcount " + repeatCount);
 
-    @Override
-    public String getCommandType() {
-        return "Repeat";
-    }
-
-    public List<Command> getRepCommand(){
-        return this.repCommands;
-    }
-
-    public List<Command> getAllRepCommands(){
-        this.allRepCommands = new ArrayList<Command>();
-        for(int i = 0; i<(int)value; i++){
-            this.allRepCommands.addAll(getRepCommand());
+        for(int i = 0; i<repeatCount; i++){
+            result.addAll(myBody);
         }
-
-        return this.allRepCommands;
+        setUnraveledCode(result);
     }
 }

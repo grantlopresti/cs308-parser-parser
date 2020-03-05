@@ -1,22 +1,36 @@
 package slogo.logicalcontroller.command.modifier;
 
-import slogo.logicalcontroller.command.Command;
+import slogo.exceptions.InvalidCommandException;
+import slogo.model.ModelTurtle;
+
+import java.lang.reflect.Method;
+import java.util.List;
 
 public class PenDown extends ModifierCommand {
-    private double value;
+    public static final int RETURN_VALUE = 1;
 
-    public PenDown(String inputvalue){
-        value = Double.parseDouble(inputvalue);
-
+    public PenDown(List<String> args){
+        super(""+RETURN_VALUE);
     }
 
     @Override
-    public double getValue() {
-        return this.value;
+    public String toString() {
+        return "penDown";
     }
 
     @Override
-    public String getCommandType() {
-        return "PenDown";
+    public void execute(ModelTurtle turtle) {
+        try {
+            String name = this.getMethodName();
+            Method method = turtle.getClass().getMethod(name.toLowerCase());
+            method.invoke(turtle);
+        } catch (Exception e) {
+            throw new InvalidCommandException();
+        }
+    }
+
+    @Override
+    public String codeReplace() {
+        return "";
     }
 }

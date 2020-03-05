@@ -17,8 +17,6 @@ public abstract class ComparisonCommand implements Command {
     public static final List<Integer> POSSIBLE_VALUES = Arrays.asList(new Integer[]{0, 1});
     public static final int DEFAULT_VALUE = 0;
 
-    protected int returnValue;
-
     protected double argument1;
     protected double argument2;
 
@@ -27,24 +25,8 @@ public abstract class ComparisonCommand implements Command {
     }
 
     public ComparisonCommand(String input1, String input2){
-        this(input1);
+        argument1 = Double.parseDouble(input1);
         argument2 = Double.parseDouble(input2);
-    }
-
-    public abstract void performComparison();
-
-    protected void setReturnValue(int value){
-        if(POSSIBLE_VALUES.contains(value)){
-            returnValue = value;
-        }
-        else{
-            returnValue = DEFAULT_VALUE;
-        }
-    }
-
-    @Override
-    public double getValue() {
-        return this.returnValue;
     }
 
     @Override
@@ -52,4 +34,7 @@ public abstract class ComparisonCommand implements Command {
         String className = this.getClass().getSimpleName();
         return className;
     }
+
+    public abstract String execute();
+
 }

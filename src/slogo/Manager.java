@@ -3,6 +3,7 @@ package slogo;
 import javafx.stage.Stage;
 import slogo.logicalcontroller.LogicalController;
 import slogo.logicalcontroller.variable.Variable;
+import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelCollection;
 import slogo.view.windows.SlogoView;
 import slogo.visualcontroller.VisualController;
@@ -18,8 +19,7 @@ import java.util.List;
 public class Manager {
     public static final String DEFAULT_LANG = "ENGLISH";
     private ModelCollection myModelCollection;
-    private List<Variable> myVariables;
-    //private SlogoView mySlogoView;
+    private VariableList myVariables;
     private SlogoView mySlogoView;
     private VisualController myVisualController;
     private LogicalController myLogicalController;
@@ -56,8 +56,8 @@ public class Manager {
 
     private void createModel() {
         myModelCollection = new ModelCollection();
-        // myModelCollection.append(new ModelTurtle());
-        myVariables = new ArrayList<Variable>();
+        myModelCollection.append(new ModelTurtle());
+        myVariables = new VariableList();
     }
 
 }

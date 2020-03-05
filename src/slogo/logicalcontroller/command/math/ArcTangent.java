@@ -2,15 +2,17 @@ package slogo.logicalcontroller.command.math;
 
 import slogo.logicalcontroller.command.Command;
 
+import java.util.List;
+
 public class ArcTangent extends MathCommand {
 
-    public ArcTangent(String input){
-        super(input);
+    public ArcTangent(List<String> input){
+        super(input.get(0));
     }
 
     @Override
-    public double performMath() {
-        return Math.atan(myArgument1);
+    public String execute() {
+        return Double.toString(Math.atan(this.myArgument1));
     }
 
     @Override

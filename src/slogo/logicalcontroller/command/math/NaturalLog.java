@@ -2,15 +2,17 @@ package slogo.logicalcontroller.command.math;
 
 import slogo.logicalcontroller.command.Command;
 
+import java.util.List;
+
 public class NaturalLog extends MathCommand {
 
-    public NaturalLog(String input){
-        super(input);
+    public NaturalLog(List<String> input){
+        super(input.get(0));
     }
 
     @Override
-    public double performMath() {
-        return Math.log(this.myArgument1);
+    public String execute() {
+        return Double.toString(Math.log(this.myArgument1));
     }
 
     @Override
