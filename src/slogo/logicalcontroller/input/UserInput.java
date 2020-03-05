@@ -55,17 +55,19 @@ public class UserInput implements UserInputInterface, BundleInterface {
             // TODO - fork between controlflow and other
             if (superclass.equals(CONTROLFLOW)) {
                 List<List<String>> args = getControlFlowArguments(this.myLineIndex, this.myCommandIndex, params);
-                return createControlFlowCommand(superclass, translated, args);
+                return createControlCommand(superclass, translated, args);
             } else {
                 List<String> args = getArguments(this.myLineIndex, this.myCommandIndex, params);
                 return createCommand(superclass, translated, args);
             }
+            // return createCommand(superclass, translated, args);
         } catch (NoCommandFound e) {
             throw new NoCommandFound("Could not generate command");
         }
     }
 
-    private Command createControlFlowCommand(String superclass, String command, List<List<String>> args) {
+    // TODO - combine with general command creation (List<?>??)
+    private Command createControlCommand(String superclass, String command, List<List<String>> args) {
         try {
             Class clazz = Class.forName(createCommandPath(superclass, command));
             Constructor ctor = clazz.getConstructor(List.class);
