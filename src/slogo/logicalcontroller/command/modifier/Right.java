@@ -1,9 +1,5 @@
 package slogo.logicalcontroller.command.modifier;
 
-import slogo.exceptions.InvalidCommandException;
-import slogo.model.ModelTurtle;
-
-import java.lang.reflect.Method;
 import java.util.List;
 
 public class Right extends ModifierCommand {
