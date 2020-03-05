@@ -8,15 +8,11 @@ import slogo.view.windows.SlogoView;
 import slogo.visualcontroller.VisualError;
 
 public class UserInputPane {
-  private SlogoView myViewer;
-  private LogicalController myLogicalController;
   private TextArea myTextArea;
 
-  public UserInputPane (SlogoView viewer, LogicalController logicalcontroller) {
+  public UserInputPane () {
     myTextArea = new TextArea();
     myTextArea.setPromptText("Enter Logo Commands Here:");
-    myLogicalController = logicalcontroller;
-    myViewer = viewer;
   }
 
   public void setInputArea(String text){
@@ -27,24 +23,12 @@ public class UserInputPane {
     return myTextArea;
   }
 
-  public void sendUserCommand() {
-    String userCommand = myTextArea.getText();
-    try {
-      if (!userCommand.equals("")) {
-        myLogicalController.handleNewCommand(userCommand);
-      } else {
-        myViewer.announceError(new VisualError(new InvalidCommandException("This command has no "
-            + "body")));
-      }
-    }
-    catch (Exception e){
-      myViewer.announceError(new VisualError(new InvalidCommandException("The following command "
-          + "is invalid, please try another!\n" + userCommand)));
-    }
-  }
-
   public void clear() {
     myTextArea.clear();
+  }
+
+  public String getCommand() {
+    return myTextArea.getText();
   }
 }
 
