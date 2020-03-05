@@ -37,7 +37,7 @@ public class SubTabFactory {
     myPossibleTabs = new ArrayList<>();
     myTabData = new ArrayList<>();
     // initialize list contents from resource file data
-    ResourceBundle reflectionResources = null;
+    ResourceBundle reflectionResources;
     try {
       reflectionResources = BundleInterface.createResourceBundle(REFLECTION_RESOURCES);
     } catch (IOException e) {
@@ -57,7 +57,10 @@ public class SubTabFactory {
       // get the tab's data from file
       Pair<String, String> data = myTabData.get(myPossibleTabs.indexOf(className));
       ListTab newTab = new ListTab(viewer, data.getKey());
+      newTab.getStyleClass().addAll("list-tab");
+      newTab.setContent(newTab.getMyVBox());
       newTab.setProperty(controller.getProperty(VisualProperty.valueOf(data.getValue())));
+
       return newTab;
 
       } catch (Exception e) {
