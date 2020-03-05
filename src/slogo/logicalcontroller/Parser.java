@@ -100,13 +100,17 @@ public class Parser implements BundleInterface {
         this.myUserInput.setCodeReplacement(myList);
     }
 
-    /**
-     * Set of executable commands on specific objects
-     * @param command
-     * @return
-     */
+    // TODO - execute on a specific turtle
     private List<String> executeModifierCommand(ModifierCommand command) {
-        System.out.printf("Executing command %s with argument %.2f\n", command.getClass().getSimpleName(), command.getArgument1());
+        for (Object o : this.myModelCollection){
+            ModelTurtle turtle = (ModelTurtle) o;
+            command.execute(turtle);
+        }
+        return new ArrayList<String>(List.of(command.codeReplace()));
+    }
+
+    // TODO - execute on a specific turtle
+    private List<String> executeQuerieCommand(QuerieCommand command) {
         for (Object o : this.myModelCollection){
             ModelTurtle turtle = (ModelTurtle) o;
             command.execute(turtle);
@@ -124,10 +128,6 @@ public class Parser implements BundleInterface {
 
     private List<String> executeMathCommand(MathCommand command) {
         return new ArrayList<String>(List.of(command.execute()));
-    }
-
-    private List<String> executeQuerieCommand(QuerieCommand command) {
-        return new ArrayList<String>();
     }
 
     private List<String> executeVariables(MakeVariable command) {return new ArrayList<String>();}
