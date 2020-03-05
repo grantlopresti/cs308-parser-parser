@@ -4,7 +4,6 @@ import slogo.logicalcontroller.variable.BasicVariable;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.logicalcontroller.variable.VariableList;
 
-import java.util.List;
 
 /**
  * Comamnd to make variables. Assumption is that new variables/updated variables will always appear last on the list.

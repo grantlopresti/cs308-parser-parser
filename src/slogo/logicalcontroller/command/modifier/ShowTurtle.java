@@ -17,22 +17,4 @@ public class ShowTurtle extends ModifierCommand {
     public String toString() {
         return "showTurtle";
     }
-
-    @Override
-    public void execute(ModelTurtle turtle) {
-        try {
-            String name = this.getMethodName();
-            Method method = turtle.getClass().getMethod(name.toLowerCase(), double.class);
-            Double value = this.getArgument1();
-            method.invoke(turtle, value);
-        } catch (Exception e) {
-            throw new InvalidCommandException();
-        }
-
-    }
-
-    @Override
-    public String codeReplace() {
-        return "";
-    }
 }
