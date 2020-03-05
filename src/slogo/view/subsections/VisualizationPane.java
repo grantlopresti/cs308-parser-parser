@@ -18,52 +18,38 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import slogo.visualcontroller.VisualCommand;
-import slogo.visualcontroller.VisualData;
 import slogo.visualcontroller.VisualError;
 import slogo.visualcontroller.VisualLine;
 import slogo.visualcontroller.VisualTurtle;
-import slogo.visualcontroller.VisualUserFunction;
 
-public class VisualizationPane implements SubPane {
+public class VisualizationPane extends Group {
 
   private static final Color DEFAULT_BG_COLOR = Color.DARKGRAY;
   private static final Color DEFAULT_PEN_COLOR = Color.BLACK;
 
   private double groupWidth;
   private double groupHeight;
-  private Group myVisualizer;
 
   private Color myBGColor = DEFAULT_BG_COLOR;
   private Color myPenColor = DEFAULT_PEN_COLOR;
 
   private List<VisualTurtle> myTurtles = new ArrayList<>();
-  private List<VisualCommand> myCommands = new ArrayList<>();
-  private List<VisualError> myErrors = new ArrayList<>();
-  private List<VisualUserFunction> myFunctions = new ArrayList<>();
   private List<VisualLine> myLines = new ArrayList<>();
-  private List<VisualData> myData = new ArrayList<>();
 
   public VisualizationPane(double width, double height){
+    super();
     groupWidth = width;
     groupHeight = height;
   }
 
-  @Override
-  public Group getNode() {
-    myVisualizer = new Group();
-
+  public void update() {
     setBackground();
-
-    addTurtlesToVisualizer(myVisualizer);
-    addLinesToVisualizer(myVisualizer);
-
-    myVisualizer.resize(groupWidth, groupHeight);
-
-    return myVisualizer;
+    addTurtlesToVisualizer();
+    addLinesToVisualizer();
+    resize(groupWidth, groupHeight);
   }
 
-  private void addLinesToVisualizer(Group visualizer) {
+  private void addLinesToVisualizer() {
     for (VisualLine line : myLines) {
       Line lineImage = new Line();
 
@@ -72,7 +58,7 @@ public class VisualizationPane implements SubPane {
       lineImage.setStroke(line.getColor());
       lineImage.setStrokeWidth(line.getThickness());
 
-      visualizer.getChildren().add(lineImage);
+      getChildren().add(lineImage);
     }
   }
 
@@ -84,7 +70,7 @@ public class VisualizationPane implements SubPane {
     lineImage.setEndY(getAdjustedY(line.getEndY()));
   }
 
-  private void addTurtlesToVisualizer(Group visualizer) {
+  private void addTurtlesToVisualizer() {
     for (VisualTurtle turtle : myTurtles) {
       ImageView turtleImage = new ImageView(turtle.getImage());
 
@@ -100,7 +86,9 @@ public class VisualizationPane implements SubPane {
       Lighting lighting = getLightingEffect(turtle.getColor());
       turtleImage.setEffect(lighting);
 
-      visualizer.getChildren().add(turtleImage);
+      getChildren().add(turtleImage);
+
+      turtle.setChangeState(false);
     }
   }
 
@@ -126,7 +114,7 @@ public class VisualizationPane implements SubPane {
     background.setWidth(groupWidth);
     background.setHeight(groupHeight);
     background.setFill(myBGColor);
-    myVisualizer.getChildren().add(background);
+    getChildren().add(background);
   }
 
   private void setAdjustedX(ImageView turtleImage, double centerX) {
@@ -169,47 +157,31 @@ public class VisualizationPane implements SubPane {
     myTurtles.add(turtle);
   }
 
-  public void addVisualCommand(VisualCommand command) {
-    myCommands.add(command);
-  }
-
   public void addVisualLine(VisualLine line) {
     myLines.add(line);
-  }
-
-  public void addVisualError(VisualError error) {
-    myErrors.add(error);
-    displayError(error);
   }
 
   private void displayError(VisualError error) {
     //TODO: add code to have popup that displays error message with okay button
   }
 
-  public void addVisualData(VisualData data) {
-    myData.add(data);
-  }
-
-  public void addVisualUserFunction(VisualUserFunction function) {
-    myFunctions.add(function);
-  }
-
   public void setBGColor(double red, double green, double blue) {
     myBGColor = new Color(red, green, blue, 1);
-    setBackground();
+    update();
   }
 
   public void clearElements() {
     myTurtles = new ArrayList<>();
     myLines = new ArrayList<>();
+    update();
   }
 
   public void resetBGColor() {
     myBGColor = DEFAULT_BG_COLOR;
+    update();
   }
 
   public void setPenColor(Color customColor) {
     myPenColor = customColor;
   }
-
 }
