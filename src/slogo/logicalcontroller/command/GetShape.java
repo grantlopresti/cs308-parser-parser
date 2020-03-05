@@ -8,7 +8,6 @@ public class GetShape implements Command {
 
     }
 
-    @Override
     public double getValue() {
         return this.value;
     }

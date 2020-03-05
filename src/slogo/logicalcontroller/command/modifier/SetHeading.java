@@ -1,27 +1,36 @@
 package slogo.logicalcontroller.command.modifier;
 
-import slogo.logicalcontroller.command.Command;
+import slogo.exceptions.InvalidCommandException;
+import slogo.model.ModelTurtle;
+
+import java.lang.reflect.Method;
+import java.util.List;
 
 public class SetHeading extends ModifierCommand {
-    private double value;
+    public SetHeading(List<String> args){
+        super(args.get(0));
+    }
 
-    public SetHeading(String inputvalue){
-        value = Double.parseDouble(inputvalue);
+    @Override
+    public String toString() {
+        return "setHeading " + this.argument1;
+    }
+
+    @Override
+    public void execute(ModelTurtle turtle) {
+        try {
+            String name = this.getMethodName();
+            Method method = turtle.getClass().getMethod(name.toLowerCase(), double.class);
+            Double value = this.getArgument1();
+            method.invoke(turtle, value);
+        } catch (Exception e) {
+            throw new InvalidCommandException();
+        }
 
     }
 
     @Override
-    public double getValue() {
-        return this.value;
-    }
-
-    @Override
-    public String getCommandType() {
-        return "SetHeading";
-    }
-
-    @Override
-    public String toString(){
-        return (getCommandType() + " " + getValue());
+    public String codeReplace() {
+        return Double.toString(this.argument1);
     }
 }

@@ -2,15 +2,17 @@ package slogo.logicalcontroller.command.math;
 
 import slogo.logicalcontroller.command.Command;
 
+import java.util.List;
+
 public class Cosine extends MathCommand {
 
-    public Cosine(String input){
-        super(input);
+    public Cosine(List<String> input){
+        super(input.get(0));
     }
 
     @Override
-    public double performMath() {
-        return Math.cos(myArgument1);
+    public String execute() {
+        return Double.toString(Math.cos(this.myArgument1));
     }
 
     @Override

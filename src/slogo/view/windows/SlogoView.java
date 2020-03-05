@@ -115,7 +115,7 @@ public class SlogoView extends Application {
     stage.show();
   }
 
-  public BorderPane createMainPane() {
+  public BorderPane createMainPane() throws IOException {
     myMainPane = new BorderPane();
 
     createSubPanes();
@@ -130,7 +130,7 @@ public class SlogoView extends Application {
     return myMainPane;
   }
 
-  private void createSubPanes() {
+  private void createSubPanes() throws IOException {
     mySubTabFactory = new SubTabFactory();
 
     createToolbarPane();
@@ -140,7 +140,7 @@ public class SlogoView extends Application {
     createCreditsPane();
   }
 
-  private void createToolbarPane() {
+  private void createToolbarPane() throws IOException {
     myToolbarPane = new ToolbarPane(this, myLogicalController).getNode();
   }
 

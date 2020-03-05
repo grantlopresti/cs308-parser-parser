@@ -4,8 +4,10 @@ import javafx.beans.property.Property;
 import slogo.exceptions.LogicalException;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.variable.Variable;
+import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelCollection;
 import slogo.model.ModelTurtle;
+import slogo.view.windows.SlogoView;
 
 import java.util.List;
 
@@ -18,18 +20,23 @@ public interface VisualInterface {
     public void setAnimationRate(double rate);
 
     /**
-     * Called by the logical controller to update turtle state and draw shapes in Slogo view
-     *
-     * @param modelCollection collection of model objects
+     * Called by logical controller to update the view
+     * @param model all turtles currently on the screen
+     * @param variableList list of variables to populate within the model
+     * @param latestCommand last command run
      */
-    public void moveModelObject(ModelCollection modelCollection);
+    public void update(ModelCollection model, VariableList variableList, Command latestCommand);
 
-    public void updateCommands(String command);
-
+    /**
+     *
+     * @param e logical exception thrown during logical controller parsing
+     */
     public void updateErrors(LogicalException e);
 
-    public void updateVariables(Variable v);
+    public void changeTurtleImage(String newValue);
 
     public Property getProperty(VisualProperty type);
+
+    public void setSlogoView(SlogoView view);
 
 }

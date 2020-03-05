@@ -2,15 +2,17 @@ package slogo.logicalcontroller.command.math;
 
 import slogo.logicalcontroller.command.Command;
 
+import java.util.List;
+
 public class Random extends MathCommand {
 
-    public Random(String input){
-        super(input);
+    public Random(List<String> input){
+        super(input.get(0));
     }
 
     @Override
-    public double performMath() {
-        return Math.random() * this.myArgument1;
+    public String execute() {
+        return Double.toString(Math.random() * this.myArgument1);
     }
 
     @Override

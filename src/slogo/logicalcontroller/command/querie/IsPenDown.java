@@ -1,27 +1,19 @@
 package slogo.logicalcontroller.command.querie;
 
-import slogo.logicalcontroller.command.Command;
+import slogo.model.ModelTurtle;
 
 public class IsPenDown extends QuerieCommand {
-    private double value;
+    public IsPenDown(){
+        super();
+    }
 
-    public IsPenDown(String inputvalue){
-        value = Double.parseDouble(inputvalue);
+    @Override
+    public void execute(ModelTurtle turtle) {
 
     }
 
     @Override
-    public double getValue() {
-        return this.value;
-    }
-
-    @Override
-    public String getCommandType() {
-        return "IsPenDown";
-    }
-
-    @Override
-    public String toString(){
-        return (getCommandType() + " " + getValue());
+    public String codeReplace() {
+        return null;
     }
 }

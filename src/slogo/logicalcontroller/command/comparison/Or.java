@@ -2,21 +2,18 @@ package slogo.logicalcontroller.command.comparison;
 
 import slogo.logicalcontroller.command.Command;
 
-public class Or extends ComparisonCommand {
-    private double value;
+import java.util.List;
 
-    public Or (String inputValue1, String inputValue2){
-        super(inputValue1, inputValue2);
+public class Or extends ComparisonCommand {
+
+    public Or(List<String> args){
+        super(args.get(0), args.get(1));
     }
 
     @Override
-    public void performComparison() {
-        if(argument1!= 0  || argument2!= 0){
-            setReturnValue(1);
-        }
-        else{
-            setReturnValue(0);
-        }
-
+    public String execute() {
+        boolean bool = this.argument1 != 0 || this.argument2 != 0;
+        return Boolean.toString(bool);
     }
+
 }

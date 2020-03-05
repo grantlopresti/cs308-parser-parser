@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Example Workspace File -->
+
+<SLogo_Workspace>
+    <Variables>
+        <Variable name = "Variable1">50</Variable>
+        <Variable name = "Variable2">40.1</Variable>
+    </Variables>
+
+    <CommandHistory>
+        <Command>
+            <Name>FD</Name>
+            <Parameter>10</Parameter>
+        </Command>
+
+        <Command>
+            <Name>Sum</Name>
+            <Parameter>50</Parameter>
+            <Parameter>30</Parameter>
+        </Command>
+
+    </CommandHistory>
+</SLogo_Workspace>

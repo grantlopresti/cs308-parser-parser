@@ -1,22 +1,37 @@
 package slogo.logicalcontroller.command.modifier;
 
-import slogo.logicalcontroller.command.Command;
+import slogo.exceptions.InvalidCommandException;
+import slogo.model.ModelTurtle;
+
+import java.lang.reflect.Method;
+import java.util.List;
 
 public class SetPosition extends ModifierCommand {
-    private double value;
+    public SetPosition(List<String> args){
+        super(args.get(0), args.get(1));
+    }
 
-    public SetPosition(String inputvalue){
-        value = Double.parseDouble(inputvalue);
+    @Override
+    public String toString() {
+        return "setPosition " + this.argument1 + " " + this.argument2;
+    }
+
+    @Override
+    public void execute(ModelTurtle turtle) {
+        try {
+            String name = this.getMethodName();
+            Method method = turtle.getClass().getMethod(name.toLowerCase(), double.class, double.class);
+            Double val1 = this.getArgument1();
+            Double val2 = this.getArgument2();
+            method.invoke(turtle, val1, val2);
+        } catch (Exception e) {
+            throw new InvalidCommandException();
+        }
 
     }
 
     @Override
-    public double getValue() {
-        return this.value;
-    }
-
-    @Override
-    public String getCommandType() {
-        return "SetPosition";
+    public String codeReplace() {
+        return "";
     }
 }

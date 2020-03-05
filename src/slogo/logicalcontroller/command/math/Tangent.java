@@ -2,15 +2,17 @@ package slogo.logicalcontroller.command.math;
 
 import slogo.logicalcontroller.command.Command;
 
+import java.util.List;
+
 public class Tangent extends MathCommand{
 
-    public Tangent(String input){
-        super(input);
+    public Tangent(List<String> input){
+        super(input.get(0));
     }
 
     @Override
-    public double performMath() {
-        return Math.tan(this.myArgument1);
+    public String execute() {
+        return Double.toString(Math.tan(this.myArgument1));
     }
 
     @Override

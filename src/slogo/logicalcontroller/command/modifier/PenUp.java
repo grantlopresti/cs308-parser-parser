@@ -1,26 +1,36 @@
 package slogo.logicalcontroller.command.modifier;
 
-import slogo.logicalcontroller.command.Command;
+import slogo.exceptions.InvalidCommandException;
+import slogo.model.ModelTurtle;
+
+import java.lang.reflect.Method;
+import java.util.List;
 
 public class PenUp extends ModifierCommand {
-    private double myValue;
-    private double retValue;
+    public static final int RETURN_VALUE = 0;
 
-    public PenUp(){
-
-    }
-
-    public double getRetValue(){
-        return this.retValue;
+    public PenUp(List<String> args){
+        super(""+RETURN_VALUE);
     }
 
     @Override
-    public double getValue() {
-        return this.myValue;
+    public String toString() {
+        return "penUp";
     }
 
     @Override
-    public String getCommandType() {
-        return "PenUp";
+    public void execute(ModelTurtle turtle) {
+        try {
+            String name = this.getMethodName();
+            Method method = turtle.getClass().getMethod(name.toLowerCase());
+            method.invoke(turtle);
+        } catch (Exception e) {
+            throw new InvalidCommandException();
+        }
+    }
+
+    @Override
+    public String codeReplace() {
+        return "";
     }
 }

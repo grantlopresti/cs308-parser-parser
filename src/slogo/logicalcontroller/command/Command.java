@@ -1,15 +1,7 @@
 package slogo.logicalcontroller.command;
 
-
+//TODO: Refactor into two different classes because there are commands that interact with the model, and there are commands that don't. - Alex
 public interface Command {
-
-    //FIXME: Please Use Generics to make command objects flexible in return value - Alex X.
-
-    /**
-     * Getter method to return the value of the command, also the number of units of movement.
-     * @return
-     */
-    public double getValue();
 
     /**
      * Getter method to return the type of the Command object. Ex: fd, rt

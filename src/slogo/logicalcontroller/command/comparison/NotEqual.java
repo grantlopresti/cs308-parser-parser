@@ -1,21 +1,17 @@
 package slogo.logicalcontroller.command.comparison;
 
 
-public class NotEqual extends ComparisonCommand {
-    private double value;
+import java.util.List;
 
-    public NotEqual(String inputValue1, String inputValue2){
-        super(inputValue1, inputValue2);
+public class NotEqual extends ComparisonCommand {
+
+    public NotEqual(List<String> args){
+        super(args.get(0), args.get(1));
     }
 
     @Override
-    public void performComparison() {
-        if(argument1 != argument2){
-            setReturnValue(1);
-        }
-        else{
-            setReturnValue(0);
-        }
-
+    public String execute() {
+        boolean bool = this.argument1 != this.argument2;
+        return Boolean.toString(bool);
     }
 }

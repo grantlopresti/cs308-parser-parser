@@ -1,22 +1,20 @@
 package slogo.logicalcontroller.command.querie;
 
-import slogo.logicalcontroller.command.Command;
+import slogo.model.ModelTurtle;
 
 public class YCoordinate extends QuerieCommand {
-    private double value;
 
-    public YCoordinate(String inputvalue){
-        value = Double.parseDouble(inputvalue);
+    public YCoordinate(){
+        super();
+    }
+
+    @Override
+    public void execute(ModelTurtle turtle) {
 
     }
 
     @Override
-    public double getValue() {
-        return this.value;
-    }
-
-    @Override
-    public String getCommandType() {
-        return "YCoordinate";
+    public String codeReplace() {
+        return null;
     }
 }
