@@ -17,20 +17,4 @@ public class PenDown extends ModifierCommand {
     public String toString() {
         return "penDown";
     }
-
-    @Override
-    public void execute(ModelTurtle turtle) {
-        try {
-            String name = this.getMethodName();
-            Method method = turtle.getClass().getMethod(name.toLowerCase());
-            method.invoke(turtle);
-        } catch (Exception e) {
-            throw new InvalidCommandException();
-        }
-    }
-
-    @Override
-    public String codeReplace() {
-        return "";
-    }
 }

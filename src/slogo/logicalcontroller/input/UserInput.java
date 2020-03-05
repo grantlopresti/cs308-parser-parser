@@ -68,7 +68,6 @@ public class UserInput implements UserInputInterface, BundleInterface {
         }
     }
 
-    // TODO - combine with general command creation (List<?>??)
     private Command createControlCommand(String superclass, String command, List<List<String>> args) {
         try {
             Class clazz = Class.forName(createCommandPath(superclass, command));
@@ -268,7 +267,6 @@ public class UserInput implements UserInputInterface, BundleInterface {
      * @param command
      * @return
      * TODO - what to do if command not found? - throw no command exception
-     * TODO - use regular expression mappings to populate this as well
      */
     private String translateCommand(String command) {
         ResourceBundle bundle = this.myResources;
@@ -326,5 +324,4 @@ public class UserInput implements UserInputInterface, BundleInterface {
     private int countParameters(String translated) {
         return Integer.parseInt(this.myParameterMap.getString(translated));
     }
-
 }

@@ -61,7 +61,7 @@ public class VariableList implements Iterable{
 
 
 
-    private boolean isSameVariable(String variableName, Variable variable){
+    public boolean isSameVariable(String variableName, Variable variable){
        return variableName.equals(variable.getName());
     }
 
