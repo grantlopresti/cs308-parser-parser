@@ -24,8 +24,15 @@ public class ListTab extends Tab{
     myListView.itemsProperty().bind(property);
     myListView.setPrefHeight(620);
     myListView.setOnMouseClicked(
-        e -> myViewer.setUserInputAreaText(myListView.getSelectionModel().getSelectedItem().toString()));
+        e -> setUserTextArea());
     myVBox.getChildren().add(myListView);
+  }
+
+  private void setUserTextArea() {
+    Object clickedItem = myListView.getSelectionModel().getSelectedItem();
+    if (clickedItem != null) {
+      myViewer.setUserInputAreaText(clickedItem.toString());
+    }
   }
 
   public VBox getMyVBox(){
