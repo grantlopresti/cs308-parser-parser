@@ -74,7 +74,15 @@ public class UserInput implements UserInputInterface, BundleInterface {
     // TODO - how to handle multi line replacements vs. single line?
     // FOR NOW - assuming single line replace (only modifiers and math will work)
     @Override
-    public void setCodeReplacement(List<String> code) {
+    public void setCodeReplacement(List<String> code, Command command) {
+        if (command.getClass().getSuperclass().getSimpleName().equals("controlflow")) {
+            multiLineReplace(code);
+        } else {
+            singleLineReplace(code);
+        }
+    }
+
+    private void singleLineReplace(List<String> code) {
         StringBuilder sb = new StringBuilder(this.myPrefix);
         for (String s: code) {
             sb.append(SPACE + s);
@@ -82,6 +90,9 @@ public class UserInput implements UserInputInterface, BundleInterface {
         sb.append(SPACE + this.mySuffix);
         this.myUserInput.set(this.myLineIndex, sb.toString().trim());
         System.out.printf("code replaced to: %s", this.myUserInput.get(this.myLineIndex));
+    }
+
+    private void multiLineReplace(List<String> code) {
     }
 
     private int findNextLine() {
