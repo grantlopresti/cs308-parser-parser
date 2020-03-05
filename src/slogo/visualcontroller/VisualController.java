@@ -5,7 +5,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import javafx.scene.image.ImageView;
 import slogo.exceptions.LogicalException;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;

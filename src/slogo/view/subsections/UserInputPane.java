@@ -7,12 +7,12 @@ import slogo.logicalcontroller.LogicalController;
 import slogo.view.windows.SlogoView;
 import slogo.visualcontroller.VisualError;
 
-public class UserInputPane implements SubPane {
+public class UserInputPane {
   private SlogoView myViewer;
   private LogicalController myLogicalController;
   private TextArea myTextArea;
 
-  public UserInputPane(SlogoView viewer, LogicalController logicalcontroller) {
+  public UserInputPane (SlogoView viewer, LogicalController logicalcontroller) {
     myTextArea = new TextArea();
     myTextArea.setPromptText("Enter Logo Commands Here:");
     myLogicalController = logicalcontroller;
@@ -23,7 +23,6 @@ public class UserInputPane implements SubPane {
     myTextArea.setText(text);
   }
 
-  @Override
   public TextArea getNode() {
     return myTextArea;
   }
