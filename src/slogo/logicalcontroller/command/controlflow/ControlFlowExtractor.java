@@ -24,6 +24,11 @@ public interface ControlFlowExtractor {
 
     }
 
+    public static int getLineLastBrac(List<String> rawCommands, int lineIndex, int bracIndex){
+        int[] retIndexes = retEndIndex(rawCommands, lineIndex, bracIndex);
+        return retIndexes[0];
+    }
+
     private static List<String> singleLineBody(int bracIndex, int endBracIndex, int lineIndex, List<String> rawCommands) {
         List<String> retLine = new ArrayList<String>();
         String line = rawCommands.get(lineIndex);

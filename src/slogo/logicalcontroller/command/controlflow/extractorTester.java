@@ -15,7 +15,7 @@ public class extractorTester implements ControlFlowExtractor {
     public static List<String> extractorTester(){
 
 
-        List<String> test = ControlFlowExtractor.initControlFlow(rawCmds3, 0, 2);
+        List<String> test = ControlFlowExtractor.initControlFlow(rawCmds4, 0, 2);
 
         System.out.println("Result: ");
         for(String elem: test){

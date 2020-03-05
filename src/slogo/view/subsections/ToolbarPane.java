@@ -39,7 +39,6 @@ public class ToolbarPane extends ToolBar {
 
   private LogicalController myLogicalController;
   private static final String DEFAULT_LANGUAGE = "English";
-  private static final String DEFAULT_TURTLE_IMAGE = "Turtle";
 
   private static final String myButtonProperties = "properties.buttons";
   private ResourceBundle myButtonResources;
@@ -49,8 +48,6 @@ public class ToolbarPane extends ToolBar {
   private Button myLoader = new Button("Load File");
   private Button myLoadAndRun = new Button("Load & Run");
   private ColorPicker myBGColorPicker = new ColorPicker();
-  private ComboBox<String> myTurtleImage = new ComboBox<>();
-  private ColorPicker myPenColorPicker = new ColorPicker();
   private Button myClearScreen = new Button("Clear Screen");
   private FileInputStream fis1 = new FileInputStream("src/properties/buttons.properties");
   private static final ObservableList<String> languageOptions =
@@ -71,9 +68,6 @@ public class ToolbarPane extends ToolBar {
   public ToolbarPane(SlogoView viewer, LogicalController logicalController) throws IOException {
     myViewer = viewer;
     myLogicalController = logicalController;
-    for (TurtleImage value : TurtleImage.values()){
-      myTurtleImage.getItems().add(value.getName());
-    }
     myButtonResources = new PropertyResourceBundle(fis1);
   }
 
@@ -87,12 +81,6 @@ public class ToolbarPane extends ToolBar {
         new Separator(),
         new Text("BG Color:"),
         myBGColorPicker,
-        new Separator(),
-        new Text("Turtle Image:"),
-        myTurtleImage,
-        new Separator(),
-        new Text("Pen Color:"),
-        myPenColorPicker,
         new Separator(),
         myClearScreen,
         new Separator(),
@@ -109,23 +97,11 @@ public class ToolbarPane extends ToolBar {
       Color c = myBGColorPicker.getValue();
       myViewer.setBGColor(c.getRed(), c.getGreen(), c.getBlue());
     });
-    setDefaultTurtleImage();
-    myTurtleImage.getSelectionModel().selectedItemProperty().addListener((options, oldValue,
-        newValue) -> myViewer.changeTurtleImage(newValue));
-    myPenColorPicker.setOnAction(t -> {
-      Color c = myPenColorPicker.getValue();
-      myViewer.setPenColor(c.getRed(), c.getGreen(), c.getBlue());
-    });
     myClearScreen.setOnAction(e -> clearVisualizationScreen());
     setDefaultLanguage();
     myLanguage.getSelectionModel().selectedItemProperty().addListener((options, oldValue,
         newValue) -> changeLanguage(newValue));
     myHelpInfo.setOnAction(e -> showHelpWindow());
-  }
-
-  private void setDefaultTurtleImage() {
-    myTurtleImage.setValue(DEFAULT_TURTLE_IMAGE);
-    myViewer.changeTurtleImage(DEFAULT_TURTLE_IMAGE.toUpperCase());
   }
 
   private void initializeLoadAndRunButton() {
