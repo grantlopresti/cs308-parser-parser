@@ -117,7 +117,8 @@ public class Parser implements BundleInterface {
             ModelTurtle turtle = (ModelTurtle) o;
             command.execute(turtle);
         }
-        return new ArrayList<String>(List.of(command.codeReplace()));
+        return new ArrayList<String>();
+        // return new ArrayList<String>(List.of(command.codeReplace()));
     }
 
     private List<String> executeComparisonCommand(ComparisonCommand command) {

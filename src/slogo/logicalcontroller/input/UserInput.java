@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.*;
 
-public class UserInput implements UserInputInterface, BundleInterface {
+public class UserInput implements UserInputInterface, BundleInterface, CommandGenerator {
 
     private List<String> myUserInput;
     private ResourceBundle myResources;
@@ -28,7 +28,6 @@ public class UserInput implements UserInputInterface, BundleInterface {
     private static final String SUPERCLASS_PROPERTIES = "src/properties/commandSuperclass.properties";
     private static final String PARAMETER_PROPERTIES = "src/properties/parameterCount.properties";
     private static final String REPLACE_PROPERTIES = "src/properties/lineReplace.properties";
-    private static final String SLOGO_COMMAND = "slogo.logicalcontroller.command.";
     private static final String CONTROLFLOW = "controlflow";
     private static ResourceBundle myCommandMap;
     private static ResourceBundle myParameterMap;
@@ -57,24 +56,14 @@ public class UserInput implements UserInputInterface, BundleInterface {
             System.out.printf("translated %s to %s \n", this.myCommand, translated);
             if (superclass.equals(CONTROLFLOW)) {
                 List<List<String>> args = getControlFlowArguments(this.myLineIndex, this.myCommandIndex, translated);
-                return createControlCommand(superclass, translated, args);
+                return CommandGenerator.createControlCommand(superclass, translated, args);
             } else {
                 int params = countParameters(translated);
                 List<String> args = getArguments(this.myLineIndex, this.myCommandIndex, params);
-                return createCommand(superclass, translated, args);
+                return CommandGenerator.createCommand(superclass, translated, args);
             }
         } catch (NoCommandFound e) {
             throw new NoCommandFound("Could not generate command");
-        }
-    }
-
-    private Command createControlCommand(String superclass, String command, List<List<String>> args) {
-        try {
-            Class clazz = Class.forName(createCommandPath(superclass, command));
-            Constructor ctor = clazz.getConstructor(List.class);
-            return (Command) ctor.newInstance(args);
-        } catch (Exception e) {
-            throw new InvalidCommandException("Could not create control flow command");
         }
     }
 
@@ -293,32 +282,6 @@ public class UserInput implements UserInputInterface, BundleInterface {
             if (key.equals(command)) {return this.myCommandMap.getString(key);}
         }
         return "";
-    }
-
-    /**
-     * Construct command using reflection based on given arguments
-     * @param superclass
-     * @param command
-     * @param arguments
-     * @return
-     */
-    private Command createCommand(String superclass, String command, List<String> arguments) {
-        for (String s: arguments) {
-            System.out.printf("%s \n", s);
-        }
-        try {
-            Class clazz = Class.forName(createCommandPath(superclass, command));
-            Constructor ctor = clazz.getConstructor(List.class);
-            return (Command) ctor.newInstance(arguments);
-        } catch (Exception e) {
-            throw new InvalidCommandException("Could not create command");
-        }
-    }
-
-    private String createCommandPath(String superclass, String command) {
-        String path = String.format("%s%s.%s", SLOGO_COMMAND, superclass, command);
-        // System.out.printf("returning path: %s \n", path);
-        return path;
     }
 
     private int countParameters(String translated) {
