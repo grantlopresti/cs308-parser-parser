@@ -201,7 +201,7 @@ public class SlogoView extends Application {
       myLeftPane.getTabs().add(mySubTabFactory.makeTab(this, myVisualController, initialTabName));
     }
 
-    myTurtleOptionsTab = new TurtleOptionsTab();
+    myTurtleOptionsTab = new TurtleOptionsTab(myVisualController);
     myLeftPane.getTabs().add(myTurtleOptionsTab);
 
     myLeftPane.setPrefWidth(LEFT_PANE_WIDTH);

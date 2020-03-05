@@ -2,11 +2,13 @@ package slogo.view.subsections;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.VBox;
 import slogo.visualcontroller.VisualController;
+import slogo.visualcontroller.VisualTurtle;
 
 public class TurtleOptionsTab extends Tab {
 
@@ -28,7 +30,8 @@ public class TurtleOptionsTab extends Tab {
     Label tabTitleLine = new Label("Turtle Options");
     Label instructions = new Label("Choose a Turtle Below to see its characteristics");
     ComboBox<String> turtleChoices = new ComboBox<>();
-    turtleChoices.itemsProperty().bind(new SimpleObjectProperty<>(myController.));
+    //turtleChoices.itemsProperty().bind(new SimpleObjectProperty<ObservableList<VisualTurtle>>
+    // (myController.getTurtlesList()));
     myOrganizer.getChildren().addAll(
         tabTitleLine,
         instructions,

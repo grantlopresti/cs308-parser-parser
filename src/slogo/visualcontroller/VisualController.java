@@ -167,12 +167,7 @@ public class VisualController implements VisualInterface {
     return myTurtles.get(turtle.getID());
   }
 
-  public void changeTurtleImage(String newValue) {
-    TurtleImage image = TurtleImage.valueOf(newValue);
-    myTurtles.get(0).setImage(image.getImagePath());
-  }
-
-  public void getTurtlesList() {
-    ObservableList<VisualTurtle> myTurtlesList = FXCollections.observableArrayList(myTurtles.values());
+  public ObservableList<VisualTurtle> getTurtlesList() {
+   return myTurtlesList = FXCollections.observableArrayList(myTurtles.values());
   }
 }
