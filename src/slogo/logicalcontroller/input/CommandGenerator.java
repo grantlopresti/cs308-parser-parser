@@ -21,7 +21,7 @@ public interface CommandGenerator {
     static String createCommandPath(String superclass, String command) {
         final String SLOGO_COMMAND = "slogo.logicalcontroller.command.";
         String path = String.format("%s%s.%s", SLOGO_COMMAND, superclass, command);
-        // System.out.printf("returning path: %s \n", path);
+        System.out.printf("returning path: %s \n", path);
         return path;
     }
 
@@ -31,6 +31,7 @@ public interface CommandGenerator {
             Constructor ctor = clazz.getConstructor(List.class);
             return (Command) ctor.newInstance(arguments);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new InvalidCommandException("Could not create command");
         }
     }

@@ -87,8 +87,9 @@ public abstract class ModifierCommand implements Command, ModifierInterface {
         try {
             String name = this.getMethodName();
             Method method = turtle.getClass().getMethod(name.toLowerCase(), double.class);
-            Double value = this.getArgument1();
-            return (String) method.invoke(turtle, value);
+            double value = this.getArgument1();
+            Object result = method.invoke(turtle, value);
+            return result.toString();
         } catch (Exception e) {
             throw new InvalidCommandException();
         }
