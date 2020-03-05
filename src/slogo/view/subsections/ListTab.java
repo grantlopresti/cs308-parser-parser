@@ -28,4 +28,8 @@ public class ListTab extends Tab{
     myVBox.getChildren().add(myListView);
   }
 
+  public VBox getMyVBox(){
+    return myVBox;
+  }
+
 }
