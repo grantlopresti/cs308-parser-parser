@@ -25,6 +25,8 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import slogo.exceptions.ResourceBundleCreationException;
+import slogo.logicalcontroller.BundleInterface;
 import slogo.logicalcontroller.LogicalController;
 import slogo.view.SubTabFactory;
 import slogo.view.subsections.ListTab;
@@ -92,18 +94,22 @@ public class SlogoView extends Application {
   private ResourceBundle myInitialLeftTabResources;
   private ResourceBundle myInitialRightTabResources;
 
-  private static final String TabResourcePath = "slogo.view.resources.possibleTabs";
-  private static final String InitialLeftTabResourcePath = "slogo.view.resources.InitialLeftTabs";
-  private static final String InitialRightTabResourcePath = "slogo.view.resources.InitialRightTabs";
+  private static final String TabResourcePath = "src/slogo/view/resources/possibleTabs.properties";
+  private static final String InitialLeftTabResourcePath = "src/slogo/view/resources/InitialLeftTabs.properties";
+  private static final String InitialRightTabResourcePath = "src/slogo/view/resources/InitialRightTabs.properties";
 
 
   public SlogoView(LogicalController logicalController, VisualController visualController) {
     myLogicalController = logicalController;
     myVisualController = visualController;
 
-    myTabTypeResources = ResourceBundle.getBundle(TabResourcePath);
-    myInitialLeftTabResources = ResourceBundle.getBundle(InitialLeftTabResourcePath);
-    myInitialRightTabResources = ResourceBundle.getBundle(InitialRightTabResourcePath);
+    try {
+      myTabTypeResources = BundleInterface.createResourceBundle(TabResourcePath);
+      myInitialLeftTabResources = BundleInterface.createResourceBundle(InitialLeftTabResourcePath);
+      myInitialRightTabResources = BundleInterface.createResourceBundle(InitialRightTabResourcePath);
+    } catch (IOException e) {
+      throw new ResourceBundleCreationException();
+    }
   }
 
   @Override

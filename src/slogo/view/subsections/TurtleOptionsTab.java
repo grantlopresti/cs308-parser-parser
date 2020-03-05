@@ -1,5 +1,11 @@
 package slogo.view.subsections;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
@@ -10,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import slogo.view.SubTabFactory;
 import slogo.view.TurtleImage;
 import slogo.view.windows.SlogoView;
 import slogo.visualcontroller.VisualController;
@@ -62,17 +69,30 @@ public class TurtleOptionsTab extends Tab {
   }
 
   private void createBonusCommandGrid() {
+
+    List buttonNames = new ArrayList<Button>();
+
+    Map bonusButtons = new HashMap<String, Button>();
+
     Button forwardButton = new Button("Forward");
+    forwardButton.setId("bonus-button");
     Button backButton = new Button("Back");
     Button rightButton = new Button("Turn Right");
     Button leftButton = new Button("Turn Left");
     Button resetButton = new Button("Reset");
+
+    GridPane.setHalignment(resetButton, HPos.CENTER);
+    GridPane.setHalignment(backButton, HPos.CENTER);
+
+    myBonusCommandGrid.setAlignment(Pos.CENTER);
 
     myBonusCommandGrid.add(forwardButton, 1, 0);
     myBonusCommandGrid.add(backButton, 1, 2);
     myBonusCommandGrid.add(rightButton, 2, 1);
     myBonusCommandGrid.add(leftButton, 0, 1);
     myBonusCommandGrid.add(resetButton, 1, 1);
+
+
   }
 
   private void initializeButtons() {
