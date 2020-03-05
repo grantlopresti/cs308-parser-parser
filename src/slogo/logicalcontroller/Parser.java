@@ -103,11 +103,12 @@ public class Parser implements BundleInterface {
 
     // TODO - execute on a specific turtle
     private List<String> executeModifierCommand(ModifierCommand command) {
+        String replace = "";
         for (Object o : this.myModelCollection){
             ModelTurtle turtle = (ModelTurtle) o;
-            command.execute(turtle);
+            // replace = command.execute(turtle);
         }
-        return new ArrayList<String>(List.of(command.codeReplace()));
+        return new ArrayList<String>(List.of(replace));
     }
 
     // TODO - execute on a specific turtle

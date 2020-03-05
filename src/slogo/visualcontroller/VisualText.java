@@ -2,15 +2,15 @@ package slogo.visualcontroller;
 
 public abstract class VisualText {
 
-    public final String myString;
+    private final String myString;
 
     public VisualText(String string) {
-        myString = string;
+        this.myString = string;
     }
 
     @Override
     public String toString() {
-        return myString;
+        return this.myString;
     }
 
 }
