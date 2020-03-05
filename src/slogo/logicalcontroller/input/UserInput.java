@@ -76,9 +76,9 @@ public class UserInput implements UserInputInterface, BundleInterface {
     }
 
 
-    // TODO - implement method stub
+    // TODO - implement method stub - PLEase double check - By Alex
     private List<List<String>> getControlFlowArguments(int myLineIndex, int myCommandIndex, int params) {
-        return null;
+        ControlFlowExtractor
     }
 
     @Override
@@ -114,8 +114,12 @@ public class UserInput implements UserInputInterface, BundleInterface {
         System.out.printf("code replaced to: %s", this.myUserInput.get(this.myLineIndex));
     }
 
-    // TODO - implmenet method stub
+    // TODO: Implementation can be better?
     private void multiLineReplace(List<String> code) {
+        List<String> prefix = myUserInput.subList(0, myLineIndex);
+        List<String> suffix = myUserInput.subList();
+
+
     }
 
     private int findNextLine() {
