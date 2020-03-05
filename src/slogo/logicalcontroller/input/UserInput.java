@@ -96,14 +96,19 @@ public class UserInput implements UserInputInterface, BundleInterface {
             paramsList.add(myUserInput.get(myCommandIndex+1));
             returnList.add(paramsList);
         }
-
+        int lineLocation = -1;
+        int columnLocation = -1;
         int linePointer = myLineIndex;
         for(int i = 0; i<numBracketSets; i++){
-            List<String> argumentSet = ControlFlowExtractor.initControlFlow(myUserInput, getOpenBracketIndex(linePointer)[0], getOpenBracketIndex(linePointer)[1]);
+            lineLocation = getOpenBracketIndex(linePointer)[0];
+            columnLocation = getOpenBracketIndex(linePointer)[1];
+            List<String> argumentSet = ControlFlowExtractor.initControlFlow(myUserInput, lineLocation, columnLocation);
             returnList.add(argumentSet);
             linePointer += argumentSet.size();
-            controlFlowEndIndex = getOpenBracketIndex(linePointer)[0];
+            controlFlowEndIndex = linePointer;
         }
+
+        System.out.println("Opening Bracket at :" + lineLocation + " " + columnLocation);
 
         return returnList;
     }
@@ -114,9 +119,10 @@ public class UserInput implements UserInputInterface, BundleInterface {
             String line = myUserInput.get(j);
 
             String[] lineElements = line.split(" ");
-
+            System.out.println("Looking for bracket on line: " + j);
             for (int i = 0; i < lineElements.length; i++) {
-                if (lineElements[i].equals("[")) {
+                System.out.print(lineElements[i]);
+                if (lineElements[i].equals('[')) {                  //TODO: BIG ISSUE SEEMS TO BE HERE: DOESNT SEEM TO RECOGNIZE THAT THERE IS AN OPENING BRACKET....FOR SOME REASON
                     result[0] = j;
                     result[1] = i;
                     return result;
@@ -124,8 +130,9 @@ public class UserInput implements UserInputInterface, BundleInterface {
             }
         }
 
-        result[1] = -1;
-        result[0] = -1;               //TODO: remember to throw an invalid syntax error
+        System.out.println("BAD THINGS HAPPEN HERE");
+        result[0] = 0;               //TODO: This is hardcoded right now for debugging.
+        result[1] = 2;               //TODO: remember to throw an invalid syntax error
         return result;
     }
 
@@ -166,9 +173,11 @@ public class UserInput implements UserInputInterface, BundleInterface {
     private void multiLineReplace(List<String> code) {
         List<String> prefix = myUserInput.subList(0, myLineIndex);
         if(myUserInput.get(controlFlowEndIndex).contains("]")){
+            System.out.println("Closing Bracket at Line: " + controlFlowEndIndex);
             controlFlowEndIndex ++;
         }
         else{
+            System.out.println("Closing Bracket at Line: " + controlFlowEndIndex+1);
             controlFlowEndIndex +=2;
         }
         List<String> suffix = myUserInput.subList(controlFlowEndIndex, myUserInput.size());
