@@ -1,10 +1,13 @@
 package slogo.view;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.util.Pair;
+import slogo.exceptions.ResourceBundleCreationException;
+import slogo.logicalcontroller.BundleInterface;
 import slogo.view.subsections.ListTab;
 import slogo.view.windows.SlogoView;
 import slogo.visualcontroller.VisualController;
@@ -20,7 +23,7 @@ import slogo.visualcontroller.VisualProperty;
 public class SubTabFactory {
   private static final String PACKAGE = SubTabFactory.class.getPackageName();
   // where to find resource data, note you can use java's package syntax
-  public static final String REFLECTION_RESOURCES = PACKAGE + ".resources.possibleTabs";
+  public static final String REFLECTION_RESOURCES = "src/slogo/view/resources/possibleTabs.properties";
   // tabs GUI can make
   private List<String> myPossibleTabs;
   // tabs constructor data
@@ -34,7 +37,12 @@ public class SubTabFactory {
     myPossibleTabs = new ArrayList<>();
     myTabData = new ArrayList<>();
     // initialize list contents from resource file data
-    ResourceBundle reflectionResources = ResourceBundle.getBundle(REFLECTION_RESOURCES);
+    ResourceBundle reflectionResources = null;
+    try {
+      reflectionResources = BundleInterface.createResourceBundle(REFLECTION_RESOURCES);
+    } catch (IOException e) {
+      throw new ResourceBundleCreationException();
+    }
     for (String key : Collections.list(reflectionResources.getKeys())) {
       myPossibleTabs.add(key);
       // divide the data into separate pieces
