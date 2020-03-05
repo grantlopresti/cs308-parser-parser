@@ -2,6 +2,10 @@ package slogo.logicalcontroller.command.controlflow;
 
 import java.util.*;
 
+/**
+ * Interface to extract information from the control flow commands
+ */
+
 public interface ControlFlowExtractor {
 
     static List<String> initControlFlow(List<String> rawCommands, int lineIndex, int bracIndex){
