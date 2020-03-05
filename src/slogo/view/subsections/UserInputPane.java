@@ -32,6 +32,9 @@ public class UserInputPane {
     try {
       if (!userCommand.equals("")) {
         myLogicalController.handleNewCommand(userCommand);
+      } else {
+        myViewer.announceError(new VisualError(new InvalidCommandException("This command has no "
+            + "body")));
       }
     }
     catch (Exception e){
