@@ -35,7 +35,7 @@ public class LogicalController {
     this.myVisualController = visualController;
     this.myVariables = variables;
     // TODO - update visualController initial state to empty lists to get first turtle to show
-    this.myVisualController.update(this.myModelCollection, this.myVariables, null);
+    // this.myVisualController.update(this.myModelCollection, this.myVariables, null);
     try {
       myParser= new Parser(DEFAULT_LANGUAGE, modelCollection);
     } catch (Exception e) {
@@ -71,7 +71,7 @@ public class LogicalController {
       }
     } catch (Exception e) {
       e.printStackTrace();
-      System.out.println("error in handle new command");
+      System.out.println("error in LogicalController.handleNewCommand");
     }
     System.out.println("Parser is finished! Yay!");
   }

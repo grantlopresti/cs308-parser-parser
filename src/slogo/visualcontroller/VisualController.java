@@ -74,7 +74,7 @@ public class VisualController implements VisualInterface {
   public void update(ModelCollection model, VariableList variableList, Command command) {
     moveModelObject(model, command);
     // updateVariables(variableList);
-    // updateCommands(Command.toString());
+    updateCommands(command);
   }
 
   /**
@@ -135,7 +135,7 @@ public class VisualController implements VisualInterface {
     }
   }
 
-  private void updateCommands(String command) {
+  private void updateCommands(Command command) {
     FXCollections.reverse(myCommandsProperty.getValue());
     myCommandsProperty.getValue().add(new VisualCommand(command));
     FXCollections.reverse(myCommandsProperty.getValue());

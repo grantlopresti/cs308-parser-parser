@@ -2,15 +2,17 @@ package slogo.logicalcontroller.command.math;
 
 import slogo.logicalcontroller.command.Command;
 
+import java.util.List;
+
 public class Difference extends MathCommand {
 
-    public Difference(String input1, String input2){
-        super(input1, input2);
+    public Difference(List<String> input){
+        super(input.get(0), input.get(1));
     }
 
     @Override
-    protected void performMath() {
-        setReturnValue(this.myArgument1 - this.myArgument2);
+    public String execute() {
+        return Double.toString(this.myArgument1 - this.myArgument2);
     }
 
     @Override

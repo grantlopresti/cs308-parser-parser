@@ -23,9 +23,11 @@ public class UserInput implements UserInputInterface, BundleInterface {
 
     private static final String SUPERCLASS_PROPERTIES = "src/properties/commandSuperclass.properties";
     private static final String PARAMETER_PROPERTIES = "src/properties/parameterCount.properties";
+    private static final String REPLACE_PROPERTIES = "src/properties/lineReplace.properties";
     private static final String SLOGO_COMMAND = "slogo.logicalcontroller.command.";
     private static ResourceBundle myCommandMap;
     private static ResourceBundle myParameterMap;
+    private static ResourceBundle myReplaceMap;
 
     public UserInput(List<String> userInput, ResourceBundle bundle) {
         this.myUserInput = userInput;
@@ -33,6 +35,7 @@ public class UserInput implements UserInputInterface, BundleInterface {
         try {
             this.myCommandMap = BundleInterface.createResourceBundle(SUPERCLASS_PROPERTIES);
             this.myParameterMap = BundleInterface.createResourceBundle(PARAMETER_PROPERTIES);
+            this.myReplaceMap = BundleInterface.createResourceBundle(REPLACE_PROPERTIES);
         } catch (IOException e) {
             // TODO - FIX THIS
             e.printStackTrace();
@@ -56,7 +59,7 @@ public class UserInput implements UserInputInterface, BundleInterface {
         }
     }
 
-    // TODO - add to interface
+    @Override
     public boolean isFinished() {
         System.out.println("checking if user input is finished");
         try {
@@ -81,7 +84,6 @@ public class UserInput implements UserInputInterface, BundleInterface {
         System.out.printf("code replaced to: %s", this.myUserInput.get(this.myLineIndex));
     }
 
-    // TODO - handle edge case of no more lines (raise flag when no more next lines and no more last commands?)
     private int findNextLine() {
         System.out.printf("looking for nextLine on input: %s \n", this.myUserInput.get(0));
         for(int i = 0; i < this.myUserInput.size(); i++){
@@ -93,8 +95,7 @@ public class UserInput implements UserInputInterface, BundleInterface {
         throw new NoCommandFound();
     }
 
-    // TODO - handle no more commands in the line
-    public int findLastCommand(int index) {
+    private int findLastCommand(int index) {
         System.out.printf("looking for lastCommand on input: %s \n", this.myUserInput.get(0));
         String line = this.myUserInput.get(index);
         String[] words = line.split("\\s+");
@@ -145,12 +146,12 @@ public class UserInput implements UserInputInterface, BundleInterface {
 
     private boolean isValidCommand(String s) {
         ResourceBundle bundle = this.myResources;
-        Enumeration<String> resourceEnumeration = bundle.getKeys();
-        String key; String value;
-        while (resourceEnumeration.hasMoreElements()) {
-            key = resourceEnumeration.nextElement();
-            value = bundle.getString(key);
-            if (value.contains(s)) {return true;}
+        for(String key: Collections.list(bundle.getKeys())){
+            String regex = bundle.getString(key);
+            String[] regexElems = regex.split("\\|");
+            if(regexElems[0].equals(s) || ((regexElems.length >1) && regexElems[1].equals(s))){
+                return true;
+            }
         }
         return false;
     }
@@ -160,14 +161,16 @@ public class UserInput implements UserInputInterface, BundleInterface {
      * @param command
      * @return
      * TODO - what to do if command not found? - throw no command exception
+     * TODO - use regular expression mappings to populate this as well
      */
     private String translateCommand(String command) {
-        Enumeration<String> resourceEnumeration = this.myResources.getKeys();
-        String key; String value;
-        while (resourceEnumeration.hasMoreElements()) {
-            key = resourceEnumeration.nextElement();
-            value = this.myResources.getString(key);
-            if (value.contains(command)) {return key;}
+        ResourceBundle bundle = this.myResources;
+        for(String key: Collections.list(bundle.getKeys())){
+            String regex = bundle.getString(key);
+            String[] regexElems = regex.split("\\|");
+            if(regexElems[0].equals(command) || ((regexElems.length >1) && regexElems[1].equals(command))){
+                return key;
+            }
         }
         return "";
     }
@@ -195,7 +198,11 @@ public class UserInput implements UserInputInterface, BundleInterface {
      * @return
      */
     private Command createCommand(String superclass, String command, List<String> arguments) {
-        System.out.printf("createCommand in UserInput.java from commmand: %s \n", command);
+        System.out.printf("attempting to createCommand in UserInput.java from command: %s \n", command);
+        System.out.printf("arguments (%d): ", arguments.size());
+        for (String s: arguments) {
+            System.out.printf("%s \n", s);
+        }
         try {
             Class clazz = Class.forName(createCommandPath(superclass, command));
             Constructor ctor = clazz.getConstructor(List.class);
@@ -207,7 +214,7 @@ public class UserInput implements UserInputInterface, BundleInterface {
 
     private String createCommandPath(String superclass, String command) {
         String path = String.format("%s%s.%s", SLOGO_COMMAND, superclass, command);
-        // System.out.printf("returning path: %s \n", path);
+        System.out.printf("returning path: %s \n", path);
         return path;
     }
 

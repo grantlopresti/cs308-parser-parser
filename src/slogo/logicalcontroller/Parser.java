@@ -5,6 +5,7 @@ import slogo.exceptions.NoCommandFound;
 import slogo.exceptions.ReflectionException;
 import slogo.exceptions.ResourceBundleCreationException;
 import slogo.logicalcontroller.command.Command;
+import slogo.logicalcontroller.command.MakeVariable;
 import slogo.logicalcontroller.command.comparison.ComparisonCommand;
 import slogo.logicalcontroller.command.controlflow.ControlFlowCommand;
 import slogo.logicalcontroller.command.math.MathCommand;
@@ -14,6 +15,7 @@ import slogo.logicalcontroller.input.UserInput;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelCollection;
+import slogo.model.ModelTurtle;
 
 import java.util.*;
 import java.io.*;
@@ -106,11 +108,15 @@ public class Parser implements BundleInterface {
      */
     private List<String> executeModifierCommand(ModifierCommand command) {
         System.out.printf("Executing command %s with argument %.2f\n", command.getClass().getSimpleName(), command.getArgument1());
-        return new ArrayList<String>(List.of(command.execute()));
+        for (Object o : this.myModelCollection){
+            ModelTurtle turtle = (ModelTurtle) o;
+            command.execute(turtle);
+        }
+        return new ArrayList<String>(List.of(command.codeReplace()));
     }
 
     private List<String> executeComparisonCommand(ComparisonCommand command) {
-        return new ArrayList<String>();
+        return new ArrayList<String>(List.of(command.execute()));
     }
 
     private List<String> executeControlFlowCommand(ControlFlowCommand command) {
@@ -118,16 +124,14 @@ public class Parser implements BundleInterface {
     }
 
     private List<String> executeMathCommand(MathCommand command) {
-        return new ArrayList<String>();
+        return new ArrayList<String>(List.of(command.execute()));
     }
 
     private List<String> executeQuerieCommand(QuerieCommand command) {
         return new ArrayList<String>();
     }
 
-    private List<Command> singleLineParse(String linee) {
-        return new ArrayList<Command>();
-    }
+    private List<String> executeVariables(MakeVariable command) {return new ArrayList<String>();}
 
     /**
      * Called by the LogicalController
@@ -180,7 +184,6 @@ public class Parser implements BundleInterface {
         } catch (NoCommandFound e) {
             System.out.println("Parser finished parsing lines");
         }
-
     }
 
     public static void main (String[] args) throws IOException {

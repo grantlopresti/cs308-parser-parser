@@ -2,15 +2,17 @@ package slogo.logicalcontroller.command.math;
 
 import slogo.logicalcontroller.command.Command;
 
+import java.util.List;
+
 public class Sine extends MathCommand {
 
-    public Sine(String input){
-        super(input);
+    public Sine(List<String> input){
+        super(input.get(0));
     }
 
     @Override
-    protected void performMath() {
-        setReturnValue(Math.sin(this.myArgument1));
+    public String execute() {
+        return Double.toString(Math.sin(this.myArgument1));
     }
 
     @Override

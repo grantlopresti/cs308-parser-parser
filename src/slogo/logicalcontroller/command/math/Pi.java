@@ -2,15 +2,17 @@ package slogo.logicalcontroller.command.math;
 
 import slogo.logicalcontroller.command.Command;
 
+import java.util.List;
+
 public class Pi extends MathCommand {
 
-    public Pi(){
+    public Pi(List<String> input){
         super();
     }
 
     @Override
-    protected void performMath() {
-        setReturnValue(Math.PI);
+    public String execute() {
+        return Double.toString(Math.PI);
     }
 
     @Override
