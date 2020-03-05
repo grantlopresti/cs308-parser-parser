@@ -1,10 +1,7 @@
 package slogo;
 
-import javafx.application.Platform;
 import javafx.stage.Stage;
-import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.LogicalController;
-import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelCollection;
@@ -15,7 +12,6 @@ import slogo.visualcontroller.VisualController;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import slogo.visualcontroller.VisualError;
 
 /**
  * Purpose of this class is to manage the controllers and the model.
@@ -25,6 +21,7 @@ public class Manager {
     public static final String DEFAULT_LANG = "ENGLISH";
     private ModelCollection myModelCollection;
     private VariableList myVariables;
+
     private SlogoView mySlogoView;
     private VisualController myVisualController;
     private LogicalController myLogicalController;
@@ -38,14 +35,8 @@ public class Manager {
         startView();
     }
 
-    private void startView() {
-        Platform.startup(() -> {
-            try {
-                mySlogoView.start(new Stage());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+    private void startView() throws IOException {
+        mySlogoView.start(new Stage());
     }
 
     private void setViewControllerView() {

@@ -35,9 +35,7 @@ import slogo.view.TurtleImage;
 import slogo.view.windows.SlogoView;
 import slogo.visualcontroller.VisualError;
 
-import javax.script.ScriptException;
-
-public class ToolbarPane implements SubPane {
+public class ToolbarPane extends ToolBar {
 
   private LogicalController myLogicalController;
   private static final String DEFAULT_LANGUAGE = "English";
@@ -79,7 +77,6 @@ public class ToolbarPane implements SubPane {
     myButtonResources = new PropertyResourceBundle(fis1);
   }
 
-  @Override
   public ToolBar getNode() {
 
     initializeButtons();
@@ -135,17 +132,7 @@ public class ToolbarPane implements SubPane {
     myLoadAndRun.setOnAction(e -> {
       try {
         loadAndRun();
-      } catch (NoSuchMethodException ex) {
-        ex.printStackTrace();
-      } catch (InstantiationException ex) {
-        ex.printStackTrace();
-      } catch (ScriptException ex) {
-        ex.printStackTrace();
-      } catch (IllegalAccessException ex) {
-        ex.printStackTrace();
-      } catch (InvocationTargetException ex) {
-        ex.printStackTrace();
-      } catch (ClassNotFoundException ex) {
+      } catch (NoSuchMethodException | InstantiationException | ScriptException | IllegalAccessException | InvocationTargetException | ClassNotFoundException ex) {
         ex.printStackTrace();
       }
     });
