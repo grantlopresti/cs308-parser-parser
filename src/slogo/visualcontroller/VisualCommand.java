@@ -11,6 +11,5 @@ public class VisualCommand extends VisualText{
 
     public VisualCommand(String fullUserInput) {
         super(fullUserInput);
-        System.out.printf("created visual command from text: %s", fullUserInput);
     }
 }
