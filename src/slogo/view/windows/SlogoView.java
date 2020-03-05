@@ -29,6 +29,7 @@ import slogo.logicalcontroller.LogicalController;
 import slogo.view.SubTabFactory;
 import slogo.view.subsections.ListTab;
 import slogo.view.subsections.ToolbarPane;
+import slogo.view.subsections.TurtleOptionsTab;
 import slogo.view.subsections.UserInputPane;
 import slogo.view.subsections.VisualizationPane;
 import slogo.visualcontroller.ErrorSeverity;
@@ -65,6 +66,7 @@ public class SlogoView extends Application {
       "VariableViewerTab",
       "DataViewerTab",
   };
+  public static final String ALERT_TITLE = "Alert";
 
   //Main Sections
   private BorderPane myMainPane;
@@ -77,6 +79,7 @@ public class SlogoView extends Application {
   //SubPanes
   private VisualizationPane myVisualizationPane;
   private UserInputPane myInputPane;
+  private TurtleOptionsTab myTurtleOptionsTab;
 
   //Controllers
   private LogicalController myLogicalController;
@@ -198,20 +201,20 @@ public class SlogoView extends Application {
       myLeftPane.getTabs().add(mySubTabFactory.makeTab(this, myVisualController, initialTabName));
     }
 
+    myTurtleOptionsTab = new TurtleOptionsTab();
+    myLeftPane.getTabs().add(myTurtleOptionsTab);
+
     myLeftPane.setPrefWidth(LEFT_PANE_WIDTH);
   }
 
   private void createRightPane() {
     myRightPane = new TabPane();
 
-    //FIXME: Initial settings should be obtained from XML File
-    String[] initialTabNames = new String[]{"CommandHistoryTab", "DataViewerTab", "ErrorHandlerTab"};
     for (String initialTabName : INITIAL_RIGHT_TAB_NAMES){
       myRightPane.getTabs().add(mySubTabFactory.makeTab(this, myVisualController, initialTabName));
     }
 
     myRightPane.setPrefWidth(RIGHT_PANE_WIDTH);
-    //myRightPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 
   }
 
@@ -248,7 +251,7 @@ public class SlogoView extends Application {
       alert = new Alert(AlertType.INFORMATION);
     }
 
-    alert.setTitle("Alert");
+    alert.setTitle(ALERT_TITLE);
     alert.setHeaderText(null);
     alert.setContentText(error.toString());
 
@@ -263,7 +266,6 @@ public class SlogoView extends Application {
     for (VisualTurtle turtle : visualTurtles){
       myVisualizationPane.addVisualTurtle(turtle);
     }
-    //TODO: UPDATE CENTER
     myVisualizationPane.update();
     myMainPane.setCenter(myCenterPane);
   }
@@ -273,7 +275,6 @@ public class SlogoView extends Application {
       myVisualizationPane.addVisualLine(line);
     }
     myVisualizationPane.update();
-    //TODO: UPDATE CENTER
     myMainPane.setCenter(myCenterPane);
   }
 
@@ -284,7 +285,6 @@ public class SlogoView extends Application {
   public void clearScreen() {
     myVisualizationPane.clearElements();
     myVisualizationPane.resetBGColor();
-    //TODO: UPDATE CENTER
     myMainPane.setCenter(myCenterPane);
   }
 

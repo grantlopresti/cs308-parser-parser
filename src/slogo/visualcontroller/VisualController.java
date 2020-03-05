@@ -21,6 +21,8 @@ public class VisualController implements VisualInterface {
 
   // Currently mirroring structure of VisualizationPane.java (change to bindings)
   private Map<Integer, VisualTurtle> myTurtles = new HashMap<>();
+  private ObservableList<VisualTurtle> myTurtlesList = FXCollections.observableArrayList(myTurtles.values());
+
   private List<VisualLine> myLines = new ArrayList<>();
 
   private SimpleObjectProperty<ObservableList<VisualError>> myErrorsProperty;
@@ -130,6 +132,7 @@ public class VisualController implements VisualInterface {
 
   private void moveTurtle(ModelTurtle turtle) {
     VisualTurtle visualTurtle = addTurtleToMap(turtle);
+    myTurtlesList.add(visualTurtle);
     visualTurtle.setChangeState(true);
     visualTurtle.updateVisualTurtle(turtle);
     try {
@@ -155,5 +158,9 @@ public class VisualController implements VisualInterface {
   public void changeTurtleImage(String newValue) {
     TurtleImage image = TurtleImage.valueOf(newValue);
     myTurtles.get(0).setImage(image.getImagePath());
+  }
+
+  public void getTurtlesList() {
+    ObservableList<VisualTurtle> myTurtlesList = FXCollections.observableArrayList(myTurtles.values());
   }
 }
