@@ -324,5 +324,4 @@ public class UserInput implements UserInputInterface, BundleInterface {
     private int countParameters(String translated) {
         return Integer.parseInt(this.myParameterMap.getString(translated));
     }
-
 }
