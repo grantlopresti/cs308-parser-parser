@@ -75,7 +75,6 @@ public class VisualController implements VisualInterface {
   public void update(ModelCollection model, VariableList variableList, Command command) {
     moveModelObject(model, command);
     // updateVariables(variableList);
-    updateCommands(command);
   }
 
   /**
@@ -93,7 +92,6 @@ public class VisualController implements VisualInterface {
   @Override
   public void changeTurtleImage(String newValue) {
     TurtleImage image = TurtleImage.valueOf(newValue);
-    System.out.println("changing Turtle Image");
     for (Integer i : myTurtles.keySet()) {
       System.out.printf("INDEX: ", i);
       myTurtles.get(i).setImage(image.getImagePath());
@@ -136,10 +134,12 @@ public class VisualController implements VisualInterface {
     }
   }
 
-  private void updateCommands(Command command) {
-    FXCollections.reverse(myCommandsProperty.getValue());
-    myCommandsProperty.getValue().add(new VisualCommand(command));
-    FXCollections.reverse(myCommandsProperty.getValue());
+  @Override
+  public void updateCommand(String userInput) {
+    System.out.printf("adding userInput: %s to binding \n ", userInput);
+    FXCollections.reverse(this.myCommandsProperty.getValue());
+    this.myCommandsProperty.getValue().add(new VisualCommand(userInput));
+    FXCollections.reverse(this.myCommandsProperty.getValue());
   }
 
   private void moveTurtle(ModelTurtle turtle) {
@@ -154,7 +154,6 @@ public class VisualController implements VisualInterface {
     } catch (NullPointerException e) {
       System.out.println("Given null turtle set, passing on draw");
     }
-
   }
 
   private void appendLine(VisualLine line) {

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -31,6 +32,7 @@ import slogo.exceptions.InvalidCommandException;
 import slogo.exceptions.InvalidCommandFileException;
 import slogo.exceptions.InvalidLanguageException;
 import slogo.logicalcontroller.LogicalController;
+import slogo.view.SubTabFactory;
 import slogo.view.TurtleImage;
 import slogo.view.windows.SlogoView;
 import slogo.visualcontroller.VisualError;
@@ -42,6 +44,10 @@ public class ToolbarPane extends ToolBar {
 
   private static final String myButtonProperties = "properties.buttons";
   private ResourceBundle myButtonResources;
+
+  private static final String PACKAGE = SubTabFactory.class.getPackageName();
+  public static final String POSSIBLE_TABS_RESOURCE = PACKAGE + ".resources.possibleTabs";
+  private ResourceBundle myPossibleTabsResource;
 
   private SlogoView myViewer;
 
@@ -64,6 +70,7 @@ public class ToolbarPane extends ToolBar {
       );
   private ComboBox<String> myLanguage = new ComboBox<>(languageOptions);
   private Button myHelpInfo = new Button("Help/Info");
+  private ComboBox<String> myTabOpener = new ComboBox<>();
 
   public ToolbarPane(SlogoView viewer, LogicalController logicalController) throws IOException {
     myViewer = viewer;
@@ -87,7 +94,10 @@ public class ToolbarPane extends ToolBar {
         new Text("Language:"),
         myLanguage,
         new Separator(),
-        myHelpInfo);
+        myHelpInfo,
+        new Separator(),
+        new Text("Tab Opener"),
+        myTabOpener);
   }
 
   private void initializeButtons() {
@@ -102,6 +112,14 @@ public class ToolbarPane extends ToolBar {
     myLanguage.getSelectionModel().selectedItemProperty().addListener((options, oldValue,
         newValue) -> changeLanguage(newValue));
     myHelpInfo.setOnAction(e -> showHelpWindow());
+    createTabOpener();
+  }
+
+  private void createTabOpener() {
+    myPossibleTabsResource = ResourceBundle.getBundle(POSSIBLE_TABS_RESOURCE);
+    for (String key : Collections.list(myPossibleTabsResource.getKeys())) {
+      myTabOpener.getItems().add(key);
+    }
   }
 
   private void initializeLoadAndRunButton() {

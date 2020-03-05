@@ -79,7 +79,6 @@ public class UserInput implements UserInputInterface, BundleInterface {
         }
     }
 
-
     // TODO - implement method stub - PLEase double check - By Alex
     private List<List<String>> getControlFlowArguments(int myLineIndex, int myCommandIndex, String command) {
         controlFlowEndIndex = 0;
@@ -140,7 +139,6 @@ public class UserInput implements UserInputInterface, BundleInterface {
 
     @Override
     public boolean isFinished() {
-        System.out.println("checking if user input is finished");
         try {
             this.myLineIndex = findNextLine();
             this.myCommandIndex = findLastCommand(this.myLineIndex);
@@ -209,7 +207,6 @@ public class UserInput implements UserInputInterface, BundleInterface {
     }
 
     private int findNextLine() {
-        System.out.printf("looking for nextLine on input: %s \n", this.myUserInput.get(0));
         for(int i = 0; i < this.myUserInput.size(); i++){
             String s = this.myUserInput.get(i);
             if(s.split("\\s+").length > 1){
@@ -220,7 +217,6 @@ public class UserInput implements UserInputInterface, BundleInterface {
     }
 
     private int findLastCommand(int index) {
-        System.out.printf("looking for lastCommand on input: %s \n", this.myUserInput.get(0));
         String line = this.myUserInput.get(index);
         String[] words = line.split("\\s+");
         for(int i = words.length-1; i>=0; i--){
@@ -232,14 +228,8 @@ public class UserInput implements UserInputInterface, BundleInterface {
         throw new NoCommandFound();
     }
 
-    private String getLine(int index) {
-        return this.myUserInput.get(index);
-    }
-
-    // TODO - how to handle multiple line parameters (param number is constant, could be bracketed parameter]
     // TODO - assume that parameters are space separated (good enough assumption)
     private List<String> getArguments(int lineIndex, int commandIndex, int params) {
-        // traverseUserInput();
         int stop = commandIndex+1+params;
         String input = this.myUserInput.get(lineIndex);
         String[] words = input.split("\\s");
@@ -248,13 +238,6 @@ public class UserInput implements UserInputInterface, BundleInterface {
         this.mySuffix = spaceSeparatedString(Arrays.copyOfRange(words, stop, words.length));
         this.myUserInput.set(lineIndex, input);
         return new ArrayList<String>(List.of(args));
-    }
-
-    private void traverseUserInput() {
-        System.out.println("Traversing user input: ");
-        for (String s: this.myUserInput) {
-            System.out.println(s);
-        }
     }
 
     private String spaceSeparatedString(String[] fullCommand) {
@@ -322,8 +305,6 @@ public class UserInput implements UserInputInterface, BundleInterface {
      * @return
      */
     private Command createCommand(String superclass, String command, List<String> arguments) {
-        System.out.printf("attempting to createCommand in UserInput.java from command: %s \n", command);
-        System.out.printf("arguments (%d): ", arguments.size());
         for (String s: arguments) {
             System.out.printf("%s \n", s);
         }
@@ -338,7 +319,7 @@ public class UserInput implements UserInputInterface, BundleInterface {
 
     private String createCommandPath(String superclass, String command) {
         String path = String.format("%s%s.%s", SLOGO_COMMAND, superclass, command);
-        System.out.printf("returning path: %s \n", path);
+        // System.out.printf("returning path: %s \n", path);
         return path;
     }
 

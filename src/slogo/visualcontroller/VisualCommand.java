@@ -8,4 +8,8 @@ public class VisualCommand extends VisualText{
         // super("FIX ME (in VisualCommand)");
         super(command.toString());
     }
+
+    public VisualCommand(String fullUserInput) {
+        super(fullUserInput);
+    }
 }
