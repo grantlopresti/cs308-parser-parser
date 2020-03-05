@@ -155,10 +155,12 @@ public class VisualizationPane extends Group {
 
   public void addVisualTurtle(VisualTurtle turtle) {
     myTurtles.add(turtle);
+    update();
   }
 
   public void addVisualLine(VisualLine line) {
     myLines.add(line);
+    update();
   }
 
   private void displayError(VisualError error) {
@@ -183,5 +185,6 @@ public class VisualizationPane extends Group {
 
   public void setPenColor(Color customColor) {
     myPenColor = customColor;
+    update();
   }
 }
