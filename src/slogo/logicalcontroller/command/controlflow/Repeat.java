@@ -15,9 +15,9 @@ public class Repeat extends ControlFlowCommand {
      * @param repeat
      * @param rawInput
      */
-    public Repeat(double repeat, List<String> rawInput){
-        super(rawInput);
-        repeatCount = (int)Math.round(repeat);
+    public Repeat(List<String> args ) {//double repeat, List<String> rawInput){
+        super(args.subList(1, args.size()-1));
+        repeatCount = (int)Math.round(Double.parseDouble(args.get(0)));
     }
 
     @Override
