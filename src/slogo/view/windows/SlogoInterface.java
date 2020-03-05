@@ -145,10 +145,10 @@ public class SlogoInterface extends Application {
     myCenterPane = new BorderPane();
 
     myVisualizationPane = new VisualizationPane(VISUALIZER_WIDTH, VISUALIZER_HEIGHT);
-    Group visualization = myVisualizationPane.getNode();
+    myVisualizationPane.update();
     HBox programInputArea = getProgramInputNode();
 
-    myCenterPane.setCenter(visualization);
+    myCenterPane.setCenter(myVisualizationPane);
     myCenterPane.setBottom(programInputArea);
   }
 
@@ -264,6 +264,7 @@ public class SlogoInterface extends Application {
       myVisualizationPane.addVisualTurtle(turtle);
     }
     //TODO: UPDATE CENTER
+    myVisualizationPane.update();
     myMainPane.setCenter(myCenterPane);
   }
 
@@ -271,7 +272,7 @@ public class SlogoInterface extends Application {
     for (VisualLine line : visualLines){
       myVisualizationPane.addVisualLine(line);
     }
-    myVisualizationPane.getNode();
+    myVisualizationPane.update();
     //TODO: UPDATE CENTER
     myMainPane.setCenter(myCenterPane);
   }
