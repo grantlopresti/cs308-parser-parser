@@ -17,7 +17,6 @@ public abstract class ControlFlowCommand implements Command {
         System.out.println("creating control flow command from initial body: ");
         for (String s: rawInput) {System.out.println(s);}
         this.myBody = rawInput;
-        unravelCode();
     }
 
     public List<String> getUnraveledCode(){

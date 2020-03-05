@@ -4,6 +4,7 @@ import slogo.exceptions.InvalidCommandException;
 import slogo.exceptions.NoCommandFound;
 import slogo.logicalcontroller.BundleInterface;
 import slogo.logicalcontroller.command.Command;
+import slogo.logicalcontroller.command.controlflow.ControlFlowCommand;
 import slogo.logicalcontroller.command.controlflow.ControlFlowExtractor;
 
 import java.io.IOException;
@@ -153,8 +154,9 @@ public class UserInput implements UserInputInterface, BundleInterface {
     // FOR NOW - assuming single line replace (only modifiers and math will work)
     @Override
     public void setCodeReplacement(List<String> code, Command command) {
-        if (command.getClass().getSuperclass().getSimpleName().equals("controlflow")) {
-            multiLineReplace(code);
+        System.out.println("Command Type Detected: " + command.getClass().getSuperclass().getSimpleName());
+        if (command.getClass().getSuperclass().getSimpleName().equals("ControlFlowCommand")) {
+            multiLineReplace(command);
         } else {
             singleLineReplace(code);
         }
@@ -171,17 +173,31 @@ public class UserInput implements UserInputInterface, BundleInterface {
     }
 
     // TODO: Implementation can be better?
-    private void multiLineReplace(List<String> code) {
+    private void multiLineReplace(Command command) {
+        System.out.println("Starting multi-line replace...");
+
+        ControlFlowCommand myControlFlowCommand = (ControlFlowCommand) command;
+        List<String> code = myControlFlowCommand.getUnraveledCode();
+
+        System.out.println("Code to be used to replace: //");
+        for(String s : code){
+            System.out.println(s);
+        }
+        System.out.println("//");
+
         List<String> prefix = myUserInput.subList(0, myLineIndex);
-        if(myUserInput.get(controlFlowEndIndex).contains("]")){
-            System.out.println("Closing Bracket at Line: " + controlFlowEndIndex);
-            controlFlowEndIndex ++;
+
+        /*
+        System.out.println("Looking for end bracket starting on line " + controlFlowEndIndex);
+
+        while(!myUserInput.get(controlFlowEndIndex).contains("]")){
+            controlFlowEndIndex++;
         }
-        else{
-            System.out.println("Closing Bracket at Line: " + controlFlowEndIndex+1);
-            controlFlowEndIndex +=2;
-        }
-        List<String> suffix = myUserInput.subList(controlFlowEndIndex, myUserInput.size());
+        System.out.println("Closing Bracket at Line: " + controlFlowEndIndex);
+
+
+         */
+        List<String> suffix = myUserInput.subList(controlFlowEndIndex+1, myUserInput.size());
 
         List<String> result = new ArrayList<>();
         result.addAll(prefix);

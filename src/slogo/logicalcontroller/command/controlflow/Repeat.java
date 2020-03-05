@@ -20,17 +20,25 @@ public class Repeat extends ControlFlowCommand {
         System.out.printf("rawInput.get(0).get(0)=%s", rawInput.get(0).get(0));
         this.myRepeatCount = (int)Math.round(Double.parseDouble(rawInput.get(0).get(0)));
         System.out.println("myRepeatCount: " + this.myRepeatCount);
+
+        unravelCode();
     }
 
     @Override
     protected void unravelCode() {
         List<String> myBody = this.getBody();
         List<String> result = new ArrayList<>();
-        result.add("SET :repcount " + this.myRepeatCount);
+        //result.add("set :repcount " + this.myRepeatCount);
 
         for(int i = 0; i < this.myRepeatCount; i++){
             result.addAll(myBody);
         }
+
         setUnraveledCode(result);
+
+        System.out.println("From Command Object's Perspective, Body is");
+        for(String s : result){
+            System.out.println(s);
+        }
     }
 }

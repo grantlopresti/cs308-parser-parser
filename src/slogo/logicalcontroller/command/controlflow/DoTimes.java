@@ -19,6 +19,8 @@ public class DoTimes extends ControlFlowCommand {
         super(rawInput.get(1));
         repeatCount = (int)Math.round(Double.parseDouble(rawInput.get(0).get(1)));
         variableName = rawInput.get(0).get(0);
+
+        unravelCode();
     }
 
     @Override
@@ -27,7 +29,7 @@ public class DoTimes extends ControlFlowCommand {
         List<String> result = new ArrayList<>();
 
         for(int i = 0; i<repeatCount; i++){
-            result.add("SET :" + variableName + " " + (i+1));
+            //result.add("set :" + variableName + " " + (i+1));
             result.addAll(myBody);
         }
         setUnraveledCode(result);
