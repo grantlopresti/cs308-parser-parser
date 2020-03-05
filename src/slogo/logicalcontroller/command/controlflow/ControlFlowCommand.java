@@ -10,11 +10,13 @@ import java.util.List;
  * @author Alex Xu
  */
 public abstract class ControlFlowCommand implements Command {
-    private List<String> body;
+    private List<String> myBody;
     private List<String> unraveledCode;
 
     public ControlFlowCommand(List<String> rawInput){
-        body = rawInput;
+        System.out.println("creating control flow command from initial param: ");
+        for (String s: rawInput) {System.out.println(s);}
+        this.myBody = rawInput;
         unravelCode();
     }
 
@@ -29,7 +31,7 @@ public abstract class ControlFlowCommand implements Command {
     }
 
     protected List<String> getBody(){
-        return body;
+        return myBody;
     }
 
     protected abstract void unravelCode();

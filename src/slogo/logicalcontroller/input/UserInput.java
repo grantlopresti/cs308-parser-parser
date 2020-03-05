@@ -53,11 +53,8 @@ public class UserInput implements UserInputInterface, BundleInterface {
             this.myCommandIndex = findLastCommand(this.myLineIndex);
             String translated = translateCommand(this.myCommand);
             String superclass = getCommandSuperclass(translated);
-            //int params = countParameters(translated);
             System.out.printf("translated %s to %s \n", this.myCommand, translated);
-            // TODO - fork between controlflow and other
             if (superclass.equals(CONTROLFLOW)) {
-
                 List<List<String>> args = getControlFlowArguments(this.myLineIndex, this.myCommandIndex, translated);
                 return createControlCommand(superclass, translated, args);
             } else {
@@ -65,7 +62,6 @@ public class UserInput implements UserInputInterface, BundleInterface {
                 List<String> args = getArguments(this.myLineIndex, this.myCommandIndex, params);
                 return createCommand(superclass, translated, args);
             }
-            // return createCommand(superclass, translated, args);
         } catch (NoCommandFound e) {
             throw new NoCommandFound("Could not generate command");
         }

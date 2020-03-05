@@ -8,7 +8,7 @@ import java.util.List;
  * @author Alex Xu
  */
 public class Repeat extends ControlFlowCommand {
-    private int repeatCount;
+    private int myRepeatCount;
 
     /**
      * Constructor for the Repeat object, takes in the number of repeats desired, rounds to nearest integer.
@@ -16,16 +16,19 @@ public class Repeat extends ControlFlowCommand {
      */
     public Repeat(List<List<String>> rawInput){
         super(rawInput.get(1));
-        repeatCount = (int)Math.round(Double.parseDouble(rawInput.get(0).get(0)));
+        System.out.println("Creating repeat command \n called constructor");
+        System.out.printf("rawInput.get(0).get(0)=%s", rawInput.get(0).get(0));
+        this.myRepeatCount = (int)Math.round(Double.parseDouble(rawInput.get(0).get(0)));
+        System.out.println("myRepeatCount: " + this.myRepeatCount);
     }
 
     @Override
     protected void unravelCode() {
         List<String> myBody = this.getBody();
         List<String> result = new ArrayList<>();
-        result.add("SET :repcount " + repeatCount);
+        result.add("SET :repcount " + this.myRepeatCount);
 
-        for(int i = 0; i<repeatCount; i++){
+        for(int i = 0; i < this.myRepeatCount; i++){
             result.addAll(myBody);
         }
         setUnraveledCode(result);
