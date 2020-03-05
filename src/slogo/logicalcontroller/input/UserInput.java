@@ -87,25 +87,29 @@ public class UserInput implements UserInputInterface, BundleInterface {
         int numParams = Integer.parseInt(myParameterMap.getString(command).split(",")[1]);
         int numBracketSets = Integer.parseInt(myParameterMap.getString(command).split(",")[0]);
 
+        System.out.println("This Command Object Takes " + numParams + " Parameters");
+        System.out.println("This Command Object Takes " + numBracketSets + " Sets of Bracketed Bodies");
+
         if(numParams == 1){
             List<String> paramsList = new ArrayList<>();
-            paramsList.add(myUserInput.get(myCommandIndex+1));
+            String param = myUserInput.get(myLineIndex).split(" ")[myCommandIndex + 1];
+            paramsList.add(param);
             returnList.add(paramsList);
         }
-        int lineLocation = -1;
+
+        int lineLocation = -1;          //TODO: Default values that are not necessarily used.
         int columnLocation = -1;
         int linePointer = myLineIndex;
         for(int i = 0; i<numBracketSets; i++){
             int[] locationArray = getOpenBracketIndex(linePointer);
             lineLocation = locationArray[0];
             columnLocation = locationArray[1];
+            System.out.println("Opening Bracket at :" + lineLocation + " " + columnLocation);
             List<String> argumentSet = ControlFlowExtractor.initControlFlow(myUserInput, lineLocation, columnLocation);
             returnList.add(argumentSet);
             linePointer += argumentSet.size();
             controlFlowEndIndex = linePointer;
         }
-
-        System.out.println("Opening Bracket at :" + lineLocation + " " + columnLocation);
 
         return returnList;
     }
