@@ -4,6 +4,7 @@ import slogo.exceptions.InvalidCommandException;
 import slogo.exceptions.NoCommandFound;
 import slogo.logicalcontroller.BundleInterface;
 import slogo.logicalcontroller.command.Command;
+import slogo.logicalcontroller.command.controlflow.ControlFlowExtractor;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -20,6 +21,8 @@ public class UserInput implements UserInputInterface, BundleInterface {
     private String mySuffix;
     private static final int NONE_FOUND = -1;
     private static final String SPACE = " ";
+
+    private int controlFlowEndIndex;
 
     private static final String SUPERCLASS_PROPERTIES = "src/properties/commandSuperclass.properties";
     private static final String PARAMETER_PROPERTIES = "src/properties/parameterCount.properties";
@@ -50,13 +53,15 @@ public class UserInput implements UserInputInterface, BundleInterface {
             this.myCommandIndex = findLastCommand(this.myLineIndex);
             String translated = translateCommand(this.myCommand);
             String superclass = getCommandSuperclass(translated);
-            int params = countParameters(translated);
+            //int params = countParameters(translated);
             System.out.printf("translated %s to %s \n", this.myCommand, translated);
             // TODO - fork between controlflow and other
             if (superclass.equals(CONTROLFLOW)) {
-                List<List<String>> args = getControlFlowArguments(this.myLineIndex, this.myCommandIndex, params);
+
+                List<List<String>> args = getControlFlowArguments(this.myLineIndex, this.myCommandIndex, translated);
                 return createControlCommand(superclass, translated, args);
             } else {
+                int params = countParameters(translated);
                 List<String> args = getArguments(this.myLineIndex, this.myCommandIndex, params);
                 return createCommand(superclass, translated, args);
             }
@@ -79,8 +84,49 @@ public class UserInput implements UserInputInterface, BundleInterface {
 
 
     // TODO - implement method stub - PLEase double check - By Alex
-    private List<List<String>> getControlFlowArguments(int myLineIndex, int myCommandIndex, int params) {
-        
+    private List<List<String>> getControlFlowArguments(int myLineIndex, int myCommandIndex, String command) {
+        controlFlowEndIndex = 0;
+
+        List<List<String>> returnList = new ArrayList<>();
+        int numParams = Integer.parseInt(myParameterMap.getString(command).split(",")[1]);
+        int numBracketSets = Integer.parseInt(myParameterMap.getString(command).split(",")[0]);
+
+        if(numParams == 1){
+            List<String> paramsList = new ArrayList<>();
+            paramsList.add(myUserInput.get(myCommandIndex+1));
+            returnList.add(paramsList);
+        }
+
+        int linePointer = myLineIndex;
+        for(int i = 0; i<numBracketSets; i++){
+            List<String> argumentSet = ControlFlowExtractor.initControlFlow(myUserInput, getOpenBracketIndex(linePointer)[0], getOpenBracketIndex(linePointer)[1]);
+            returnList.add(argumentSet);
+            linePointer += argumentSet.size();
+            controlFlowEndIndex = getOpenBracketIndex(linePointer)[0];
+        }
+
+        return returnList;
+    }
+
+    private int[] getOpenBracketIndex(int lineIndex){                     //TODO: Searches for the first openbracket after the given line index, so line index should be the smallest index of a possible occurance.
+        int[] result = new int[2];                                        //TODO: Index 0 is the Lineindex, 1 is the locationIndex in that line.
+        for(int j = lineIndex; j<myUserInput.size(); j++) {
+            String line = myUserInput.get(j);
+
+            String[] lineElements = line.split(" ");
+
+            for (int i = 0; i < lineElements.length; i++) {
+                if (lineElements[i].equals("[")) {
+                    result[0] = j;
+                    result[1] = i;
+                    return result;
+                }
+            }
+        }
+
+        result[1] = -1;
+        result[0] = -1;               //TODO: remember to throw an invalid syntax error
+        return result;
     }
 
     @Override
@@ -119,9 +165,20 @@ public class UserInput implements UserInputInterface, BundleInterface {
     // TODO: Implementation can be better?
     private void multiLineReplace(List<String> code) {
         List<String> prefix = myUserInput.subList(0, myLineIndex);
-        List<String> suffix = myUserInput.subList();
+        if(myUserInput.get(controlFlowEndIndex).contains("]")){
+            controlFlowEndIndex ++;
+        }
+        else{
+            controlFlowEndIndex +=2;
+        }
+        List<String> suffix = myUserInput.subList(controlFlowEndIndex, myUserInput.size());
 
+        List<String> result = new ArrayList<>();
+        result.addAll(prefix);
+        result.addAll(code);
+        result.addAll(suffix);
 
+        myUserInput = result;
     }
 
     private int findNextLine() {
