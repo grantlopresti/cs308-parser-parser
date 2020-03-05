@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import slogo.exceptions.LogicalException;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.variable.Variable;
+import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelCollection;
 import slogo.model.ModelTurtle;
 import slogo.view.TurtleImage;
@@ -70,7 +71,7 @@ public class VisualController implements VisualInterface {
 
   // TODO - implement commands updating as strings
   @Override
-  public void update(ModelCollection model, List<Variable> variableList, Command command) {
+  public void update(ModelCollection model, VariableList variableList, Command command) {
     moveModelObject(model, command);
     // updateVariables(variableList);
     updateCommands(command);
@@ -118,10 +119,10 @@ public class VisualController implements VisualInterface {
     }
   }
 
-  private void updateVariables(List<Variable> variableList) {
+  private void updateVariables(VariableList variableList) {
     myVariablesProperty.getValue().clear();
-    for (Variable v: variableList) {
-      myVariablesProperty.getValue().add(new VisualVariable(v));
+    for (Object v: variableList) {
+      myVariablesProperty.getValue().add(new VisualVariable((Variable)v));
     }
   }
 

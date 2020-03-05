@@ -12,14 +12,14 @@ public class IfElse extends ControlFlowCommand {
 
     private int myConditional;
 
-    public IfElse(double conditional, List<String> rawInputTrue, List<String> rawInputFalse){
-        super(rawInputTrue);
-        myConditional = (int)Math.round(conditional);
-        falseCommandsList = rawInputFalse;
+    public IfElse(List<List<String>> rawInput){
+        super(rawInput.get(1));
+        myConditional = (int)Math.round(Double.parseDouble(rawInput.get(0).get(0)));
+        falseCommandsList = rawInput.get(2);
     }
 
     @Override
-    public void unravelCode() {
+    protected void unravelCode() {
         List<String> result;
         if(isTrue()){
             result = this.getBody();

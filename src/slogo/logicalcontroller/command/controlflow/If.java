@@ -10,13 +10,13 @@ import java.util.List;
 public class If extends ControlFlowCommand {
     private int myConditional;
 
-    public If(double conditional, List<String> rawInput){
-        super(rawInput);
-        myConditional = (int)Math.round(conditional);
+    public If(List<List<String>> rawInput){
+        super(rawInput.get(1));
+        myConditional = (int)Math.round(Double.parseDouble(rawInput.get(0).get(0)));
     }
 
     @Override
-    public void unravelCode() {
+    protected void unravelCode() {
         List<String> result;
         if(isTrue()){
             result = this.getBody();

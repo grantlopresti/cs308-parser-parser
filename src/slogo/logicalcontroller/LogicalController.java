@@ -2,7 +2,7 @@ package slogo.logicalcontroller;
 
 import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.command.Command;
-import slogo.logicalcontroller.variable.Variable;
+import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelCollection;
 import slogo.visualcontroller.VisualController;
 
@@ -10,7 +10,6 @@ import javax.script.ScriptException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Logical controller handles the interaction between the user input from the GUI, the parser, command objects,
@@ -21,15 +20,14 @@ public class LogicalController {
   private static final String DEFAULT_LANGUAGE = "ENGLISH";
 
   private Parser myParser;
-
   private ModelCollection myModelCollection;
   private VisualController myVisualController;
-  private List<Variable> myVariables;
+  private VariableList myVariables;
 
   private LogicalController(){
   };
 
-  public LogicalController(ModelCollection modelCollection, VisualController visualController, List<Variable> variables){
+  public LogicalController(ModelCollection modelCollection, VisualController visualController, VariableList variables){
     this.myModelCollection = modelCollection;
     this.myVisualController = visualController;
     this.myVariables = variables;
@@ -59,13 +57,13 @@ public class LogicalController {
    */
   public void handleNewCommand(String fullUserInput) throws InvalidCommandException, NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
     try {
-      System.out.printf("recieved user input: %s \n", fullUserInput);
+      System.out.printf("recieved user input: %s \n", fullUserInput);             //TODO: Comment filtering should happen here
       this.myParser.parse(Arrays.asList(fullUserInput.split("\n")));
       while(!this.myParser.isFinished()){
         this.myParser.executeNextCommand();
         Command latestCommand = this.myParser.getLatestCommand();
         ModelCollection newModel = this.myParser.getModel();
-        List<Variable> newVariables = this.myParser.getVariables();
+        VariableList newVariables = this.myParser.getVariables();
         this.myVisualController.update(newModel, newVariables, latestCommand);
       }
     } catch (Exception e) {
