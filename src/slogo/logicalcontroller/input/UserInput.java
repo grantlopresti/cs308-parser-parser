@@ -109,7 +109,7 @@ public class UserInput implements UserInputInterface, BundleInterface {
             List<String> argumentSet = ControlFlowExtractor.initControlFlow(myUserInput, lineLocation, columnLocation);
             returnList.add(argumentSet);
             linePointer += argumentSet.size();
-            controlFlowEndIndex = linePointer;
+            controlFlowEndIndex = ControlFlowExtractor.getLineLastBrac(myUserInput, lineLocation, columnLocation);
         }
 
         return returnList;
@@ -197,6 +197,7 @@ public class UserInput implements UserInputInterface, BundleInterface {
 
 
          */
+
         List<String> suffix = myUserInput.subList(controlFlowEndIndex+1, myUserInput.size());
 
         List<String> result = new ArrayList<>();
