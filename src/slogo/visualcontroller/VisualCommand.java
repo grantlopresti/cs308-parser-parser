@@ -8,4 +8,9 @@ public class VisualCommand extends VisualText{
         // super("FIX ME (in VisualCommand)");
         super(command.toString());
     }
+
+    public VisualCommand(String fullUserInput) {
+        super(fullUserInput);
+        System.out.printf("created visual command from text: %s", fullUserInput);
+    }
 }

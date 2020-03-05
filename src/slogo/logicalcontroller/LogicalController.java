@@ -58,7 +58,6 @@ public class LogicalController {
    */
   public void handleNewCommand(String fullUserInput) throws InvalidCommandException, NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
     try {
-      System.out.printf("received user input: %s \n", fullUserInput);
       this.myParser.parse(trimList(Arrays.asList(fullUserInput.split("\n"))));
       while(!this.myParser.isFinished()){
         this.myParser.executeNextCommand();
@@ -67,11 +66,11 @@ public class LogicalController {
         VariableList newVariables = this.myParser.getVariables();
         this.myVisualController.update(newModel, newVariables, latestCommand);
       }
+      this.myVisualController.updateCommand(fullUserInput);
     } catch (Exception e) {
       e.printStackTrace();
       System.out.println("error in LogicalController.handleNewCommand");
     }
-    System.out.println("Parser is finished! Yay!");
   }
 
   // TODO - implement preprocessing to remove all comments from code

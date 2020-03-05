@@ -39,4 +39,5 @@ public interface VisualInterface {
 
     public void setSlogoView(SlogoView view);
 
+    public void updateCommand(String fullUserInput);
 }
