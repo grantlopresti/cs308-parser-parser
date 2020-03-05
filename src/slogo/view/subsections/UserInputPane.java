@@ -4,15 +4,15 @@ package slogo.view.subsections;
 import javafx.scene.control.TextArea;
 import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.LogicalController;
-import slogo.view.windows.SlogoInterface;
+import slogo.view.windows.SlogoView;
 import slogo.visualcontroller.VisualError;
 
 public class UserInputPane {
-  private SlogoInterface myViewer;
+  private SlogoView myViewer;
   private LogicalController myLogicalController;
   private TextArea myTextArea;
 
-  public UserInputPane (SlogoInterface viewer, LogicalController logicalcontroller) {
+  public UserInputPane (SlogoView viewer, LogicalController logicalcontroller) {
     myTextArea = new TextArea();
     myTextArea.setPromptText("Enter Logo Commands Here:");
     myLogicalController = logicalcontroller;

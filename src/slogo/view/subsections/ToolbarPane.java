@@ -15,7 +15,6 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Separator;
 import javafx.scene.control.ToolBar;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -30,10 +29,8 @@ import slogo.exceptions.InvalidCommandFileException;
 import slogo.exceptions.InvalidLanguageException;
 import slogo.logicalcontroller.LogicalController;
 import slogo.view.TurtleImage;
-import slogo.view.windows.SlogoInterface;
+import slogo.view.windows.SlogoView;
 import slogo.visualcontroller.VisualError;
-
-import javax.script.ScriptException;
 
 public class ToolbarPane extends ToolBar {
 
@@ -44,7 +41,7 @@ public class ToolbarPane extends ToolBar {
   private static final String myButtonProperties = "properties.buttons";
   private ResourceBundle myButtonResources;
 
-  private SlogoInterface myViewer;
+  private SlogoView myViewer;
 
   private Button myLoader = new Button("Load File");
   private Button myLoadAndRun = new Button("Load & Run");
@@ -67,7 +64,7 @@ public class ToolbarPane extends ToolBar {
   private ComboBox<String> myLanguage = new ComboBox<>(languageOptions);
   private Button myHelpInfo = new Button("Help/Info");
 
-  public ToolbarPane(SlogoInterface viewer, LogicalController logicalController) {
+  public ToolbarPane(SlogoView viewer, LogicalController logicalController) {
     myViewer = viewer;
     myLogicalController = logicalController;
     for (TurtleImage value : TurtleImage.values()){

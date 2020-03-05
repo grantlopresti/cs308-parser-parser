@@ -1,13 +1,12 @@
 package slogo.view;
 
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.util.Pair;
 import slogo.view.subsections.ListTab;
-import slogo.view.windows.SlogoInterface;
+import slogo.view.windows.SlogoView;
 import slogo.visualcontroller.VisualController;
 import slogo.visualcontroller.VisualProperty;
 
@@ -45,7 +44,7 @@ public class SubTabFactory {
   }
 
   // make ListTab from given data
-  public ListTab makeTab (SlogoInterface viewer, VisualController controller, String className) throws IllegalStateException {
+  public ListTab makeTab (SlogoView viewer, VisualController controller, String className) throws IllegalStateException {
     try {
       // get the tab's data from file
       Pair<String, String> data = myTabData.get(myPossibleTabs.indexOf(className));

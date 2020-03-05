@@ -4,15 +4,15 @@ import javafx.beans.property.Property;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.VBox;
-import slogo.view.windows.SlogoInterface;
+import slogo.view.windows.SlogoView;
 
 public class ListTab extends Tab{
 
-  protected SlogoInterface myViewer;
+  protected SlogoView myViewer;
   protected VBox myVBox;
   protected ListView myListView;
 
-  public ListTab(SlogoInterface viewer, String tabName) {
+  public ListTab(SlogoView viewer, String tabName) {
     super(tabName);
     myVBox = new VBox();
     myListView = new ListView();

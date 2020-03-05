@@ -10,14 +10,14 @@ import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
 import slogo.model.ModelTurtle;
 import slogo.view.TurtleImage;
-import slogo.view.windows.SlogoInterface;
+import slogo.view.windows.SlogoView;
 
 import java.util.*;
 
 public class VisualController implements VisualInterface {
 
   private double myAnimationRate = 0.0;
-  private SlogoInterface mySlogoView;
+  private SlogoView mySlogoView;
 
   // Currently mirroring structure of VisualizationPane.java (change to bindings)
   private Map<Integer, VisualTurtle> myTurtles = new HashMap<>();
@@ -34,7 +34,7 @@ public class VisualController implements VisualInterface {
    * Constructor for a VisualController, with its associated SlogoView
    * @param view is the view in which VisualObjects will be added to the display
    */
-  public VisualController(SlogoInterface view){
+  public VisualController(SlogoView view){
     mySlogoView = view;
   }
 
@@ -51,7 +51,7 @@ public class VisualController implements VisualInterface {
     myFilesProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
   }
 
-  public void setSlogoView(SlogoInterface view) {
+  public void setSlogoView(SlogoView view) {
     mySlogoView = view;
   }
 

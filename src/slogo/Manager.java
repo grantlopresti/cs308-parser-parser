@@ -1,20 +1,15 @@
 package slogo;
 
-import javafx.application.Platform;
 import javafx.stage.Stage;
-import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.LogicalController;
-import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.model.ModelCollection;
-import slogo.model.ModelTurtle;
-import slogo.view.windows.SlogoInterface;
+import slogo.view.windows.SlogoView;
 import slogo.visualcontroller.VisualController;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import slogo.visualcontroller.VisualError;
 
 /**
  * Purpose of this class is to manage the controllers and the model.
@@ -25,7 +20,7 @@ public class Manager {
     private ModelCollection myModelCollection;
     private List<Variable> myVariables;
     //private SlogoView mySlogoView;
-    private SlogoInterface mySlogoView;
+    private SlogoView mySlogoView;
     private VisualController myVisualController;
     private LogicalController myLogicalController;
 
@@ -47,7 +42,7 @@ public class Manager {
     }
 
     private void createSlogoView() {
-        mySlogoView = new SlogoInterface(myLogicalController, myVisualController);
+        mySlogoView = new SlogoView(myLogicalController, myVisualController);
     }
 
     private void createLogicalController() throws IOException {
