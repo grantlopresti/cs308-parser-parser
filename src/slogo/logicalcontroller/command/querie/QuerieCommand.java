@@ -1,8 +1,10 @@
 package slogo.logicalcontroller.command.querie;
 
+import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.command.Command;
 import slogo.model.ModelTurtle;
 
+import java.lang.reflect.Method;
 import java.util.ResourceBundle;
 
 /**
@@ -13,7 +15,6 @@ public abstract class QuerieCommand implements Command {
     public static final String RESOURCE_BUNDLE_LOCATION = "src/properties/querieCommands.MyBundle";
 
     private ResourceBundle methodMappings;
-    private String userInput;
 
     public QuerieCommand(){
         methodMappings = ResourceBundle.getBundle(RESOURCE_BUNDLE_LOCATION);
@@ -22,13 +23,9 @@ public abstract class QuerieCommand implements Command {
     /**
      * Returns the method name to be called on turtle objects, based on a properties file.
      */
-    public String getMethodName(){
+    private String getMethodName(){
         String key = this.getCommandType();
         return methodMappings.getString(key);
-    }
-
-    public void setUserInput(String input){
-        userInput = input;
     }
 
     @Override
@@ -48,10 +45,16 @@ public abstract class QuerieCommand implements Command {
 
     @Override
     public String toString(){
-        return userInput;
+        return getMethodName();
     }
 
-    public abstract void execute(ModelTurtle turtle);
-
-    public abstract String codeReplace();
+    public String execute(ModelTurtle turtle){
+        try {
+            String name = this.getMethodName();
+            Method method = turtle.getClass().getMethod(name.toLowerCase());
+            return (String) method.invoke(turtle);
+        } catch (Exception e) {
+            throw new InvalidCommandException();
+        }
+    }
 }

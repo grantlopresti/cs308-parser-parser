@@ -5,7 +5,7 @@ import slogo.logicalcontroller.variable.VariableList;
 
 /**
  * Command to evaluate variables
- * @author Alex Xu
+ * @author Amjad S.
  */
 public class EvalulateVariable {
 

@@ -7,14 +7,4 @@ public class YCoordinate extends QuerieCommand {
     public YCoordinate(){
         super();
     }
-
-    @Override
-    public void execute(ModelTurtle turtle) {
-
-    }
-
-    @Override
-    public String codeReplace() {
-        return null;
-    }
 }

@@ -1,5 +1,6 @@
 package slogo.logicalcontroller.command.modifier;
 
+import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.command.Command;
 import slogo.model.ModelTurtle;
 
@@ -7,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
@@ -24,7 +26,6 @@ public abstract class ModifierCommand implements Command, ModifierInterface {
     protected double argument1;
     protected double argument2;
 
-    private String userInput;
 
     public ModifierCommand(){
         try {
@@ -49,14 +50,11 @@ public abstract class ModifierCommand implements Command, ModifierInterface {
         argument2 = Double.parseDouble(input2);
     }
 
-    public void setUserInput(String input){
-        userInput = input;
-    }
 
     /**
      * Returns the method name to be called on turtle objects, based on a properties file.
      */
-    public String getMethodName(){
+    protected String getMethodName(){
         String key = this.getCommandType();
         return methodMappings.getString(key);
     }
@@ -76,9 +74,6 @@ public abstract class ModifierCommand implements Command, ModifierInterface {
         return className;
     }
 
-    @Override
-    public abstract String toString();
-
     public double getArgument1(){
         return argument1;
     }
@@ -88,9 +83,18 @@ public abstract class ModifierCommand implements Command, ModifierInterface {
     }
 
     @Override
-    public abstract void execute(ModelTurtle turtle);
+    public String execute(ModelTurtle turtle){
+        try {
+            String name = this.getMethodName();
+            Method method = turtle.getClass().getMethod(name.toLowerCase(), double.class);
+            Double value = this.getArgument1();
+            return (String) method.invoke(turtle, value);
+        } catch (Exception e) {
+            throw new InvalidCommandException();
+        }
+    }
 
     @Override
-    public abstract String codeReplace();
+    public abstract String toString();
 
 }
