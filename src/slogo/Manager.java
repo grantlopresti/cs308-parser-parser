@@ -5,6 +5,7 @@ import slogo.logicalcontroller.LogicalController;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelCollection;
+import slogo.model.ModelTurtle;
 import slogo.view.windows.SlogoView;
 import slogo.visualcontroller.VisualController;
 
@@ -20,6 +21,7 @@ public class Manager {
     public static final String DEFAULT_LANG = "ENGLISH";
     private ModelCollection myModelCollection;
     private VariableList myVariables;
+
     private SlogoView mySlogoView;
     private VisualController myVisualController;
     private LogicalController myLogicalController;
