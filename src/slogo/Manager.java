@@ -5,7 +5,6 @@ import slogo.logicalcontroller.LogicalController;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelCollection;
-import slogo.model.ModelTurtle;
 import slogo.view.windows.SlogoView;
 import slogo.visualcontroller.VisualController;
 
