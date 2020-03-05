@@ -57,8 +57,8 @@ public class LogicalController {
    */
   public void handleNewCommand(String fullUserInput) throws InvalidCommandException, NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
     try {
-      System.out.printf("recieved user input: %s \n", fullUserInput);             //TODO: Comment filtering should happen here
-      this.myParser.parse(Arrays.asList(fullUserInput.split("\n")));
+      System.out.printf("recieved user input: %s \n", fullUserInput);
+      this.myParser.parse(trimList(Arrays.asList(fullUserInput.split("\n"))));
       while(!this.myParser.isFinished()){
         this.myParser.executeNextCommand();
         Command latestCommand = this.myParser.getLatestCommand();
@@ -71,6 +71,11 @@ public class LogicalController {
       System.out.println("error in LogicalController.handleNewCommand");
     }
     System.out.println("Parser is finished! Yay!");
+  }
+
+  // TODO - implement preprocessing to remove all comments from code
+  private List<String> trimList(List<String> userInput) {
+    return userInput;
   }
 
   //TODO: Below is just for testing purposes, for the Parser functionality.

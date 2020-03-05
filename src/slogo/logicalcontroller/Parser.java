@@ -98,16 +98,20 @@ public class Parser implements BundleInterface {
     public void executeNextCommand(){
         this.myLatestCommand = this.myUserInput.getNextCommand();
         List<String> myList = this.executeCommand(this.myLatestCommand);
-        this.myUserInput.setCodeReplacement(myList);
+        this.myUserInput.setCodeReplacement(myList, this.myLatestCommand);
     }
 
-    /**
-     * Set of executable commands on specific objects
-     * @param command
-     * @return
-     */
+    // TODO - execute on a specific turtle
     private List<String> executeModifierCommand(ModifierCommand command) {
-        System.out.printf("Executing command %s with argument %.2f\n", command.getClass().getSimpleName(), command.getArgument1());
+        for (Object o : this.myModelCollection){
+            ModelTurtle turtle = (ModelTurtle) o;
+            command.execute(turtle);
+        }
+        return new ArrayList<String>(List.of(command.codeReplace()));
+    }
+
+    // TODO - execute on a specific turtle
+    private List<String> executeQuerieCommand(QuerieCommand command) {
         for (Object o : this.myModelCollection){
             ModelTurtle turtle = (ModelTurtle) o;
             command.execute(turtle);
@@ -125,10 +129,6 @@ public class Parser implements BundleInterface {
 
     private List<String> executeMathCommand(MathCommand command) {
         return new ArrayList<String>(List.of(command.execute()));
-    }
-
-    private List<String> executeQuerieCommand(QuerieCommand command) {
-        return new ArrayList<String>();
     }
 
     private List<String> executeVariables(MakeVariable command) {return new ArrayList<String>();}
@@ -168,25 +168,4 @@ public class Parser implements BundleInterface {
         return this.myLanguageResources;
     }
 
-    // TODO - incorporate command cycle into parser for real time processing
-    private static void testCommandCycle() throws IOException {
-        try {
-            String language = "Russian";
-            Parser p = new Parser(language, new ModelCollection());
-            List<String> userInput = new ArrayList<String>(List.of("40", "60", "75", "vpered vpered 50"));
-            UserInput myInput = new UserInput(userInput, p.getLanguageResources());
-            p.myLatestCommand = myInput.getNextCommand();
-            List<String> myList = p.executeCommand(p.myLatestCommand);
-            for (String s: myList) {
-                System.out.print(s);
-            }
-            myInput.setCodeReplacement(myList);
-        } catch (NoCommandFound e) {
-            System.out.println("Parser finished parsing lines");
-        }
-    }
-
-    public static void main (String[] args) throws IOException {
-        testCommandCycle();
-    }
 }

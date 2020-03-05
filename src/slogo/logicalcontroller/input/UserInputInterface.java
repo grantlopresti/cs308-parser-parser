@@ -16,7 +16,7 @@ public interface UserInputInterface {
      *
      * @param code
      */
-    public void setCodeReplacement(List<String> code);
+    public void setCodeReplacement(List<String> code, Command command);
 
     /**
      * Signals to Logical Controller (through Parser), that all code has been executed

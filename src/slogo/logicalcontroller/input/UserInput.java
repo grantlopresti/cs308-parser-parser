@@ -25,6 +25,7 @@ public class UserInput implements UserInputInterface, BundleInterface {
     private static final String PARAMETER_PROPERTIES = "src/properties/parameterCount.properties";
     private static final String REPLACE_PROPERTIES = "src/properties/lineReplace.properties";
     private static final String SLOGO_COMMAND = "slogo.logicalcontroller.command.";
+    private static final String CONTROLFLOW = "controlflow";
     private static ResourceBundle myCommandMap;
     private static ResourceBundle myParameterMap;
     private static ResourceBundle myReplaceMap;
@@ -48,17 +49,36 @@ public class UserInput implements UserInputInterface, BundleInterface {
             this.myLineIndex = findNextLine();
             this.myCommandIndex = findLastCommand(this.myLineIndex);
             String translated = translateCommand(this.myCommand);
-            System.out.printf("translated %s to %s \n", this.myCommand, translated);
-            int params = countParameters(translated);
-
-
-            List<String> arguments = getArguments(this.myLineIndex, this.myCommandIndex, params);
             String superclass = getCommandSuperclass(translated);
-            Command c = createCommand(superclass, translated, arguments);
-            return c;
+            int params = countParameters(translated);
+            System.out.printf("translated %s to %s \n", this.myCommand, translated);
+            // TODO - fork between controlflow and other
+            if (superclass.equals(CONTROLFLOW)) {
+                List<List<String>> args = getControlFlowArguments(this.myLineIndex, this.myCommandIndex, params);
+                return createControlFlowCommand(superclass, translated, args);
+            } else {
+                List<String> args = getArguments(this.myLineIndex, this.myCommandIndex, params);
+                return createCommand(superclass, translated, args);
+            }
         } catch (NoCommandFound e) {
             throw new NoCommandFound("Could not generate command");
         }
+    }
+
+    private Command createControlFlowCommand(String superclass, String command, List<List<String>> args) {
+        try {
+            Class clazz = Class.forName(createCommandPath(superclass, command));
+            Constructor ctor = clazz.getConstructor(List.class);
+            return (Command) ctor.newInstance(args);
+        } catch (Exception e) {
+            throw new InvalidCommandException("Could not create control flow command");
+        }
+    }
+
+
+    // TODO - implement method stub
+    private List<List<String>> getControlFlowArguments(int myLineIndex, int myCommandIndex, int params) {
+        return null;
     }
 
     @Override
@@ -76,7 +96,15 @@ public class UserInput implements UserInputInterface, BundleInterface {
     // TODO - how to handle multi line replacements vs. single line?
     // FOR NOW - assuming single line replace (only modifiers and math will work)
     @Override
-    public void setCodeReplacement(List<String> code) {
+    public void setCodeReplacement(List<String> code, Command command) {
+        if (command.getClass().getSuperclass().getSimpleName().equals("controlflow")) {
+            multiLineReplace(code);
+        } else {
+            singleLineReplace(code);
+        }
+    }
+
+    private void singleLineReplace(List<String> code) {
         StringBuilder sb = new StringBuilder(this.myPrefix);
         for (String s: code) {
             sb.append(SPACE + s);
@@ -84,6 +112,10 @@ public class UserInput implements UserInputInterface, BundleInterface {
         sb.append(SPACE + this.mySuffix);
         this.myUserInput.set(this.myLineIndex, sb.toString().trim());
         System.out.printf("code replaced to: %s", this.myUserInput.get(this.myLineIndex));
+    }
+
+    // TODO - implmenet method stub
+    private void multiLineReplace(List<String> code) {
     }
 
     private int findNextLine() {

@@ -1,6 +1,7 @@
 package slogo.logicalcontroller.command.querie;
 
 import slogo.logicalcontroller.command.Command;
+import slogo.model.ModelTurtle;
 
 import java.util.ResourceBundle;
 
@@ -49,4 +50,8 @@ public abstract class QuerieCommand implements Command {
     public String toString(){
         return userInput;
     }
+
+    public abstract void execute(ModelTurtle turtle);
+
+    public abstract String codeReplace();
 }
