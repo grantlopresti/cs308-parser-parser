@@ -10,6 +10,7 @@ import javax.script.ScriptException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Logical controller handles the interaction between the user input from the GUI, the parser, command objects,
@@ -57,7 +58,7 @@ public class LogicalController {
    */
   public void handleNewCommand(String fullUserInput) throws InvalidCommandException, NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
     try {
-      System.out.printf("recieved user input: %s \n", fullUserInput);
+      System.out.printf("received user input: %s \n", fullUserInput);
       this.myParser.parse(trimList(Arrays.asList(fullUserInput.split("\n"))));
       while(!this.myParser.isFinished()){
         this.myParser.executeNextCommand();

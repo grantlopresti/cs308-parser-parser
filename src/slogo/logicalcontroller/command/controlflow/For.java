@@ -11,6 +11,7 @@ public class For extends ControlFlowCommand {
     private int myStartValue;
     private int myEndValue;
     private int myIncrement;
+    private String variableName;
 
     /**
      * Constructor for the For Command Object. Takes in a starting index and an ending index. Rounds to the nearest integer.
@@ -18,9 +19,10 @@ public class For extends ControlFlowCommand {
     public For(List<List<String>> rawInput){
         super(rawInput.get(1));
 
-        myStartValue = (int)Math.round(Double.parseDouble(rawInput.get(0).get(0)));                 //TODO: Long lines and MAGIC NUMBERS: REFACTOR
-        myEndValue = (int)Math.round(Double.parseDouble(rawInput.get(0).get(1)));
-        myIncrement = (int)Math.round(Double.parseDouble(rawInput.get(0).get(2)));
+        variableName = rawInput.get(0).get(0);
+        myStartValue = (int)Math.round(Double.parseDouble(rawInput.get(0).get(1)));                 //TODO: Long lines and MAGIC NUMBERS: REFACTOR
+        myEndValue = (int)Math.round(Double.parseDouble(rawInput.get(0).get(2)));
+        myIncrement = (int)Math.round(Double.parseDouble(rawInput.get(0).get(3)));
     }
 
     @Override

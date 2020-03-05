@@ -9,6 +9,7 @@ import java.util.List;
  */
 public class DoTimes extends ControlFlowCommand {
     private int repeatCount;
+    private String variableName;
 
     /**
      * Constructor for the DOTIMES command. Takes in a number of repeats (rounded to nearest integer)
@@ -16,7 +17,8 @@ public class DoTimes extends ControlFlowCommand {
      */
     public DoTimes(List<List<String>> rawInput){
         super(rawInput.get(1));
-        repeatCount = (int)Math.round(Double.parseDouble(rawInput.get(0).get(0)));
+        repeatCount = (int)Math.round(Double.parseDouble(rawInput.get(0).get(1)));
+        variableName = rawInput.get(0).get(0);
     }
 
     @Override
@@ -25,7 +27,7 @@ public class DoTimes extends ControlFlowCommand {
         List<String> result = new ArrayList<>();
 
         for(int i = 0; i<repeatCount; i++){
-            result.add("SET :variable " + (i+1));
+            result.add("SET :" + variableName + " " + (i+1));
             result.addAll(myBody);
         }
         setUnraveledCode(result);
