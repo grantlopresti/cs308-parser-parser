@@ -50,6 +50,8 @@ public class UserInput implements UserInputInterface, BundleInterface {
             String translated = translateCommand(this.myCommand);
             System.out.printf("translated %s to %s \n", this.myCommand, translated);
             int params = countParameters(translated);
+
+
             List<String> arguments = getArguments(this.myLineIndex, this.myCommandIndex, params);
             String superclass = getCommandSuperclass(translated);
             Command c = createCommand(superclass, translated, arguments);

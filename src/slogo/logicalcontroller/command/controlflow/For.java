@@ -4,23 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implements the FOR Factory Design Pattern
+ * Implements the FOR Factory Design Pattern. Assumption is that the input convention is followed from other classes.
  * @author Alex Xu
  */
 public class For extends ControlFlowCommand {
     private int myStartValue;
     private int myEndValue;
+    private int myIncrement;
 
     /**
      * Constructor for the For Command Object. Takes in a starting index and an ending index. Rounds to the nearest integer.
-     * @param start
-     * @param end
-     * @param rawInput
      */
-    public For(double start, double end, List<String> rawInput){
-        super(rawInput);
-        myStartValue = (int)Math.round(start);
-        myEndValue = (int)Math.round(end);
+    public For(List<List<String>> rawInput){
+        super(rawInput.get(1));
+
+        myStartValue = (int)Math.round(Double.parseDouble(rawInput.get(0).get(0)));                 //TODO: Long lines and MAGIC NUMBERS: REFACTOR
+        myEndValue = (int)Math.round(Double.parseDouble(rawInput.get(0).get(1)));
+        myIncrement = (int)Math.round(Double.parseDouble(rawInput.get(0).get(2)));
     }
 
     @Override

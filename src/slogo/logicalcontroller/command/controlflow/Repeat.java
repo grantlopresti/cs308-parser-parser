@@ -12,12 +12,11 @@ public class Repeat extends ControlFlowCommand {
 
     /**
      * Constructor for the Repeat object, takes in the number of repeats desired, rounds to nearest integer.
-     * @param repeat
      * @param rawInput
      */
-    public Repeat(double repeat, List<String> rawInput){
-        super(rawInput);
-        repeatCount = (int)Math.round(repeat);
+    public Repeat(List<List<String>> rawInput){
+        super(rawInput.get(1));
+        repeatCount = (int)Math.round(Double.parseDouble(rawInput.get(0).get(0)));
     }
 
     @Override

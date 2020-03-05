@@ -12,12 +12,11 @@ public class DoTimes extends ControlFlowCommand {
 
     /**
      * Constructor for the DOTIMES command. Takes in a number of repeats (rounded to nearest integer)
-     * @param repeat
      * @param rawInput
      */
-    public DoTimes(double repeat, List<String> rawInput){
-        super(rawInput);
-        repeatCount = (int)Math.round(repeat);
+    public DoTimes(List<List<String>> rawInput){
+        super(rawInput.get(1));
+        repeatCount = (int)Math.round(Double.parseDouble(rawInput.get(0).get(0)));
     }
 
     @Override
@@ -31,6 +30,4 @@ public class DoTimes extends ControlFlowCommand {
         }
         setUnraveledCode(result);
     }
-
-
 }

@@ -2,7 +2,6 @@ package slogo.logicalcontroller;
 
 import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.command.Command;
-import slogo.logicalcontroller.variable.Variable;
 import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelCollection;
 import slogo.visualcontroller.VisualController;
@@ -11,7 +10,6 @@ import javax.script.ScriptException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Logical controller handles the interaction between the user input from the GUI, the parser, command objects,
@@ -22,7 +20,6 @@ public class LogicalController {
   private static final String DEFAULT_LANGUAGE = "ENGLISH";
 
   private Parser myParser;
-
   private ModelCollection myModelCollection;
   private VisualController myVisualController;
   private VariableList myVariables;
@@ -60,7 +57,7 @@ public class LogicalController {
    */
   public void handleNewCommand(String fullUserInput) throws InvalidCommandException, NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
     try {
-      System.out.printf("recieved user input: %s \n", fullUserInput);
+      System.out.printf("recieved user input: %s \n", fullUserInput);             //TODO: Comment filtering should happen here
       this.myParser.parse(Arrays.asList(fullUserInput.split("\n")));
       while(!this.myParser.isFinished()){
         this.myParser.executeNextCommand();
