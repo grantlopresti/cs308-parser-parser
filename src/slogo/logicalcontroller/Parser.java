@@ -1,6 +1,7 @@
 package slogo.logicalcontroller;
 
 import slogo.exceptions.ReflectionException;
+import slogo.exceptions.ResourceBundleException;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.command.MakeVariable;
 import slogo.logicalcontroller.command.comparison.ComparisonCommand;
@@ -65,7 +66,7 @@ public class Parser implements BundleInterface {
      * Two stage process, first
      * @param lines
      */
-    public void parse(List<String> lines) {
+    public void parse(List<String> lines) throws ResourceBundleException {
         this.myUserInput = new UserInput(lines, this.myLanguageResources);
     }
 

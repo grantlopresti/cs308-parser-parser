@@ -1,5 +1,6 @@
 package slogo.logicalcontroller;
 
+import slogo.exceptions.DeprecationException;
 import slogo.exceptions.InvalidCommandException;
 import slogo.exceptions.InvalidLanguageException;
 import slogo.exceptions.LogicalException;
@@ -18,7 +19,7 @@ import java.util.List;
 /**
  * Logical controller handles the interaction between the user input from the GUI, the parser, command objects,
  * variables, and changes in the Model package.
- * @author Alex Xu
+ * @author Alex Xu, Max Smith
  */
 public class LogicalController {
   private static final String DEFAULT_LANGUAGE = "ENGLISH";
@@ -32,22 +33,7 @@ public class LogicalController {
     this.myModelCollection = modelCollection;
     this.myVisualController = visualController;
     this.myVariables = variables;
-    // this.myVisualController.update(this.myModelCollection, this.myVariables, null);
-    // updateVisualController(null);
     createParser();
-  }
-
-  public LogicalController(ModelCollection modelCollection) {
-    this.myModelCollection = modelCollection;
-    createModel();
-    createParser();
-    // this.myVisualController.start(this.myModelCollection);
-    this.myVisualController.update(this.myModelCollection, this.myVariables, null);
-    // updateVisualController(null);
-  }
-
-  private void updateVisualController(Command command) {
-    this.myVisualController.update(this.myModelCollection, this.myVariables, command);
   }
 
   private void createParser() {
@@ -56,12 +42,6 @@ public class LogicalController {
     } catch (Exception e) {
       System.exit(0);
     }
-  }
-
-  private void createModel() {
-    myModelCollection = new ModelCollection();
-    myModelCollection.append(new ModelTurtle());
-    myVariables = new VariableList();
   }
 
   /**
@@ -95,6 +75,8 @@ public class LogicalController {
       this.myVisualController.updateCommand(fullUserInput);
     } catch (LogicalException e) {
       this.myVisualController.updateErrors(e);
+    } catch (DeprecationException e) {
+      this.myVisualController.deprecateProgram(e);
     }
   }
 

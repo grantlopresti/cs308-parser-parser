@@ -6,6 +6,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import slogo.exceptions.DeprecationException;
 import slogo.exceptions.LogicalException;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.variable.Variable;
@@ -23,7 +24,7 @@ public class VisualController implements VisualInterface {
   private SlogoView mySlogoView;
 
   // Currently mirroring structure of VisualizationPane.java (change to bindings)
-  private Map<Integer, VisualTurtle> myTurtles = new HashMap<Integer, VisualTurtle>();
+  private Map<Integer, VisualTurtle> myTurtles = new HashMap<>();
   private ObservableList<VisualTurtle> myTurtlesList = FXCollections.observableArrayList(myTurtles.values());
 
   private List<VisualLine> myLines = new ArrayList<>();
@@ -154,6 +155,13 @@ public class VisualController implements VisualInterface {
     FXCollections.reverse(this.myCommandsProperty.getValue());
   }
 
+  @Override
+  public void deprecateProgram(DeprecationException e) {
+    VisualError ve = new VisualError(e);
+    this.mySlogoView.announceError(ve);
+    System.exit(0);
+  }
+
   private void moveTurtle(ModelTurtle turtle) {
     VisualTurtle visualTurtle = addTurtleToMap(turtle);
     myTurtlesList.add(visualTurtle);
@@ -164,7 +172,6 @@ public class VisualController implements VisualInterface {
       if (turtle.isPenActive())
         appendLine(new VisualLine(visualTurtle));
     } catch (NullPointerException e) {
-      e.printStackTrace();
       System.out.println("Given null turtle set, passing on draw");
     }
   }

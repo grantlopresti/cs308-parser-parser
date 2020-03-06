@@ -2,12 +2,9 @@ package slogo.view.subsections;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collections;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -26,16 +23,11 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javax.script.ScriptException;
 
 import slogo.exceptions.InvalidCommandException;
 import slogo.exceptions.InvalidCommandFileException;
-import slogo.exceptions.InvalidLanguageException;
-import slogo.exceptions.ResourceBundleCreationException;
-import slogo.logicalcontroller.BundleInterface;
 import slogo.logicalcontroller.LogicalController;
 import slogo.view.SubTabFactory;
-import slogo.view.TurtleImage;
 import slogo.view.windows.SlogoView;
 import slogo.visualcontroller.VisualError;
 

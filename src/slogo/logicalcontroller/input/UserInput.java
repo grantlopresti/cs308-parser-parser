@@ -1,6 +1,7 @@
 package slogo.logicalcontroller.input;
 
 import slogo.exceptions.NoCommandFoundException;
+import slogo.exceptions.ResourceBundleException;
 import slogo.logicalcontroller.BundleInterface;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.command.controlflow.ControlFlowCommand;
@@ -36,8 +37,7 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
             myCommandMap = BundleInterface.createResourceBundle(SUPERCLASS_PROPERTIES);
             myParameterMap = BundleInterface.createResourceBundle(PARAMETER_PROPERTIES);
         } catch (IOException e) {
-            // TODO - this should never throw, maybe announce to user that resource bundles could not be found?
-            e.printStackTrace();
+            throw new ResourceBundleException("Could not create User Input resource bundles");
         }
     }
 
@@ -193,7 +193,6 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
             for (String s: words) {
                 if (CommandGenerator.isValidCommand(s, this.myResources)) {return i;}
             }
-            // if(s.split("\\s+").length > 1){ return i; }
         }
         throw new NoCommandFoundException();
     }

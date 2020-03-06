@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -29,12 +31,12 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import slogo.exceptions.DeprecationException;
 import slogo.exceptions.InvalidCommandException;
-import slogo.exceptions.ResourceBundleCreationException;
+import slogo.exceptions.ResourceBundleException;
 import slogo.logicalcontroller.BundleInterface;
 import slogo.logicalcontroller.LogicalController;
 import slogo.view.SubTabFactory;
-import slogo.view.TurtleImage;
 import slogo.view.subsections.ToolbarPane;
 import slogo.view.subsections.TurtleOptionsTab;
 import slogo.view.subsections.UserInputPane;
@@ -161,8 +163,6 @@ public class SlogoView extends Application {
 
     myCenterPane.setCenter(myVisualizationPane);
     myCenterPane.setBottom(programInputArea);
-
-    myVisualizationPane.showTurtleInCenter();
   }
 
   private HBox getProgramInputNode() {
@@ -209,7 +209,6 @@ public class SlogoView extends Application {
       }
     }
     catch (Exception e){
-      e.printStackTrace();
       announceError(new VisualError(new InvalidCommandException("The following command "
           + "is invalid, please try another!\n" + userCommand)));
     }
@@ -239,7 +238,7 @@ public class SlogoView extends Application {
     try {
       myPossibleTabsResource = BundleInterface.createResourceBundle(POSSIBLE_TABS_RESOURCE);
     } catch (IOException e) {
-      throw new ResourceBundleCreationException();
+      throw new ResourceBundleException();
     }
     for (String key : Collections.list(myPossibleTabsResource.getKeys())) {
       MenuItem menuItem = new MenuItem(myPossibleTabsResource.getString(key).split(",")[0]);
@@ -328,7 +327,6 @@ public class SlogoView extends Application {
   public void clearScreen() {
     myVisualizationPane.clearElements();
     myVisualizationPane.resetBGColor();
-    myMainPane.setCenter(myCenterPane);
   }
 
   public void setPenColor(double red, double green, double blue) {
@@ -341,4 +339,5 @@ public class SlogoView extends Application {
     myVisualizationPane.changeTurtleImage(ID, newValue.toUpperCase());
     //TODO: UPDATE CENTER
   }
+
 }
