@@ -37,6 +37,7 @@ public class VisualizationPane extends Group {
   private Map<Integer, VisualTurtle> myTurtles = new HashMap<>();
   private Map<Integer, ImageView> myTurtlesImageViews = new HashMap<>();
   private List<VisualLine> myLines = new ArrayList<>();
+  private List<Line> myLinesOnScreen = new ArrayList<>();
 
   public VisualizationPane(double width, double height){
     super();
@@ -61,6 +62,7 @@ public class VisualizationPane extends Group {
       lineImage.setStroke(line.getColor());
       lineImage.setStrokeWidth(line.getThickness());
 
+      myLinesOnScreen.add(lineImage);
       getChildren().add(lineImage);
     }
   }
@@ -193,8 +195,16 @@ public class VisualizationPane extends Group {
   }
 
   public void clearElements() {
+    for (ImageView turtle : myTurtlesImageViews.values()){
+      getChildren().remove(turtle);
+    }
+    for (Line line : myLinesOnScreen){
+      getChildren().remove(line);
+    }
     myTurtles = new HashMap<>();
+    myTurtlesImageViews = new HashMap<>();
     myLines = new ArrayList<>();
+    myLinesOnScreen = new ArrayList<>();
     update();
   }
 
