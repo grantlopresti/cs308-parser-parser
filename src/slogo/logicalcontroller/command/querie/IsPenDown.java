@@ -1,7 +1,9 @@
 package slogo.logicalcontroller.command.querie;
 
+import java.util.List;
+
 public class IsPenDown extends QuerieCommand {
-    public IsPenDown(){
+    public IsPenDown(List<String> stringList){
         super();
     }
 }
