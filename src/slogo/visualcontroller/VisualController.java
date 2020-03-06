@@ -6,6 +6,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import slogo.exceptions.DeprecationException;
 import slogo.exceptions.LogicalException;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.variable.Variable;
@@ -152,6 +153,13 @@ public class VisualController implements VisualInterface {
     FXCollections.reverse(this.myCommandsProperty.getValue());
     this.myCommandsProperty.getValue().add(new VisualCommand(userInput));
     FXCollections.reverse(this.myCommandsProperty.getValue());
+  }
+
+  @Override
+  public void deprecateProgram(DeprecationException e) {
+    VisualError ve = new VisualError(e);
+    this.mySlogoView.announceError(ve);
+    System.exit(0);
   }
 
   private void moveTurtle(ModelTurtle turtle) {

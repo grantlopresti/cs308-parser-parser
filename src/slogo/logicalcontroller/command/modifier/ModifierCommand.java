@@ -1,6 +1,7 @@
 package slogo.logicalcontroller.command.modifier;
 
 import slogo.exceptions.InvalidCommandException;
+import slogo.logicalcontroller.BundleInterface;
 import slogo.logicalcontroller.command.Command;
 import slogo.model.ModelTurtle;
 
@@ -18,7 +19,7 @@ import java.util.ResourceBundle;
  * @author Alex Xu
  */
 public abstract class ModifierCommand implements Command, ModifierInterface {
-    public static final String RESOURCE_BUNDLE_LOCATION = "src/properties/modifierCommands.MyBundle";
+    public static final String RESOURCE_BUNDLE_LOCATION = "src/properties/modifierCommands.properties";
 
     private FileInputStream fis;
     private ResourceBundle methodMappings;
@@ -27,21 +28,17 @@ public abstract class ModifierCommand implements Command, ModifierInterface {
     protected double argument2;
 
 
-    public ModifierCommand(){
+    public ModifierCommand()  {
         try {
-            fis = new FileInputStream("src/properties/modifierCommands.properties");
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found exception");
-        }
-        try {
-            methodMappings = new PropertyResourceBundle(fis);
+            this.methodMappings = BundleInterface.createResourceBundle(RESOURCE_BUNDLE_LOCATION);
         } catch (IOException e) {
-            System.out.println("IO Exception");
+            System.out.println("File not found exception");
         }
     }
 
     public ModifierCommand(String input1){
         this();
+        System.out.println("successfully created modifier command");
         argument1 = Double.parseDouble(input1);
     }
 

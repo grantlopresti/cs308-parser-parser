@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.util.Pair;
-import slogo.exceptions.ResourceBundleCreationException;
+import slogo.exceptions.ResourceBundleException;
 import slogo.logicalcontroller.BundleInterface;
 import slogo.view.subsections.ListTab;
 import slogo.view.windows.SlogoView;
@@ -41,7 +41,7 @@ public class SubTabFactory {
     try {
       reflectionResources = BundleInterface.createResourceBundle(REFLECTION_RESOURCES);
     } catch (IOException e) {
-      throw new ResourceBundleCreationException();
+      throw new ResourceBundleException();
     }
     for (String key : Collections.list(reflectionResources.getKeys())) {
       myPossibleTabs.add(key);

@@ -1,6 +1,7 @@
 package slogo.visualcontroller;
 
 import javafx.beans.property.Property;
+import slogo.exceptions.DeprecationException;
 import slogo.exceptions.LogicalException;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.variable.Variable;
@@ -40,4 +41,6 @@ public interface VisualInterface {
     public void setSlogoView(SlogoView view);
 
     public void updateCommand(String fullUserInput);
+
+    public void deprecateProgram(DeprecationException e);
 }
