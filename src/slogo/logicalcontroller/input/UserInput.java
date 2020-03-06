@@ -193,7 +193,6 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
             for (String s: words) {
                 if (CommandGenerator.isValidCommand(s, this.myResources)) {return i;}
             }
-            // if(s.split("\\s+").length > 1){ return i; }
         }
         throw new NoCommandFoundException();
     }

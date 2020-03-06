@@ -18,14 +18,6 @@ public class SetPosition extends ModifierCommand {
 
     @Override
     public String execute(ModelTurtle turtle) {
-        try {
-            String name = this.getMethodName();
-            Method method = turtle.getClass().getMethod(name.toLowerCase(), double.class, double.class);
-            Double value = this.getArgument1();
-            Double value2 = this.getArgument2();
-            return (String) method.invoke(turtle, value, value2);
-        } catch (Exception e) {
-            throw new InvalidCommandException();
-        }
+        return executeDoubleParameter(turtle);
     }
 }
