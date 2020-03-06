@@ -327,7 +327,6 @@ public class SlogoView extends Application {
   public void clearScreen() {
     myVisualizationPane.clearElements();
     myVisualizationPane.resetBGColor();
-    myMainPane.setCenter(myCenterPane);
   }
 
   public void setPenColor(double red, double green, double blue) {
