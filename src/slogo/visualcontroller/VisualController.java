@@ -21,7 +21,7 @@ import java.util.*;
 
 public class VisualController implements VisualInterface {
 
-  private double myAnimationRate = 0.0;
+  private double myAnimationRate = 3;
   private SlogoView mySlogoView;
 
   // Currently mirroring structure of VisualizationPane.java (change to bindings)
@@ -75,14 +75,6 @@ public class VisualController implements VisualInterface {
     myAnimationRate = rate;
   }
 
-  public void start(ModelCollection model) {
-    Iterator iter = model.iterator();
-    while (iter.hasNext()) {
-      moveTurtle((ModelTurtle) iter.next());
-    }
-  }
-
-  // TODO - implement commands updating as strings
   @Override
   public void update(ModelCollection model, VariableList variableList, Command command) {
     moveModelObject(model, command);
@@ -147,13 +139,6 @@ public class VisualController implements VisualInterface {
       ModelTurtle turtle = (ModelTurtle) o;
       moveTurtle(turtle);
     }
-//    Iterator iter = modelCollection.iterator();
-//    while (iter.hasNext()) {
-//      ModelTurtle turtle = (ModelTurtle) iter.next();
-//      System.out.printf("\nattempting to move model object ID %d, active %b\n", turtle.getID(), turtle.isActive());
-//      if (turtle.isActive())
-//        moveTurtle(turtle);
-//    }
   }
 
   @Override
@@ -175,6 +160,7 @@ public class VisualController implements VisualInterface {
     myTurtlesList.add(visualTurtle);
     visualTurtle.updateVisualTurtle(turtle);
     try {
+      System.out.println("attempting to move turtle: " + turtle.getID());
       mySlogoView.updateVisualTurtles(new ArrayList<>(List.of(visualTurtle)));
       if (turtle.isPenActive())
         appendLine(new VisualLine(visualTurtle));

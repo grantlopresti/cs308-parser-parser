@@ -8,9 +8,8 @@ import java.util.*;
  * of data structure. Implements the Iterable interface.
  * @author Alex Xu
  */
-public class ModelCollection implements Iterable {
+public class ModelCollection {
 
-    private List<ModelObject> myModelObjectList;
     private Map<Integer, ModelObject> myModelObjectMap;
 
     /**
@@ -21,7 +20,6 @@ public class ModelCollection implements Iterable {
     }
 
     private void initLists() {
-        this.myModelObjectList = new ArrayList<ModelObject>();
         this.myModelObjectMap = new HashMap<Integer, ModelObject>();
     }
 
@@ -37,19 +35,7 @@ public class ModelCollection implements Iterable {
      * @param object
      */
     public void append(ModelObject object){
-        if (!(myModelObjectMap.containsKey(object.getID()))) {
-            myModelObjectList.add(object);
-            myModelObjectMap.put(object.getID(), object);
-        }
-    }
-
-    /**
-     * Get a ModelObject from the ModelCollection
-     * @param index
-     * @return
-     */
-    public ModelObject get(int index){
-        return myModelObjectList.get(index);
+        this.myModelObjectMap.putIfAbsent(object.getID(), object);
     }
 
     public Map<Integer, ModelObject>  getModelMap() {
@@ -62,7 +48,7 @@ public class ModelCollection implements Iterable {
      */
     public ModelCollection getActiveTurtles() {
         List<ModelObject> activeTurtles = new ArrayList<ModelObject>();
-        for (ModelObject o: this.myModelObjectList) {
+        for (ModelObject o: this.myModelObjectMap.values()) {
             ModelTurtle turtle = (ModelTurtle) o;
             if (turtle.isActive()) {
                 System.out.println("\nadding turtle: " + turtle.ID + " to active turtle collection");
@@ -84,12 +70,4 @@ public class ModelCollection implements Iterable {
         turtle.deactivate();
     }
 
-    /**
-     * Required by the Iterator interface
-     * @return
-     */
-    @Override
-    public Iterator iterator() {
-        return myModelObjectList.iterator();
-    }
 }

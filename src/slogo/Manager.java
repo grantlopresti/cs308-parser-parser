@@ -14,6 +14,9 @@ import java.io.IOException;
  * NOTE: Not complete and will only be continued to work on if we have time by basic implementation due date.
  */
 public class Manager {
+
+    private static final int ANIMATION_RATE = 3;
+
     public static final String DEFAULT_LANG = "ENGLISH";
     private ModelCollection myModelCollection;
     private VariableList myVariables;
