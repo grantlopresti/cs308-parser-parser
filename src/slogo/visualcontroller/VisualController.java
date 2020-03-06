@@ -157,7 +157,6 @@ public class VisualController implements VisualInterface {
   private void moveTurtle(ModelTurtle turtle) {
     VisualTurtle visualTurtle = addTurtleToMap(turtle);
     myTurtlesList.add(visualTurtle);
-    visualTurtle.setChangeState(true);
     visualTurtle.updateVisualTurtle(turtle);
     try {
       mySlogoView.updateVisualTurtles(new ArrayList<>(List.of(visualTurtle)));

@@ -75,36 +75,41 @@ public class VisualizationPane extends Group {
 
   private void addTurtlesToVisualizer() {
     for (VisualTurtle turtle : myTurtles.values()) {
-      visualizeTurtle(turtle);
+      getChildren().remove(myTurtlesImageViews.get(turtle.getId()));
+      ImageView turtleImage = new ImageView(turtle.getImage().getImagePath());
+      myTurtlesImageViews.remove(turtle.getId());
+      myTurtlesImageViews.put(turtle.getId(), turtleImage);
+
+      visualizeTurtle(turtleImage, turtle);
     }
   }
 
-  private void visualizeTurtle(VisualTurtle turtle) {
-    getChildren().remove(myTurtlesImageViews.get(turtle.getId()));
-
-    ImageView turtleImage = new ImageView(turtle.getImage().getImagePath());
-
-    myTurtlesImageViews.remove(turtle.getId());
-    myTurtlesImageViews.put(turtle.getId(), turtleImage);
-
+  private void visualizeTurtle(ImageView turtleImage, VisualTurtle turtle) {
     turtleImage.setFitWidth(turtle.getSize());
     turtleImage.setPreserveRatio(true);
 
-    setAdjustedX(turtleImage, turtle.getPreviousX());
-    setAdjustedY(turtleImage, turtle.getPreviousY());
+    turtleImage.setX(getAdjustedX(turtle.getPreviousX())-(turtle.getSize()/2));
+    turtleImage.setY(getAdjustedY(turtle.getPreviousY())-(turtle.getSize()/2));
 
-    Animation turtleAnimation = makeAnimation(turtle, turtleImage);
-    turtleAnimation.play();
+    if (turtle.getPreviousX() != turtle.getCenterX()) {
+      Animation turtleMoveAnimation = makeMoveAnimation(turtle, turtleImage);
+      turtleMoveAnimation.play();
+    }
+
+    turtleImage.rotateProperty().set(360 - turtle.getHeading());
+
+    turtleImage.setX(getAdjustedX(turtle.getCenterX())-(turtle.getSize()/2));
+    turtleImage.setY(getAdjustedY(turtle.getCenterY())-(turtle.getSize()/2));
+
+    System.out.println();
 
     Lighting lighting = getLightingEffect(turtle.getColor());
     turtleImage.setEffect(lighting);
 
     getChildren().add(turtleImage);
-
-    turtle.setChangeState(false);
   }
 
-  private Animation makeAnimation (VisualTurtle turtle, Node agent) {
+  private Animation makeMoveAnimation (VisualTurtle turtle, Node agent) {
     // create something to follow
     Path path = new Path();
     path.getElements().add(new MoveTo(getAdjustedX(turtle.getPreviousX()),
@@ -112,14 +117,19 @@ public class VisualizationPane extends Group {
     path.getElements().add(new LineTo(getAdjustedX(turtle.getCenterX()),
         getAdjustedY(turtle.getCenterY())));
     // create an animation where the shape follows a path
-    PathTransition pt = new PathTransition(Duration.seconds(4), path, agent);
-    // create an animation that rotates the shape
-    RotateTransition rt = new RotateTransition(Duration.seconds(3));
-    rt.setFromAngle(360 - turtle.getPreviousHeading());
-    rt.setToAngle(360 - turtle.getHeading());
+    PathTransition pt = new PathTransition(Duration.seconds(3), path, agent);
     // put them together in order
-    return new SequentialTransition(agent, pt, rt);
+    return new SequentialTransition(agent, pt);
   }
+
+//  private Animation makeTurnAnimation (VisualTurtle turtle, Node agent) {
+//    // create an animation that rotates the shape
+//    RotateTransition rt = new RotateTransition(Duration.seconds(3));
+//    rt.setFromAngle(360 - turtle.getPreviousHeading());
+//    rt.setToAngle(360 - turtle.getHeading());
+//
+//    return new SequentialTransition(agent, rt);
+//  }
   
   private void setBackground() {
     myBackgroundRect = new Rectangle();
@@ -129,26 +139,8 @@ public class VisualizationPane extends Group {
     getChildren().add(myBackgroundRect);
   }
 
-  private void setAdjustedX(ImageView turtleImage, double centerX) {
-    double adjustedX = getAdjustedX(centerX);
-    if (adjustedX <= groupWidth && adjustedX >= 0) {
-      turtleImage.setX(adjustedX);
-    } else {
-      turtleImage.setVisible(false);
-    }
-  }
-
   private double getAdjustedX(double centerX) {
     return centerX + groupWidth /2;
-  }
-
-  private void setAdjustedY(ImageView turtleImage, double centerY) {
-    double adjustedY = getAdjustedY(centerY);
-    if (adjustedY <= groupHeight && adjustedY >= 0) {
-      turtleImage.setY(adjustedY);
-    } else {
-      turtleImage.setVisible(false);
-    }
   }
 
   private double getAdjustedY(double centerY) {
@@ -197,6 +189,10 @@ public class VisualizationPane extends Group {
 
     targetTurtle.setImage(TurtleImage.valueOf(imageName));
 
-    visualizeTurtle(targetTurtle);
+    visualizeTurtle(new ImageView(targetTurtle.getImage().getImagePath()), targetTurtle);
+  }
+
+  public void showTurtleInCenter() {
+    visualizeTurtle(new ImageView(TurtleImage.TURTLE.getImagePath()), new VisualTurtle());
   }
 }
