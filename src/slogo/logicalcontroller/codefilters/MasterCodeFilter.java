@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.logging.Filter;
 
 /**
  * Utility class that filters the user input before sending it to the parser.
@@ -30,7 +29,7 @@ public final class MasterCodeFilter{
         throw new AssertionError(INVALID_INSTANTIATION_ERROR);
     }
 
-    public static String filter(String rawInput) throws NoSuchMethodException, ClassNotFoundException {
+    public static String filter(String rawInput) throws NoSuchMethodException, ClassNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException {
         String result;
 
         ResourceBundle filtersApplied;
@@ -46,8 +45,8 @@ public final class MasterCodeFilter{
         List<FilterSuperclass> filterObjectsList = extractFilterObjects(activeFilterClasses);
         List<Method> methodList = extractOperatingMethods(activeFilterClasses);
 
-        performFiltering(filterObjectsList, methodList);
-
+        result = performFiltering(filterObjectsList, methodList, rawInput);
+        return result;
     }
 
     private static List<FilterSuperclass> extractFilterObjects(List<Class> activeFilters) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
@@ -61,10 +60,13 @@ public final class MasterCodeFilter{
         return filterObjectsList;
     }
 
-    private static void performFiltering(List<FilterSuperclass> classList, List<Method> methodList) {
-        for(Method method : methodList){
-
+    private static String performFiltering(List<FilterSuperclass> classList, List<Method> methodList, String rawInput) throws InvocationTargetException, IllegalAccessException {
+        String result = rawInput;
+        for(int i = 0; i<classList.size(); i++){
+            Object resultObject = (String) methodList.get(i).invoke(classList.get(i), rawInput);
+            result = (String) resultObject;
         }
+        return result;
     }
 
     private static List<String> extractActiveFilters(ResourceBundle filterInformation){
@@ -111,5 +113,4 @@ public final class MasterCodeFilter{
             System.out.println(item);
         }
     }
-
 }
