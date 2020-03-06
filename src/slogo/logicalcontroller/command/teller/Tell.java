@@ -32,20 +32,18 @@ public class Tell extends TellerCommand {
      * @param model
      */
     private void activateTurtles(ModelCollection model) {
-        Map<Integer, ModelObject> map = model.getModelMap();
         for (int id: myArgs) {
-            ModelTurtle turtle = new ModelTurtle(id);
-            map.putIfAbsent(id, turtle);
-            turtle.activate();
+            model.append(new ModelTurtle(id));
+            model.activate(id);
         }
     }
 
     private void deactivateTurtles(ModelCollection model) {
         Map<Integer, ModelObject> map = model.getModelMap();
         for (ModelObject object: map.values()) {
-            if (!myArgs.contains(object.getID())) {
-                ModelTurtle turtle = (ModelTurtle) object;
-                turtle.deactivate();
+            int id = object.getID();
+            if (!myArgs.contains(id)) {
+                model.deactivate(id);
             }
         }
     }

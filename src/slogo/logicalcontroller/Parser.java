@@ -84,6 +84,7 @@ public class Parser implements BundleInterface {
             Object o = method.invoke(this, command);
             return (List<String>) o;
         } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException | NullPointerException e) {
+            e.printStackTrace();
             throw new ReflectionException("Unable to apply Reflection in parser");
         }
     }
@@ -101,6 +102,7 @@ public class Parser implements BundleInterface {
     private List<String> executeModifierCommand(ModifierCommand command) {
         String replace = "";
         Collection<ModelObject> turtles = this.myModelCollection.getActiveTurtles().getModelMap().values();
+        System.out.printf("found %d active turtles", turtles.size());
         for (Object o : turtles){
             ModelTurtle turtle = (ModelTurtle) o;
             System.out.println("executing in parser on turtle: " + turtle.getID());

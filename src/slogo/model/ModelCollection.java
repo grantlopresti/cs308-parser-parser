@@ -71,6 +71,18 @@ public class ModelCollection implements Iterable {
         return new ModelCollection(activeTurtles);
     }
 
+    public void activate(int id) {
+        ModelObject o = myModelObjectMap.get(id);
+        ModelTurtle turtle = (ModelTurtle)o;
+        turtle.activate();
+    }
+
+    public void deactivate(int id) {
+        ModelObject o = myModelObjectMap.get(id);
+        ModelTurtle turtle = (ModelTurtle)o;
+        turtle.deactivate();
+    }
+
     /**
      * Required by the Iterator interface
      * @return
