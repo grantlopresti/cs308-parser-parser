@@ -80,14 +80,6 @@ public class VisualTurtle extends VisualObject {
     mySize = size;
   }
 
-  public boolean hasChangedState() {
-    return myChangeState;
-  }
-
-  public void setChangeState(boolean changeState) {
-    myChangeState = changeState;
-  }
-
   public TurtleImage getImage() {
     return myImage;
   }
