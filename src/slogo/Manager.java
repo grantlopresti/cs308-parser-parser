@@ -49,6 +49,7 @@ public class Manager {
 
     private void createLogicalController() throws IOException {
         myLogicalController = new LogicalController(myModelCollection, myVisualController, myVariables);
+        // myLogicalController = new LogicalController(myModelCollection);
         myLogicalController.setLanguage(DEFAULT_LANG);
     }
 

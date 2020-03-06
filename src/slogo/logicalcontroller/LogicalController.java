@@ -5,6 +5,7 @@ import slogo.exceptions.LogicalException;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelCollection;
+import slogo.model.ModelTurtle;
 import slogo.visualcontroller.VisualController;
 
 import javax.script.ScriptException;
@@ -33,11 +34,35 @@ public class LogicalController {
     this.myVisualController = visualController;
     this.myVariables = variables;
     // this.myVisualController.update(this.myModelCollection, this.myVariables, null);
+    // updateVisualController(null);
+    createParser();
+  }
+
+  public LogicalController(ModelCollection modelCollection) {
+    this.myModelCollection = modelCollection;
+    createModel();
+    createParser();
+    // this.myVisualController.start(this.myModelCollection);
+    this.myVisualController.update(this.myModelCollection, this.myVariables, null);
+    // updateVisualController(null);
+  }
+
+  private void updateVisualController(Command command) {
+    this.myVisualController.update(this.myModelCollection, this.myVariables, command);
+  }
+
+  private void createParser() {
     try {
-      myParser= new Parser(DEFAULT_LANGUAGE, modelCollection, this.myVariables);
+      myParser= new Parser(DEFAULT_LANGUAGE, this.myModelCollection, this.myVariables);
     } catch (Exception e) {
       System.exit(0);
     }
+  }
+
+  private void createModel() {
+    myModelCollection = new ModelCollection();
+    myModelCollection.append(new ModelTurtle());
+    myVariables = new VariableList();
   }
 
   /**

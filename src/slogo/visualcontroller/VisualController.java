@@ -22,7 +22,7 @@ public class VisualController implements VisualInterface {
   private SlogoView mySlogoView;
 
   // Currently mirroring structure of VisualizationPane.java (change to bindings)
-  private Map<Integer, VisualTurtle> myTurtles = new HashMap<>();
+  private Map<Integer, VisualTurtle> myTurtles = new HashMap<Integer, VisualTurtle>();
   private ObservableList<VisualTurtle> myTurtlesList = FXCollections.observableArrayList(myTurtles.values());
 
   private List<VisualLine> myLines = new ArrayList<>();
@@ -68,6 +68,13 @@ public class VisualController implements VisualInterface {
   @Override
   public void setAnimationRate(double rate) {
     myAnimationRate = rate;
+  }
+
+  public void start(ModelCollection model) {
+    Iterator iter = model.iterator();
+    while (iter.hasNext()) {
+      moveTurtle((ModelTurtle) iter.next());
+    }
   }
 
   // TODO - implement commands updating as strings
@@ -151,9 +158,11 @@ public class VisualController implements VisualInterface {
     visualTurtle.updateVisualTurtle(turtle);
     try {
       mySlogoView.updateVisualTurtles(new ArrayList<>(List.of(visualTurtle)));
+      System.out.println("attempted to update visual turtle");
       if (turtle.isPenActive())
         appendLine(new VisualLine(visualTurtle));
     } catch (NullPointerException e) {
+      e.printStackTrace();
       System.out.println("Given null turtle set, passing on draw");
     }
   }
@@ -164,7 +173,8 @@ public class VisualController implements VisualInterface {
   }
 
   private VisualTurtle addTurtleToMap(ModelTurtle turtle) {
-    myTurtles.putIfAbsent(turtle.getID(), new VisualTurtle());
+    System.out.println("adding model turtle to the map");
+    myTurtles.putIfAbsent(turtle.getID(), new VisualTurtle(turtle));
     return myTurtles.get(turtle.getID());
   }
 
