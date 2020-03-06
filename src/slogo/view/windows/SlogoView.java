@@ -33,6 +33,7 @@ import slogo.exceptions.ResourceBundleCreationException;
 import slogo.logicalcontroller.BundleInterface;
 import slogo.logicalcontroller.LogicalController;
 import slogo.view.SubTabFactory;
+import slogo.view.TurtleImage;
 import slogo.view.subsections.ToolbarPane;
 import slogo.view.subsections.TurtleOptionsTab;
 import slogo.view.subsections.UserInputPane;
@@ -98,12 +99,8 @@ public class SlogoView extends Application {
   private SubTabFactory mySubTabFactory;
 
   private ResourceBundle myTabTypeResources;
-  private ResourceBundle myInitialLeftTabResources;
-  private ResourceBundle myInitialRightTabResources;
 
   private static final String TabResourcePath = "src/slogo/view/resources/possibleTabs.properties";
-  private static final String InitialLeftTabResourcePath = "src/slogo/view/resources/InitialLeftTabs.properties";
-  private static final String InitialRightTabResourcePath = "src/slogo/view/resources/InitialRightTabs.properties";
 
 
   public SlogoView(LogicalController logicalController, VisualController visualController) {
@@ -112,8 +109,6 @@ public class SlogoView extends Application {
 
     try {
       myTabTypeResources = BundleInterface.createResourceBundle(TabResourcePath);
-      myInitialLeftTabResources = BundleInterface.createResourceBundle(InitialLeftTabResourcePath);
-      myInitialRightTabResources = BundleInterface.createResourceBundle(InitialRightTabResourcePath);
     } catch (IOException e) {
       throw new ResourceBundleCreationException();
     }
@@ -191,17 +186,13 @@ public class SlogoView extends Application {
     runButton.setId("run-button");
     runButton.setMinSize(60, WINDOW_HEIGHT * 0.10);
     runButton.setPrefWidth(120);
-    runButton.setOnAction(e -> {
-      sendUserCommand(myInputPane.getCommand());
-    });
+    runButton.setOnAction(e -> sendUserCommand(myInputPane.getCommand()));
 
     Button clearButton = new Button("Clear");
     clearButton.setId("run-button");
     clearButton.setMinSize(60, WINDOW_HEIGHT * 0.05);
     clearButton.setPrefWidth(120);
-    clearButton.setOnAction(e -> {
-      myInputPane.clear();
-    });
+    clearButton.setOnAction(e -> myInputPane.clear());
 
     buttonArea.getChildren().addAll(runButton, clearButton);
     return buttonArea;
@@ -255,7 +246,7 @@ public class SlogoView extends Application {
       throw new ResourceBundleCreationException();
     }
     for (String key : Collections.list(myPossibleTabsResource.getKeys())) {
-      MenuItem menuItem = new MenuItem(key);
+      MenuItem menuItem = new MenuItem(myPossibleTabsResource.getString(key).split(",")[0]);
       menuItem.setOnAction(e -> {
         Tab newTab = mySubTabFactory.makeTab(this, myVisualController, key);
         myRightTabPane.getTabs().add(newTab);
@@ -346,11 +337,12 @@ public class SlogoView extends Application {
 
   public void setPenColor(double red, double green, double blue) {
     Color customColor = new Color(red,green,blue,1);
-    myVisualizationPane.setPenColor(customColor);
+    //TODO: SEND COLOR CHANGE COMMAND TO LOGICAL CONTROLLER
   }
 
-  public void changeTurtleImage(String newValue) {
+  public void changeTurtleImage(int ID, String newValue) {
     myVisualController.changeTurtleImage(newValue.toUpperCase());
+    myVisualizationPane.changeTurtleImage(ID, newValue.toUpperCase());
     //TODO: UPDATE CENTER
   }
 }

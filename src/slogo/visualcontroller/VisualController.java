@@ -104,7 +104,7 @@ public class VisualController implements VisualInterface {
     TurtleImage image = TurtleImage.valueOf(newValue);
     for (Integer i : myTurtles.keySet()) {
       System.out.printf("INDEX: ", i);
-      myTurtles.get(i).setImage(image.getImagePath());
+      myTurtles.get(i).setImage(image);
     }
   }
 

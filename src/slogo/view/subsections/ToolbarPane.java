@@ -99,7 +99,7 @@ public class ToolbarPane extends ToolBar {
 
   private void initializeButtons() {
     myLoader.setOnAction(e -> loadFile());
-    initializeLoadAndRunButton();
+    myLoadAndRun.setOnAction(e -> loadAndRun());
     myBGColorPicker.setOnAction(t -> {
       Color c = myBGColorPicker.getValue();
       myViewer.setBGColor(c.getRed(), c.getGreen(), c.getBlue());
@@ -110,11 +110,6 @@ public class ToolbarPane extends ToolBar {
         newValue) -> changeLanguage(newValue));
     myHelpInfo.setOnAction(e -> showHelpWindow());
   }
-
-  private void initializeLoadAndRunButton() {
-    myLoadAndRun.setOnAction(e -> loadAndRun());
-  }
-
 
   private void showHelpWindow() {
     Stage stage = new Stage();

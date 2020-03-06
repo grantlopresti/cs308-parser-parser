@@ -14,7 +14,9 @@
   -fx-text-fill: white;
 }
 
-
+.vBox {
+  -fx-background-color: white;
+}
 
 .list-cell:even {
   -fx-background-color: white;
