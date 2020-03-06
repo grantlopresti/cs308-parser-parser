@@ -155,7 +155,7 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
         }
         sb.append(SPACE + this.mySuffix);
         this.myUserInput.set(this.myLineIndex, sb.toString().trim());
-        System.out.printf("code replaced to: %s", this.myUserInput.get(this.myLineIndex));
+        System.out.printf("code replaced to: %s\n", this.myUserInput.get(this.myLineIndex));
     }
 
     // TODO: Implementation can be better?

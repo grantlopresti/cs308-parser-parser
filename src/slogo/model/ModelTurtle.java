@@ -16,7 +16,6 @@ public class ModelTurtle extends ModelObject {
     public ModelTurtle(){
         super();
         orientTurtle();
-
     }
 
     public ModelTurtle(int id) {
@@ -76,12 +75,12 @@ public class ModelTurtle extends ModelObject {
     }
 
     public void activate() {
-        System.out.print("Activating turtle: " + this.ID);
+        System.out.printf("Activating turtle: %d\n", this.ID);
         this.isActive = true;
     }
 
     public void deactivate() {
-        System.out.print("Deactivating turtle: " + this.ID);
+        System.out.printf("Deactivating turtle: %d\n", this.ID);
         this.isActive = false;
     }
 

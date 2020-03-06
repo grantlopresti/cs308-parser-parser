@@ -12,9 +12,9 @@ public interface ControlFlowExtractor {
         String myLine = rawCommands.get(line);
         int start = myLine.indexOf("[") + 1;
         int end = myLine.indexOf("]");
-        System.out.printf("on line %s, found brackets @start %d and @end %d \nPrinting arguments:\n", myLine, start, end);
+        System.out.printf("on line %s, found brackets @start %d and @end %d \n", myLine, start, end);
         List<String> ret = Arrays.asList(myLine.substring(start, end).trim().split("\\s"));
-        for (String s: ret) {System.out.println(s);}
+        // for (String s: ret) {System.out.println(s);}
         return ret;
     }
 

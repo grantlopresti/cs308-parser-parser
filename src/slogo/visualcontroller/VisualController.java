@@ -12,6 +12,7 @@ import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelCollection;
+import slogo.model.ModelObject;
 import slogo.model.ModelTurtle;
 import slogo.view.TurtleImage;
 import slogo.view.windows.SlogoView;
@@ -141,11 +142,18 @@ public class VisualController implements VisualInterface {
 
   // TODO: leverage command knowledge to dictate turtle motion (rotations specifically)
   private void moveModelObject(ModelCollection modelCollection, Command command) {
-    Iterator iter = modelCollection.iterator();
-    while (iter.hasNext()) {
-      ModelTurtle turtle = (ModelTurtle) iter.next();
+    Collection<ModelObject> turtles = modelCollection.getActiveTurtles().getModelMap().values();
+    for (Object o: turtles) {
+      ModelTurtle turtle = (ModelTurtle) o;
       moveTurtle(turtle);
     }
+//    Iterator iter = modelCollection.iterator();
+//    while (iter.hasNext()) {
+//      ModelTurtle turtle = (ModelTurtle) iter.next();
+//      System.out.printf("\nattempting to move model object ID %d, active %b\n", turtle.getID(), turtle.isActive());
+//      if (turtle.isActive())
+//        moveTurtle(turtle);
+//    }
   }
 
   @Override
@@ -168,7 +176,6 @@ public class VisualController implements VisualInterface {
     visualTurtle.updateVisualTurtle(turtle);
     try {
       mySlogoView.updateVisualTurtles(new ArrayList<>(List.of(visualTurtle)));
-      System.out.println("attempted to update visual turtle");
       if (turtle.isPenActive())
         appendLine(new VisualLine(visualTurtle));
     } catch (NullPointerException e) {

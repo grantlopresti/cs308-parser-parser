@@ -18,7 +18,7 @@ public class Tell extends TellerCommand {
         activateTurtles(model);
         deactivateTurtles(model);
         int last = myArgs.get(myArgs.size()-1);
-        System.out.println("executing tell: returning last turtle id" + last);
+        System.out.printf("executing tell: returning last turtle id (%d)", last);
         return Integer.toString(last);
     }
 

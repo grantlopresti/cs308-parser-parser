@@ -17,12 +17,19 @@ public class ModelCollection implements Iterable {
      * Default Constructor for ModelCollection object
      */
     public ModelCollection(){
-        myModelObjectList = new ArrayList<ModelObject>();
-        myModelObjectMap = new HashMap<Integer, ModelObject>();
+        initLists();
+    }
+
+    private void initLists() {
+        this.myModelObjectList = new ArrayList<ModelObject>();
+        this.myModelObjectMap = new HashMap<Integer, ModelObject>();
     }
 
     public ModelCollection(List<ModelObject> objects) {
-        this.myModelObjectList = objects;
+        this();
+        for (ModelObject o: objects) {
+            this.append(o);
+        }
     }
 
     /**
@@ -30,6 +37,7 @@ public class ModelCollection implements Iterable {
      * @param object
      */
     public void append(ModelObject object){
+        // System.out.println("appending turtle: ")
         myModelObjectList.add(object);
         myModelObjectMap.put(object.getID(), object);
     }
@@ -56,6 +64,7 @@ public class ModelCollection implements Iterable {
         for (ModelObject o: this.myModelObjectList) {
             ModelTurtle turtle = (ModelTurtle) o;
             if (turtle.isActive()) {
+                System.out.println("\nadding turtle: " + turtle.ID + " to active turtle collection");
                 activeTurtles.add(turtle);
             }
         }

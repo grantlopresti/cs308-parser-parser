@@ -13,6 +13,7 @@ import slogo.logicalcontroller.command.teller.TellerCommand;
 import slogo.logicalcontroller.input.UserInput;
 import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelCollection;
+import slogo.model.ModelObject;
 import slogo.model.ModelTurtle;
 
 import java.util.*;
@@ -99,8 +100,10 @@ public class Parser implements BundleInterface {
     // TODO - execute on a specific turtle
     private List<String> executeModifierCommand(ModifierCommand command) {
         String replace = "";
-        for (Object o : this.myModelCollection){
+        Collection<ModelObject> turtles = this.myModelCollection.getActiveTurtles().getModelMap().values();
+        for (Object o : turtles){
             ModelTurtle turtle = (ModelTurtle) o;
+            System.out.println("executing in parser on turtle: " + turtle.getID());
             replace = command.execute(turtle);
         }
         return new ArrayList<String>(List.of(replace));
@@ -109,7 +112,8 @@ public class Parser implements BundleInterface {
     // TODO - execute on a specific turtle
     private List<String> executeQuerieCommand(QuerieCommand command) {
         String replace = "";
-        for (Object o : this.myModelCollection){
+        Collection<ModelObject> turtles = this.myModelCollection.getActiveTurtles().getModelMap().values();
+        for (Object o : turtles){
             ModelTurtle turtle = (ModelTurtle) o;
             replace = command.execute(turtle);
         }
