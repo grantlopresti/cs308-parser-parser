@@ -14,7 +14,9 @@
   -fx-text-fill: white;
 }
 
-
+.vBox {
+  -fx-background-color: white;
+}
 
 .list-cell:even {
   -fx-background-color: white;
@@ -27,7 +29,6 @@
   -fx-background-color: #0093ff;
   -fx-text-fill: white;
 }
-
 
 .tab-pane .tab-header-area .tab-header-background {
   -fx-opacity: 30;

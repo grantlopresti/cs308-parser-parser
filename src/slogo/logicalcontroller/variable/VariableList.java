@@ -13,7 +13,7 @@ public class VariableList implements Iterable{
     private List<Variable> myVariablesList;
 
     public VariableList(){
-        myVariablesList = new ArrayList<>();
+        this.myVariablesList = new ArrayList<Variable>();
     }
 
     /**
@@ -64,8 +64,13 @@ public class VariableList implements Iterable{
        return variableName.equals(variable.getName());
     }
 
+    public boolean isEmpty() {
+        return this.myVariablesList.size() == 0;
+    }
+
     @Override
     public Iterator iterator() {
         return myVariablesList.iterator();
     }
+
 }

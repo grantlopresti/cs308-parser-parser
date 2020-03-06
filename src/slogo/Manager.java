@@ -2,16 +2,12 @@ package slogo;
 
 import javafx.stage.Stage;
 import slogo.logicalcontroller.LogicalController;
-import slogo.logicalcontroller.variable.Variable;
 import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelCollection;
 import slogo.model.ModelTurtle;
 import slogo.view.windows.SlogoView;
 import slogo.visualcontroller.VisualController;
-
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Purpose of this class is to manage the controllers and the model.
@@ -49,6 +45,7 @@ public class Manager {
 
     private void createLogicalController() throws IOException {
         myLogicalController = new LogicalController(myModelCollection, myVisualController, myVariables);
+        // myLogicalController = new LogicalController(myModelCollection);
         myLogicalController.setLanguage(DEFAULT_LANG);
     }
 

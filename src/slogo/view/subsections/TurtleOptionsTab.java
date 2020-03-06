@@ -16,7 +16,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import slogo.view.SubTabFactory;
 import slogo.view.TurtleImage;
 import slogo.view.windows.SlogoView;
 import slogo.visualcontroller.VisualController;
@@ -27,12 +26,15 @@ public class TurtleOptionsTab extends Tab {
 
   private static final String DEFAULT_TURTLE_IMAGE = "Turtle";
 
-  private ComboBox<String> myTurtleChoices = new ComboBox<>();
+  private ComboBox<String> myTurtlePicker = new ComboBox<>();
+  private ComboBox<String> myTurtleImagePicker = new ComboBox<>();
   private ColorPicker myPenColorPicker = new ColorPicker();
   private GridPane myBonusCommandGrid = new GridPane();
 
   private VisualController myController;
   private SlogoView myViewer;
+
+  private int mySelectedTurtleID = 0;
 
   private VBox myOrganizer;
 
@@ -49,18 +51,20 @@ public class TurtleOptionsTab extends Tab {
     Label tabTitleLine = new Label("Turtle Options");
     Label instructions = new Label("Choose a Turtle Below to see its characteristics");
     for (TurtleImage value : TurtleImage.values()){
-      myTurtleChoices.getItems().add(value.getName());
+      myTurtleImagePicker.getItems().add(value.getName());
     }
     createBonusCommandGrid();
     initializeButtons();
-    //turtleChoices.itemsProperty().bind(new SimpleObjectProperty<ObservableList<VisualTurtle>>
-    // (myController.getTurtlesList()));
+    myTurtlePicker.itemsProperty().bind(myController.getMyTurtlesProperty());
     myOrganizer.getChildren().addAll(
         tabTitleLine,
         instructions,
         new Separator(),
+        new Text("Select a Turtle:"),
+        new ComboBox<>(),
+        new Separator(),
         new Text("Turtle Image:"),
-        myTurtleChoices,
+        myTurtleImagePicker,
         new Text("Pen Color:"),
         myPenColorPicker,
         new Separator(),
@@ -71,10 +75,6 @@ public class TurtleOptionsTab extends Tab {
   }
 
   private void createBonusCommandGrid() {
-
-    List buttonNames = new ArrayList<Button>();
-
-    Map bonusButtons = new HashMap<String, Button>();
 
     Button forwardButton = new Button("Forward");
     forwardButton.setOnMouseClicked(e -> myViewer.sendUserCommand("forward 50"));
@@ -103,8 +103,8 @@ public class TurtleOptionsTab extends Tab {
 
   private void initializeButtons() {
     setDefaultTurtleImage();
-    myTurtleChoices.getSelectionModel().selectedItemProperty().addListener((options, oldValue,
-        newValue) -> myViewer.changeTurtleImage(newValue));
+    myTurtleImagePicker.getSelectionModel().selectedItemProperty().addListener((options, oldValue,
+        newValue) -> myViewer.changeTurtleImage(mySelectedTurtleID, newValue));
     myPenColorPicker.setOnAction(t -> {
       Color c = myPenColorPicker.getValue();
       myViewer.setPenColor(c.getRed(), c.getGreen(), c.getBlue());
@@ -112,7 +112,6 @@ public class TurtleOptionsTab extends Tab {
   }
 
   private void setDefaultTurtleImage() {
-    myTurtleChoices.setValue(DEFAULT_TURTLE_IMAGE);
-    myViewer.changeTurtleImage(DEFAULT_TURTLE_IMAGE.toUpperCase());
+    myTurtleImagePicker.setValue(DEFAULT_TURTLE_IMAGE);
   }
 }

@@ -1,10 +1,12 @@
 package slogo.logicalcontroller;
 
 import slogo.exceptions.InvalidCommandException;
+import slogo.exceptions.InvalidLanguageException;
 import slogo.exceptions.LogicalException;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelCollection;
+import slogo.model.ModelTurtle;
 import slogo.visualcontroller.VisualController;
 
 import javax.script.ScriptException;
@@ -30,22 +32,48 @@ public class LogicalController {
     this.myModelCollection = modelCollection;
     this.myVisualController = visualController;
     this.myVariables = variables;
-    // TODO - update visualController initial state to empty lists to get first turtle to show
     // this.myVisualController.update(this.myModelCollection, this.myVariables, null);
+    // updateVisualController(null);
+    createParser();
+  }
+
+  public LogicalController(ModelCollection modelCollection) {
+    this.myModelCollection = modelCollection;
+    createModel();
+    createParser();
+    // this.myVisualController.start(this.myModelCollection);
+    this.myVisualController.update(this.myModelCollection, this.myVariables, null);
+    // updateVisualController(null);
+  }
+
+  private void updateVisualController(Command command) {
+    this.myVisualController.update(this.myModelCollection, this.myVariables, command);
+  }
+
+  private void createParser() {
     try {
-      myParser= new Parser(DEFAULT_LANGUAGE, modelCollection);
+      myParser= new Parser(DEFAULT_LANGUAGE, this.myModelCollection, this.myVariables);
     } catch (Exception e) {
       System.exit(0);
     }
   }
 
+  private void createModel() {
+    myModelCollection = new ModelCollection();
+    myModelCollection.append(new ModelTurtle());
+    myVariables = new VariableList();
+  }
+
   /**
    * To be called from the front-end to change the language (also needs to happen the first time).
    * @param language
-   * @throws IOException
    */
-  public void setLanguage(String language) throws IOException {
-    myParser.setLanguage(language);
+  public void setLanguage(String language) {
+    try {
+      myParser.setLanguage(language);
+    } catch (IOException e) {
+      this.myVisualController.updateErrors(new InvalidLanguageException());
+    }
   }
 
   /**
@@ -54,7 +82,7 @@ public class LogicalController {
    * @param fullUserInput
    * @throws InvalidCommandException
    */
-  public void handleNewCommand(String fullUserInput) throws InvalidCommandException, NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
+  public void handleNewCommand(String fullUserInput) {
     try {
       this.myParser.parse(trimList(Arrays.asList(fullUserInput.split("\n"))));
       while(!this.myParser.isFinished()){
@@ -66,7 +94,6 @@ public class LogicalController {
       }
       this.myVisualController.updateCommand(fullUserInput);
     } catch (LogicalException e) {
-      e.printStackTrace();
       this.myVisualController.updateErrors(e);
     }
   }

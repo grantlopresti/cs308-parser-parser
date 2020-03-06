@@ -2,6 +2,7 @@ package slogo.visualcontroller;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -22,7 +23,7 @@ public class VisualController implements VisualInterface {
   private SlogoView mySlogoView;
 
   // Currently mirroring structure of VisualizationPane.java (change to bindings)
-  private Map<Integer, VisualTurtle> myTurtles = new HashMap<>();
+  private Map<Integer, VisualTurtle> myTurtles = new HashMap<Integer, VisualTurtle>();
   private ObservableList<VisualTurtle> myTurtlesList = FXCollections.observableArrayList(myTurtles.values());
 
   private List<VisualLine> myLines = new ArrayList<>();
@@ -33,6 +34,7 @@ public class VisualController implements VisualInterface {
   private SimpleObjectProperty<ObservableList<VisualData>> myDataProperty;
   private SimpleObjectProperty<ObservableList<VisualVariable>> myVariablesProperty;
   private SimpleObjectProperty<ObservableList<VisualFile>> myFilesProperty;
+  private SimpleObjectProperty<ObservableList<String>> myTurtleNamesProperty;
 
   /**
    * Constructor for a VisualController, with its associated SlogoView
@@ -53,6 +55,7 @@ public class VisualController implements VisualInterface {
     myDataProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
     myVariablesProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
     myFilesProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
+    myTurtleNamesProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
   }
 
   @Override
@@ -70,11 +73,18 @@ public class VisualController implements VisualInterface {
     myAnimationRate = rate;
   }
 
+  public void start(ModelCollection model) {
+    Iterator iter = model.iterator();
+    while (iter.hasNext()) {
+      moveTurtle((ModelTurtle) iter.next());
+    }
+  }
+
   // TODO - implement commands updating as strings
   @Override
   public void update(ModelCollection model, VariableList variableList, Command command) {
     moveModelObject(model, command);
-    // updateVariables(variableList);
+    updateVariables(variableList);
   }
 
   /**
@@ -94,7 +104,7 @@ public class VisualController implements VisualInterface {
     TurtleImage image = TurtleImage.valueOf(newValue);
     for (Integer i : myTurtles.keySet()) {
       System.out.printf("INDEX: ", i);
-      myTurtles.get(i).setImage(image.getImagePath());
+      myTurtles.get(i).setImage(image);
     }
   }
 
@@ -120,8 +130,11 @@ public class VisualController implements VisualInterface {
 
   private void updateVariables(VariableList variableList) {
     myVariablesProperty.getValue().clear();
-    for (Object v: variableList) {
-      myVariablesProperty.getValue().add(new VisualVariable((Variable)v));
+    if (!variableList.isEmpty()) {
+      Iterator iter = variableList.iterator();
+      while (iter.hasNext()) {
+        myVariablesProperty.getValue().add(new VisualVariable((Variable)iter.next()));
+      }
     }
   }
 
@@ -144,13 +157,14 @@ public class VisualController implements VisualInterface {
   private void moveTurtle(ModelTurtle turtle) {
     VisualTurtle visualTurtle = addTurtleToMap(turtle);
     myTurtlesList.add(visualTurtle);
-    visualTurtle.setChangeState(true);
     visualTurtle.updateVisualTurtle(turtle);
     try {
       mySlogoView.updateVisualTurtles(new ArrayList<>(List.of(visualTurtle)));
+      System.out.println("attempted to update visual turtle");
       if (turtle.isPenActive())
         appendLine(new VisualLine(visualTurtle));
     } catch (NullPointerException e) {
+      e.printStackTrace();
       System.out.println("Given null turtle set, passing on draw");
     }
   }
@@ -162,10 +176,11 @@ public class VisualController implements VisualInterface {
 
   private VisualTurtle addTurtleToMap(ModelTurtle turtle) {
     myTurtles.putIfAbsent(turtle.getID(), new VisualTurtle());
+    myTurtleNamesProperty.getValue().add(turtle.getID() + "");
     return myTurtles.get(turtle.getID());
   }
 
-  public ObservableList<VisualTurtle> getTurtlesList() {
-   return myTurtlesList = FXCollections.observableArrayList(myTurtles.values());
+  public ObservableValue<? extends ObservableList<String>> getMyTurtlesProperty() {
+    return myTurtleNamesProperty;
   }
 }

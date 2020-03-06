@@ -1,7 +1,9 @@
 package slogo.view.subsections;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
@@ -18,7 +20,7 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import slogo.visualcontroller.VisualError;
+import slogo.view.TurtleImage;
 import slogo.visualcontroller.VisualLine;
 import slogo.visualcontroller.VisualTurtle;
 
@@ -31,9 +33,10 @@ public class VisualizationPane extends Group {
   private double groupHeight;
 
   private Color myBGColor = DEFAULT_BG_COLOR;
-  private Color myPenColor = DEFAULT_PEN_COLOR;
+  private Rectangle myBackgroundRect;
 
-  private List<VisualTurtle> myTurtles = new ArrayList<>();
+  private Map<Integer, VisualTurtle> myTurtles = new HashMap<>();
+  private Map<Integer, ImageView> myTurtlesImageViews = new HashMap<>();
   private List<VisualLine> myLines = new ArrayList<>();
 
   public VisualizationPane(double width, double height){
@@ -71,28 +74,42 @@ public class VisualizationPane extends Group {
   }
 
   private void addTurtlesToVisualizer() {
-    for (VisualTurtle turtle : myTurtles) {
-      ImageView turtleImage = new ImageView(turtle.getImage());
+    for (VisualTurtle turtle : myTurtles.values()) {
+      getChildren().remove(myTurtlesImageViews.get(turtle.getId()));
+      ImageView turtleImage = new ImageView(turtle.getImage().getImagePath());
+      myTurtlesImageViews.remove(turtle.getId());
+      myTurtlesImageViews.put(turtle.getId(), turtleImage);
 
-      turtleImage.setFitWidth(turtle.getSize());
-      turtleImage.setPreserveRatio(true);
-
-      setAdjustedX(turtleImage, turtle.getPreviousX());
-      setAdjustedY(turtleImage, turtle.getPreviousY());
-
-      Animation turtleAnimation = makeAnimation(turtle, turtleImage);
-      turtleAnimation.play();
-
-      Lighting lighting = getLightingEffect(turtle.getColor());
-      turtleImage.setEffect(lighting);
-
-      getChildren().add(turtleImage);
-
-      turtle.setChangeState(false);
+      visualizeTurtle(turtleImage, turtle);
     }
   }
 
-  private Animation makeAnimation (VisualTurtle turtle, Node agent) {
+  private void visualizeTurtle(ImageView turtleImage, VisualTurtle turtle) {
+    turtleImage.setFitWidth(turtle.getSize());
+    turtleImage.setPreserveRatio(true);
+
+    turtleImage.setX(getAdjustedX(turtle.getPreviousX())-(turtle.getSize()/2));
+    turtleImage.setY(getAdjustedY(turtle.getPreviousY())-(turtle.getSize()/2));
+
+    if (turtle.getPreviousX() != turtle.getCenterX()) {
+      Animation turtleMoveAnimation = makeMoveAnimation(turtle, turtleImage);
+      turtleMoveAnimation.play();
+    }
+
+    turtleImage.rotateProperty().set(360 - turtle.getHeading());
+
+    turtleImage.setX(getAdjustedX(turtle.getCenterX())-(turtle.getSize()/2));
+    turtleImage.setY(getAdjustedY(turtle.getCenterY())-(turtle.getSize()/2));
+
+    System.out.println();
+
+    Lighting lighting = getLightingEffect(turtle.getColor());
+    turtleImage.setEffect(lighting);
+
+    getChildren().add(turtleImage);
+  }
+
+  private Animation makeMoveAnimation (VisualTurtle turtle, Node agent) {
     // create something to follow
     Path path = new Path();
     path.getElements().add(new MoveTo(getAdjustedX(turtle.getPreviousX()),
@@ -100,43 +117,30 @@ public class VisualizationPane extends Group {
     path.getElements().add(new LineTo(getAdjustedX(turtle.getCenterX()),
         getAdjustedY(turtle.getCenterY())));
     // create an animation where the shape follows a path
-    PathTransition pt = new PathTransition(Duration.seconds(4), path, agent);
-    // create an animation that rotates the shape
-    RotateTransition rt = new RotateTransition(Duration.seconds(3));
-    rt.setFromAngle(360 - turtle.getPreviousHeading());
-    rt.setToAngle(360 - turtle.getHeading());
+    PathTransition pt = new PathTransition(Duration.seconds(3), path, agent);
     // put them together in order
-    return new SequentialTransition(agent, pt, rt);
-  }
-  
-  private void setBackground() {
-    Rectangle background = new Rectangle();
-    background.setWidth(groupWidth);
-    background.setHeight(groupHeight);
-    background.setFill(myBGColor);
-    getChildren().add(background);
+    return new SequentialTransition(agent, pt);
   }
 
-  private void setAdjustedX(ImageView turtleImage, double centerX) {
-    double adjustedX = getAdjustedX(centerX);
-    if (adjustedX <= groupWidth && adjustedX >= 0) {
-      turtleImage.setX(adjustedX);
-    } else {
-      turtleImage.setVisible(false);
-    }
+//  private Animation makeTurnAnimation (VisualTurtle turtle, Node agent) {
+//    // create an animation that rotates the shape
+//    RotateTransition rt = new RotateTransition(Duration.seconds(3));
+//    rt.setFromAngle(360 - turtle.getPreviousHeading());
+//    rt.setToAngle(360 - turtle.getHeading());
+//
+//    return new SequentialTransition(agent, rt);
+//  }
+  
+  private void setBackground() {
+    myBackgroundRect = new Rectangle();
+    myBackgroundRect.setWidth(groupWidth);
+    myBackgroundRect.setHeight(groupHeight);
+    myBackgroundRect.setFill(myBGColor);
+    getChildren().add(myBackgroundRect);
   }
 
   private double getAdjustedX(double centerX) {
     return centerX + groupWidth /2;
-  }
-
-  private void setAdjustedY(ImageView turtleImage, double centerY) {
-    double adjustedY = getAdjustedY(centerY);
-    if (adjustedY <= groupHeight && adjustedY >= 0) {
-      turtleImage.setY(adjustedY);
-    } else {
-      turtleImage.setVisible(false);
-    }
   }
 
   private double getAdjustedY(double centerY) {
@@ -154,7 +158,8 @@ public class VisualizationPane extends Group {
   }
 
   public void addVisualTurtle(VisualTurtle turtle) {
-    myTurtles.add(turtle);
+    myTurtles.remove(turtle.getId());
+    myTurtles.put(turtle.getId(), turtle);
     update();
   }
 
@@ -163,28 +168,31 @@ public class VisualizationPane extends Group {
     update();
   }
 
-  private void displayError(VisualError error) {
-    //TODO: add code to have popup that displays error message with okay button
-  }
-
   public void setBGColor(double red, double green, double blue) {
     myBGColor = new Color(red, green, blue, 1);
-    update();
+    myBackgroundRect.setFill(myBGColor);
   }
 
   public void clearElements() {
-    myTurtles = new ArrayList<>();
+    myTurtles = new HashMap<>();
     myLines = new ArrayList<>();
     update();
   }
 
   public void resetBGColor() {
     myBGColor = DEFAULT_BG_COLOR;
-    update();
+    myBackgroundRect.setFill(myBGColor);
   }
 
-  public void setPenColor(Color customColor) {
-    myPenColor = customColor;
-    update();
+  public void changeTurtleImage(int ID, String imageName) {
+    VisualTurtle targetTurtle = myTurtles.get(ID);
+
+    targetTurtle.setImage(TurtleImage.valueOf(imageName));
+
+    visualizeTurtle(new ImageView(targetTurtle.getImage().getImagePath()), targetTurtle);
+  }
+
+  public void showTurtleInCenter() {
+    visualizeTurtle(new ImageView(TurtleImage.TURTLE.getImagePath()), new VisualTurtle());
   }
 }
