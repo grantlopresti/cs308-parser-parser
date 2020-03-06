@@ -14,7 +14,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -47,7 +50,10 @@ public class ToolbarPane extends ToolBar {
   private Button myLoadAndRun = new Button("Load & Run");
   private ColorPicker myBGColorPicker = new ColorPicker();
   private Button myClearScreen = new Button("Clear Screen");
+  private Button myDarkModeToggle = new Button("Toggle Mode");
+
   private FileInputStream fis1 = new FileInputStream("src/properties/buttons.properties");
+
   private static final ObservableList<String> languageOptions =
       FXCollections.observableArrayList(
           "English",
@@ -78,16 +84,18 @@ public class ToolbarPane extends ToolBar {
         myLoader,
         myLoadAndRun,
         new Separator(),
-        new Text("BG Color:"),
+        new Label("BG Color:"),
         myBGColorPicker,
         new Separator(),
         myClearScreen,
         new Separator(),
-        new Text("Language:"),
+        new Label("Language:"),
         myLanguage,
         new Separator(),
         myHelpInfo,
-        new Separator());
+        new Separator(),
+        new Label("Dark Mode"),
+        myDarkModeToggle);
   }
 
   private void initializeButtons() {
@@ -102,6 +110,7 @@ public class ToolbarPane extends ToolBar {
     myLanguage.getSelectionModel().selectedItemProperty().addListener((options, oldValue,
         newValue) -> changeLanguage(newValue));
     myHelpInfo.setOnAction(e -> showHelpWindow());
+    myDarkModeToggle.setOnAction(e -> myViewer.toggleDarkMode());
   }
 
   private void showHelpWindow() {

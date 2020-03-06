@@ -95,7 +95,6 @@ public abstract class ModifierCommand implements Command, ModifierInterface {
     protected String executeDoubleParameter(ModelTurtle turtle) {
         try {
             String name = this.getMethodName();
-
             Method method = turtle.getClass().getMethod(name, double.class, double.class);
             Double value = this.getArgument1();
             Double value2 = this.getArgument2();
