@@ -9,11 +9,9 @@ public abstract class FilterSuperclass implements FiltersInterface{
     /**
      * Default constructor of a Filter Object
      */
-    public FilterSuperclass(String input){
+    public FilterSuperclass(){
     }
 
-    public String filter(String input){
-        return input;
-    }
+    public abstract String filter(String input);
 
 }

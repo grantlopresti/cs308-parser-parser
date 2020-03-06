@@ -6,16 +6,42 @@ package slogo.logicalcontroller.codefilters;
  */
 public class CommentsFilter extends FilterSuperclass {
 
-    public CommentsFilter
+    public final static String COMMENT_SYMBOL = "#";
+    public final static String EMPTY_STRING = "";
+    public final static String NEW_LINE = "\n";
 
     /**
-     * Returns a processed String.
-     * @return
+     * Default constructor of a Filter Object
      */
+    public CommentsFilter() {
+        super();
+    }
+
     @Override
     public String filter(String input) {
-        String processedResult = "";
+        StringBuilder processedResult = new StringBuilder();
 
-        return processedResult;
+        String[] lineDelimited = input.split(NEW_LINE);
+        for(String line : lineDelimited){
+            if(line.contains(COMMENT_SYMBOL)){
+                String newLine = extractUncommentedPart(line);
+                processedResult.append(newLine);
+            }
+            else{
+                processedResult.append(line + NEW_LINE);
+            }
+        }
+        return processedResult.toString();
+    }
+
+    private String extractUncommentedPart(String line){
+        int commentIndex = line.indexOf(COMMENT_SYMBOL);
+        String newLine = line.substring(0, commentIndex);
+        if(newLine.equals(EMPTY_STRING)){
+            return newLine;
+        }
+        else{
+            return newLine + NEW_LINE;
+        }
     }
 }
