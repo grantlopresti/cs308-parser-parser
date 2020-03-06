@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -31,7 +30,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import slogo.exceptions.DeprecationException;
 import slogo.exceptions.InvalidCommandException;
 import slogo.exceptions.ResourceBundleException;
 import slogo.logicalcontroller.BundleInterface;
@@ -57,8 +55,9 @@ public class SlogoView extends Application {
   private static final int WINDOW_WIDTH = LEFT_PANE_WIDTH + VISUALIZER_WIDTH + RIGHT_PANE_WIDTH;
   private static final int WINDOW_HEIGHT = 700;
 
+  public static final String DEFAULT_STYLESHEET = "stylesheets/darkMode.css";
+
   public static final String PROJECT_TITLE = "Parser Parser - Slogo Project - CS 308";
-  public static final String DEFAULT_STYLESHEET = "stylesheets/defaultStyle.css";
   public static final String CREATORS_CREDIT = "Created by: Alex Xu, Amjad Syedibrahim, Grant LoPresti, and Max Smith";
   public static final String CLASS_CREDIT = "CS 308 - Spring 2020 - Duvall";
   public static final String PROJECT_CREDIT = "Slogo - Parser Team 10";
