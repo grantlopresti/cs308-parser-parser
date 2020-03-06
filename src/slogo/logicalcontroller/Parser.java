@@ -1,7 +1,6 @@
 package slogo.logicalcontroller;
 
 import slogo.exceptions.ReflectionException;
-import slogo.exceptions.ResourceBundleCreationException;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.command.MakeVariable;
 import slogo.logicalcontroller.command.comparison.ComparisonCommand;
@@ -20,7 +19,7 @@ import java.lang.reflect.*;
 
 /**
  * Purpose of this class is to parse incoming commands from the console and from a text file that the user will have an option to read in.
- * @author Amjad S
+ * @author Max S, Alex Q, Amjad S
  */
 public class Parser implements BundleInterface {
 
@@ -30,6 +29,8 @@ public class Parser implements BundleInterface {
     private ModelCollection myModelCollection;
     private ResourceBundle myLanguageResources;
     private Command myLatestCommand;
+
+    private static final String EXECUTE = "execute";
 
     /**
      * Constructor for the Parser class that takes in the input language and initializes all the used variables that are required for parsing.
@@ -75,12 +76,12 @@ public class Parser implements BundleInterface {
     private List<String> executeCommand(Command command) {
         try {
             Class superclazz = command.getClass().getSuperclass();
-            String name = "execute" + superclazz.getSimpleName();
+            String name = EXECUTE + superclazz.getSimpleName();
             Method method = this.getClass().getDeclaredMethod(name, superclazz); //Command.class
             Object o = method.invoke(this, command);
             return (List<String>) o;
         } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException | NullPointerException e) {
-            throw new ReflectionException("Unable to apply Reflection " + e.getMessage());
+            throw new ReflectionException("Unable to apply Reflection in parser");
         }
     }
 
@@ -110,7 +111,6 @@ public class Parser implements BundleInterface {
             ModelTurtle turtle = (ModelTurtle) o;
             replace = command.execute(turtle);
         }
-        // return new ArrayList<String>();
         return new ArrayList<String>(List.of(replace));
     }
 
@@ -118,12 +118,12 @@ public class Parser implements BundleInterface {
         return new ArrayList<String>(List.of(command.execute()));
     }
 
-    private List<String> executeControlFlowCommand(ControlFlowCommand command) {
-        return new ArrayList<String>();
-    }
-
     private List<String> executeMathCommand(MathCommand command) {
         return new ArrayList<String>(List.of(command.execute()));
+    }
+
+    private List<String> executeControlFlowCommand(ControlFlowCommand command) {
+        return new ArrayList<String>();
     }
 
     private List<String> executeVariables(MakeVariable command) {return new ArrayList<String>();}

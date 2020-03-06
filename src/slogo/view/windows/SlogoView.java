@@ -104,11 +104,13 @@ public class SlogoView extends Application {
     myLogicalController = logicalController;
     myVisualController = visualController;
 
+    /*
     try {
       myTabTypeResources = BundleInterface.createResourceBundle(TabResourcePath);
     } catch (IOException e) {
       throw new ResourceBundleCreationException();
     }
+     */
   }
 
   @Override
