@@ -1,8 +1,6 @@
 package slogo.model;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * The purpose of this class is to provide an encapsulation of the data structure used to hold multiple
@@ -11,21 +9,29 @@ import java.util.List;
  * @author Alex Xu
  */
 public class ModelCollection implements Iterable {
+
     private List<ModelObject> myModelObjectList;
+    private Map<Integer, ModelObject> myModelObjectMap;
 
     /**
      * Default Constructor for ModelCollection object
      */
     public ModelCollection(){
         myModelObjectList = new ArrayList<ModelObject>();
+        myModelObjectMap = new HashMap<Integer, ModelObject>();
+    }
+
+    public ModelCollection(List<ModelObject> objects) {
+        this.myModelObjectList = objects;
     }
 
     /**
      * Add a ModelObject to the ModelCollection
-     * @param myModelObject
+     * @param object
      */
-    public void append(ModelObject myModelObject){
-        myModelObjectList.add(myModelObject);
+    public void append(ModelObject object){
+        myModelObjectList.add(object);
+        myModelObjectMap.put(object.getID(), object);
     }
 
     /**
@@ -35,6 +41,25 @@ public class ModelCollection implements Iterable {
      */
     public ModelObject get(int index){
         return myModelObjectList.get(index);
+    }
+
+    public Map<Integer, ModelObject>  getModelMap() {
+        return this.myModelObjectMap;
+    }
+
+    /**
+     *
+     * @return new model collection with all active turtles after a teller has been run
+     */
+    public ModelCollection getActiveTurtles() {
+        List<ModelObject> activeTurtles = new ArrayList<ModelObject>();
+        for (ModelObject o: this.myModelObjectList) {
+            ModelTurtle turtle = (ModelTurtle) o;
+            if (turtle.isActive()) {
+                activeTurtles.add(turtle);
+            }
+        }
+        return new ModelCollection(activeTurtles);
     }
 
     /**

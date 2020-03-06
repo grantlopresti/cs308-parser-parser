@@ -11,10 +11,12 @@ import java.util.List;
  */
 public abstract class TellerCommand implements Command {
 
-    protected List<String> myArgs;
+    protected List<Integer> myArgs;
 
     public TellerCommand(List<String> args) {
-        this.myArgs = args;
+        for (String s: args) {
+            this.myArgs.add(Integer.parseInt(s));
+        }
     }
 
     public abstract String execute(ModelCollection model);

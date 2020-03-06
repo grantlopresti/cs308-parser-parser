@@ -8,7 +8,9 @@ public abstract class ModelObject implements ModelInterface{
     private double xCoordinate;
     private double yCoordinate;
     private double heading;
-    private int ID;
+    protected int ID;
+
+    private boolean isActive;
 
     /**
      * Default Constructor for all ModelObjects
@@ -173,4 +175,5 @@ public abstract class ModelObject implements ModelInterface{
     private double calcDistance(double x, double y){
         return Math.sqrt(x*x + y*y);
     }
+
 }
