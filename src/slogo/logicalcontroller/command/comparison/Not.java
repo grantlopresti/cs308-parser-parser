@@ -11,7 +11,6 @@ public class Not extends ComparisonCommand {
     @Override
     public String execute() {
         boolean bool = this.argument1 == 0;
-        return Boolean.toString(bool);
+        return booleanToString(bool);
     }
-
 }

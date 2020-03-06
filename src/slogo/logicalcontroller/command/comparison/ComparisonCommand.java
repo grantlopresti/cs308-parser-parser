@@ -37,4 +37,8 @@ public abstract class ComparisonCommand implements Command {
 
     public abstract String execute();
 
+    protected String booleanToString(boolean value) {
+        return ""+(value ? 1 : 0);
+    }
+
 }
