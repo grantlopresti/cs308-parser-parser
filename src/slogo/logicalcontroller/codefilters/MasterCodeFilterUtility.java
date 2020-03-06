@@ -16,7 +16,7 @@ import java.util.Set;
  * final keyword prevents subclassing and improves efficiency.
  * @author Alex Xu
  */
-public final class MasterCodeFilter{
+public final class MasterCodeFilterUtility {
 
     public static final String RESOURCE_BUNDLE_LOCATION = "src/properties/inputFilters.properties";
     public static final String INVALID_INSTANTIATION_ERROR = "Instantiating utility class.";
@@ -25,7 +25,7 @@ public final class MasterCodeFilter{
     /**
      * Applies all of the filters, user-defined through a properties file.
      */
-    private MasterCodeFilter(){
+    private MasterCodeFilterUtility(){
         throw new AssertionError(INVALID_INSTANTIATION_ERROR);
     }
 
