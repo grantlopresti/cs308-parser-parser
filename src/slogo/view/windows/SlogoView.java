@@ -18,6 +18,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
@@ -48,8 +49,8 @@ public class SlogoView extends Application {
 
   private static final int VISUALIZER_WIDTH = 800;
   private static final int VISUALIZER_HEIGHT = 525;
-  public static final int RIGHT_PANE_WIDTH = 350;
-  public static final int LEFT_PANE_WIDTH = 350;
+  public static final int RIGHT_PANE_WIDTH = 375;
+  public static final int LEFT_PANE_WIDTH = 325;
 
   private static final int WINDOW_WIDTH = LEFT_PANE_WIDTH + VISUALIZER_WIDTH + RIGHT_PANE_WIDTH;
   private static final int WINDOW_HEIGHT = 700;
@@ -64,15 +65,11 @@ public class SlogoView extends Application {
   private ResourceBundle myPossibleTabsResource;
 
   //FIXME: Delete these and replace with XML reading
-  public static final String[] INITIAL_LEFT_TAB_NAMES = new String[]{
-      "UserDefinedFunctionsTab",
-      "ErrorHandlerTab",
-      "FileViewerTab"
-  };
   public static final String[] INITIAL_RIGHT_TAB_NAMES = new String[]{
       "CommandHistoryTab",
       "VariableViewerTab",
-      "DataViewerTab",
+      "UserDefinedFunctionsTab",
+      "ErrorHandlerTab"
   };
   public static final String ALERT_TITLE = "Alert";
 
@@ -162,6 +159,12 @@ public class SlogoView extends Application {
 
     myCenterPane.setCenter(myVisualizationPane);
     myCenterPane.setBottom(programInputArea);
+
+    showTurtleInCenter();
+  }
+
+  private void showTurtleInCenter() {
+    sendUserCommand("bk 1\nfd 1");
   }
 
   private HBox getProgramInputNode() {
@@ -217,20 +220,15 @@ public class SlogoView extends Application {
   private void createLeftPane() {
     myLeftPane = new VBox();
 
-    MenuBar leftNewTab = new MenuBar();
-
     myLeftTabPane = new TabPane();
     myTurtleOptionsTab = new TurtleOptionsTab(this, myVisualController);
-    myLeftTabPane.getTabs().add(myTurtleOptionsTab);
-
-    //FIXME: Initial settings should be obtained from XML File
-    for (String initialTabName : INITIAL_LEFT_TAB_NAMES){
-      myLeftTabPane.getTabs().add(mySubTabFactory.makeTab(this, myVisualController, initialTabName));
-    }
-
+    Tab colorPaletteTab = new Tab("Colors");
+    Tab imagePaletteTab = new Tab("Images");
+    myLeftTabPane.getTabs().addAll(myTurtleOptionsTab, imagePaletteTab, colorPaletteTab);
+    myLeftTabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
     myLeftTabPane.setPrefWidth(LEFT_PANE_WIDTH);
 
-    myLeftPane.getChildren().addAll(leftNewTab, myLeftTabPane);
+    myLeftPane.getChildren().addAll(myLeftTabPane);
   }
 
   private void createRightPane() {

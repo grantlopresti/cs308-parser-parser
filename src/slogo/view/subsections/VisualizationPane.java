@@ -75,27 +75,33 @@ public class VisualizationPane extends Group {
 
   private void addTurtlesToVisualizer() {
     for (VisualTurtle turtle : myTurtles.values()) {
-      ImageView turtleImage = new ImageView(turtle.getImage().getImagePath());
-
-      myTurtlesImageViews.remove(turtle.getId());
-      myTurtlesImageViews.put(turtle.getId(), turtleImage);
-
-      turtleImage.setFitWidth(turtle.getSize());
-      turtleImage.setPreserveRatio(true);
-
-      setAdjustedX(turtleImage, turtle.getPreviousX());
-      setAdjustedY(turtleImage, turtle.getPreviousY());
-
-      Animation turtleAnimation = makeAnimation(turtle, turtleImage);
-      turtleAnimation.play();
-
-      Lighting lighting = getLightingEffect(turtle.getColor());
-      turtleImage.setEffect(lighting);
-
-      getChildren().add(turtleImage);
-
-      turtle.setChangeState(false);
+      visualizeTurtle(turtle);
     }
+  }
+
+  private void visualizeTurtle(VisualTurtle turtle) {
+    getChildren().remove(myTurtlesImageViews.get(turtle.getId()));
+
+    ImageView turtleImage = new ImageView(turtle.getImage().getImagePath());
+
+    myTurtlesImageViews.remove(turtle.getId());
+    myTurtlesImageViews.put(turtle.getId(), turtleImage);
+
+    turtleImage.setFitWidth(turtle.getSize());
+    turtleImage.setPreserveRatio(true);
+
+    setAdjustedX(turtleImage, turtle.getPreviousX());
+    setAdjustedY(turtleImage, turtle.getPreviousY());
+
+    Animation turtleAnimation = makeAnimation(turtle, turtleImage);
+    turtleAnimation.play();
+
+    Lighting lighting = getLightingEffect(turtle.getColor());
+    turtleImage.setEffect(lighting);
+
+    getChildren().add(turtleImage);
+
+    turtle.setChangeState(false);
   }
 
   private Animation makeAnimation (VisualTurtle turtle, Node agent) {
@@ -191,7 +197,6 @@ public class VisualizationPane extends Group {
 
     targetTurtle.setImage(TurtleImage.valueOf(imageName));
 
-    myTurtlesImageViews.remove(ID);
-
+    visualizeTurtle(targetTurtle);
   }
 }
