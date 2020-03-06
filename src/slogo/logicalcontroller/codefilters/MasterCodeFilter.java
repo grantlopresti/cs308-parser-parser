@@ -3,11 +3,14 @@ package slogo.logicalcontroller.codefilters;
 import slogo.exceptions.ResourceBundleException;
 import slogo.logicalcontroller.BundleInterface;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.logging.Filter;
 
 /**
  * Utility class that filters the user input before sending it to the parser.
@@ -29,6 +32,7 @@ public final class MasterCodeFilter{
 
     public static String filter(String rawInput) throws NoSuchMethodException, ClassNotFoundException {
         String result;
+
         ResourceBundle filtersApplied;
         try {
             filtersApplied = BundleInterface.createResourceBundle(RESOURCE_BUNDLE_LOCATION);
@@ -37,13 +41,27 @@ public final class MasterCodeFilter{
         }
 
         List<String> activeFilters = extractActiveFilters(filtersApplied);
-        List<Method> methodList = extractOperatingMethods(activeFilters);
+        List<Class> activeFilterClasses = extractOperatingClasses(activeFilters);
 
-        performFiltering(methodList);
+        List<FilterSuperclass> filterObjectsList = extractFilterObjects(activeFilterClasses);
+        List<Method> methodList = extractOperatingMethods(activeFilterClasses);
+
+        performFiltering(filterObjectsList, methodList);
 
     }
 
-    private static void performFiltering(List<Method> methodList) {
+    private static List<FilterSuperclass> extractFilterObjects(List<Class> activeFilters) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        List<FilterSuperclass> filterObjectsList = new ArrayList<>();
+        for(Class myClass : activeFilters){
+            Constructor filterConstructor = myClass.getConstructor(null);
+            Object obj = filterConstructor.newInstance(null);
+            FilterSuperclass filterObject = (FilterSuperclass) obj;
+            filterObjectsList.add(filterObject);
+        }
+        return filterObjectsList;
+    }
+
+    private static void performFiltering(List<FilterSuperclass> classList, List<Method> methodList) {
         for(Method method : methodList){
 
         }
@@ -60,13 +78,12 @@ public final class MasterCodeFilter{
                 activeFiltersList.add(key);
             }
         }
-        printActiveFilters(activeFiltersList);                                              //TODO: Remove the print statement later
+        printActiveFilters(activeFiltersList);                                                  //TODO: Remove the print statement later
         return activeFiltersList;
     }
 
-    private static List<Method> extractOperatingMethods(List<String> activeFilters) throws ClassNotFoundException, NoSuchMethodException {
+    private static List<Method> extractOperatingMethods(List<Class> classList) throws NoSuchMethodException {
         List<Method> methodList = new ArrayList<>();
-        List<Class> classList = extractOperatingClasses(activeFilters);
         for (Class myClass : classList){
             Method filterMethod = myClass.getMethod("filter", String.class);            //TODO: Use reflection to extract this "filter" name.
             methodList.add(filterMethod);
