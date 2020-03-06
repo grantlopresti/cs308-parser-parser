@@ -6,6 +6,8 @@ package slogo.logicalcontroller.codefilters;
  */
 public abstract class FilterSuperclass implements FiltersInterface{
 
+    public final static String NEW_LINE = "\n";
+
     /**
      * Default constructor of a Filter Object
      */

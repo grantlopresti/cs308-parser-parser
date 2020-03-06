@@ -1,14 +1,13 @@
 package slogo.logicalcontroller.codefilters;
 
 /**
- * Utility class whose purpose is to serve as a module ot the Master Filter. Must contain a filter method.
+ * Class whose purpose is to serve as a module ot the Master Filter. Must contain a filter method.
  * @author Alex Xu
  */
 public class CommentsFilter extends FilterSuperclass {
 
     public final static String COMMENT_SYMBOL = "#";
     public final static String EMPTY_STRING = "";
-    public final static String NEW_LINE = "\n";
 
     /**
      * Default constructor of a Filter Object
