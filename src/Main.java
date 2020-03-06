@@ -9,8 +9,8 @@ import slogo.view.windows.SlogoView;
 public class Main {
 
     public static void main (String[] args) throws IOException {
-        //startWithSplashScreen();
-        startWithoutSplashScreen();
+        startWithSplashScreen();
+        // startWithoutSplashScreen();
     }
 
     private static void startWithoutSplashScreen() throws IOException {

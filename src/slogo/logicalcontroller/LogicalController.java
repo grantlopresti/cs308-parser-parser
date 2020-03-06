@@ -59,7 +59,6 @@ public class LogicalController {
   public void handleNewCommand(String fullUserInput) throws InvalidCommandException, NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
     try {
       this.myParser.parse(trimList(Arrays.asList(fullUserInput.split("\n"))));
-
       while(!this.myParser.isFinished()){
         this.myParser.executeNextCommand();
         Command latestCommand = this.myParser.getLatestCommand();

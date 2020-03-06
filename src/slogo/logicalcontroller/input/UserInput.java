@@ -137,7 +137,6 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
     }
 
     // TODO - how to handle multi line replacements vs. single line?
-    // FOR NOW - assuming single line replace (only modifiers and math will work)
     @Override
     public void setCodeReplacement(List<String> code, Command command) {
         System.out.println("Command Type Detected: " + command.getClass().getSuperclass().getSimpleName());
@@ -196,10 +195,11 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
 
     private int findNextLine() {
         for(int i = 0; i < this.myUserInput.size(); i++){
-            String s = this.myUserInput.get(i);
-            if(s.split("\\s+").length > 1){
-                return i;
+            String[] words = this.myUserInput.get(i).split(SPACE);
+            for (String s: words) {
+                if (isValidCommand(s)) {return i;}
             }
+            // if(s.split("\\s+").length > 1){ return i; }
         }
         throw new NoCommandFound();
     }
