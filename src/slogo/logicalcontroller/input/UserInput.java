@@ -10,6 +10,8 @@ import slogo.logicalcontroller.command.controlflow.ControlFlowExtractor;
 import java.io.IOException;
 import java.util.*;
 
+import static slogo.logicalcontroller.command.controlflow.ControlFlowExtractor.*;
+
 public class UserInput implements UserInputInterface, BundleInterface, CommandGenerator {
 
     private List<String> myUserInput;
@@ -27,6 +29,7 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
     private static final String SUPERCLASS_PROPERTIES = "src/properties/commandSuperclass.properties";
     private static final String PARAMETER_PROPERTIES = "src/properties/parameterCount.properties";
     private static final String CONTROLFLOW = "controlflow";
+    private static final String TELLER = "teller";
     private static ResourceBundle myCommandMap;
     private static ResourceBundle myParameterMap;
 
@@ -52,6 +55,10 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
             if (superclass.equals(CONTROLFLOW)) {
                 List<List<String>> args = getControlFlowArguments(this.myLineIndex, this.myCommandIndex, translated);
                 return CommandGenerator.createControlCommand(superclass, translated, args);
+            } else if (superclass.equals(TELLER)) {
+                this.myPrefix = SPACE; this.mySuffix = SPACE;
+                List<String> args = getBracketArguments(this.myUserInput, this.myLineIndex);
+                return CommandGenerator.createCommand(superclass, translated, args);
             } else {
                 int params = countParameters(translated);
                 List<String> args = getArguments(this.myLineIndex, this.myCommandIndex, params);
@@ -88,10 +95,10 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
             lineLocation = locationArray[0];
             columnLocation = locationArray[1];
             System.out.println("Opening Bracket at :" + lineLocation + " " + columnLocation);
-            List<String> argumentSet = ControlFlowExtractor.initControlFlow(myUserInput, lineLocation, columnLocation);
+            List<String> argumentSet = initControlFlow(myUserInput, lineLocation, columnLocation);
             returnList.add(argumentSet);
             linePointer += argumentSet.size();
-            controlFlowEndIndex = ControlFlowExtractor.getLineLastBrac(myUserInput, lineLocation, columnLocation);
+            controlFlowEndIndex = getLineLastBrac(myUserInput, lineLocation, columnLocation);
         }
 
         return returnList;

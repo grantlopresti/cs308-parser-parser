@@ -1,11 +1,9 @@
 package slogo.logicalcontroller.command.teller;
 
-import slogo.logicalcontroller.command.Command;
 import slogo.model.ModelCollection;
 import slogo.model.ModelObject;
 import slogo.model.ModelTurtle;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 

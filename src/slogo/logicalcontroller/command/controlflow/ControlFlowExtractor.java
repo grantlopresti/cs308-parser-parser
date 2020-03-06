@@ -8,6 +8,16 @@ import java.util.*;
 
 public interface ControlFlowExtractor {
 
+    static List<String> getBracketArguments(List<String> rawCommands, int line) {
+        String myLine = rawCommands.get(line);
+        int start = myLine.indexOf("[") + 1;
+        int end = myLine.indexOf("]");
+        System.out.printf("on line %s, found brackets @start %d and @end %d \nPrinting arguments:\n", myLine, start, end);
+        List<String> ret = Arrays.asList(myLine.substring(start, end).trim().split("\\s"));
+        for (String s: ret) {System.out.println(s);}
+        return ret;
+    }
+
     static List<String> initControlFlow(List<String> rawCommands, int lineIndex, int bracIndex){
 
         int[] retIndexes = retEndIndex(rawCommands, lineIndex, bracIndex);
