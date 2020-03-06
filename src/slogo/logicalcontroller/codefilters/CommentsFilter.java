@@ -10,7 +10,9 @@ public class CommentsFilter implements filtersInterface{
      * @return
      */
     @Override
-    public String filter() {
-        return null;
+    public String filter(String input) {
+        String processedResult = "";
+
+        return processedResult;
     }
 }

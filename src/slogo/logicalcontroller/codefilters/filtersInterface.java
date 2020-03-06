@@ -11,6 +11,6 @@ public interface filtersInterface {
      * Returns a processed String.
      * @return
      */
-    public String filter();
+    public String filter(String input);
 
 }

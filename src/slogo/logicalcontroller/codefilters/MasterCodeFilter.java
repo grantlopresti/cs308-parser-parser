@@ -1,6 +1,6 @@
 package slogo.logicalcontroller.codefilters;
 
-import slogo.exceptions.ResourceBundleCreationException;
+import slogo.exceptions.ResourceBundleException;
 import slogo.logicalcontroller.BundleInterface;
 
 import java.lang.reflect.Method;
@@ -16,8 +16,9 @@ import java.util.Set;
  */
 public final class MasterCodeFilter{
 
-    private static final String RESOURCE_BUNDLE_LOCATION = "src/properties/inputFilters.properties";
-    private static final String INVALID_INSTANTIATION_ERROR = "Instantiating utility class.";
+    public static final String RESOURCE_BUNDLE_LOCATION = "src/properties/inputFilters.properties";
+    public static final String INVALID_INSTANTIATION_ERROR = "Instantiating utility class.";
+    public static final String CLASS_PREFIX = "slogo.logicalcontroller.codefilters.";
 
     /**
      * Applies all of the filters, user-defined through a properties file.
@@ -32,7 +33,7 @@ public final class MasterCodeFilter{
         try {
             filtersApplied = BundleInterface.createResourceBundle(RESOURCE_BUNDLE_LOCATION);
         } catch (Exception e) {
-            throw new ResourceBundleCreationException();
+            throw new ResourceBundleException();
         }
 
         List<String> activeFilters = extractActiveFilters(filtersApplied);
@@ -52,15 +53,33 @@ public final class MasterCodeFilter{
             }
         }
 
-        printActiveFilters(activeFiltersList);
+        printActiveFilters(activeFiltersList);                  //TODO: Remove the print statement later
 
         return activeFiltersList;
     }
 
-    private List<Method> extractOperatingMethods(List<String>){
-
+    private List<Method> extractOperatingMethods(List<String> activeFilters) throws ClassNotFoundException, NoSuchMethodException {
+        List<Method> methodList = new ArrayList<>();
+        List<Class> classList = extractOperatingClasses(activeFilters);
+        for (Class myClass : classList){
+            Method filterMethod = myClass.getMethod("filter", String.class);
+            methodList.add(filterMethod);
+        }
+        return methodList;
     }
 
+    private List<Class> extractOperatingClasses(List<String> activeFilters) throws ClassNotFoundException {             //TODO: Error handling
+        List<Class> classList = new ArrayList<Class>();
+        for (String className : activeFilters){
+            Class classObject = Class.forName(createClassPath(CLASS_PREFIX, className));
+            classList.add(classObject);
+        }
+        return classList;
+    }
+
+    private String createClassPath(String prefix, String className){
+        return prefix + className;
+    }
 
     //TODO: Remove this print statement after debugging and things work.
     private static void printActiveFilters(List<String> activeFiltersList){
