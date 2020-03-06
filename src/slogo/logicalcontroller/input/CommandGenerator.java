@@ -32,6 +32,7 @@ public interface CommandGenerator {
         try {
             Class clazz = Class.forName(createCommandPath(superclass, command));
             Constructor ctor = clazz.getConstructor(List.class);
+            System.out.printf("clazz: %s \nconstructor: %s", clazz.toString(), ctor.toString());
             return (Command) ctor.newInstance(arguments);
         } catch (Exception e) {
             e.printStackTrace();

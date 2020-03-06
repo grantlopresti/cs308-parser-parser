@@ -1,6 +1,7 @@
 package slogo.logicalcontroller;
 
 import slogo.exceptions.InvalidCommandException;
+import slogo.exceptions.LogicalException;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelCollection;
@@ -67,9 +68,9 @@ public class LogicalController {
         this.myVisualController.update(newModel, newVariables, latestCommand);
       }
       this.myVisualController.updateCommand(fullUserInput);
-    } catch (Exception e) {
+    } catch (LogicalException e) {
       e.printStackTrace();
-      System.out.println("error in LogicalController.handleNewCommand");
+      this.myVisualController.updateErrors(e);
     }
   }
 

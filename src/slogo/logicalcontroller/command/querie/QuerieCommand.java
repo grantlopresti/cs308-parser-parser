@@ -1,10 +1,13 @@
 package slogo.logicalcontroller.command.querie;
 
 import slogo.exceptions.InvalidCommandException;
+import slogo.exceptions.InvalidParameterException;
+import slogo.logicalcontroller.BundleInterface;
 import slogo.logicalcontroller.command.Command;
 import slogo.model.ModelTurtle;
 
 import java.lang.reflect.Method;
+import java.util.InvalidPropertiesFormatException;
 import java.util.ResourceBundle;
 
 /**
@@ -12,12 +15,16 @@ import java.util.ResourceBundle;
  * @author Alex Xu
  */
 public abstract class QuerieCommand implements Command {
-    public static final String RESOURCE_BUNDLE_LOCATION = "src/properties/querieCommands.MyBundle";
 
+    private static final String RESOURCE_BUNDLE_LOCATION = "src/properties/querieCommands.properties";
     private ResourceBundle methodMappings;
 
     public QuerieCommand(){
-        methodMappings = ResourceBundle.getBundle(RESOURCE_BUNDLE_LOCATION);
+        try {
+            this.methodMappings = BundleInterface.createResourceBundle(RESOURCE_BUNDLE_LOCATION);
+        } catch (Exception e) {
+            throw new InvalidParameterException("could not find querie properties file");
+        }
     }
 
     /**
@@ -51,8 +58,9 @@ public abstract class QuerieCommand implements Command {
     public String execute(ModelTurtle turtle){
         try {
             String name = this.getMethodName();
-            Method method = turtle.getClass().getMethod(name.toLowerCase());
-            return (String) method.invoke(turtle);
+            Method method = turtle.getClass().getMethod(name);
+            Object result = method.invoke(turtle);
+            return result.toString();
         } catch (Exception e) {
             throw new InvalidCommandException();
         }

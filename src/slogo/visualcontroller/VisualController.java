@@ -136,7 +136,6 @@ public class VisualController implements VisualInterface {
 
   @Override
   public void updateCommand(String userInput) {
-    System.out.printf("adding userInput: %s to binding \n ", userInput);
     FXCollections.reverse(this.myCommandsProperty.getValue());
     this.myCommandsProperty.getValue().add(new VisualCommand(userInput));
     FXCollections.reverse(this.myCommandsProperty.getValue());
