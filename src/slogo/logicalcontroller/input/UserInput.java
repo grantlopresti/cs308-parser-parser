@@ -5,7 +5,7 @@ import slogo.exceptions.ResourceBundleException;
 import slogo.logicalcontroller.BundleInterface;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.command.controlflow.ControlFlowCommand;
-import slogo.logicalcontroller.command.controlflow.ControlFlowExtractor;
+import slogo.logicalcontroller.ControlFlowExtractor;
 
 import java.io.IOException;
 import java.util.*;

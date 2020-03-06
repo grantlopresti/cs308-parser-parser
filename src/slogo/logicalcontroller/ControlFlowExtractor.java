@@ -1,4 +1,4 @@
-package slogo.logicalcontroller.command.controlflow;
+package slogo.logicalcontroller;
 
 import java.util.*;
 

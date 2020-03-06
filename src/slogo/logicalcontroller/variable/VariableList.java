@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * Provides encapsulation for the variable list.
+ * Provides only the functionality that is required of it (trade off is less freedom for other classes to manipulate it).
  * @author Alex Xu
  */
 public class VariableList implements Iterable{
