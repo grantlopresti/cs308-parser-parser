@@ -7,7 +7,7 @@ import slogo.view.TurtleImage;
 public class VisualTurtle extends VisualObject {
 
   public static final boolean DEFAULT_CHANGE_STATE = false;
-  public static final String DEFAULT_IMAGE = TurtleImage.TURTLE.getImagePath();
+  public static final TurtleImage DEFAULT_IMAGE = TurtleImage.TURTLE;
   public static final Color DEFAULT_COLOR = Color.PURPLE;
   public static final double DEFAULT_SIZE = 30;
   public static final double DEFAULT_X = 0;
@@ -16,7 +16,7 @@ public class VisualTurtle extends VisualObject {
 
   private int myID;
   private boolean myChangeState = DEFAULT_CHANGE_STATE;
-  private String myImage = DEFAULT_IMAGE;
+  private TurtleImage myImage = DEFAULT_IMAGE;
   private Color myColor = DEFAULT_COLOR;
   private double myCenterX = DEFAULT_X;
   private double myCenterY = DEFAULT_Y;
@@ -88,11 +88,11 @@ public class VisualTurtle extends VisualObject {
     myChangeState = changeState;
   }
 
-  public String getImage() {
+  public TurtleImage getImage() {
     return myImage;
   }
 
-  public void setImage(String image) {
+  public void setImage(TurtleImage image) {
     myImage = image;
   }
 
@@ -165,4 +165,7 @@ public class VisualTurtle extends VisualObject {
   @Override
   public String toString() {return "Testing";}
 
+  public Integer getId() {
+    return myID;
+  }
 }

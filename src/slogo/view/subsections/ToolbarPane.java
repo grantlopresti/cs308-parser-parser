@@ -48,8 +48,6 @@ public class ToolbarPane extends ToolBar {
   private ResourceBundle myButtonResources;
 
   private static final String PACKAGE = SubTabFactory.class.getPackageName();
-  public static final String POSSIBLE_TABS_RESOURCE = "src/slogo/view/resources/possibleTabs.properties";
-  private ResourceBundle myPossibleTabsResource;
 
   private SlogoView myViewer;
 
@@ -73,7 +71,6 @@ public class ToolbarPane extends ToolBar {
       );
   private ComboBox<String> myLanguage = new ComboBox<>(languageOptions);
   private Button myHelpInfo = new Button("Help/Info");
-  private ComboBox<String> myTabOpener = new ComboBox<>();
 
   public ToolbarPane(SlogoView viewer, LogicalController logicalController) throws IOException {
     myViewer = viewer;
@@ -98,14 +95,12 @@ public class ToolbarPane extends ToolBar {
         myLanguage,
         new Separator(),
         myHelpInfo,
-        new Separator(),
-        new Text("Tab Opener"),
-        myTabOpener);
+        new Separator());
   }
 
   private void initializeButtons() {
     myLoader.setOnAction(e -> loadFile());
-    initializeLoadAndRunButton();
+    myLoadAndRun.setOnAction(e -> loadAndRun());
     myBGColorPicker.setOnAction(t -> {
       Color c = myBGColorPicker.getValue();
       myViewer.setBGColor(c.getRed(), c.getGreen(), c.getBlue());
@@ -115,30 +110,7 @@ public class ToolbarPane extends ToolBar {
     myLanguage.getSelectionModel().selectedItemProperty().addListener((options, oldValue,
         newValue) -> changeLanguage(newValue));
     myHelpInfo.setOnAction(e -> showHelpWindow());
-    createTabOpener();
   }
-
-  private void createTabOpener() {
-    try {
-      myPossibleTabsResource = BundleInterface.createResourceBundle(POSSIBLE_TABS_RESOURCE);
-    } catch (IOException e) {
-      throw new ResourceBundleCreationException();
-    }
-    for (String key : Collections.list(myPossibleTabsResource.getKeys())) {
-      myTabOpener.getItems().add(key);
-    }
-  }
-
-  private void initializeLoadAndRunButton() {
-    myLoadAndRun.setOnAction(e -> {
-      try {
-        loadAndRun();
-      } catch (NoSuchMethodException | InstantiationException | ScriptException | IllegalAccessException | InvocationTargetException | ClassNotFoundException ex) {
-        ex.printStackTrace();
-      }
-    });
-  }
-
 
   private void showHelpWindow() {
     Stage stage = new Stage();
@@ -174,7 +146,7 @@ public class ToolbarPane extends ToolBar {
     myViewer.setUserInputAreaText(fileContents);
   }
 
-  private void loadAndRun() throws NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
+  private void loadAndRun() {
     File file = getUserFile();
     sendCommands(file);
   }
@@ -192,14 +164,14 @@ public class ToolbarPane extends ToolBar {
     return fc.showOpenDialog(new Stage());
   }
 
-  private void sendCommands(File file) throws NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
+  private void sendCommands(File file) {
     String fileContents = getTextFromFile(file);
     try {
       assert fileContents != null;
       myLogicalController.handleNewCommand(fileContents);
     } catch (Exception e) {
       myViewer.announceError(new VisualError(new InvalidCommandException("The "
-          + "following command is invald: \n" + fileContents)));
+          + "following command is invalid: \n" + fileContents)));
     }
   }
 

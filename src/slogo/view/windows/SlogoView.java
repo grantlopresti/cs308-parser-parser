@@ -8,13 +8,17 @@ import java.util.ResourceBundle;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
@@ -30,7 +34,7 @@ import slogo.exceptions.ResourceBundleCreationException;
 import slogo.logicalcontroller.BundleInterface;
 import slogo.logicalcontroller.LogicalController;
 import slogo.view.SubTabFactory;
-import slogo.view.subsections.ListTab;
+import slogo.view.TurtleImage;
 import slogo.view.subsections.ToolbarPane;
 import slogo.view.subsections.TurtleOptionsTab;
 import slogo.view.subsections.UserInputPane;
@@ -39,15 +43,14 @@ import slogo.visualcontroller.ErrorSeverity;
 import slogo.visualcontroller.VisualController;
 import slogo.visualcontroller.VisualError;
 import slogo.visualcontroller.VisualLine;
-import slogo.visualcontroller.VisualProperty;
 import slogo.visualcontroller.VisualTurtle;
 
 public class SlogoView extends Application {
 
   private static final int VISUALIZER_WIDTH = 800;
   private static final int VISUALIZER_HEIGHT = 525;
-  public static final int RIGHT_PANE_WIDTH = 350;
-  public static final int LEFT_PANE_WIDTH = 350;
+  public static final int RIGHT_PANE_WIDTH = 375;
+  public static final int LEFT_PANE_WIDTH = 325;
 
   private static final int WINDOW_WIDTH = LEFT_PANE_WIDTH + VISUALIZER_WIDTH + RIGHT_PANE_WIDTH;
   private static final int WINDOW_HEIGHT = 700;
@@ -58,28 +61,29 @@ public class SlogoView extends Application {
   public static final String CLASS_CREDIT = "CS 308 - Spring 2020 - Duvall";
   public static final String PROJECT_CREDIT = "Slogo - Parser Team 10";
 
+  public static final String POSSIBLE_TABS_RESOURCE = "src/slogo/view/resources/possibleTabs.properties";
+  private ResourceBundle myPossibleTabsResource;
+
   //FIXME: Delete these and replace with XML reading
-  public static final String[] INITIAL_LEFT_TAB_NAMES = new String[]{
-      "UserDefinedFunctionsTab",
-      "ErrorHandlerTab",
-      "FileViewerTab"
-  };
   public static final String[] INITIAL_RIGHT_TAB_NAMES = new String[]{
       "CommandHistoryTab",
       "VariableViewerTab",
-      "DataViewerTab",
+      "UserDefinedFunctionsTab",
+      "ErrorHandlerTab"
   };
   public static final String ALERT_TITLE = "Alert";
 
   //Main Sections
   private BorderPane myMainPane;
   private ToolBar myToolbarPane;
-  private TabPane myLeftPane;
+  private VBox myLeftPane;
   private BorderPane myCenterPane;
-  private TabPane myRightPane;
+  private VBox myRightPane;
   private Pane myCreditsPane;
 
   //SubPanes
+  private TabPane myLeftTabPane;
+  private TabPane myRightTabPane;
   private VisualizationPane myVisualizationPane;
   private UserInputPane myInputPane;
   private TurtleOptionsTab myTurtleOptionsTab;
@@ -92,12 +96,8 @@ public class SlogoView extends Application {
   private SubTabFactory mySubTabFactory;
 
   private ResourceBundle myTabTypeResources;
-  private ResourceBundle myInitialLeftTabResources;
-  private ResourceBundle myInitialRightTabResources;
 
   private static final String TabResourcePath = "src/slogo/view/resources/possibleTabs.properties";
-  private static final String InitialLeftTabResourcePath = "src/slogo/view/resources/InitialLeftTabs.properties";
-  private static final String InitialRightTabResourcePath = "src/slogo/view/resources/InitialRightTabs.properties";
 
 
   public SlogoView(LogicalController logicalController, VisualController visualController) {
@@ -106,8 +106,6 @@ public class SlogoView extends Application {
 
     try {
       myTabTypeResources = BundleInterface.createResourceBundle(TabResourcePath);
-      myInitialLeftTabResources = BundleInterface.createResourceBundle(InitialLeftTabResourcePath);
-      myInitialRightTabResources = BundleInterface.createResourceBundle(InitialRightTabResourcePath);
     } catch (IOException e) {
       throw new ResourceBundleCreationException();
     }
@@ -118,6 +116,7 @@ public class SlogoView extends Application {
     Scene scene = new Scene(createMainPane(), WINDOW_WIDTH, WINDOW_HEIGHT);
     stage.setTitle(PROJECT_TITLE);
     scene.getStylesheets().add(DEFAULT_STYLESHEET);
+    scene.setFill(Color.DARKGRAY);
     stage.setScene(scene);
     stage.show();
   }
@@ -160,6 +159,12 @@ public class SlogoView extends Application {
 
     myCenterPane.setCenter(myVisualizationPane);
     myCenterPane.setBottom(programInputArea);
+
+    showTurtleInCenter();
+  }
+
+  private void showTurtleInCenter() {
+    sendUserCommand("bk 1\nfd 1");
   }
 
   private HBox getProgramInputNode() {
@@ -184,17 +189,13 @@ public class SlogoView extends Application {
     runButton.setId("run-button");
     runButton.setMinSize(60, WINDOW_HEIGHT * 0.10);
     runButton.setPrefWidth(120);
-    runButton.setOnAction(e -> {
-      sendUserCommand(myInputPane.getCommand());
-    });
+    runButton.setOnAction(e -> sendUserCommand(myInputPane.getCommand()));
 
     Button clearButton = new Button("Clear");
     clearButton.setId("run-button");
     clearButton.setMinSize(60, WINDOW_HEIGHT * 0.05);
     clearButton.setPrefWidth(120);
-    clearButton.setOnAction(e -> {
-      myInputPane.clear();
-    });
+    clearButton.setOnAction(e -> myInputPane.clear());
 
     buttonArea.getChildren().addAll(runButton, clearButton);
     return buttonArea;
@@ -217,27 +218,49 @@ public class SlogoView extends Application {
   }
 
   private void createLeftPane() {
-    myLeftPane = new TabPane();
+    myLeftPane = new VBox();
 
-    //FIXME: Initial settings should be obtained from XML File
-    for (String initialTabName : INITIAL_LEFT_TAB_NAMES){
-      myLeftPane.getTabs().add(mySubTabFactory.makeTab(this, myVisualController, initialTabName));
-    }
+    myLeftTabPane = new TabPane();
     myTurtleOptionsTab = new TurtleOptionsTab(this, myVisualController);
-    myLeftPane.getTabs().add(myTurtleOptionsTab);
+    Tab colorPaletteTab = new Tab("Colors");
+    Tab imagePaletteTab = new Tab("Images");
+    myLeftTabPane.getTabs().addAll(myTurtleOptionsTab, imagePaletteTab, colorPaletteTab);
+    myLeftTabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+    myLeftTabPane.setPrefWidth(LEFT_PANE_WIDTH);
 
-    myLeftPane.setPrefWidth(LEFT_PANE_WIDTH);
+    myLeftPane.getChildren().addAll(myLeftTabPane);
   }
 
   private void createRightPane() {
-    myRightPane = new TabPane();
+    myRightPane = new VBox();
 
-    for (String initialTabName : INITIAL_RIGHT_TAB_NAMES){
-      myRightPane.getTabs().add(mySubTabFactory.makeTab(this, myVisualController, initialTabName));
+    MenuBar rightNewTab = new MenuBar();
+    Menu menu = new Menu("Choose Tab to Add to Right Pane");
+    rightNewTab.getMenus().add(menu);
+
+    try {
+      myPossibleTabsResource = BundleInterface.createResourceBundle(POSSIBLE_TABS_RESOURCE);
+    } catch (IOException e) {
+      throw new ResourceBundleCreationException();
+    }
+    for (String key : Collections.list(myPossibleTabsResource.getKeys())) {
+      MenuItem menuItem = new MenuItem(myPossibleTabsResource.getString(key).split(",")[0]);
+      menuItem.setOnAction(e -> {
+        Tab newTab = mySubTabFactory.makeTab(this, myVisualController, key);
+        myRightTabPane.getTabs().add(newTab);
+      });
+      menu.getItems().add(menuItem);
     }
 
-    myRightPane.setPrefWidth(RIGHT_PANE_WIDTH);
+    myRightTabPane = new TabPane();
 
+    for (String initialTabName : INITIAL_RIGHT_TAB_NAMES){
+      myRightTabPane.getTabs().add(mySubTabFactory.makeTab(this, myVisualController, initialTabName));
+    }
+
+    myRightTabPane.setPrefWidth(RIGHT_PANE_WIDTH);
+
+    myRightPane.getChildren().addAll(rightNewTab, myRightTabPane);
   }
 
   private void createCreditsPane() {
@@ -312,12 +335,12 @@ public class SlogoView extends Application {
 
   public void setPenColor(double red, double green, double blue) {
     Color customColor = new Color(red,green,blue,1);
-    myVisualizationPane.setPenColor(customColor);
+    //TODO: SEND COLOR CHANGE COMMAND TO LOGICAL CONTROLLER
   }
 
-  public void changeTurtleImage(String newValue) {
+  public void changeTurtleImage(int ID, String newValue) {
     myVisualController.changeTurtleImage(newValue.toUpperCase());
+    myVisualizationPane.changeTurtleImage(ID, newValue.toUpperCase());
     //TODO: UPDATE CENTER
-    //myVisualizationPane.
   }
 }

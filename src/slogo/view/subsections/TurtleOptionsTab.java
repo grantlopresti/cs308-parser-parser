@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -37,6 +33,8 @@ public class TurtleOptionsTab extends Tab {
 
   private VisualController myController;
   private SlogoView myViewer;
+
+  private int mySelectedTurtleID = 0;
 
   private VBox myOrganizer;
 
@@ -110,7 +108,7 @@ public class TurtleOptionsTab extends Tab {
   private void initializeButtons() {
     setDefaultTurtleImage();
     myTurtleImages.getSelectionModel().selectedItemProperty().addListener((options, oldValue,
-        newValue) -> myViewer.changeTurtleImage(newValue));
+        newValue) -> myViewer.changeTurtleImage(mySelectedTurtleID, newValue));
     myPenColorPicker.setOnAction(t -> {
       Color c = myPenColorPicker.getValue();
       myViewer.setPenColor(c.getRed(), c.getGreen(), c.getBlue());
@@ -119,6 +117,5 @@ public class TurtleOptionsTab extends Tab {
 
   private void setDefaultTurtleImage() {
     myTurtleImages.setValue(DEFAULT_TURTLE_IMAGE);
-    myViewer.changeTurtleImage(DEFAULT_TURTLE_IMAGE.toUpperCase());
   }
 }
