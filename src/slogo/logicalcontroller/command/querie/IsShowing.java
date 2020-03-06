@@ -2,7 +2,7 @@ package slogo.logicalcontroller.command.querie;
 
 
 public class IsShowing extends QuerieCommand {
-    public IsShowing(){
+    public IsShowing(List<String>){
         super();
     }
 }
