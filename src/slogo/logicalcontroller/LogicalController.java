@@ -26,9 +26,6 @@ public class LogicalController {
   private VisualController myVisualController;
   private VariableList myVariables;
 
-  private LogicalController(){
-  };
-
   public LogicalController(ModelCollection modelCollection, VisualController visualController, VariableList variables){
     this.myModelCollection = modelCollection;
     this.myVisualController = visualController;
