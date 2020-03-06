@@ -10,8 +10,6 @@ import slogo.logicalcontroller.ControlFlowExtractor;
 import java.io.IOException;
 import java.util.*;
 
-import static slogo.logicalcontroller.command.controlflow.ControlFlowExtractor.*;
-
 public class UserInput implements UserInputInterface, BundleInterface, CommandGenerator {
 
     private List<String> myUserInput;
@@ -57,7 +55,7 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
                 return CommandGenerator.createControlCommand(superclass, translated, args);
             } else if (superclass.equals(TELLER)) {
                 this.myPrefix = SPACE; this.mySuffix = SPACE;
-                List<String> args = getBracketArguments(this.myUserInput, this.myLineIndex);
+                List<String> args = ControlFlowExtractor.getBracketArguments(this.myUserInput, this.myLineIndex);
                 return CommandGenerator.createCommand(superclass, translated, args);
             } else {
                 int params = countParameters(translated);
@@ -71,14 +69,10 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
 
     // TODO - implement method stub - PLEase double check - By Alex
     private List<List<String>> getControlFlowArguments(int myLineIndex, int myCommandIndex, String command) {
-        controlFlowEndIndex = 0;
-
+        this.controlFlowEndIndex = 0;
         List<List<String>> returnList = new ArrayList<>();
         int numParams = Integer.parseInt(myParameterMap.getString(command).split(",")[1]);
         int numBracketSets = Integer.parseInt(myParameterMap.getString(command).split(",")[0]);
-
-        System.out.println("This Command Object Takes " + numParams + " Parameters");
-        System.out.println("This Command Object Takes " + numBracketSets + " Sets of Bracketed Bodies");
 
         if(numParams == 1){
             List<String> paramsList = new ArrayList<>();
@@ -95,12 +89,11 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
             lineLocation = locationArray[0];
             columnLocation = locationArray[1];
             System.out.println("Opening Bracket at :" + lineLocation + " " + columnLocation);
-            List<String> argumentSet = initControlFlow(myUserInput, lineLocation, columnLocation);
+            List<String> argumentSet = ControlFlowExtractor.initControlFlow(myUserInput, lineLocation, columnLocation);
             returnList.add(argumentSet);
             linePointer += argumentSet.size();
-            controlFlowEndIndex = getLineLastBrac(myUserInput, lineLocation, columnLocation);
+            controlFlowEndIndex = ControlFlowExtractor.getLineLastBrac(myUserInput, lineLocation, columnLocation);
         }
-
         return returnList;
     }
 
@@ -172,18 +165,6 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
         System.out.println("//");
 
         List<String> prefix = myUserInput.subList(0, myLineIndex);
-
-        /*
-        System.out.println("Looking for end bracket starting on line " + controlFlowEndIndex);
-
-        while(!myUserInput.get(controlFlowEndIndex).contains("]")){
-            controlFlowEndIndex++;
-        }
-        System.out.println("Closing Bracket at Line: " + controlFlowEndIndex);
-
-
-         */
-
         List<String> suffix = myUserInput.subList(controlFlowEndIndex+1, myUserInput.size());
 
         List<String> result = new ArrayList<>();

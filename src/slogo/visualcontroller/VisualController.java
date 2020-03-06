@@ -38,14 +38,6 @@ public class VisualController implements VisualInterface {
   private SimpleObjectProperty<ObservableList<VisualFile>> myFilesProperty;
   private SimpleObjectProperty<ObservableList<String>> myTurtleNamesProperty;
 
-  /**
-   * Constructor for a VisualController, with its associated SlogoView
-   * @param view is the view in which VisualObjects will be added to the display
-   */
-  public VisualController(SlogoView view){
-    mySlogoView = view;
-  }
-
   public VisualController() {
     initProperties();
   }
@@ -180,6 +172,7 @@ public class VisualController implements VisualInterface {
     return myTurtles.get(turtle.getID());
   }
 
+  @Override
   public ObservableValue<? extends ObservableList<String>> getMyTurtlesProperty() {
     return myTurtleNamesProperty;
   }
