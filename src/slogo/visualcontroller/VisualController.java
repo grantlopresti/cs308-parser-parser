@@ -2,6 +2,7 @@ package slogo.visualcontroller;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -33,6 +34,7 @@ public class VisualController implements VisualInterface {
   private SimpleObjectProperty<ObservableList<VisualData>> myDataProperty;
   private SimpleObjectProperty<ObservableList<VisualVariable>> myVariablesProperty;
   private SimpleObjectProperty<ObservableList<VisualFile>> myFilesProperty;
+  private SimpleObjectProperty<ObservableList<String>> myTurtleNamesProperty;
 
   /**
    * Constructor for a VisualController, with its associated SlogoView
@@ -53,6 +55,7 @@ public class VisualController implements VisualInterface {
     myDataProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
     myVariablesProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
     myFilesProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
+    myTurtleNamesProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList());
   }
 
   @Override
@@ -163,10 +166,11 @@ public class VisualController implements VisualInterface {
 
   private VisualTurtle addTurtleToMap(ModelTurtle turtle) {
     myTurtles.putIfAbsent(turtle.getID(), new VisualTurtle());
+    myTurtleNamesProperty.getValue().add(turtle.getID() + "");
     return myTurtles.get(turtle.getID());
   }
 
-  public ObservableList<VisualTurtle> getTurtlesList() {
-   return myTurtlesList = FXCollections.observableArrayList(myTurtles.values());
+  public ObservableValue<? extends ObservableList<String>> getMyTurtlesProperty() {
+    return myTurtleNamesProperty;
   }
 }
