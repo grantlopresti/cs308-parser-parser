@@ -27,7 +27,7 @@ public final class MasterCodeFilter{
         throw new AssertionError(INVALID_INSTANTIATION_ERROR);
     }
 
-    public static String filter(String rawInput){
+    public static String filter(String rawInput) throws NoSuchMethodException, ClassNotFoundException {
         String result;
         ResourceBundle filtersApplied;
         try {
@@ -37,8 +37,16 @@ public final class MasterCodeFilter{
         }
 
         List<String> activeFilters = extractActiveFilters(filtersApplied);
+        List<Method> methodList = extractOperatingMethods(activeFilters);
 
+        performFiltering(methodList);
 
+    }
+
+    private static void performFiltering(List<Method> methodList) {
+        for(Method method : methodList){
+
+        }
     }
 
     private static List<String> extractActiveFilters(ResourceBundle filterInformation){
@@ -52,23 +60,21 @@ public final class MasterCodeFilter{
                 activeFiltersList.add(key);
             }
         }
-
-        printActiveFilters(activeFiltersList);                  //TODO: Remove the print statement later
-
+        printActiveFilters(activeFiltersList);                                              //TODO: Remove the print statement later
         return activeFiltersList;
     }
 
-    private List<Method> extractOperatingMethods(List<String> activeFilters) throws ClassNotFoundException, NoSuchMethodException {
+    private static List<Method> extractOperatingMethods(List<String> activeFilters) throws ClassNotFoundException, NoSuchMethodException {
         List<Method> methodList = new ArrayList<>();
         List<Class> classList = extractOperatingClasses(activeFilters);
         for (Class myClass : classList){
-            Method filterMethod = myClass.getMethod("filter", String.class);
+            Method filterMethod = myClass.getMethod("filter", String.class);            //TODO: Use reflection to extract this "filter" name.
             methodList.add(filterMethod);
         }
         return methodList;
     }
 
-    private List<Class> extractOperatingClasses(List<String> activeFilters) throws ClassNotFoundException {             //TODO: Error handling
+    private static List<Class> extractOperatingClasses(List<String> activeFilters) throws ClassNotFoundException {             //TODO: Error handling
         List<Class> classList = new ArrayList<Class>();
         for (String className : activeFilters){
             Class classObject = Class.forName(createClassPath(CLASS_PREFIX, className));
@@ -77,7 +83,7 @@ public final class MasterCodeFilter{
         return classList;
     }
 
-    private String createClassPath(String prefix, String className){
+    private static String createClassPath(String prefix, String className){
         return prefix + className;
     }
 

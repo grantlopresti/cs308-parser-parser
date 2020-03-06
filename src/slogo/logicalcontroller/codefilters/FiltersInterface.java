@@ -5,7 +5,7 @@ package slogo.logicalcontroller.codefilters;
  * if future filter pre-processing functionality is desired, it MUST implement this interface to ensure correct functionality.
  * @author Alex Xu
  */
-public interface filtersInterface {
+public interface FiltersInterface {
 
     /**
      * Returns a processed String.
