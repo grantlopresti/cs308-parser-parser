@@ -161,8 +161,6 @@ public class SlogoView extends Application {
 
     myCenterPane.setCenter(myVisualizationPane);
     myCenterPane.setBottom(programInputArea);
-
-    myVisualizationPane.showTurtleInCenter();
   }
 
   private HBox getProgramInputNode() {
