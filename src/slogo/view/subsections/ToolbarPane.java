@@ -70,7 +70,6 @@ public class ToolbarPane extends ToolBar {
       );
   private ComboBox<String> myLanguage = new ComboBox<>(languageOptions);
   private Button myHelpInfo = new Button("Help/Info");
-  private ComboBox<String> myTabOpener = new ComboBox<>();
 
   public ToolbarPane(SlogoView viewer, LogicalController logicalController) throws IOException {
     myViewer = viewer;
@@ -95,9 +94,7 @@ public class ToolbarPane extends ToolBar {
         myLanguage,
         new Separator(),
         myHelpInfo,
-        new Separator(),
-        new Text("Tab Opener"),
-        myTabOpener);
+        new Separator());
   }
 
   private void initializeButtons() {
@@ -115,13 +112,7 @@ public class ToolbarPane extends ToolBar {
   }
 
   private void initializeLoadAndRunButton() {
-    myLoadAndRun.setOnAction(e -> {
-      try {
-        loadAndRun();
-      } catch (NoSuchMethodException | InstantiationException | ScriptException | IllegalAccessException | InvocationTargetException | ClassNotFoundException ex) {
-        ex.printStackTrace();
-      }
-    });
+    myLoadAndRun.setOnAction(e -> loadAndRun());
   }
 
 
@@ -159,7 +150,7 @@ public class ToolbarPane extends ToolBar {
     myViewer.setUserInputAreaText(fileContents);
   }
 
-  private void loadAndRun() throws NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
+  private void loadAndRun() {
     File file = getUserFile();
     sendCommands(file);
   }
@@ -177,14 +168,14 @@ public class ToolbarPane extends ToolBar {
     return fc.showOpenDialog(new Stage());
   }
 
-  private void sendCommands(File file) throws NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
+  private void sendCommands(File file) {
     String fileContents = getTextFromFile(file);
     try {
       assert fileContents != null;
       myLogicalController.handleNewCommand(fileContents);
     } catch (Exception e) {
       myViewer.announceError(new VisualError(new InvalidCommandException("The "
-          + "following command is invald: \n" + fileContents)));
+          + "following command is invalid: \n" + fileContents)));
     }
   }
 
