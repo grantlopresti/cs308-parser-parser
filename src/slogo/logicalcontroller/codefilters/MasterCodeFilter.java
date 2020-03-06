@@ -64,7 +64,7 @@ public final class MasterCodeFilter{
     private static String performFiltering(List<FilterSuperclass> classList, List<Method> methodList, String rawInput) throws InvocationTargetException, IllegalAccessException {
         String result = rawInput;
         for(int i = 0; i<classList.size(); i++){
-            Object resultObject = methodList.get(i).invoke(classList.get(i), rawInput);
+            Object resultObject = methodList.get(i).invoke(classList.get(i), result);
             result = (String) resultObject;
         }
         return result;
