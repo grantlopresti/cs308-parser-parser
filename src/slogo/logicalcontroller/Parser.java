@@ -9,6 +9,7 @@ import slogo.logicalcontroller.command.controlflow.ControlFlowCommand;
 import slogo.logicalcontroller.command.math.MathCommand;
 import slogo.logicalcontroller.command.modifier.ModifierCommand;
 import slogo.logicalcontroller.command.querie.QuerieCommand;
+import slogo.logicalcontroller.command.teller.TellerCommand;
 import slogo.logicalcontroller.input.UserInput;
 import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelCollection;
@@ -121,6 +122,10 @@ public class Parser implements BundleInterface {
 
     private List<String> executeMathCommand(MathCommand command) {
         return new ArrayList<String>(List.of(command.execute()));
+    }
+
+    private List<String> executeTellerCommand(TellerCommand command) {
+        return new ArrayList<String>(List.of(command.execute(this.myModelCollection)));
     }
 
     private List<String> executeControlFlowCommand(ControlFlowCommand command) {
