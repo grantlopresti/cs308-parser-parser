@@ -91,6 +91,7 @@ public class TurtleOptionsTab extends Tab {
     GridPane.setHalignment(backButton, HPos.CENTER);
 
     myBonusCommandGrid.setAlignment(Pos.CENTER);
+    myBonusCommandGrid.setVgap(5);
 
     myBonusCommandGrid.add(forwardButton, 1, 0);
     myBonusCommandGrid.add(backButton, 1, 2);
