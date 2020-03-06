@@ -4,7 +4,10 @@ import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.command.Command;
 
 import java.lang.reflect.Constructor;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public interface CommandGenerator {
 
@@ -34,6 +37,32 @@ public interface CommandGenerator {
             e.printStackTrace();
             throw new InvalidCommandException("Could not create command");
         }
+    }
+
+    static boolean isValidCommand(String s, ResourceBundle bundle) {
+        for(String key: Collections.list(bundle.getKeys())){
+            String regex = bundle.getString(key);
+            String[] regexElems = regex.split("\\|");
+            if(regexElems[0].equals(s) || ((regexElems.length >1) && regexElems[1].equals(s))){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Use properties file to translate command Key into superclass for reflections
+     * @param command
+     * @return
+     */
+    static String getCommandSuperclass(String command, ResourceBundle bundle) {
+        Enumeration<String> resourceEnumeration = bundle.getKeys();
+        String key;
+        while (resourceEnumeration.hasMoreElements()) {
+            key = resourceEnumeration.nextElement();
+            if (key.equals(command)) {return bundle.getString(key);}
+        }
+        return "";
     }
 
 }

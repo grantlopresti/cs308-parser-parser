@@ -52,7 +52,7 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
             this.myLineIndex = findNextLine();
             this.myCommandIndex = findLastCommand(this.myLineIndex);
             String translated = translateCommand(this.myCommand);
-            String superclass = getCommandSuperclass(translated);
+            String superclass = CommandGenerator.getCommandSuperclass(translated, this.myCommandMap);
             System.out.printf("translated %s to %s \n", this.myCommand, translated);
             if (superclass.equals(CONTROLFLOW)) {
                 List<List<String>> args = getControlFlowArguments(this.myLineIndex, this.myCommandIndex, translated);
@@ -197,7 +197,7 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
         for(int i = 0; i < this.myUserInput.size(); i++){
             String[] words = this.myUserInput.get(i).split(SPACE);
             for (String s: words) {
-                if (isValidCommand(s)) {return i;}
+                if (CommandGenerator.isValidCommand(s, this.myResources)) {return i;}
             }
             // if(s.split("\\s+").length > 1){ return i; }
         }
@@ -208,7 +208,7 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
         String line = this.myUserInput.get(index);
         String[] words = line.split("\\s+");
         for(int i = words.length-1; i>=0; i--){
-            if(isValidCommand(words[i])) {
+            if(CommandGenerator.isValidCommand(words[i], this.myResources)) {
                 this.myCommand = words[i];
                 return i;
             }
@@ -239,18 +239,6 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
         return sb.deleteCharAt(sb.length()-1).toString();
     }
 
-    private boolean isValidCommand(String s) {
-        ResourceBundle bundle = this.myResources;
-        for(String key: Collections.list(bundle.getKeys())){
-            String regex = bundle.getString(key);
-            String[] regexElems = regex.split("\\|");
-            if(regexElems[0].equals(s) || ((regexElems.length >1) && regexElems[1].equals(s))){
-                return true;
-            }
-        }
-        return false;
-    }
-
     /**
      * Translates raw user inputted command (in arbitrary language) to Key in properties file
      * @param command
@@ -265,21 +253,6 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
             if(regexElems[0].equals(command) || ((regexElems.length >1) && regexElems[1].equals(command))){
                 return key;
             }
-        }
-        return "";
-    }
-
-    /**
-     * Use properties file to translate command Key into superclass for reflections
-     * @param command
-     * @return
-     */
-    private String getCommandSuperclass(String command) {
-        Enumeration<String> resourceEnumeration = this.myCommandMap.getKeys();
-        String key;
-        while (resourceEnumeration.hasMoreElements()) {
-            key = resourceEnumeration.nextElement();
-            if (key.equals(command)) {return this.myCommandMap.getString(key);}
         }
         return "";
     }
