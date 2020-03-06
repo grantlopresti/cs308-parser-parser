@@ -1,0 +1,183 @@
+.root {
+  -fx-accent: #1e74c6;
+  -fx-focus-color: -fx-accent;
+  -fx-base: #373e43;
+  -fx-control-inner-background: derive(-fx-base, 35%);
+  -fx-control-inner-background-alt: -fx-control-inner-background ;
+}
+
+.label{
+  -fx-text-fill: lightgray;
+}
+
+.text-field {
+  -fx-prompt-text-fill: gray;
+}
+
+.titulo{
+  -fx-font-weight: bold;
+  -fx-font-size: 18px;
+}
+
+.button{
+  -fx-focus-traversable: false;
+}
+
+.button:hover{
+  -fx-text-fill: white;
+}
+
+.separator *.line {
+  -fx-background-color: #3C3C3C;
+  -fx-border-style: solid;
+  -fx-border-width: 1px;
+}
+
+.scroll-bar{
+  -fx-background-color: derive(-fx-base,45%)
+}
+
+.button:default {
+  -fx-base: -fx-accent ;
+}
+
+.table-view{
+  /*-fx-background-color: derive(-fx-base, 10%);*/
+  -fx-selection-bar-non-focused: derive(-fx-base, 50%);
+}
+
+.table-view .column-header .label{
+  -fx-alignment: CENTER_LEFT;
+  -fx-font-weight: none;
+}
+
+.list-cell:even,
+.list-cell:odd,
+.table-row-cell:even,
+.table-row-cell:odd{
+  -fx-control-inner-background: derive(-fx-base, 15%);
+}
+
+.list-cell:empty,
+.table-row-cell:empty {
+  -fx-background-color: transparent;
+}
+
+.list-cell,
+.table-row-cell{
+  -fx-border-color: transparent;
+  -fx-table-cell-border-color:transparent;
+}
+
+.button {
+  -fx-background-color: #7711aa;
+  -fx-alignment: CENTER;
+  -fx-text-fill: white;
+  -fx-font-size: 12px;
+  -fx-font-weight: bold;
+}
+.button:hover{
+  -fx-background-color: #e6e6e6;
+}
+
+.list-cell:filled:selected:focused, .list-cell:filled:selected {
+  -fx-background-color: linear-gradient(#aa22ff 0%, #8818dd 25%, #6610Cc 75%, #4408aa 100%);
+  -fx-text-fill: black;
+}
+
+.list-cell:even {
+  -fx-background-color: white;
+}
+.list-cell:odd{
+  -fx-background-color: lightgray;
+}
+
+.list-cell:filled:hover {
+  -fx-background-color: #aa22ff;
+  -fx-text-fill: white;
+}
+
+.tab-pane .tab-header-area .tab-header-background {
+  -fx-opacity: 30;
+}
+.tab {
+  -fx-background-insets: 0 2 0 2,0,0;
+}
+.tab-pane .tab {
+  -fx-background-color: #e6e6e6;
+}
+.tab-pane .list-view {
+  -fx-padding: 10 20 10 20;
+}
+.vBox {
+  -fx-padding: 10 20 10 20;
+  -fx-spacing: 10;
+}
+.vBox .button{
+  -fx-padding: 8 15 15 15;
+  -fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;
+  -fx-background-radius: 8;
+  -fx-background-color:
+      linear-gradient(from 0% 93% to 0% 100%, #8a22bb 0%, #7711aa 100%),
+      #7711aa,
+      #9f33cf,
+      radial-gradient(center 50% 50%, radius 100%, #9f33cf, #8a22bb);
+  -fx-font-weight: bold;
+  -fx-font-size: 1.1em;
+  -fx-text-fill: white;
+}
+.vBox .button:hover {
+  -fx-background-color:
+      linear-gradient(from 0% 93% to 0% 100%, #8a22bb 0%, #7711aa 100%),
+      #7711aa,
+      #9f33cf,
+      radial-gradient(center 50% 50%, radius 100%, #9f33cf, #8a22bb);
+}
+.vBox .button:pressed {
+  -fx-padding: 10 15 13 15;
+  -fx-background-insets: 2 0 0 0,2 0 3 0, 2 0 4 0, 2 0 5 0;
+}
+
+
+.tab-pane .tab:selected {
+  -fx-background-color: #7711aa;
+}
+.tab-pane .tab {
+  -fx-background-color: #aa22ff;
+}
+.tab .tab-label {
+  -fx-alignment: CENTER;
+  -fx-text-fill: white;
+  -fx-font-size: 12px;
+  -fx-font-weight: bold;
+}
+.tab:selected .tab-label {
+  -fx-alignment: CENTER;
+  -fx-text-fill: white;
+}
+
+
+#run-button{
+  -fx-padding: 8 15 15 15;
+  -fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;
+  -fx-background-radius: 8;
+  -fx-background-color:
+      linear-gradient(from 0% 93% to 0% 100%, #8a22bb 0%, #7711aa 100%),
+      #7711aa,
+      #9f33cf,
+      radial-gradient(center 50% 50%, radius 100%, #9f33cf, #8a22bb);
+  -fx-font-weight: bold;
+  -fx-font-size: 1.1em;
+  -fx-text-fill: white;
+}
+#run-button:hover {
+  -fx-background-color:
+      linear-gradient(from 0% 93% to 0% 100%, #8a22bb 0%, #7711aa 100%),
+      #7711aa,
+      #9f33cf,
+      radial-gradient(center 50% 50%, radius 100%, #9f33cf, #8a22bb);
+}
+#run-button:pressed {
+  -fx-padding: 10 15 13 15;
+  -fx-background-insets: 2 0 0 0,2 0 3 0, 2 0 4 0, 2 0 5 0;
+}

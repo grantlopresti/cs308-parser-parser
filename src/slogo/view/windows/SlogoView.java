@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -31,7 +30,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import slogo.exceptions.DeprecationException;
 import slogo.exceptions.InvalidCommandException;
 import slogo.exceptions.ResourceBundleException;
 import slogo.logicalcontroller.BundleInterface;
@@ -57,8 +55,10 @@ public class SlogoView extends Application {
   private static final int WINDOW_WIDTH = LEFT_PANE_WIDTH + VISUALIZER_WIDTH + RIGHT_PANE_WIDTH;
   private static final int WINDOW_HEIGHT = 700;
 
-  public static final String PROJECT_TITLE = "Parser Parser - Slogo Project - CS 308";
   public static final String DEFAULT_STYLESHEET = "stylesheets/defaultStyle.css";
+  public Boolean isDarkMode = false;
+
+  public static final String PROJECT_TITLE = "Parser Parser - Slogo Project - CS 308";
   public static final String CREATORS_CREDIT = "Created by: Alex Xu, Amjad Syedibrahim, Grant LoPresti, and Max Smith";
   public static final String CLASS_CREDIT = "CS 308 - Spring 2020 - Duvall";
   public static final String PROJECT_CREDIT = "Slogo - Parser Team 10";
@@ -115,13 +115,15 @@ public class SlogoView extends Application {
      */
   }
 
+  private Scene myScene;
+
   @Override
   public void start(Stage stage) throws IOException {
-    Scene scene = new Scene(createMainPane(), WINDOW_WIDTH, WINDOW_HEIGHT);
+    myScene = new Scene(createMainPane(), WINDOW_WIDTH, WINDOW_HEIGHT);
     stage.setTitle(PROJECT_TITLE);
-    scene.getStylesheets().add(DEFAULT_STYLESHEET);
-    scene.setFill(Color.DARKGRAY);
-    stage.setScene(scene);
+    myScene.getStylesheets().add(DEFAULT_STYLESHEET);
+    myScene.setFill(Color.DARKGRAY);
+    stage.setScene(myScene);
     stage.show();
   }
 
@@ -328,7 +330,6 @@ public class SlogoView extends Application {
   public void clearScreen() {
     myVisualizationPane.clearElements();
     myVisualizationPane.resetBGColor();
-    myMainPane.setCenter(myCenterPane);
   }
 
   public void setPenColor(double red, double green, double blue) {
@@ -342,4 +343,16 @@ public class SlogoView extends Application {
     //TODO: UPDATE CENTER
   }
 
+  public void toggleDarkMode() {
+    System.out.println(isDarkMode);
+    if (isDarkMode) {
+      myScene.getStylesheets().remove("stylesheets/darkMode.css");
+      myScene.getStylesheets().add("stylesheets/defaultStyle.css");
+      isDarkMode = false;
+    } else {
+      myScene.getStylesheets().remove("stylesheets/defaultStyle.css");
+      myScene.getStylesheets().add("stylesheets/darkMode.css");
+      isDarkMode = true;
+    }
+  }
 }
