@@ -1,14 +1,12 @@
 package slogo.logicalcontroller.input;
 
-import slogo.exceptions.InvalidCommandException;
-import slogo.exceptions.NoCommandFound;
+import slogo.exceptions.NoCommandFoundException;
 import slogo.logicalcontroller.BundleInterface;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.command.controlflow.ControlFlowCommand;
 import slogo.logicalcontroller.command.controlflow.ControlFlowExtractor;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.util.*;
 
 public class UserInput implements UserInputInterface, BundleInterface, CommandGenerator {
@@ -62,8 +60,8 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
                 List<String> args = getArguments(this.myLineIndex, this.myCommandIndex, params);
                 return CommandGenerator.createCommand(superclass, translated, args);
             }
-        } catch (NoCommandFound e) {
-            throw new NoCommandFound("Could not generate command");
+        } catch (NoCommandFoundException e) {
+            throw new NoCommandFoundException("Could not generate command");
         }
     }
 
@@ -131,7 +129,7 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
             this.myLineIndex = findNextLine();
             this.myCommandIndex = findLastCommand(this.myLineIndex);
             return false;
-        } catch (NoCommandFound e) {
+        } catch (NoCommandFoundException e) {
             return true;
         }
     }
@@ -201,7 +199,7 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
             }
             // if(s.split("\\s+").length > 1){ return i; }
         }
-        throw new NoCommandFound();
+        throw new NoCommandFoundException();
     }
 
     private int findLastCommand(int index) {
@@ -213,7 +211,7 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
                 return i;
             }
         }
-        throw new NoCommandFound();
+        throw new NoCommandFoundException();
     }
 
     // TODO - assume that parameters are space separated (good enough assumption)

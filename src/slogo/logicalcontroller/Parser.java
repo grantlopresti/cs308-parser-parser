@@ -1,7 +1,5 @@
 package slogo.logicalcontroller;
 
-import slogo.exceptions.InvalidCommandException;
-import slogo.exceptions.NoCommandFound;
 import slogo.exceptions.ReflectionException;
 import slogo.exceptions.ResourceBundleCreationException;
 import slogo.logicalcontroller.command.Command;
@@ -12,7 +10,6 @@ import slogo.logicalcontroller.command.math.MathCommand;
 import slogo.logicalcontroller.command.modifier.ModifierCommand;
 import slogo.logicalcontroller.command.querie.QuerieCommand;
 import slogo.logicalcontroller.input.UserInput;
-import slogo.logicalcontroller.variable.Variable;
 import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelCollection;
 import slogo.model.ModelTurtle;
