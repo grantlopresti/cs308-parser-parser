@@ -60,12 +60,9 @@ public class VariableList implements Iterable{
         myVariablesList = new ArrayList<>();
     }
 
-
-
     public boolean isSameVariable(String variableName, Variable variable){
        return variableName.equals(variable.getName());
     }
-
 
     @Override
     public Iterator iterator() {
