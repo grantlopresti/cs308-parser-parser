@@ -1,6 +1,7 @@
 package slogo.logicalcontroller;
 
 import slogo.exceptions.InvalidCommandException;
+import slogo.exceptions.InvalidLanguageException;
 import slogo.exceptions.LogicalException;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.variable.VariableList;
@@ -68,10 +69,13 @@ public class LogicalController {
   /**
    * To be called from the front-end to change the language (also needs to happen the first time).
    * @param language
-   * @throws IOException
    */
-  public void setLanguage(String language) throws IOException {
-    myParser.setLanguage(language);
+  public void setLanguage(String language) {
+    try {
+      myParser.setLanguage(language);
+    } catch (IOException e) {
+      this.myVisualController.updateErrors(new InvalidLanguageException());
+    }
   }
 
   /**

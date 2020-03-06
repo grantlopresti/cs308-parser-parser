@@ -25,13 +25,11 @@ import java.lang.reflect.*;
 public class Parser implements BundleInterface {
 
     private String myLanguage;
-    private List<Command> finalCommandObjects;
     private VariableList myVariableList;
     private UserInput myUserInput;
     private ModelCollection myModelCollection;
     private ResourceBundle myLanguageResources;
     private Command myLatestCommand;
-    private boolean myFinished;
 
     /**
      * Constructor for the Parser class that takes in the input language and initializes all the used variables that are required for parsing.
@@ -49,11 +47,7 @@ public class Parser implements BundleInterface {
      */
     public void setLanguage(String language) throws IOException {
         this.myLanguage = language;
-        try {
-            this.myLanguageResources = BundleInterface.createResourceBundle(nameLanguageFile());
-        } catch (IOException e) {
-            throw new ResourceBundleCreationException();
-        }
+        this.myLanguageResources = BundleInterface.createResourceBundle(nameLanguageFile());
     }
 
     /**
@@ -134,15 +128,6 @@ public class Parser implements BundleInterface {
 
     private List<String> executeVariables(MakeVariable command) {return new ArrayList<String>();}
 
-    /**
-     * Called by the LogicalController
-     * Returns the final list of commands to be executed on the model
-     * @return
-     */
-    public List<Command> getCommands(){
-        return this.finalCommandObjects;
-    }
-
     public Command getLatestCommand() {
         return this.myLatestCommand;
     }
@@ -163,10 +148,6 @@ public class Parser implements BundleInterface {
 
     private UserInput getUserInput() {
         return this.myUserInput;
-    }
-
-    public ResourceBundle getLanguageResources() {
-        return this.myLanguageResources;
     }
 
 }

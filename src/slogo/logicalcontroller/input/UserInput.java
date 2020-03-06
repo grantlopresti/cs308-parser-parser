@@ -25,21 +25,18 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
 
     private static final String SUPERCLASS_PROPERTIES = "src/properties/commandSuperclass.properties";
     private static final String PARAMETER_PROPERTIES = "src/properties/parameterCount.properties";
-    private static final String REPLACE_PROPERTIES = "src/properties/lineReplace.properties";
     private static final String CONTROLFLOW = "controlflow";
     private static ResourceBundle myCommandMap;
     private static ResourceBundle myParameterMap;
-    private static ResourceBundle myReplaceMap;
 
     public UserInput(List<String> userInput, ResourceBundle bundle) {
         this.myUserInput = userInput;
         this.myResources = bundle;
         try {
-            this.myCommandMap = BundleInterface.createResourceBundle(SUPERCLASS_PROPERTIES);
-            this.myParameterMap = BundleInterface.createResourceBundle(PARAMETER_PROPERTIES);
-            this.myReplaceMap = BundleInterface.createResourceBundle(REPLACE_PROPERTIES);
+            myCommandMap = BundleInterface.createResourceBundle(SUPERCLASS_PROPERTIES);
+            myParameterMap = BundleInterface.createResourceBundle(PARAMETER_PROPERTIES);
         } catch (IOException e) {
-            // TODO - FIX THIS
+            // TODO - this should never throw, maybe announce to user that resource bundles could not be found?
             e.printStackTrace();
         }
     }
@@ -50,7 +47,7 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
             this.myLineIndex = findNextLine();
             this.myCommandIndex = findLastCommand(this.myLineIndex);
             String translated = translateCommand(this.myCommand);
-            String superclass = CommandGenerator.getCommandSuperclass(translated, this.myCommandMap);
+            String superclass = CommandGenerator.getCommandSuperclass(translated, myCommandMap);
             System.out.printf("translated %s to %s \n", this.myCommand, translated);
             if (superclass.equals(CONTROLFLOW)) {
                 List<List<String>> args = getControlFlowArguments(this.myLineIndex, this.myCommandIndex, translated);

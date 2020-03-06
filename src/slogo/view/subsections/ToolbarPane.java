@@ -68,7 +68,8 @@ public class ToolbarPane extends ToolBar {
           "Portuguese",
           "Russian",
           "Spanish",
-          "Urdu"
+          "Urdu",
+              "Gibberish"
       );
   private ComboBox<String> myLanguage = new ComboBox<>(languageOptions);
   private Button myHelpInfo = new Button("Help/Info");
@@ -203,12 +204,7 @@ public class ToolbarPane extends ToolBar {
   }
 
   private void changeLanguage(String language) {
-    try {
-      myLogicalController.setLanguage(language);
-    } catch (IOException e) {
-      myViewer.announceError(new VisualError(new InvalidLanguageException("The chosen language: " + language
-          + " is invalid. \n Please try again!")));
-    }
+    myLogicalController.setLanguage(language);
   }
 
   private String getTextFromFile(File file) {
