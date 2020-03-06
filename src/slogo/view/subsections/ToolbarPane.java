@@ -48,8 +48,6 @@ public class ToolbarPane extends ToolBar {
   private ResourceBundle myButtonResources;
 
   private static final String PACKAGE = SubTabFactory.class.getPackageName();
-  public static final String POSSIBLE_TABS_RESOURCE = "src/slogo/view/resources/possibleTabs.properties";
-  private ResourceBundle myPossibleTabsResource;
 
   private SlogoView myViewer;
 
@@ -114,18 +112,6 @@ public class ToolbarPane extends ToolBar {
     myLanguage.getSelectionModel().selectedItemProperty().addListener((options, oldValue,
         newValue) -> changeLanguage(newValue));
     myHelpInfo.setOnAction(e -> showHelpWindow());
-    createTabOpener();
-  }
-
-  private void createTabOpener() {
-    try {
-      myPossibleTabsResource = BundleInterface.createResourceBundle(POSSIBLE_TABS_RESOURCE);
-    } catch (IOException e) {
-      throw new ResourceBundleCreationException();
-    }
-    for (String key : Collections.list(myPossibleTabsResource.getKeys())) {
-      myTabOpener.getItems().add(key);
-    }
   }
 
   private void initializeLoadAndRunButton() {

@@ -8,12 +8,15 @@ import java.util.ResourceBundle;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToolBar;
@@ -30,7 +33,6 @@ import slogo.exceptions.ResourceBundleCreationException;
 import slogo.logicalcontroller.BundleInterface;
 import slogo.logicalcontroller.LogicalController;
 import slogo.view.SubTabFactory;
-import slogo.view.subsections.ListTab;
 import slogo.view.subsections.ToolbarPane;
 import slogo.view.subsections.TurtleOptionsTab;
 import slogo.view.subsections.UserInputPane;
@@ -39,7 +41,6 @@ import slogo.visualcontroller.ErrorSeverity;
 import slogo.visualcontroller.VisualController;
 import slogo.visualcontroller.VisualError;
 import slogo.visualcontroller.VisualLine;
-import slogo.visualcontroller.VisualProperty;
 import slogo.visualcontroller.VisualTurtle;
 
 public class SlogoView extends Application {
@@ -58,6 +59,9 @@ public class SlogoView extends Application {
   public static final String CLASS_CREDIT = "CS 308 - Spring 2020 - Duvall";
   public static final String PROJECT_CREDIT = "Slogo - Parser Team 10";
 
+  public static final String POSSIBLE_TABS_RESOURCE = "src/slogo/view/resources/possibleTabs.properties";
+  private ResourceBundle myPossibleTabsResource;
+
   //FIXME: Delete these and replace with XML reading
   public static final String[] INITIAL_LEFT_TAB_NAMES = new String[]{
       "UserDefinedFunctionsTab",
@@ -74,12 +78,14 @@ public class SlogoView extends Application {
   //Main Sections
   private BorderPane myMainPane;
   private ToolBar myToolbarPane;
-  private TabPane myLeftPane;
+  private VBox myLeftPane;
   private BorderPane myCenterPane;
-  private TabPane myRightPane;
+  private VBox myRightPane;
   private Pane myCreditsPane;
 
   //SubPanes
+  private TabPane myLeftTabPane;
+  private TabPane myRightTabPane;
   private VisualizationPane myVisualizationPane;
   private UserInputPane myInputPane;
   private TurtleOptionsTab myTurtleOptionsTab;
@@ -118,6 +124,7 @@ public class SlogoView extends Application {
     Scene scene = new Scene(createMainPane(), WINDOW_WIDTH, WINDOW_HEIGHT);
     stage.setTitle(PROJECT_TITLE);
     scene.getStylesheets().add(DEFAULT_STYLESHEET);
+    scene.setFill(Color.DARKGRAY);
     stage.setScene(scene);
     stage.show();
   }
@@ -216,27 +223,54 @@ public class SlogoView extends Application {
   }
 
   private void createLeftPane() {
-    myLeftPane = new TabPane();
+    myLeftPane = new VBox();
+
+    MenuBar leftNewTab = new MenuBar();
+
+    myLeftTabPane = new TabPane();
+    myTurtleOptionsTab = new TurtleOptionsTab(this, myVisualController);
+    myLeftTabPane.getTabs().add(myTurtleOptionsTab);
 
     //FIXME: Initial settings should be obtained from XML File
     for (String initialTabName : INITIAL_LEFT_TAB_NAMES){
-      myLeftPane.getTabs().add(mySubTabFactory.makeTab(this, myVisualController, initialTabName));
+      myLeftTabPane.getTabs().add(mySubTabFactory.makeTab(this, myVisualController, initialTabName));
     }
-    myTurtleOptionsTab = new TurtleOptionsTab(this, myVisualController);
-    myLeftPane.getTabs().add(myTurtleOptionsTab);
 
-    myLeftPane.setPrefWidth(LEFT_PANE_WIDTH);
+    myLeftTabPane.setPrefWidth(LEFT_PANE_WIDTH);
+
+    myLeftPane.getChildren().addAll(leftNewTab, myLeftTabPane);
   }
 
   private void createRightPane() {
-    myRightPane = new TabPane();
+    myRightPane = new VBox();
 
-    for (String initialTabName : INITIAL_RIGHT_TAB_NAMES){
-      myRightPane.getTabs().add(mySubTabFactory.makeTab(this, myVisualController, initialTabName));
+    MenuBar rightNewTab = new MenuBar();
+    Menu menu = new Menu("Choose Tab to Add to Right Pane");
+    rightNewTab.getMenus().add(menu);
+
+    try {
+      myPossibleTabsResource = BundleInterface.createResourceBundle(POSSIBLE_TABS_RESOURCE);
+    } catch (IOException e) {
+      throw new ResourceBundleCreationException();
+    }
+    for (String key : Collections.list(myPossibleTabsResource.getKeys())) {
+      MenuItem menuItem = new MenuItem(key);
+      menuItem.setOnAction(e -> {
+        Tab newTab = mySubTabFactory.makeTab(this, myVisualController, key);
+        myRightTabPane.getTabs().add(newTab);
+      });
+      menu.getItems().add(menuItem);
     }
 
-    myRightPane.setPrefWidth(RIGHT_PANE_WIDTH);
+    myRightTabPane = new TabPane();
 
+    for (String initialTabName : INITIAL_RIGHT_TAB_NAMES){
+      myRightTabPane.getTabs().add(mySubTabFactory.makeTab(this, myVisualController, initialTabName));
+    }
+
+    myRightTabPane.setPrefWidth(RIGHT_PANE_WIDTH);
+
+    myRightPane.getChildren().addAll(rightNewTab, myRightTabPane);
   }
 
   private void createCreditsPane() {
@@ -317,6 +351,5 @@ public class SlogoView extends Application {
   public void changeTurtleImage(String newValue) {
     myVisualController.changeTurtleImage(newValue.toUpperCase());
     //TODO: UPDATE CENTER
-    //myVisualizationPane.
   }
 }
