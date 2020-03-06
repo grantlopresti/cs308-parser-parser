@@ -66,11 +66,13 @@ public class VisualizationPane extends Group {
   }
 
   private void setAdjustedLineLocations(VisualLine line, Line lineImage) {
-    lineImage.setStartX(getAdjustedX(line.getStartX()));
-    lineImage.setStartY(getAdjustedY(line.getStartY()));
+    lineImage.setStartX(getAdjustedX(getInbounds(line.getStartX(), line.getThickness(),
+        groupWidth)));
+    lineImage.setStartY(getAdjustedY(getInbounds(line.getStartY(), line.getThickness(),
+        groupHeight)));
 
-    lineImage.setEndX(getAdjustedX(line.getEndX()));
-    lineImage.setEndY(getAdjustedY(line.getEndY()));
+    lineImage.setEndX(getAdjustedX(getInbounds(line.getEndX(), line.getThickness(), groupWidth)));
+    lineImage.setEndY(getAdjustedY(getInbounds(line.getEndY(), line.getThickness(), groupHeight)));
   }
 
   private void addTurtlesToVisualizer() {
@@ -95,10 +97,10 @@ public class VisualizationPane extends Group {
 
     turtleImage.rotateProperty().set(360 - turtle.getHeading());
 
-    turtleImage.setX(getAdjustedX(turtle.getCenterX())-(turtle.getSize()/2));
-    turtleImage.setY(getAdjustedY(turtle.getCenterY())-(turtle.getSize()/2));
-
-    System.out.println();
+    turtleImage.setX(getAdjustedX(getInbounds(turtle.getCenterX(),
+        turtleImage.getFitWidth(), groupWidth))- (turtle.getSize()/2));
+    turtleImage.setY(getAdjustedY(getInbounds(turtle.getCenterY(),
+        turtleImage.getFitHeight(), groupHeight))- (turtle.getSize()/2));
 
     Lighting lighting = getLightingEffect(turtle.getColor());
     turtleImage.setEffect(lighting);
@@ -106,13 +108,32 @@ public class VisualizationPane extends Group {
     getChildren().add(turtleImage);
   }
 
+  private double getInbounds(double coordinate, double imageSize, double dimension) {
+    System.out.printf("Coord: %.2f\n", coordinate);
+    double maxDistance = dimension/2;
+    double imageAdjustment = imageSize/2;
+    double ret;
+    if (coordinate < (-1 * maxDistance)+imageAdjustment){
+      ret = -1 * maxDistance + imageAdjustment + 5;
+    } else if (coordinate > maxDistance - imageAdjustment){
+      ret = maxDistance - imageAdjustment - 5;
+    } else {
+      ret = coordinate;
+    }
+    System.out.printf("RET: %.2f\n", ret);
+    return ret;
+  }
+
   private Animation makeMoveAnimation (VisualTurtle turtle, Node agent) {
     // create something to follow
     Path path = new Path();
-    path.getElements().add(new MoveTo(getAdjustedX(turtle.getPreviousX()),
-        getAdjustedY(turtle.getPreviousY())));
-    path.getElements().add(new LineTo(getAdjustedX(turtle.getCenterX()),
-        getAdjustedY(turtle.getCenterY())));
+    path.getElements().add(new MoveTo(
+        getAdjustedX(getInbounds(turtle.getPreviousX(), turtle.getSize(), groupWidth)),
+        getAdjustedY(getInbounds(turtle.getPreviousY(), turtle.getSize(), groupHeight))
+    ));
+    double nextX = getAdjustedX(getInbounds(turtle.getCenterX(), turtle.getSize(), groupWidth));
+    double nextY = getAdjustedY(getInbounds(turtle.getCenterY(), turtle.getSize(), groupHeight));
+    path.getElements().add(new LineTo(nextX,nextY));
     // create an animation where the shape follows a path
     PathTransition pt = new PathTransition(Duration.seconds(3), path, agent);
     // put them together in order
@@ -127,7 +148,7 @@ public class VisualizationPane extends Group {
 //
 //    return new SequentialTransition(agent, rt);
 //  }
-  
+
   private void setBackground() {
     myBackgroundRect.setWidth(groupWidth);
     myBackgroundRect.setHeight(groupHeight);
