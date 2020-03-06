@@ -2,21 +2,15 @@ package slogo.exceptions;
 
 import slogo.visualcontroller.ErrorSeverity;
 
-public class NoCommandFound extends LogicalException {
+public class VariableDoesNotExistException extends LogicalException{
 
-    public NoCommandFound() {
+    public VariableDoesNotExistException() {
         super();
         this.myErrorSeverity = ErrorSeverity.BASIC;
     }
 
-    public NoCommandFound(String message) {
+    public VariableDoesNotExistException(String message) {
         super(message);
         this.myErrorSeverity = ErrorSeverity.BASIC;
     }
-
-    @Override
-    public ErrorSeverity getErrorSeverity() {
-        return myErrorSeverity;
-    }
-
 }

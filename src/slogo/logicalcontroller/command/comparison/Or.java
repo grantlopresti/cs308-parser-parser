@@ -1,7 +1,5 @@
 package slogo.logicalcontroller.command.comparison;
 
-import slogo.logicalcontroller.command.Command;
-
 import java.util.List;
 
 public class Or extends ComparisonCommand {
@@ -13,7 +11,6 @@ public class Or extends ComparisonCommand {
     @Override
     public String execute() {
         boolean bool = this.argument1 != 0 || this.argument2 != 0;
-        return Boolean.toString(bool);
+        return booleanToString(bool);
     }
-
 }
