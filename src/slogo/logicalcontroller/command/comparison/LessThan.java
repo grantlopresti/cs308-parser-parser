@@ -1,7 +1,5 @@
 package slogo.logicalcontroller.command.comparison;
 
-import slogo.logicalcontroller.command.Command;
-
 import java.util.List;
 
 public class LessThan extends ComparisonCommand {
@@ -13,7 +11,7 @@ public class LessThan extends ComparisonCommand {
     @Override
     public String execute() {
         boolean bool = this.argument1 < this.argument2;
-        return Boolean.toString(bool);
+        return booleanToString(bool);
     }
 
 }
