@@ -31,6 +31,7 @@ public class VisualizationPane extends Group {
   private double groupHeight;
 
   private Color myBGColor = DEFAULT_BG_COLOR;
+  private Rectangle myBackgroundRect;
   private Color myPenColor = DEFAULT_PEN_COLOR;
 
   private List<VisualTurtle> myTurtles = new ArrayList<>();
@@ -110,11 +111,11 @@ public class VisualizationPane extends Group {
   }
   
   private void setBackground() {
-    Rectangle background = new Rectangle();
-    background.setWidth(groupWidth);
-    background.setHeight(groupHeight);
-    background.setFill(myBGColor);
-    getChildren().add(background);
+    myBackgroundRect = new Rectangle();
+    myBackgroundRect.setWidth(groupWidth);
+    myBackgroundRect.setHeight(groupHeight);
+    myBackgroundRect.setFill(myBGColor);
+    getChildren().add(myBackgroundRect);
   }
 
   private void setAdjustedX(ImageView turtleImage, double centerX) {
@@ -169,7 +170,7 @@ public class VisualizationPane extends Group {
 
   public void setBGColor(double red, double green, double blue) {
     myBGColor = new Color(red, green, blue, 1);
-    update();
+    myBackgroundRect.setFill(myBGColor);
   }
 
   public void clearElements() {
@@ -180,7 +181,7 @@ public class VisualizationPane extends Group {
 
   public void resetBGColor() {
     myBGColor = DEFAULT_BG_COLOR;
-    update();
+    myBackgroundRect.setFill(myBGColor);
   }
 
   public void setPenColor(Color customColor) {
