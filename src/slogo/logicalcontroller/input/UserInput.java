@@ -139,7 +139,6 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
     // TODO - how to handle multi line replacements vs. single line?
     @Override
     public void setCodeReplacement(List<String> code, Command command) {
-        System.out.println("Command Type Detected: " + command.getClass().getSuperclass().getSimpleName());
         if (command.getClass().getSuperclass().getSimpleName().equals("ControlFlowCommand")) {
             multiLineReplace(command);
         } else {

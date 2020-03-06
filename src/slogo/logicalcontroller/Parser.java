@@ -40,9 +40,10 @@ public class Parser implements BundleInterface {
      * Constructor for the Parser class that takes in the input language and initializes all the used variables that are required for parsing.
      * @param language
      */
-    public Parser(String language, ModelCollection model) throws IOException {
+    public Parser(String language, ModelCollection model, VariableList variables) throws IOException {
         setLanguage(language);
         this.myModelCollection = model;
+        this.myVariableList = variables;
     }
 
     /**
@@ -83,11 +84,8 @@ public class Parser implements BundleInterface {
     private List<String> executeCommand(Command command) {
         try {
             Class superclazz = command.getClass().getSuperclass();
-            System.out.printf("superclazz: %s \n", superclazz);
             String name = "execute" + superclazz.getSimpleName();
-            System.out.printf("name: %s \n", name);
             Method method = this.getClass().getDeclaredMethod(name, superclazz); //Command.class
-            System.out.printf("method: %s \n", method);
             Object o = method.invoke(this, command);
             return (List<String>) o;
         } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException | NullPointerException e) {

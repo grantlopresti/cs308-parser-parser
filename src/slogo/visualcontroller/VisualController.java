@@ -74,7 +74,7 @@ public class VisualController implements VisualInterface {
   @Override
   public void update(ModelCollection model, VariableList variableList, Command command) {
     moveModelObject(model, command);
-    // updateVariables(variableList);
+    updateVariables(variableList);
   }
 
   /**
@@ -120,8 +120,11 @@ public class VisualController implements VisualInterface {
 
   private void updateVariables(VariableList variableList) {
     myVariablesProperty.getValue().clear();
-    for (Object v: variableList) {
-      myVariablesProperty.getValue().add(new VisualVariable((Variable)v));
+    if (!variableList.isEmpty()) {
+      Iterator iter = variableList.iterator();
+      while (iter.hasNext()) {
+        myVariablesProperty.getValue().add(new VisualVariable((Variable)iter.next()));
+      }
     }
   }
 

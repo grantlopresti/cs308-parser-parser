@@ -26,17 +26,15 @@ public class LogicalController {
   private VisualController myVisualController;
   private VariableList myVariables;
 
-  private LogicalController(){
-  };
+  private LogicalController(){ };
 
   public LogicalController(ModelCollection modelCollection, VisualController visualController, VariableList variables){
     this.myModelCollection = modelCollection;
     this.myVisualController = visualController;
     this.myVariables = variables;
-    // TODO - update visualController initial state to empty lists to get first turtle to show
     // this.myVisualController.update(this.myModelCollection, this.myVariables, null);
     try {
-      myParser= new Parser(DEFAULT_LANGUAGE, modelCollection);
+      myParser= new Parser(DEFAULT_LANGUAGE, modelCollection, this.myVariables);
     } catch (Exception e) {
       System.exit(0);
     }
