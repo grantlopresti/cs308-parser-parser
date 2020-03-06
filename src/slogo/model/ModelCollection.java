@@ -37,9 +37,10 @@ public class ModelCollection implements Iterable {
      * @param object
      */
     public void append(ModelObject object){
-        // System.out.println("appending turtle: ")
-        myModelObjectList.add(object);
-        myModelObjectMap.put(object.getID(), object);
+        if (!(myModelObjectMap.containsKey(object.getID()))) {
+            myModelObjectList.add(object);
+            myModelObjectMap.put(object.getID(), object);
+        }
     }
 
     /**
