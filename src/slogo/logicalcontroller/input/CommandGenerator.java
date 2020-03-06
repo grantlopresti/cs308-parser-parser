@@ -34,7 +34,6 @@ public interface CommandGenerator {
             System.out.printf("clazz: %s \nconstructor: %s", clazz.toString(), ctor.toString());
             return (Command) ctor.newInstance(arguments);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new InvalidCommandException("Could not create command");
         }
     }

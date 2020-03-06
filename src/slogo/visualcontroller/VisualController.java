@@ -173,7 +173,6 @@ public class VisualController implements VisualInterface {
       if (turtle.isPenActive())
         appendLine(new VisualLine(visualTurtle));
     } catch (NullPointerException e) {
-      e.printStackTrace();
       System.out.println("Given null turtle set, passing on draw");
     }
   }
