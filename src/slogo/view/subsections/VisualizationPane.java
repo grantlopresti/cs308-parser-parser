@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
-import javafx.animation.RotateTransition;
 import javafx.animation.SequentialTransition;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -33,7 +32,7 @@ public class VisualizationPane extends Group {
   private double groupHeight;
 
   private Color myBGColor = DEFAULT_BG_COLOR;
-  private Rectangle myBackgroundRect;
+  private Rectangle myBackgroundRect = new Rectangle();
 
   private Map<Integer, VisualTurtle> myTurtles = new HashMap<>();
   private Map<Integer, ImageView> myTurtlesImageViews = new HashMap<>();
@@ -43,6 +42,7 @@ public class VisualizationPane extends Group {
     super();
     groupWidth = width;
     groupHeight = height;
+    addVisualTurtle(new VisualTurtle());
   }
 
   public void update() {
@@ -80,18 +80,15 @@ public class VisualizationPane extends Group {
       myTurtlesImageViews.remove(turtle.getId());
       myTurtlesImageViews.put(turtle.getId(), turtleImage);
 
-      visualizeTurtle(turtleImage, turtle);
+      visualizeTurtle(turtleImage, turtle, true);
     }
   }
 
-  private void visualizeTurtle(ImageView turtleImage, VisualTurtle turtle) {
+  private void visualizeTurtle(ImageView turtleImage, VisualTurtle turtle, Boolean doAnimate) {
     turtleImage.setFitWidth(turtle.getSize());
     turtleImage.setPreserveRatio(true);
 
-    turtleImage.setX(getAdjustedX(turtle.getPreviousX())-(turtle.getSize()/2));
-    turtleImage.setY(getAdjustedY(turtle.getPreviousY())-(turtle.getSize()/2));
-
-    if (turtle.getPreviousX() != turtle.getCenterX()) {
+    if (doAnimate && turtle.getPreviousX() != turtle.getCenterX()) {
       Animation turtleMoveAnimation = makeMoveAnimation(turtle, turtleImage);
       turtleMoveAnimation.play();
     }
@@ -132,11 +129,12 @@ public class VisualizationPane extends Group {
 //  }
   
   private void setBackground() {
-    myBackgroundRect = new Rectangle();
     myBackgroundRect.setWidth(groupWidth);
     myBackgroundRect.setHeight(groupHeight);
     myBackgroundRect.setFill(myBGColor);
-    getChildren().add(myBackgroundRect);
+    if (getChildren().isEmpty()){
+      getChildren().add(myBackgroundRect);
+    }
   }
 
   private double getAdjustedX(double centerX) {
@@ -187,12 +185,17 @@ public class VisualizationPane extends Group {
   public void changeTurtleImage(int ID, String imageName) {
     VisualTurtle targetTurtle = myTurtles.get(ID);
 
+    if (myTurtlesImageViews.values().size() > 0) {
+      getChildren().remove(myTurtlesImageViews.get(ID));
+      myTurtlesImageViews.remove(ID);
+    }
+
     targetTurtle.setImage(TurtleImage.valueOf(imageName));
 
-    visualizeTurtle(new ImageView(targetTurtle.getImage().getImagePath()), targetTurtle);
+    ImageView newImage = new ImageView(targetTurtle.getImage().getImagePath());
+    myTurtlesImageViews.put(ID, newImage);
+
+    visualizeTurtle(newImage, targetTurtle, false);
   }
 
-  public void showTurtleInCenter() {
-    visualizeTurtle(new ImageView(TurtleImage.TURTLE.getImagePath()), new VisualTurtle());
-  }
 }
