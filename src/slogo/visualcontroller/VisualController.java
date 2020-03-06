@@ -24,7 +24,7 @@ public class VisualController implements VisualInterface {
   private SlogoView mySlogoView;
 
   // Currently mirroring structure of VisualizationPane.java (change to bindings)
-  private Map<Integer, VisualTurtle> myTurtles = new HashMap<Integer, VisualTurtle>();
+  private Map<Integer, VisualTurtle> myTurtles = new HashMap<>();
   private ObservableList<VisualTurtle> myTurtlesList = FXCollections.observableArrayList(myTurtles.values());
 
   private List<VisualLine> myLines = new ArrayList<>();
@@ -165,7 +165,6 @@ public class VisualController implements VisualInterface {
   private void moveTurtle(ModelTurtle turtle) {
     VisualTurtle visualTurtle = addTurtleToMap(turtle);
     myTurtlesList.add(visualTurtle);
-    visualTurtle.setChangeState(true);
     visualTurtle.updateVisualTurtle(turtle);
     try {
       mySlogoView.updateVisualTurtles(new ArrayList<>(List.of(visualTurtle)));

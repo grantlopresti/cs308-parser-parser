@@ -27,7 +27,7 @@ public class TurtleOptionsTab extends Tab {
   private static final String DEFAULT_TURTLE_IMAGE = "Turtle";
 
   private ComboBox<String> myTurtlePicker = new ComboBox<>();
-  private ComboBox<String> myTurtleImages = new ComboBox<>();
+  private ComboBox<String> myTurtleImagePicker = new ComboBox<>();
   private ColorPicker myPenColorPicker = new ColorPicker();
   private GridPane myBonusCommandGrid = new GridPane();
 
@@ -51,7 +51,7 @@ public class TurtleOptionsTab extends Tab {
     Label tabTitleLine = new Label("Turtle Options");
     Label instructions = new Label("Choose a Turtle Below to see its characteristics");
     for (TurtleImage value : TurtleImage.values()){
-      myTurtleImages.getItems().add(value.getName());
+      myTurtleImagePicker.getItems().add(value.getName());
     }
     createBonusCommandGrid();
     initializeButtons();
@@ -64,7 +64,7 @@ public class TurtleOptionsTab extends Tab {
         new ComboBox<>(),
         new Separator(),
         new Text("Turtle Image:"),
-        myTurtleImages,
+        myTurtleImagePicker,
         new Text("Pen Color:"),
         myPenColorPicker,
         new Separator(),
@@ -75,10 +75,6 @@ public class TurtleOptionsTab extends Tab {
   }
 
   private void createBonusCommandGrid() {
-
-    List<Button> buttonNames = new ArrayList<Button>();
-
-    Map<String, Button> bonusButtons = new HashMap<String, Button>();
 
     Button forwardButton = new Button("Forward");
     forwardButton.setOnMouseClicked(e -> myViewer.sendUserCommand("forward 50"));
@@ -107,7 +103,7 @@ public class TurtleOptionsTab extends Tab {
 
   private void initializeButtons() {
     setDefaultTurtleImage();
-    myTurtleImages.getSelectionModel().selectedItemProperty().addListener((options, oldValue,
+    myTurtleImagePicker.getSelectionModel().selectedItemProperty().addListener((options, oldValue,
         newValue) -> myViewer.changeTurtleImage(mySelectedTurtleID, newValue));
     myPenColorPicker.setOnAction(t -> {
       Color c = myPenColorPicker.getValue();
@@ -116,6 +112,6 @@ public class TurtleOptionsTab extends Tab {
   }
 
   private void setDefaultTurtleImage() {
-    myTurtleImages.setValue(DEFAULT_TURTLE_IMAGE);
+    myTurtleImagePicker.setValue(DEFAULT_TURTLE_IMAGE);
   }
 }
