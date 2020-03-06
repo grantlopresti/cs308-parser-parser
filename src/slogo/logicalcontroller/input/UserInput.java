@@ -10,8 +10,6 @@ import slogo.logicalcontroller.ControlFlowExtractor;
 import java.io.IOException;
 import java.util.*;
 
-import static slogo.logicalcontroller.command.controlflow.ControlFlowExtractor.*;
-
 public class UserInput implements UserInputInterface, BundleInterface, CommandGenerator {
 
     private List<String> myUserInput;
@@ -57,7 +55,7 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
                 return CommandGenerator.createControlCommand(superclass, translated, args);
             } else if (superclass.equals(TELLER)) {
                 this.myPrefix = SPACE; this.mySuffix = SPACE;
-                List<String> args = getBracketArguments(this.myUserInput, this.myLineIndex);
+                List<String> args = ControlFlowExtractor.getBracketArguments(this.myUserInput, this.myLineIndex);
                 return CommandGenerator.createCommand(superclass, translated, args);
             } else {
                 int params = countParameters(translated);
@@ -95,10 +93,10 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
             lineLocation = locationArray[0];
             columnLocation = locationArray[1];
             System.out.println("Opening Bracket at :" + lineLocation + " " + columnLocation);
-            List<String> argumentSet = initControlFlow(myUserInput, lineLocation, columnLocation);
+            List<String> argumentSet = ControlFlowExtractor.initControlFlow(myUserInput, lineLocation, columnLocation);
             returnList.add(argumentSet);
             linePointer += argumentSet.size();
-            controlFlowEndIndex = getLineLastBrac(myUserInput, lineLocation, columnLocation);
+            controlFlowEndIndex = ControlFlowExtractor.getLineLastBrac(myUserInput, lineLocation, columnLocation);
         }
 
         return returnList;

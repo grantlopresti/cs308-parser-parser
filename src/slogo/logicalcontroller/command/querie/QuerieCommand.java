@@ -1,7 +1,7 @@
 package slogo.logicalcontroller.command.querie;
 
 import slogo.exceptions.InvalidCommandException;
-import slogo.exceptions.ResourceBundleCreationException;
+import slogo.exceptions.ResourceBundleException;
 import slogo.logicalcontroller.BundleInterface;
 import slogo.logicalcontroller.command.Command;
 import slogo.model.ModelTurtle;
@@ -22,7 +22,7 @@ public abstract class QuerieCommand implements Command {
         try {
             this.methodMappings = BundleInterface.createResourceBundle(RESOURCE_BUNDLE_LOCATION);
         } catch (Exception e) {
-            throw new ResourceBundleCreationException("could not find querie properties file");
+            throw new ResourceBundleException("could not find querie properties file");
         }
     }
 

@@ -30,6 +30,7 @@ public final class MasterCodeFilter{
     }
 
     public static String filter(String rawInput) throws NoSuchMethodException, ClassNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException {
+        printInput(rawInput);
         String result;
 
         ResourceBundle filtersApplied;
@@ -112,5 +113,9 @@ public final class MasterCodeFilter{
         for (String item : activeFiltersList){
             System.out.println(item);
         }
+    }
+
+    private static void printInput(String input){
+        
     }
 }
