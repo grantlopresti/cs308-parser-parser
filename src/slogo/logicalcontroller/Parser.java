@@ -9,9 +9,11 @@ import slogo.logicalcontroller.command.controlflow.ControlFlowCommand;
 import slogo.logicalcontroller.command.math.MathCommand;
 import slogo.logicalcontroller.command.modifier.ModifierCommand;
 import slogo.logicalcontroller.command.querie.QuerieCommand;
+import slogo.logicalcontroller.command.teller.TellerCommand;
 import slogo.logicalcontroller.input.UserInput;
 import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelCollection;
+import slogo.model.ModelObject;
 import slogo.model.ModelTurtle;
 
 import java.util.*;
@@ -82,6 +84,7 @@ public class Parser implements BundleInterface {
             Object o = method.invoke(this, command);
             return (List<String>) o;
         } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException | NullPointerException e) {
+            e.printStackTrace();
             throw new ReflectionException("Unable to apply Reflection in parser");
         }
     }
@@ -98,8 +101,11 @@ public class Parser implements BundleInterface {
     // TODO - execute on a specific turtle
     private List<String> executeModifierCommand(ModifierCommand command) {
         String replace = "";
-        for (Object o : this.myModelCollection){
+        Collection<ModelObject> turtles = this.myModelCollection.getActiveTurtles().getModelMap().values();
+        System.out.printf("found %d active turtles", turtles.size());
+        for (Object o : turtles){
             ModelTurtle turtle = (ModelTurtle) o;
+            System.out.println("executing in parser on turtle: " + turtle.getID());
             replace = command.execute(turtle);
         }
         return new ArrayList<String>(List.of(replace));
@@ -108,7 +114,8 @@ public class Parser implements BundleInterface {
     // TODO - execute on a specific turtle
     private List<String> executeQuerieCommand(QuerieCommand command) {
         String replace = "";
-        for (Object o : this.myModelCollection){
+        Collection<ModelObject> turtles = this.myModelCollection.getActiveTurtles().getModelMap().values();
+        for (Object o : turtles){
             ModelTurtle turtle = (ModelTurtle) o;
             replace = command.execute(turtle);
         }
@@ -121,6 +128,10 @@ public class Parser implements BundleInterface {
 
     private List<String> executeMathCommand(MathCommand command) {
         return new ArrayList<String>(List.of(command.execute()));
+    }
+
+    private List<String> executeTellerCommand(TellerCommand command) {
+        return new ArrayList<String>(List.of(command.execute(this.myModelCollection)));
     }
 
     private List<String> executeControlFlowCommand(ControlFlowCommand command) {

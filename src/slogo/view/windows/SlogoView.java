@@ -51,6 +51,7 @@ public class SlogoView extends Application {
   private static final int VISUALIZER_HEIGHT = 525;
   public static final int RIGHT_PANE_WIDTH = 375;
   public static final int LEFT_PANE_WIDTH = 325;
+  private static final int ANIMATION_RATE = 3;
 
   private static final int WINDOW_WIDTH = LEFT_PANE_WIDTH + VISUALIZER_WIDTH + RIGHT_PANE_WIDTH;
   private static final int WINDOW_HEIGHT = 700;
@@ -105,7 +106,7 @@ public class SlogoView extends Application {
   public SlogoView(LogicalController logicalController, VisualController visualController) {
     myLogicalController = logicalController;
     myVisualController = visualController;
-
+    myVisualController.setAnimationRate(ANIMATION_RATE);
     /*
     try {
       myTabTypeResources = BundleInterface.createResourceBundle(TabResourcePath);
@@ -159,7 +160,7 @@ public class SlogoView extends Application {
   private void createCenterPane() {
     myCenterPane = new BorderPane();
 
-    myVisualizationPane = new VisualizationPane(VISUALIZER_WIDTH, VISUALIZER_HEIGHT);
+    myVisualizationPane = new VisualizationPane(VISUALIZER_WIDTH, VISUALIZER_HEIGHT, ANIMATION_RATE);
     myVisualizationPane.update();
     HBox programInputArea = getProgramInputNode();
 
@@ -211,6 +212,7 @@ public class SlogoView extends Application {
       }
     }
     catch (Exception e){
+      e.printStackTrace();
       announceError(new VisualError(new InvalidCommandException("The following command "
           + "is invalid, please try another!\n" + userCommand)));
     }

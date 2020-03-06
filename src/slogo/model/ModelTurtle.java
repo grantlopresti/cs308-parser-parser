@@ -8,14 +8,25 @@ public class ModelTurtle extends ModelObject {
 
     private Pen myPen;
     private boolean isShowing;
+    private boolean isActive;
 
     /**
      * Default constructor of ModelTurtle object
      */
     public ModelTurtle(){
         super();
-        myPen = new Pen();
-        isShowing = true;
+        orientTurtle();
+    }
+
+    public ModelTurtle(int id) {
+        super(id);
+        orientTurtle();
+    }
+
+    private void orientTurtle() {
+        this.myPen = new Pen();
+        this.isShowing = true;
+        this.isActive = true;
     }
 
     /**
@@ -63,7 +74,20 @@ public class ModelTurtle extends ModelObject {
         return 0;
     }
 
+    public void activate() {
+        System.out.printf("Activating turtle: %d\n", this.ID);
+        this.isActive = true;
+    }
+
+    public void deactivate() {
+        System.out.printf("Deactivating turtle: %d\n", this.ID);
+        this.isActive = false;
+    }
+
     public boolean isShowing(){
         return isShowing;
     }
+
+    public boolean isActive() {return this.isActive;}
+
 }

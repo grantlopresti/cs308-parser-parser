@@ -39,10 +39,13 @@ public class VisualizationPane extends Group {
   private List<VisualLine> myLines = new ArrayList<>();
   private List<Line> myLinesOnScreen = new ArrayList<>();
 
-  public VisualizationPane(double width, double height){
+  private static int ANIMATION_RATE;
+
+  public VisualizationPane(double width, double height, int rate){
     super();
     groupWidth = width;
     groupHeight = height;
+    ANIMATION_RATE = rate;
     addVisualTurtle(new VisualTurtle());
   }
 
@@ -111,7 +114,7 @@ public class VisualizationPane extends Group {
   }
 
   private double getInbounds(double coordinate, double imageSize, double dimension) {
-    System.out.printf("Coord: %.2f\n", coordinate);
+    // System.out.printf("Coord: %.2f\n", coordinate);
     double maxDistance = dimension/2;
     double imageAdjustment = imageSize/2;
     double ret;
@@ -122,7 +125,7 @@ public class VisualizationPane extends Group {
     } else {
       ret = coordinate;
     }
-    System.out.printf("RET: %.2f\n", ret);
+    // System.out.printf("RET: %.2f\n", ret);
     return ret;
   }
 
