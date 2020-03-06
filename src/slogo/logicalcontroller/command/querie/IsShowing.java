@@ -1,6 +1,5 @@
 package slogo.logicalcontroller.command.querie;
 
-
 import java.util.List;
 
 public class IsShowing extends QuerieCommand {

@@ -10,8 +10,8 @@ import slogo.logicalcontroller.variable.VariableList;
  * @author Alex Xu
  */
 public class MakeVariable {
-    VariableList myVariableList;
-    double returnValue;
+    private VariableList myVariableList;
+    private double returnValue;
 
     public MakeVariable(String name, double value, VariableList variableList){
         Variable myVariable = new BasicVariable(name, value);
