@@ -24,7 +24,6 @@ Amjad Syedibrahim:
 * Wrote code for the various functionalities of the Parser's basic implementation. Wrote helper methods in UserInput class to deal with proper creation of command variables.
 Implemented controlFlowExtractor utility class, worked on user-defined commands and control flow structures.
 
-
 Max Smith:
 * Wrote code for the visualController, implemented and designed the latest iteration of the Parser, redesigned Command object hierarchy
 and interfaces, wrote exceptions to improve error handling, implemented and designed and multiple turtles.
