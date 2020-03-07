@@ -14,10 +14,10 @@ import java.io.IOException;
  * NOTE: Not complete and will only be continued to work on if we have time by basic implementation due date.
  */
 public class Manager {
+    private String myDefaultLang;
 
     private static final int ANIMATION_RATE = 3;
 
-    public static final String DEFAULT_LANG = "ENGLISH";
     private ModelCollection myModelCollection;
     private VariableList myVariables;
 
@@ -25,7 +25,8 @@ public class Manager {
     private VisualController myVisualController;
     private LogicalController myLogicalController;
 
-    public Manager() throws IOException {
+    public Manager(String defaultLang) throws IOException {
+        myDefaultLang = defaultLang;
         createModel();
         createVisualController();
         createLogicalController();
@@ -46,10 +47,9 @@ public class Manager {
         mySlogoView = new SlogoView(myLogicalController, myVisualController);
     }
 
-    private void createLogicalController() throws IOException {
+    private void createLogicalController() {
         myLogicalController = new LogicalController(myModelCollection, myVisualController, myVariables);
-        // myLogicalController = new LogicalController(myModelCollection);
-        myLogicalController.setLanguage(DEFAULT_LANG);
+        myLogicalController.setLanguage(myDefaultLang);
     }
 
     private void createVisualController() {
