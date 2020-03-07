@@ -47,9 +47,10 @@ Data files needed:
 ##### Features implemented:
 
 * Basic SLogo Commands
+* Reading / Saving SLogo files
 * Multiple Turtles
 * Expandability to support additional commands
-
+* (Add more here)
 
 ### Notes/Assumptions
 
@@ -64,3 +65,6 @@ Extra credit:
 
 ### Impressions
 
+* Designing the parsing algorithm was a challenge for this project
+* Interesting to see how data-driven design and design patterns can be used to create a program that evaluates another
+"programming language".
