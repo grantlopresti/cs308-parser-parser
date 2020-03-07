@@ -16,8 +16,9 @@ Names: Alex Xu, Amjad Syedibrahim, Max Smith, Grant LoPresti
 ### Primary Roles
 
 Alex Xu:
-* Wrote code for the model package (ModelObjects, Turtles, Pens, ModelCollection, etc.), codefilters package, worked on the 
-LogicalController and Parser design, as well as creating the command objects, variable objects, and certain exceptions.
+* Wrote code for the model package (ModelObjects, Turtles, Pens, ModelCollection, etc.), codefilters package for code preprocessing, and worked on the 
+LogicalController and Parser design, as well as creating the command objects, variable objects, and certain exceptions. Started
+but did not complete XML writing/saving/validation (save workspace functionality) as more work was needed elsewhere.
 
 Amjad Syedibrahim:
 * Wrote code for the various functionalities of the Parser's basic implementation. Wrote helper methods in UserInput class to deal with proper creation of command variables.
@@ -75,6 +76,7 @@ Front End
 Back End
 * Additional commands - infrastructure for extensibility (e.g. tell works)
 * Support for multiple turtles
+* Future expandability to include infinite parameters and recursion
 
 ### Notes/Assumptions
 
@@ -89,7 +91,9 @@ Known Bugs:
 * Variables can be created, but not used (part of parsing design)
 
 Extra credit:
-* ```slogo/logicalcontroller/codefilters``` package to massage data before parsing (with toggleable filters through properties file)
+* ```slogo/logicalcontroller/codefilters``` package to "massage" data before parsing (with toggleable filters through properties file)
+    * This feature is modular and data-driven, where a user an toggle these filters on or off. This is essentially a "syntax corrector" that
+    makes the program more forgiving to user-errors (and enables the Parser's algorithm to look for new forms of syntax)
 * Toggleable ```DarkMode``` in view to change style sheet of whole page
 
 ### Impressions
