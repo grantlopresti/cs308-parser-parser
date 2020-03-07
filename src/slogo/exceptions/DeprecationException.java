@@ -18,7 +18,7 @@ public class DeprecationException extends RuntimeException {
     }
 
     public ErrorSeverity getErrorSeverity() {
-        return this.myErrorSeverity;
+        return myErrorSeverity;
     }
 
     public String getMessage() {
