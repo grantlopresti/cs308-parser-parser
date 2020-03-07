@@ -6,9 +6,9 @@ import java.util.*;
  * Interface to extract information from the control flow commands
  */
 
-public interface ControlFlowExtractor {
+public class ControlFlowExtractor {
 
-    static List<String> getBracketArguments(List<String> rawCommands, int line) {
+    public static List<String> getBracketArguments(List<String> rawCommands, int line) {
         String myLine = rawCommands.get(line);
         int start = myLine.indexOf("[") + 1;
         int end = myLine.indexOf("]");
@@ -18,7 +18,7 @@ public interface ControlFlowExtractor {
         return ret;
     }
 
-    static List<String> initControlFlow(List<String> rawCommands, int lineIndex, int bracIndex){
+    public static List<String> initControlFlow(List<String> rawCommands, int lineIndex, int bracIndex){
 
         int[] retIndexes = retEndIndex(rawCommands, lineIndex, bracIndex);
         int endLineIndex = retIndexes[0];

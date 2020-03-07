@@ -102,7 +102,7 @@ public class Parser implements BundleInterface {
     private List<String> executeModifierCommand(ModifierCommand command) {
         String replace = "";
         Collection<ModelObject> turtles = this.myModelCollection.getActiveTurtles().getModelMap().values();
-        System.out.printf("found %d active turtles", turtles.size());
+        System.out.printf("found %d active turtles\n", turtles.size());
         for (Object o : turtles){
             ModelTurtle turtle = (ModelTurtle) o;
             System.out.println("executing in parser on turtle: " + turtle.getID());
