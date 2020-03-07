@@ -152,7 +152,7 @@ public class VisualController implements VisualInterface {
     myTurtlesList.add(visualTurtle);
     visualTurtle.updateVisualTurtle(turtle);
     try {
-      System.out.println("attempting to move turtle: " + turtle.getID());
+      System.out.println("attempting to move turtle: " + turtle.getID() + " in visual controller");
       mySlogoView.updateVisualTurtles(new ArrayList<>(List.of(visualTurtle)));
       if (turtle.isPenActive())
         appendLine(new VisualLine(visualTurtle));
@@ -167,7 +167,7 @@ public class VisualController implements VisualInterface {
   }
 
   private VisualTurtle addTurtleToMap(ModelTurtle turtle) {
-    myTurtles.putIfAbsent(turtle.getID(), new VisualTurtle());
+    myTurtles.putIfAbsent(turtle.getID(), new VisualTurtle(turtle));
     myTurtleNamesProperty.getValue().add(turtle.getID() + "");
     return myTurtles.get(turtle.getID());
   }

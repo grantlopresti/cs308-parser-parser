@@ -51,7 +51,7 @@ public class ModelCollection {
         for (ModelObject o: this.myModelObjectMap.values()) {
             ModelTurtle turtle = (ModelTurtle) o;
             if (turtle.isActive()) {
-                System.out.println("\nadding turtle: " + turtle.ID + " to active turtle collection");
+                System.out.println("adding turtle: " + turtle.ID + " to active turtle collection");
                 activeTurtles.add(turtle);
             }
         }
