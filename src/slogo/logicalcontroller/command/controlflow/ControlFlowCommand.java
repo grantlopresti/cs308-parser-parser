@@ -1,6 +1,8 @@
 package slogo.logicalcontroller.command.controlflow;
 
 import slogo.logicalcontroller.command.Command;
+import slogo.logicalcontroller.variable.VariableList;
+import slogo.model.ModelTurtle;
 
 import java.util.List;
 
@@ -23,6 +25,7 @@ public abstract class ControlFlowCommand implements Command {
         return unraveledCode;
     }
 
+
     @Override
     public String getCommandType() {
         String className = this.getClass().getSimpleName();
@@ -37,5 +40,15 @@ public abstract class ControlFlowCommand implements Command {
 
     protected void setUnraveledCode(List<String> input){
         unraveledCode = input;
+    }
+
+    @Override
+    public String execute(ModelTurtle turtle) {
+        return null;
+    }
+
+    @Override
+    public String execute(VariableList list) {
+        return null;
     }
 }

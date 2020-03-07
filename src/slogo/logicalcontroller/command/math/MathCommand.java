@@ -1,6 +1,7 @@
 package slogo.logicalcontroller.command.math;
 
 import slogo.logicalcontroller.command.Command;
+import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelTurtle;
 
 /**
@@ -46,5 +47,10 @@ public abstract class MathCommand implements Command {
     }
 
     public abstract String execute(ModelTurtle turtle);
+
+    @Override
+    public String execute(VariableList list) {
+        return null;
+    }
 
 }

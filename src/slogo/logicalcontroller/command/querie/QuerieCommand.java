@@ -4,6 +4,7 @@ import slogo.exceptions.InvalidCommandException;
 import slogo.exceptions.ResourceBundleException;
 import slogo.logicalcontroller.BundleInterface;
 import slogo.logicalcontroller.command.Command;
+import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelTurtle;
 
 import java.lang.reflect.Method;
@@ -63,5 +64,10 @@ public abstract class QuerieCommand implements Command {
         } catch (Exception e) {
             throw new InvalidCommandException();
         }
+    }
+
+    @Override
+    public String execute(VariableList list) {
+        return null;
     }
 }

@@ -8,7 +8,7 @@ import slogo.logicalcontroller.variable.VariableList;
  * Command to evaluate variables
  * @author Alex X. and Amjad S.
  */
-public class EvaluateVariable {
+public class EvaluateVariable extends VariableCommand{
 
     private double variableValue;
     private VariableList myVariableList;
@@ -40,4 +40,10 @@ public class EvaluateVariable {
             throw new VariableDoesNotExistException();
         }
     }
+
+    @Override
+    public String execute(VariableList list) {
+        return null;
+    }
+
 }

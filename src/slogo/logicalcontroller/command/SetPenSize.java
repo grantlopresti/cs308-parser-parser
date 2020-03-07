@@ -1,5 +1,6 @@
 package slogo.logicalcontroller.command;
 
+import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelTurtle;
 
 public class SetPenSize implements Command {
@@ -21,6 +22,11 @@ public class SetPenSize implements Command {
 
     @Override
     public String execute(ModelTurtle turtle) {
+        return null;
+    }
+
+    @Override
+    public String execute(VariableList list) {
         return null;
     }
 }

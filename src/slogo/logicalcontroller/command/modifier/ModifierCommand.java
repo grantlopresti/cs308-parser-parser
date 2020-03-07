@@ -3,6 +3,7 @@ package slogo.logicalcontroller.command.modifier;
 import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.BundleInterface;
 import slogo.logicalcontroller.command.Command;
+import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelTurtle;
 
 import java.io.FileInputStream;
@@ -106,5 +107,10 @@ public abstract class ModifierCommand implements Command, ModifierInterface {
 
     @Override
     public abstract String toString();
+
+    @Override
+    public String execute(VariableList list) {
+        return null;
+    }
 
 }

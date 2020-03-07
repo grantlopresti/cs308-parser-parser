@@ -18,7 +18,7 @@ public class Main {
             try {
                 new Manager("ENGLISH");
             } catch (IOException e) {
-                e.printStackTrace();
+                ; // TODO - handle no english
             }
         });
     }
@@ -29,7 +29,7 @@ public class Main {
                 Home myHome = new Home();
                 myHome.start(new Stage());
             } catch (IOException e) {
-                e.printStackTrace();
+                ; // TODO - handle no start
             }
         });
     }
