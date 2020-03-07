@@ -77,14 +77,13 @@ public class UserInput implements UserInputInterface, BundleInterface {
             returnList.add(paramsList);
         }
 
-        int lineLocation = -1;          //TODO: Default values that are not necessarily used.
+        int lineLocation = -1;
         int columnLocation = -1;
         int linePointer = myLineIndex;
         for(int i = 0; i<numBracketSets; i++){
             int[] locationArray = getOpenBracketIndex(linePointer);
             lineLocation = locationArray[0];
             columnLocation = locationArray[1];
-            System.out.println("Opening Bracket at :" + lineLocation + " " + columnLocation);
             List<String> argumentSet = ControlFlowExtractor.initControlFlow(myUserInput, lineLocation, columnLocation);
             returnList.add(argumentSet);
             linePointer += argumentSet.size();
@@ -93,13 +92,11 @@ public class UserInput implements UserInputInterface, BundleInterface {
         return returnList;
     }
 
-    private int[] getOpenBracketIndex(int lineIndex){                     //TODO: Searches for the first openbracket after the given line index, so line index should be the smallest index of a possible occurance.
-        int[] result = new int[2];                                        //TODO: Index 0 is the Lineindex, 1 is the locationIndex in that line.
+    private int[] getOpenBracketIndex(int lineIndex){
+        int[] result = new int[2];
         for(int j = lineIndex; j<myUserInput.size(); j++) {
             String line = myUserInput.get(j);
-
             String[] lineElements = line.split(" ");
-            System.out.println("Looking for bracket on line: " + j);
             for (int i = 0; i < lineElements.length; i++) {
                 System.out.print(lineElements[i]);
                 if (lineElements[i].equals("[")) {
@@ -109,8 +106,6 @@ public class UserInput implements UserInputInterface, BundleInterface {
                 }
             }
         }
-
-        System.out.println("NO OPENING BRACKET FOUND");
         result[0] = -1;
         result[1] = -1;
         return result;
@@ -131,7 +126,6 @@ public class UserInput implements UserInputInterface, BundleInterface {
     @Override
     public void setCodeReplacement(List<String> code, Command command) {
         if (command.getClass().getSuperclass().getSimpleName().equals("ControlFlowCommand")) {
-            System.out.println("Class name: " + command.getClass());
             multiLineReplace(command);
         } else {
             singleLineReplace(code);
@@ -145,26 +139,17 @@ public class UserInput implements UserInputInterface, BundleInterface {
         }
         sb.append(SPACE + this.mySuffix);
         this.myUserInput.set(this.myLineIndex, sb.toString().trim());
-        System.out.printf("code replaced to: %s\n", this.myUserInput.get(this.myLineIndex));
     }
 
     // TODO: Implementation can be better?
     private void multiLineReplace(Command command) {
-        System.out.println("Starting multi-line replace...");
-
         ControlFlowCommand myControlFlowCommand = (ControlFlowCommand) command;
         List<String> code = myControlFlowCommand.getUnraveledCode();
-
-        System.out.println("Code to be used to replace: //");
-        System.out.println("Da code: " + Arrays.asList(code));
         for(String s : code){
             System.out.println(s);
         }
-        System.out.println("//");
-
         List<String> prefix = myUserInput.subList(0, myLineIndex);
         List<String> suffix = myUserInput.subList(controlFlowEndIndex+1, myUserInput.size());
-
         List<String> result = new ArrayList<>();
         result.addAll(prefix);
         result.addAll(code);
@@ -225,7 +210,6 @@ public class UserInput implements UserInputInterface, BundleInterface {
      * TODO - what to do if command not found? - throw no command exception
      */
     private String translateCommand(String command) {
-        System.out.println("What is translated" + command);
         ResourceBundle bundle = this.myResources;
         for(String key: Collections.list(bundle.getKeys())){
             String regex = bundle.getString(key);
