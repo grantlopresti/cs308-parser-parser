@@ -1,5 +1,6 @@
 package slogo.view.subsections;
 
+
 import java.util.HashMap;
 import java.util.Map;
 import javafx.beans.property.SimpleObjectProperty;
@@ -168,9 +169,7 @@ public class TurtleOptionsTab extends Tab {
     } else {
       myTurtles.put(turtle.getId(), turtle);
     }
-    if (myTurtleIDs.contains(turtle.getId().toString())){
-      myTurtleIDs.add(turtle.getId().toString());
-    }
+    myTurtleIDs.remove(turtle.getId().toString());
     myTurtleIDs.add(turtle.getId().toString());
     if (myTurtlePicker.getValue() != null) {
       changeTurtleStats(myTurtlePicker.getValue());
