@@ -26,6 +26,8 @@ import slogo.visualcontroller.VisualTurtle;
 public class VisualizationPane extends Group {
 
   private static final Color DEFAULT_BG_COLOR = Color.DARKGRAY;
+  public static final int FULL_ROTATION = 360;
+  public static final int EDGE_BUFFER = 5;
   //private static final Color DEFAULT_PEN_COLOR = Color.BLACK;
 
   private double groupWidth;
@@ -95,7 +97,7 @@ public class VisualizationPane extends Group {
     turtleImage.setPreserveRatio(true);
 
     animateIfNeeded(turtleImage, turtle, doAnimate);
-    turtleImage.rotateProperty().set(360 - turtle.getHeading());
+    turtleImage.rotateProperty().set(FULL_ROTATION - turtle.getHeading());
     setFinalPosition(turtleImage, turtle);
 
     Lighting lighting = getLightingEffect(turtle.getColor());
@@ -123,9 +125,9 @@ public class VisualizationPane extends Group {
     double imageAdjustment = imageSize/2;
     double ret;
     if (coordinate < (-1 * maxDistance)+imageAdjustment){
-      ret = -1 * maxDistance + imageAdjustment + 5;
+      ret = -1 * maxDistance + imageAdjustment + EDGE_BUFFER;
     } else if (coordinate > maxDistance - imageAdjustment){
-      ret = maxDistance - imageAdjustment - 5;
+      ret = maxDistance - imageAdjustment - EDGE_BUFFER;
     } else {
       ret = coordinate;
     }

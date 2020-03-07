@@ -8,6 +8,7 @@ import slogo.view.windows.SlogoView;
 
 public class ListTab extends Tab{
 
+  public static final int LIST_PREF_HEIGHT = 620;
   protected SlogoView myViewer;
   protected VBox myVBox;
   protected ListView<String> myListView;
@@ -22,7 +23,7 @@ public class ListTab extends Tab{
   public void setProperty(Property property) {
     myListView = new ListView<>();
     myListView.itemsProperty().bind(property);
-    myListView.setPrefHeight(620);
+    myListView.setPrefHeight(LIST_PREF_HEIGHT);
     myListView.setOnMouseClicked(
         e -> setUserTextArea());
     myVBox.getChildren().add(myListView);

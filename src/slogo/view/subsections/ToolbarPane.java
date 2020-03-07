@@ -29,6 +29,8 @@ import slogo.visualcontroller.VisualError;
 public class ToolbarPane extends ToolBar {
 
   private static final String DEFAULT_LANGUAGE = "English";
+  public static final int STAGE_WIDTH = 1200;
+  public static final int STAGE_HEIGHT = 600;
 
   private SlogoView myViewer;
 
@@ -99,8 +101,8 @@ public class ToolbarPane extends ToolBar {
   private void showHelpWindow() {
     Stage stage = new Stage();
     stage.setTitle("Slogo Help/Info");
-    stage.setWidth(1200);
-    stage.setHeight(600);
+    stage.setWidth(STAGE_WIDTH);
+    stage.setHeight(STAGE_HEIGHT);
     Scene scene = new Scene(new Group());
     VBox root = new VBox();
     final WebView browser = new WebView();

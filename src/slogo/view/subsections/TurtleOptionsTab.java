@@ -36,6 +36,16 @@ public class TurtleOptionsTab extends Tab {
   public static final String PEN_STATE = "\tPen State:\t\t";
   public static final String PEN_COLOR = "\tPen Color:\t";
   public static final String PEN_THICKNESS = "\tThickness:\t";
+  public static final String FORWARD_50 = "forward 50";
+  public static final String BACK_50 = "back 50";
+  public static final String RIGHT_90 = "right 90";
+  public static final String LEFT_90 = "left 90";
+  public static final String RESET = "reset";
+  public static final int V_GAP = 5;
+  public static final int COL_INDEX_1 = 1;
+  public static final int ROW_INDEX_1 = 1;
+  public static final int ROW_INDEX_2 = 2;
+  public static final int INDEX_ZERO = 0;
 
   private ComboBox<String> myTurtlePicker = new ComboBox<>();
   private ComboBox<String> myTurtleImagePicker = new ComboBox<>();
@@ -125,11 +135,11 @@ public class TurtleOptionsTab extends Tab {
 
   private void createBonusCommandGrid() {
 
-    Button forwardButton = getButton("Forward", "forward 50");
-    Button backButton = getButton("Back", "back 50");
-    Button rightButton = getButton("Turn Right", "right 90");
-    Button leftButton = getButton("Turn Left", "left 90");
-    Button resetButton = getButton("Reset", "reset");
+    Button forwardButton = getButton("Forward", FORWARD_50);
+    Button backButton = getButton("Back", BACK_50);
+    Button rightButton = getButton("Turn Right", RIGHT_90);
+    Button leftButton = getButton("Turn Left", LEFT_90);
+    Button resetButton = getButton("Reset", RESET);
 
     GridPane.setHalignment(resetButton, HPos.CENTER);
     GridPane.setHalignment(backButton, HPos.CENTER);
@@ -140,13 +150,14 @@ public class TurtleOptionsTab extends Tab {
   private void setupAndFillGrid(Button forwardButton, Button backButton, Button rightButton,
       Button leftButton, Button resetButton) {
     myBonusCommandGrid.setAlignment(Pos.CENTER);
-    myBonusCommandGrid.setVgap(5);
+    myBonusCommandGrid.setVgap(V_GAP);
 
-    myBonusCommandGrid.add(forwardButton, 1, 0);
-    myBonusCommandGrid.add(backButton, 1, 2);
-    myBonusCommandGrid.add(rightButton, 2, 1);
-    myBonusCommandGrid.add(leftButton, 0, 1);
-    myBonusCommandGrid.add(resetButton, 1, 1);
+    //YES, THESE MAGIC NUMBERS SHOULD BE READ IN FROM RESOURCE FILE
+    myBonusCommandGrid.add(forwardButton, COL_INDEX_1, INDEX_ZERO);
+    myBonusCommandGrid.add(backButton, COL_INDEX_1, ROW_INDEX_2);
+    myBonusCommandGrid.add(rightButton, ROW_INDEX_2, ROW_INDEX_1);
+    myBonusCommandGrid.add(leftButton, INDEX_ZERO, ROW_INDEX_1);
+    myBonusCommandGrid.add(resetButton, COL_INDEX_1, ROW_INDEX_1);
   }
 
   private Button getButton(String forward, String s) {
