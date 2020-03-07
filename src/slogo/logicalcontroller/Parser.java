@@ -6,11 +6,13 @@ import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.command.MakeVariable;
 import slogo.logicalcontroller.command.comparison.ComparisonCommand;
 import slogo.logicalcontroller.command.controlflow.ControlFlowCommand;
+import slogo.logicalcontroller.command.controlflow.customCommandList;
 import slogo.logicalcontroller.command.math.MathCommand;
 import slogo.logicalcontroller.command.modifier.ModifierCommand;
 import slogo.logicalcontroller.command.querie.QuerieCommand;
 import slogo.logicalcontroller.command.teller.TellerCommand;
 import slogo.logicalcontroller.input.UserInput;
+import slogo.logicalcontroller.variable.ParserInterface;
 import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelCollection;
 import slogo.model.ModelObject;
@@ -22,12 +24,13 @@ import java.lang.reflect.*;
 
 /**
  * Purpose of this class is to parse incoming commands from the console and from a text file that the user will have an option to read in.
- * @author Max S, Alex Q, Amjad S
+ * @authors Max S, Alex X, Amjad S
  */
-public class Parser implements BundleInterface {
+public class Parser implements BundleInterface, ParserInterface {
 
     private String myLanguage;
     private VariableList myVariableList;
+    private customCommandList myCustomCommandList;
     private UserInput myUserInput;
     private ModelCollection myModelCollection;
     private ResourceBundle myLanguageResources;
@@ -49,6 +52,7 @@ public class Parser implements BundleInterface {
      * Reads in the language of the appropriate resource file and loads it into a resource bundle for future use.
      * @param language
      */
+    @Override
     public void setLanguage(String language) throws IOException {
         this.myLanguage = language;
         this.myLanguageResources = BundleInterface.createResourceBundle(nameLanguageFile());
@@ -68,6 +72,7 @@ public class Parser implements BundleInterface {
      * Two stage process, first
      * @param lines
      */
+    @Override
     public void parse(List<String> lines) throws ResourceBundleException {
         this.myUserInput = new UserInput(lines, this.myLanguageResources);
     }
@@ -92,8 +97,11 @@ public class Parser implements BundleInterface {
     /**
      * Method to find and execute the next command in the arraylist of raw commands. Represents one step of the turtle.
      */
+    @Override
     public void executeNextCommand(){
+        System.out.println("Entered executeNextCommand");
         this.myLatestCommand = this.myUserInput.getNextCommand();
+        System.out.println("Latest to come through" + this.myLatestCommand);
         List<String> myList = this.executeCommand(this.myLatestCommand);
         this.myUserInput.setCodeReplacement(myList, this.myLatestCommand);
     }
@@ -135,18 +143,26 @@ public class Parser implements BundleInterface {
 
     private List<String> executeVariables(MakeVariable command) {return new ArrayList<String>();}
 
+    @Override
     public Command getLatestCommand() {
         return this.myLatestCommand;
     }
 
+    @Override
     public VariableList getVariables() {return this.myVariableList; }
 
+    @Override
     public boolean isFinished(){
         return this.myUserInput.isFinished();
     }
 
+    @Override
     public ModelCollection getModel(){
         return this.myModelCollection;
+    }
+
+    public customCommandList getCustomCommandList(){
+        return this.myCustomCommandList;
     }
 
     private void setUserInput(List<String> userInput) {

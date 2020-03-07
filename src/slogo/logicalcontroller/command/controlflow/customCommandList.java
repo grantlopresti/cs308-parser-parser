@@ -7,17 +7,17 @@ import java.util.Iterator;
 import java.util.List;
 
 public class customCommandList implements Iterable {
-    private List<To> myCustomCommandList;
+    private List<MakeUserInstruction> myCustomCommandList;
 
     public customCommandList(){
-        this.myCustomCommandList = new ArrayList<To>();
+        this.myCustomCommandList = new ArrayList<MakeUserInstruction>();
     }
 
-    public To get(int index){
+    public MakeUserInstruction get(int index){
         return myCustomCommandList.get(index);
     }
 
-    public void addTo(To to){
+    public void addTo(MakeUserInstruction to){
         deleteTo(to.getName());
         myCustomCommandList.add(to);
     }
@@ -27,7 +27,7 @@ public class customCommandList implements Iterable {
     }
 
     public void deleteTo(String name){
-        for(To to : myCustomCommandList){
+        for(MakeUserInstruction to : myCustomCommandList){
             if(isSameVariable(name, to)){
                 myCustomCommandList.remove(to);
             }
@@ -38,7 +38,7 @@ public class customCommandList implements Iterable {
         myCustomCommandList = new ArrayList<>();
     }
 
-    public boolean isSameVariable(String toName, To to){
+    public boolean isSameVariable(String toName, MakeUserInstruction to){
         return toName.equals(to.getName());
     }
 
