@@ -29,14 +29,19 @@ public class MakeVariable {
         return myValue;
     }
 
-    public String execute(VariableList list) {
+    private void appendList(VariableList list) {
         for (Object o : list) {
             Variable v = (Variable) o;
             if (v.getName().equals(this.myName)) {
-                ;
+                list.addVariable(new BasicVariable(this.myName, this.myValue));
+                return;
             }
         }
-        return "";
+    }
+
+    public String execute(VariableList list) {
+        appendList(list);
+        return Double.toString(this.myValue);
     }
 
 }
