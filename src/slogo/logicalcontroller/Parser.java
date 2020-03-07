@@ -90,7 +90,6 @@ public class Parser implements BundleInterface, ParserInterface {
             Object o = method.invoke(this, command);
             return (List<String>) o;
         } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException | NullPointerException e) {
-            e.printStackTrace();
             throw new ReflectionException("Unable to apply Reflection in parser");
         }
     }
