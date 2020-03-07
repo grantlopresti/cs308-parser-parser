@@ -20,7 +20,7 @@ import java.util.*;
 
 public class VisualController implements VisualInterface {
 
-  private double myAnimationRate = 3;
+  private double myAnimationRate;
   private SlogoView mySlogoView;
 
   // Currently mirroring structure of VisualizationPane.java (change to bindings)
