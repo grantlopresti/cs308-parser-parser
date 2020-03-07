@@ -1,4 +1,6 @@
 package slogo.logicalcontroller.command.variables;
 
-public abstract class VariableCommand {
+import slogo.logicalcontroller.command.Command;
+
+public abstract class VariableCommand implements Command {
 }

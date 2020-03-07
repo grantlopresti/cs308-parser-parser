@@ -31,7 +31,6 @@ public final class MasterCodeFilterUtility {
     }
 
     public static String filter(String rawInput, String language){
-        printInput(rawInput);
         String result;
         ResourceBundle filtersApplied;
         ResourceBundle languageBundle;
@@ -92,13 +91,13 @@ public final class MasterCodeFilterUtility {
     private static List<Method> extractOperatingMethods(List<Class> classList, String methodKeyWord) throws NoSuchMethodException {
         List<Method> methodList = new ArrayList<>();
         for (Class myClass : classList){
-            Method filterMethod = myClass.getMethod(methodKeyWord, String.class, ResourceBundle.class);            //TODO: Use reflection to extract this "filter" name.
+            Method filterMethod = myClass.getMethod(methodKeyWord, String.class, ResourceBundle.class);
             methodList.add(filterMethod);
         }
         return methodList;
     }
 
-    private static List<Class> extractOperatingClasses(List<String> activeFilters) throws ClassNotFoundException {             //TODO: Error handling
+    private static List<Class> extractOperatingClasses(List<String> activeFilters) throws ClassNotFoundException {
         List<Class> classList = new ArrayList<Class>();
         for (String className : activeFilters){
             Class classObject = Class.forName(createClassPath(CLASS_PREFIX, className));
