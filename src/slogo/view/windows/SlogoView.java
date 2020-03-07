@@ -207,7 +207,6 @@ public class SlogoView extends Application {
       }
     }
     catch (Exception e){
-      e.printStackTrace();
       announceError(new VisualError(new InvalidCommandException("The following command "
           + "is invalid, please try another!\n" + userCommand)));
     }
