@@ -16,7 +16,7 @@ public class Main {
     private static void startWithoutSplashScreen() throws IOException {
         Platform.startup(() -> {
             try {
-                new Manager();
+                new Manager("ENGLISH");
             } catch (IOException e) {
                 e.printStackTrace();
             }
