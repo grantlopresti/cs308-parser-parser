@@ -34,7 +34,6 @@ public class CommandGenerator {
             Class clazz = Class.forName(createCommandPath(superclass, command));
             Constructor ctor = clazz.getConstructor(List.class);
             System.out.printf("clazz: %s \nconstructor: %s \n", clazz.toString(), ctor.toString());
-            // for (String s: arguments) {System.out.print(s + " ");}
             return (Command) ctor.newInstance(arguments);
         } catch (Exception e) {
             throw new InvalidCommandException("Could not create command");
