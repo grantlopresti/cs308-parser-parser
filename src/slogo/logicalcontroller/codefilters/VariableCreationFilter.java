@@ -49,7 +49,7 @@ public class VariableCreationFilter extends FilterSuperclass{       //TODO: This
     }
 
     private boolean isVariableCreation(String word, String previousWord){
-        return word.contains(VARIABLE_SEPARATOR) && previousWord.equals()
+        return word.contains(VARIABLE_SEPARATOR); //&& previousWord.equals()
     }
 
 }

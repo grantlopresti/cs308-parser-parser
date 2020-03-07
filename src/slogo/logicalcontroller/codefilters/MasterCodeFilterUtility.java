@@ -21,6 +21,8 @@ public final class MasterCodeFilterUtility {
     public static final String RESOURCE_BUNDLE_LOCATION = "src/properties/inputFilters.properties";
     public static final String INVALID_INSTANTIATION_ERROR = "Instantiating utility class.";
     public static final String CLASS_PREFIX = "slogo.logicalcontroller.codefilters.";
+    public static final String LANGUAGES_PATH = "resources/languages/";
+    public static final String PROPERTIES_SUFFIX = ".properties";
 
     /**
      * Applies all of the filters, user-defined through a properties file.
@@ -29,13 +31,15 @@ public final class MasterCodeFilterUtility {
         throw new AssertionError(INVALID_INSTANTIATION_ERROR);
     }
 
-    public static String filter(String rawInput) throws NoSuchMethodException, ClassNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException {
+    public static String filter(String rawInput, String language) throws NoSuchMethodException, ClassNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException {
         printInput(rawInput);
         String result;
 
         ResourceBundle filtersApplied;
+        ResourceBundle languageBundle;
         try {
             filtersApplied = BundleInterface.createResourceBundle(RESOURCE_BUNDLE_LOCATION);
+            languageBundle = BundleInterface.createResourceBundle(LANGUAGES_PATH + language + PROPERTIES_SUFFIX);
         } catch (Exception e) {
             throw new ResourceBundleException();
         }
@@ -46,7 +50,7 @@ public final class MasterCodeFilterUtility {
         List<FilterSuperclass> filterObjectsList = extractFilterObjects(activeFilterClasses);
         List<Method> methodList = extractOperatingMethods(activeFilterClasses);
 
-        result = performFiltering(filterObjectsList, methodList, rawInput);
+        result = performFiltering(filterObjectsList, methodList, rawInput, languageBundle);
         return result;
     }
 
@@ -61,10 +65,10 @@ public final class MasterCodeFilterUtility {
         return filterObjectsList;
     }
 
-    private static String performFiltering(List<FilterSuperclass> classList, List<Method> methodList, String rawInput) throws InvocationTargetException, IllegalAccessException {
+    private static String performFiltering(List<FilterSuperclass> classList, List<Method> methodList, String rawInput, ResourceBundle language) throws InvocationTargetException, IllegalAccessException {
         String result = rawInput;
         for(int i = 0; i<classList.size(); i++){
-            Object resultObject = methodList.get(i).invoke(classList.get(i), result);
+            Object resultObject = methodList.get(i).invoke(classList.get(i), result, language);
             result = (String) resultObject;
         }
         return result;
@@ -88,7 +92,7 @@ public final class MasterCodeFilterUtility {
     private static List<Method> extractOperatingMethods(List<Class> classList) throws NoSuchMethodException {
         List<Method> methodList = new ArrayList<>();
         for (Class myClass : classList){
-            Method filterMethod = myClass.getMethod("filter", String.class);            //TODO: Use reflection to extract this "filter" name.
+            Method filterMethod = myClass.getMethod("filter", String.class, String.class);            //TODO: Use reflection to extract this "filter" name.
             methodList.add(filterMethod);
         }
         return methodList;
