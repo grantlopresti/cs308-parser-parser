@@ -1,5 +1,11 @@
 package slogo.view.subsections;
 
+
+import java.util.HashMap;
+import java.util.Map;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -9,19 +15,27 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import slogo.view.TurtleImage;
 import slogo.view.windows.SlogoView;
-import slogo.visualcontroller.VisualController;
+import slogo.visualcontroller.VisualTurtle;
 
 public class TurtleOptionsTab extends Tab {
 
   public static final String TAB_NAME = "Turtle Options";
 
   private static final String DEFAULT_TURTLE_IMAGE = "Turtle";
+  public static final String TURTLE_STATS = "Turtle Stats:";
+  public static final String TURTLE_ID = "\tTurtle ID:\t\t";
+  public static final String TURTLE_X_POS = "\tTurtle X-Pos:\t";
+  public static final String TURTLE_Y_POS = "\tTurtle Y-Pos:\t";
+  public static final String TURTLE_HEADING = "\tTurtle Heading: ";
+  public static final String PEN_STATS = "Pen Stats:";
+  public static final String PEN_STATE = "\tPen State:\t\t";
+  public static final String PEN_COLOR = "\tPen Color:\t";
+  public static final String PEN_THICKNESS = "\tThickness:\t";
 
   private ComboBox<String> myTurtlePicker = new ComboBox<>();
   private ComboBox<String> myTurtleImagePicker = new ComboBox<>();
@@ -29,17 +43,30 @@ public class TurtleOptionsTab extends Tab {
   private GridPane myBonusCommandGrid = new GridPane();
   private VBox myTurtleStats = new VBox();
 
-  private VisualController myController;
+
+  //text components
+  Label turtleStats = new Label(TURTLE_STATS);
+  Label turtleID = new Label(TURTLE_ID);
+  Label turtleXPos = new Label(TURTLE_X_POS);
+  Label turtleYPos = new Label(TURTLE_Y_POS);
+  Label turtleHeading = new Label(TURTLE_HEADING);
+  Label penStats = new Label(PEN_STATS);
+  Label penState = new Label(PEN_STATE);
+  Label penColor = new Label(PEN_COLOR);
+  Label penThickness = new Label(PEN_THICKNESS);
+
   private SlogoView myViewer;
 
   private int mySelectedTurtleID = 0;
 
+  private ObservableList<String> myTurtleIDs = FXCollections.observableArrayList();
+  private Map<Integer, VisualTurtle> myTurtles = new HashMap<>();
+
   private VBox myOrganizer;
 
-  public TurtleOptionsTab(SlogoView viewer, VisualController controller) {
+  public TurtleOptionsTab(SlogoView viewer) {
     super(TAB_NAME);
     myViewer = viewer;
-    myController = controller;
     buildTab();
   }
 
@@ -53,11 +80,12 @@ public class TurtleOptionsTab extends Tab {
     createTurtleStatsBox();
     initializeButtons();
 
-    myTurtlePicker.itemsProperty().bind(myController.getMyTurtlesProperty());
+    myTurtlePicker.itemsProperty().bind(new SimpleObjectProperty<>(myTurtleIDs));
+    myTurtlePicker.setOnAction(t -> changeTurtleStats(myTurtlePicker.getValue()));
 
     myOrganizer.getChildren().addAll(
         new Text("Select a Turtle:"),
-        new ComboBox<>(),
+        myTurtlePicker,
         new Separator(),
         new Text("Turtle Image:"),
         myTurtleImagePicker,
@@ -73,26 +101,21 @@ public class TurtleOptionsTab extends Tab {
     setContent(myOrganizer);
   }
 
+  private void changeTurtleStats(String value) {
+    VisualTurtle targetTurtle = myTurtles.get(Integer.parseInt(value));
+
+    turtleID.setText(TURTLE_ID + targetTurtle.getId());
+    turtleXPos.setText(TURTLE_X_POS + targetTurtle.getCenterX());
+    turtleYPos.setText(TURTLE_Y_POS + targetTurtle.getCenterY());
+    turtleHeading.setText(TURTLE_HEADING + targetTurtle.getHeading());
+
+    //penState.setText(penState.getText() + targetTurtle.getPenState());
+    penState.setText(PEN_STATE + "DOWN");
+    penColor.setText(PEN_COLOR + targetTurtle.getColor());
+    penThickness.setText(PEN_THICKNESS + targetTurtle.getPenThickeness());
+  }
+
   private void createTurtleStatsBox() {
-
-    int boundTurtleID = 0;
-    double boundTurtleXPosition = 0;
-    double boundTurtleYPosition = 0;
-    double boundTurtleHeading = 0;
-    int boundPenState = 0;
-    String boundPenColor = "#022822";
-    double boundPenThickness = 0;
-
-    // position, heading) and the pen (i.e., up/down, color, thickness
-    Label turtleStats = new Label("Turtle Stats:");
-    Label turtleID = new Label("\tTurtle ID:\t\t" + boundTurtleID);
-    Label turtleXPos = new Label("\tTurtle X-Pos:\t" + boundTurtleXPosition);
-    Label turtleYPos = new Label("\tTurtle Y-Pos:\t" + boundTurtleYPosition);
-    Label turtleHeading = new Label("\tTurtle Heading: " + boundTurtleHeading);
-    Label penStats = new Label("Pen Stats:");
-    Label penState = new Label("\tPen State:\t\t" + boundPenState);
-    Label penColor = new Label("\tPen Color:\t" + boundPenColor);
-    Label penThickness = new Label("\tThickness:\t" + boundPenThickness);
 
     myTurtleStats.getChildren().addAll(turtleStats, turtleID, turtleXPos, turtleYPos,
         turtleHeading, penStats, penState, penColor, penThickness);
@@ -123,8 +146,6 @@ public class TurtleOptionsTab extends Tab {
     myBonusCommandGrid.add(rightButton, 2, 1);
     myBonusCommandGrid.add(leftButton, 0, 1);
     myBonusCommandGrid.add(resetButton, 1, 1);
-
-
   }
 
   private void initializeButtons() {
@@ -139,5 +160,19 @@ public class TurtleOptionsTab extends Tab {
 
   private void setDefaultTurtleImage() {
     myTurtleImagePicker.setValue(DEFAULT_TURTLE_IMAGE);
+  }
+
+  public void addTurtle(VisualTurtle turtle) {
+
+    if (myTurtles.containsKey(turtle.getId())) {
+      myTurtles.replace(turtle.getId(), turtle);
+    } else {
+      myTurtles.put(turtle.getId(), turtle);
+    }
+    myTurtleIDs.remove(turtle.getId().toString());
+    myTurtleIDs.add(turtle.getId().toString());
+    if (myTurtlePicker.getValue() != null) {
+      changeTurtleStats(myTurtlePicker.getValue());
+    }
   }
 }

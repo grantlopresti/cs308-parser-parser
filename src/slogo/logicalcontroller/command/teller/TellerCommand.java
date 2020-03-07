@@ -1,6 +1,7 @@
 package slogo.logicalcontroller.command.teller;
 
 import slogo.logicalcontroller.command.Command;
+import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelCollection;
 
 import java.util.ArrayList;
@@ -23,5 +24,10 @@ public abstract class TellerCommand implements Command {
     }
 
     public abstract String execute(ModelCollection model);
+
+    @Override
+    public String execute(VariableList list) {
+        return null;
+    }
 
 }

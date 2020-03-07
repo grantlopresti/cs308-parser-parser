@@ -2,7 +2,6 @@ package slogo.visualcontroller;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -36,7 +35,7 @@ public class VisualController implements VisualInterface {
   private SimpleObjectProperty<ObservableList<VisualData>> myDataProperty;
   private SimpleObjectProperty<ObservableList<VisualVariable>> myVariablesProperty;
   private SimpleObjectProperty<ObservableList<VisualFile>> myFilesProperty;
-  private SimpleObjectProperty<ObservableList<String>> myTurtleNamesProperty;
+  private SimpleObjectProperty<ObservableList<Integer>> myTurtleNamesProperty;
 
   public VisualController() {
     initProperties();
@@ -109,6 +108,8 @@ public class VisualController implements VisualInterface {
         return myFunctionsProperty;
       case FILE:
         return myFilesProperty;
+      case TURTLE:
+        return myTurtleNamesProperty;
       default:
         throw new IllegalArgumentException();
     }
@@ -167,12 +168,7 @@ public class VisualController implements VisualInterface {
 
   private VisualTurtle addTurtleToMap(ModelTurtle turtle) {
     myTurtles.putIfAbsent(turtle.getID(), new VisualTurtle(turtle));
-    myTurtleNamesProperty.getValue().add(turtle.getID() + "");
+    myTurtleNamesProperty.getValue().add(turtle.getID());
     return myTurtles.get(turtle.getID());
-  }
-
-  @Override
-  public ObservableValue<? extends ObservableList<String>> getMyTurtlesProperty() {
-    return myTurtleNamesProperty;
   }
 }

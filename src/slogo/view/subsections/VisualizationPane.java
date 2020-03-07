@@ -46,7 +46,6 @@ public class VisualizationPane extends Group {
     groupWidth = width;
     groupHeight = height;
     ANIMATION_RATE = rate;
-    addVisualTurtle(new VisualTurtle());
   }
 
   public void update() {
@@ -114,7 +113,6 @@ public class VisualizationPane extends Group {
   }
 
   private double getInbounds(double coordinate, double imageSize, double dimension) {
-    // System.out.printf("Coord: %.2f\n", coordinate);
     double maxDistance = dimension/2;
     double imageAdjustment = imageSize/2;
     double ret;
@@ -125,7 +123,6 @@ public class VisualizationPane extends Group {
     } else {
       ret = coordinate;
     }
-    // System.out.printf("RET: %.2f\n", ret);
     return ret;
   }
 
@@ -140,7 +137,7 @@ public class VisualizationPane extends Group {
     double nextY = getAdjustedY(getInbounds(turtle.getCenterY(), turtle.getSize(), groupHeight));
     path.getElements().add(new LineTo(nextX,nextY));
     // create an animation where the shape follows a path
-    PathTransition pt = new PathTransition(Duration.seconds(3), path, agent);
+    PathTransition pt = new PathTransition(Duration.seconds(ANIMATION_RATE), path, agent);
     // put them together in order
     return new SequentialTransition(agent, pt);
   }

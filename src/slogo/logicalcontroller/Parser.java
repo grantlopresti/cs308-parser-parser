@@ -3,7 +3,6 @@ package slogo.logicalcontroller;
 import slogo.exceptions.ReflectionException;
 import slogo.exceptions.ResourceBundleException;
 import slogo.logicalcontroller.command.Command;
-import slogo.logicalcontroller.command.MakeVariable;
 import slogo.logicalcontroller.command.comparison.ComparisonCommand;
 import slogo.logicalcontroller.command.controlflow.ControlFlowCommand;
 import slogo.logicalcontroller.command.controlflow.customCommandList;
@@ -11,6 +10,7 @@ import slogo.logicalcontroller.command.math.MathCommand;
 import slogo.logicalcontroller.command.modifier.ModifierCommand;
 import slogo.logicalcontroller.command.querie.QuerieCommand;
 import slogo.logicalcontroller.command.teller.TellerCommand;
+import slogo.logicalcontroller.command.variables.VariableCommand;
 import slogo.logicalcontroller.input.UserInput;
 import slogo.logicalcontroller.variable.ParserInterface;
 import slogo.logicalcontroller.variable.VariableList;
@@ -89,7 +89,6 @@ public class Parser implements BundleInterface, ParserInterface {
             Object o = method.invoke(this, command);
             return (List<String>) o;
         } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException | NullPointerException e) {
-            e.printStackTrace();
             throw new ReflectionException("Unable to apply Reflection in parser");
         }
     }
@@ -141,7 +140,9 @@ public class Parser implements BundleInterface, ParserInterface {
         return new ArrayList<String>();
     }
 
-    private List<String> executeVariables(MakeVariable command) {return new ArrayList<String>();}
+    private List<String> executeVariableCommand(VariableCommand command) {
+        return new ArrayList<String>(List.of(command.execute(this.myVariableList)));
+    }
 
     @Override
     public Command getLatestCommand() {

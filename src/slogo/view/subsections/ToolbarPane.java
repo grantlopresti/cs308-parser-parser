@@ -1,12 +1,9 @@
 package slogo.view.subsections;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
@@ -16,12 +13,9 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
@@ -30,19 +24,12 @@ import javafx.stage.Stage;
 import slogo.exceptions.InvalidCommandException;
 import slogo.exceptions.InvalidCommandFileException;
 import slogo.logicalcontroller.LogicalController;
-import slogo.view.SubTabFactory;
 import slogo.view.windows.SlogoView;
 import slogo.visualcontroller.VisualError;
 
 public class ToolbarPane extends ToolBar {
 
-  private LogicalController myLogicalController;
   private static final String DEFAULT_LANGUAGE = "English";
-
-  private static final String myButtonProperties = "properties.buttons";
-  private ResourceBundle myButtonResources;
-
-  private static final String PACKAGE = SubTabFactory.class.getPackageName();
 
   private SlogoView myViewer;
 
@@ -51,8 +38,6 @@ public class ToolbarPane extends ToolBar {
   private ColorPicker myBGColorPicker = new ColorPicker();
   private Button myClearScreen = new Button("Clear Screen");
   private Button myDarkModeToggle = new Button("Toggle Mode");
-
-  private FileInputStream fis1 = new FileInputStream("src/slogo/view/resources/buttons.properties");
 
   private static final ObservableList<String> languageOptions =
       FXCollections.observableArrayList(
@@ -70,10 +55,8 @@ public class ToolbarPane extends ToolBar {
   private ComboBox<String> myLanguage = new ComboBox<>(languageOptions);
   private Button myHelpInfo = new Button("Help/Info");
 
-  public ToolbarPane(SlogoView viewer, LogicalController logicalController) throws IOException {
+  public ToolbarPane(SlogoView viewer) {
     myViewer = viewer;
-    myLogicalController = logicalController;
-    myButtonResources = new PropertyResourceBundle(fis1);
   }
 
   public ToolBar getNode() {
@@ -169,7 +152,7 @@ public class ToolbarPane extends ToolBar {
     String fileContents = getTextFromFile(file);
     try {
       assert fileContents != null;
-      myLogicalController.handleNewCommand(fileContents);
+      myViewer.handleNewCommand(fileContents);
     } catch (Exception e) {
       myViewer.announceError(new VisualError(new InvalidCommandException("The "
           + "following command is invalid: \n" + fileContents)));
@@ -177,7 +160,7 @@ public class ToolbarPane extends ToolBar {
   }
 
   private void changeLanguage(String language) {
-    myLogicalController.setLanguage(language);
+    myViewer.setLanguage(language);
   }
 
   private String getTextFromFile(File file) {
