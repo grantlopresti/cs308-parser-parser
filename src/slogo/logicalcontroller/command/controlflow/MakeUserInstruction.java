@@ -13,10 +13,9 @@ public class MakeUserInstruction extends ControlFlowCommand {
 
 
     public MakeUserInstruction(List<List<String>> rawInput){
-        super(rawInput.get(2));
+        super(rawInput.get(1));
         funcName = rawInput.get(0).get(0);
         variables = rawInput.get(1);
-
         unravelCode();
     }
 
