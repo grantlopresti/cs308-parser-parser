@@ -35,7 +35,6 @@ public class Parser implements BundleInterface, ParserInterface {
     private ModelCollection myModelCollection;
     private ResourceBundle myLanguageResources;
     private Command myLatestCommand;
-
     private static final String EXECUTE = "execute";
 
     /**
@@ -98,9 +97,7 @@ public class Parser implements BundleInterface, ParserInterface {
      */
     @Override
     public void executeNextCommand(){
-        System.out.println("Entered executeNextCommand");
         this.myLatestCommand = this.myUserInput.getNextCommand();
-        System.out.println("Latest to come through" + this.myLatestCommand);
         List<String> myList = this.executeCommand(this.myLatestCommand);
         this.myUserInput.setCodeReplacement(myList, this.myLatestCommand);
     }
@@ -108,7 +105,6 @@ public class Parser implements BundleInterface, ParserInterface {
     private List<String> executeGeneralCommand(Command command) {
         String replace = "";
         Collection<ModelObject> turtles = this.myModelCollection.getActiveTurtles().getModelMap().values();
-        System.out.printf("found %d active turtles\n", turtles.size());
         for (Object o : turtles){
             ModelTurtle turtle = (ModelTurtle) o;
             replace = command.execute(turtle);
