@@ -3,7 +3,6 @@ package slogo.logicalcontroller;
 import slogo.exceptions.ReflectionException;
 import slogo.exceptions.ResourceBundleException;
 import slogo.logicalcontroller.command.Command;
-import slogo.logicalcontroller.command.MakeVariable;
 import slogo.logicalcontroller.command.comparison.ComparisonCommand;
 import slogo.logicalcontroller.command.controlflow.ControlFlowCommand;
 import slogo.logicalcontroller.command.controlflow.customCommandList;
