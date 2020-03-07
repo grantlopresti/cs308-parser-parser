@@ -1,14 +1,15 @@
 package slogo.logicalcontroller.codefilters;
 
+import java.util.ResourceBundle;
+
 /**
- * Utility class whose purpose is to serve as a module ot the Master Filter. Must contain a filter method.
+ * Class whose purpose is to serve as a module ot the Master Filter. Must contain a filter method.
  * @author Alex Xu
  */
 public class CommentsFilter extends FilterSuperclass {
 
     public final static String COMMENT_SYMBOL = "#";
     public final static String EMPTY_STRING = "";
-    public final static String NEW_LINE = "\n";
 
     /**
      * Default constructor of a Filter Object
@@ -18,7 +19,7 @@ public class CommentsFilter extends FilterSuperclass {
     }
 
     @Override
-    public String filter(String input) {
+    public String filter(String input, ResourceBundle language) {
         StringBuilder processedResult = new StringBuilder();
 
         String[] lineDelimited = input.split(NEW_LINE);
