@@ -84,7 +84,7 @@ Assumptions or Simplifications:
 * Assumed that errors could be combined into a single error for user display (e.g. all reflection exceptions get packaged into one exception)
 
 Interesting data files:
-* (Add more here)
+* See ```data/examples/interesting```
 
 Known Bugs:
 * Any command that does not cause an error will be displayed as a user input (e.g. blah blah, however these do not get executed)
