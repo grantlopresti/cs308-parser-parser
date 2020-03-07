@@ -22,7 +22,7 @@ public class MakeVariable extends VariableCommand{
         double value = Double.parseDouble(args.get(1));
         this.myValue = value;
         this.myName = name;
-        System.out.printf("successfully created variable with name: %s and value %.2f", name, value);
+        // System.out.printf("successfully created variable with name: %s and value %.2f", name, value);
     }
 
     private void appendList(VariableList list) {

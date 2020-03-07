@@ -98,7 +98,7 @@ public class UserInput implements UserInputInterface, BundleInterface {
             String line = myUserInput.get(j);
             String[] lineElements = line.split(" ");
             for (int i = 0; i < lineElements.length; i++) {
-                System.out.print(lineElements[i]);
+                // System.out.print(lineElements[i]);
                 if (lineElements[i].equals("[")) {
                     result[0] = j;
                     result[1] = i;

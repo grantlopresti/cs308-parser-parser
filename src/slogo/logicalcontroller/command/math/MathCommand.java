@@ -24,7 +24,7 @@ public abstract class MathCommand implements Command {
     }
 
     public MathCommand(String input1, String input2) {
-        System.out.printf("creating 2 arg math command from %s and %s\n", input1, input2);
+        // System.out.printf("creating 2 arg math command from %s and %s\n", input1, input2);
         this.myArgument1 = Double.parseDouble(input1);
         this.myArgument2 = Double.parseDouble(input2);
     }
