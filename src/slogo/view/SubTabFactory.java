@@ -51,7 +51,14 @@ public class SubTabFactory {
     }
   }
 
-  // make ListTab from given data
+  /**
+   * Makes a list tab from the given data
+   * @param viewer is the SlogoView that it communicates with
+   * @param controller is the Visual Controller which the listview is bound to
+   * @param className tells the method exactly what kind of tab to make
+   * @return the new List Tab
+   * @throws IllegalStateException
+   */
   public ListTab makeTab (SlogoView viewer, VisualController controller, String className) throws IllegalStateException {
     try {
       // get the tab's data from file

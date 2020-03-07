@@ -62,8 +62,6 @@ public class TurtleOptionsTab extends Tab {
   private ObservableList<String> myTurtleIDs = FXCollections.observableArrayList();
   private Map<Integer, VisualTurtle> myTurtles = new HashMap<>();
 
-  private VBox myOrganizer;
-
   public TurtleOptionsTab(SlogoView viewer) {
     super(TAB_NAME);
     myViewer = viewer;
@@ -71,7 +69,7 @@ public class TurtleOptionsTab extends Tab {
   }
 
   private void buildTab() {
-    myOrganizer = new VBox();
+    VBox myOrganizer = new VBox();
     myOrganizer.getStyleClass().add("vBox");
     for (TurtleImage value : TurtleImage.values()){
       myTurtleImagePicker.getItems().add(value.getName());
@@ -83,6 +81,11 @@ public class TurtleOptionsTab extends Tab {
     myTurtlePicker.itemsProperty().bind(new SimpleObjectProperty<>(myTurtleIDs));
     myTurtlePicker.setOnAction(t -> changeTurtleStats(myTurtlePicker.getValue()));
 
+    addChildernToOrganizer(myOrganizer);
+    setContent(myOrganizer);
+  }
+
+  private void addChildernToOrganizer(VBox myOrganizer) {
     myOrganizer.getChildren().addAll(
         new Text("Select a Turtle:"),
         myTurtlePicker,
@@ -98,7 +101,6 @@ public class TurtleOptionsTab extends Tab {
         new Text("Current Turtle Statistics"),
         myTurtleStats
     );
-    setContent(myOrganizer);
   }
 
   private void changeTurtleStats(String value) {
@@ -109,7 +111,6 @@ public class TurtleOptionsTab extends Tab {
     turtleYPos.setText(TURTLE_Y_POS + targetTurtle.getCenterY());
     turtleHeading.setText(TURTLE_HEADING + targetTurtle.getHeading());
 
-    //penState.setText(penState.getText() + targetTurtle.getPenState());
     penState.setText(PEN_STATE + "DOWN");
     penColor.setText(PEN_COLOR + targetTurtle.getColor());
     penThickness.setText(PEN_THICKNESS + targetTurtle.getPenThickeness());
@@ -124,20 +125,20 @@ public class TurtleOptionsTab extends Tab {
 
   private void createBonusCommandGrid() {
 
-    Button forwardButton = new Button("Forward");
-    forwardButton.setOnMouseClicked(e -> myViewer.sendUserCommand("forward 50"));
-    Button backButton = new Button("Back");
-    backButton.setOnMouseClicked(e -> myViewer.sendUserCommand("back 50"));
-    Button rightButton = new Button("Turn Right");
-    rightButton.setOnMouseClicked(e -> myViewer.sendUserCommand("right 90"));
-    Button leftButton = new Button("Turn Left");
-    leftButton.setOnMouseClicked(e -> myViewer.sendUserCommand("left 90"));
-    Button resetButton = new Button("Reset");
-    resetButton.setOnMouseClicked(e -> myViewer.sendUserCommand("reset"));
+    Button forwardButton = getButton("Forward", "forward 50");
+    Button backButton = getButton("Back", "back 50");
+    Button rightButton = getButton("Turn Right", "right 90");
+    Button leftButton = getButton("Turn Left", "left 90");
+    Button resetButton = getButton("Reset", "reset");
 
     GridPane.setHalignment(resetButton, HPos.CENTER);
     GridPane.setHalignment(backButton, HPos.CENTER);
 
+    setupAndFillGrid(forwardButton, backButton, rightButton, leftButton, resetButton);
+  }
+
+  private void setupAndFillGrid(Button forwardButton, Button backButton, Button rightButton,
+      Button leftButton, Button resetButton) {
     myBonusCommandGrid.setAlignment(Pos.CENTER);
     myBonusCommandGrid.setVgap(5);
 
@@ -146,6 +147,12 @@ public class TurtleOptionsTab extends Tab {
     myBonusCommandGrid.add(rightButton, 2, 1);
     myBonusCommandGrid.add(leftButton, 0, 1);
     myBonusCommandGrid.add(resetButton, 1, 1);
+  }
+
+  private Button getButton(String forward, String s) {
+    Button forwardButton = new Button(forward);
+    forwardButton.setOnMouseClicked(e -> myViewer.sendUserCommand(s));
+    return forwardButton;
   }
 
   private void initializeButtons() {
@@ -163,16 +170,27 @@ public class TurtleOptionsTab extends Tab {
   }
 
   public void addTurtle(VisualTurtle turtle) {
+    addTurtleToMap(turtle);
+    addTurtleIDToList(turtle);
+    updateTurtlePicker();
+  }
 
+  private void updateTurtlePicker() {
+    if (myTurtlePicker.getValue() != null) {
+      changeTurtleStats(myTurtlePicker.getValue());
+    }
+  }
+
+  private void addTurtleIDToList(VisualTurtle turtle) {
+    myTurtleIDs.remove(turtle.getId().toString());
+    myTurtleIDs.add(turtle.getId().toString());
+  }
+
+  private void addTurtleToMap(VisualTurtle turtle) {
     if (myTurtles.containsKey(turtle.getId())) {
       myTurtles.replace(turtle.getId(), turtle);
     } else {
       myTurtles.put(turtle.getId(), turtle);
-    }
-    myTurtleIDs.remove(turtle.getId().toString());
-    myTurtleIDs.add(turtle.getId().toString());
-    if (myTurtlePicker.getValue() != null) {
-      changeTurtleStats(myTurtlePicker.getValue());
     }
   }
 }
