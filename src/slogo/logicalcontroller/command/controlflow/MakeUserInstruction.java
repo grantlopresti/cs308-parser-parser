@@ -1,5 +1,7 @@
 package slogo.logicalcontroller.command.controlflow;
 
+import slogo.model.ModelTurtle;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +13,6 @@ public class MakeUserInstruction extends ControlFlowCommand {
 
     public MakeUserInstruction(List<List<String>> rawInput){
         super(rawInput.get(1));
-
         unravelCode();
     }
 
@@ -22,5 +23,10 @@ public class MakeUserInstruction extends ControlFlowCommand {
     @Override
     protected void unravelCode() {
         setUnraveledCode(body);
+    }
+
+    @Override
+    public String execute(ModelTurtle turtle) {
+        return null;
     }
 }

@@ -6,7 +6,7 @@ import slogo.logicalcontroller.command.Command;
 import java.lang.reflect.Constructor;
 import java.util.*;
 
-public interface CommandGenerator {
+public class CommandGenerator {
 
     static Command createControlCommand(String superclass, String command, List<List<String>> args) {
         try {System.out.println("Class name path: " + createCommandPath(superclass, command));

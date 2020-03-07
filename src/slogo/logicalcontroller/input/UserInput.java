@@ -10,7 +10,7 @@ import slogo.logicalcontroller.ControlFlowExtractor;
 import java.io.IOException;
 import java.util.*;
 
-public class UserInput implements UserInputInterface, BundleInterface, CommandGenerator {
+public class UserInput implements UserInputInterface, BundleInterface {
 
     private List<String> myUserInput;
     private ResourceBundle myResources;
@@ -19,7 +19,6 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
     private String myCommand;
     private String myPrefix;
     private String mySuffix;
-    private static final int NONE_FOUND = -1;
     private static final String SPACE = " ";
 
     private int controlFlowEndIndex;

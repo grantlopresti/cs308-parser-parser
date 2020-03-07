@@ -7,7 +7,6 @@ public class MakeUserInstruction implements Command {
 
     public MakeUserInstruction(String inputvalue){
         value = Double.parseDouble(inputvalue);
-
     }
 
     public double getValue() {
