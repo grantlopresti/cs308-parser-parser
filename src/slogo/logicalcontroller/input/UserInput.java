@@ -145,9 +145,9 @@ public class UserInput implements UserInputInterface, BundleInterface {
     private void multiLineReplace(Command command) {
         ControlFlowCommand myControlFlowCommand = (ControlFlowCommand) command;
         List<String> code = myControlFlowCommand.getUnraveledCode();
-        for(String s : code){
-            System.out.println(s);
-        }
+//        for(String s : code){
+//            System.out.println(s);
+//        }
         List<String> prefix = myUserInput.subList(0, myLineIndex);
         List<String> suffix = myUserInput.subList(controlFlowEndIndex+1, myUserInput.size());
         List<String> result = new ArrayList<>();

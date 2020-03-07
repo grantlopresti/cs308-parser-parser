@@ -80,6 +80,8 @@ Back End
 
 Assumptions or Simplifications:
 * Assumed that user input would be space separated
+* Assumption that control flow statements (for, repeat) have brackets on the first line
+* Assumed that errors could be combined into a single error for user display (e.g. all reflection exceptions get packaged into one exception)
 
 Interesting data files:
 * (Add more here)
