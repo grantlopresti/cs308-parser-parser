@@ -8,6 +8,8 @@ import java.util.*;
 
 public class CommandGenerator {
 
+    public static final String COLON = ":";
+
     static Command createControlCommand(String superclass, String command, List<List<String>> args) {
         try {System.out.println("Class name path: " + createCommandPath(superclass, command));
             System.out.println("Argument 2: " + args.get(1).get(0));
@@ -27,10 +29,11 @@ public class CommandGenerator {
     }
 
     static Command createCommand(String superclass, String command, List<String> arguments) {
+        System.out.printf("trying to createCommand from superclass: %s and command: %s\n", superclass, command);
         try {
             Class clazz = Class.forName(createCommandPath(superclass, command));
             Constructor ctor = clazz.getConstructor(List.class);
-            // System.out.printf("clazz: %s \nconstructor: %s \narguments: ", clazz.toString(), ctor.toString());
+            System.out.printf("clazz: %s \nconstructor: %s \n", clazz.toString(), ctor.toString());
             // for (String s: arguments) {System.out.print(s + " ");}
             return (Command) ctor.newInstance(arguments);
         } catch (Exception e) {
@@ -39,6 +42,11 @@ public class CommandGenerator {
     }
 
     static boolean isValidCommand(String s, ResourceBundle bundle) {
+        if (s.contains(COLON)) {
+            System.out.println("cound colon in command " + s);
+            System.out.println("returning true");
+            return true;
+        }
         for(String key: Collections.list(bundle.getKeys())){
             String regex = bundle.getString(key);
             String[] regexElems = regex.split("\\|");

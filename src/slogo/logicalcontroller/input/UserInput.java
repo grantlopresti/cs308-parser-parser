@@ -45,7 +45,7 @@ public class UserInput implements UserInputInterface, BundleInterface {
     public Command getNextCommand() {
         try {
             this.myLineIndex = findNextLine();
-            System.out.println("The line index: " + this.myLineIndex);
+            // System.out.println("The line index: " + this.myLineIndex);
             this.myCommandIndex = findLastCommand(this.myLineIndex);
             System.out.println("The Command index: " + this.myCommandIndex);
             String translated = translateCommand(this.myCommand);
@@ -181,36 +181,71 @@ public class UserInput implements UserInputInterface, BundleInterface {
     }
 
     private int findNextLine() {
+        System.out.println("looking for next line with command");
         for(int i = 0; i < this.myUserInput.size(); i++){
             String[] words = this.myUserInput.get(i).split(SPACE);
             for (String s: words) {
-                if (CommandGenerator.isValidCommand(s, this.myResources)) {return i;}
+                if (CommandGenerator.isValidCommand(s, this.myResources)) {
+                    System.out.println("found line with command");
+                    return i;
+                }
             }
         }
         throw new NoCommandFoundException();
     }
 
     private int findLastCommand(int index) {
+        System.out.println("looking for last command in line");
         String line = this.myUserInput.get(index);
         String[] words = line.split("\\s+");
-        for(int i = words.length-1; i>=0; i--){
+        for(int i = words.length-1; i >= 0; i--){
             if(CommandGenerator.isValidCommand(words[i], this.myResources)) {
-                this.myCommand = words[i];
+                this.myUserInput.set(index, updateUserInput(words, i, assignCommand(words[i])));
                 return i;
             }
         }
         throw new NoCommandFoundException();
     }
 
+    private String updateUserInput(String[] words, int col, String replace) {
+        words[col] = replace;
+        String guy = spaceSeparatedString(words);
+        System.out.println("updating user input to: " + guy);
+        return guy;
+    }
+
+    private String assignCommand(String s) {
+        System.out.println("assigning command");
+        final String COLON = ":";
+        int index = s.indexOf(COLON);
+        if (index != -1) {
+            String prefix = s.substring(0, index);
+            String suffix = s.substring(index+1);
+            this.myCommand = prefix;
+            s = prefix + SPACE + suffix;
+            System.out.println("s: " + s);
+        } else {
+            this.myCommand = s;
+        }
+        System.out.println("this.myCommand: " + this.myCommand);
+        return s;
+    }
+
     // TODO - assume that parameters are space separated (good enough assumption)
     private List<String> getArguments(int lineIndex, int commandIndex, int params) {
         int stop = commandIndex+1+params;
         String input = this.myUserInput.get(lineIndex);
+        System.out.printf("fetching arguments from string %s with %d params", input, params);
         String[] words = input.split("\\s");
         String[] args = Arrays.copyOfRange(words, commandIndex+1, stop);
+        System.out.println("args: ");
+        for (String s: args) {
+            System.out.println(s);
+        }
         this.myPrefix = spaceSeparatedString(Arrays.copyOfRange(words, 0, commandIndex));
         this.mySuffix = spaceSeparatedString(Arrays.copyOfRange(words, stop, words.length));
         this.myUserInput.set(lineIndex, input);
+        System.out.println("returning list of arguments");
         return new ArrayList<String>(List.of(args));
     }
 
