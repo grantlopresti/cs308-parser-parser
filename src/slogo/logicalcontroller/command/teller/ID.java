@@ -1,6 +1,7 @@
 package slogo.logicalcontroller.command.teller;
 
 import slogo.model.ModelCollection;
+import slogo.model.ModelTurtle;
 
 import java.util.List;
 
@@ -20,5 +21,10 @@ public class ID extends TellerCommand {
     @Override
     public String getCommandType() {
         return "ID";
+    }
+
+    @Override
+    public String execute(ModelTurtle turtle) {
+        return null;
     }
 }

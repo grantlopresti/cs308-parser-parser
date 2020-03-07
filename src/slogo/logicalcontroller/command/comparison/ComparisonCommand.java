@@ -1,6 +1,7 @@
 package slogo.logicalcontroller.command.comparison;
 
 import slogo.logicalcontroller.command.Command;
+import slogo.model.ModelTurtle;
 
 import java.util.Arrays;
 import java.util.List;
@@ -39,7 +40,7 @@ public abstract class ComparisonCommand implements Command {
      * Method that an external parser should call to retrieve the return value to conduct code replace.
      * @return
      */
-    public abstract String execute();
+    public abstract String execute(ModelTurtle turtle);
 
     protected String booleanToString(boolean value) {
         return ""+(value ? 1 : 0);

@@ -1,5 +1,7 @@
 package slogo.logicalcontroller.command.math;
 
+import slogo.model.ModelTurtle;
+
 import java.util.List;
 
 //TODO: Difference between Difference and Minus commands?
@@ -10,7 +12,7 @@ public class Minus extends MathCommand {
     }
 
     @Override
-    public String execute() {
+    public String execute(ModelTurtle turtle) {
         return Double.toString(-1 * this.myArgument1);
     }
 
