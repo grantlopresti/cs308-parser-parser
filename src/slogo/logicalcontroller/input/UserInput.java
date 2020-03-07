@@ -1,10 +1,11 @@
 package slogo.logicalcontroller.input;
 
 import slogo.exceptions.NoCommandFoundException;
+import slogo.exceptions.ResourceBundleException;
 import slogo.logicalcontroller.BundleInterface;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.command.controlflow.ControlFlowCommand;
-import slogo.logicalcontroller.command.controlflow.ControlFlowExtractor;
+import slogo.logicalcontroller.ControlFlowExtractor;
 
 import java.io.IOException;
 import java.util.*;
@@ -25,22 +26,19 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
 
     private static final String SUPERCLASS_PROPERTIES = "src/properties/commandSuperclass.properties";
     private static final String PARAMETER_PROPERTIES = "src/properties/parameterCount.properties";
-    private static final String REPLACE_PROPERTIES = "src/properties/lineReplace.properties";
     private static final String CONTROLFLOW = "controlflow";
+    private static final String TELLER = "teller";
     private static ResourceBundle myCommandMap;
     private static ResourceBundle myParameterMap;
-    private static ResourceBundle myReplaceMap;
 
     public UserInput(List<String> userInput, ResourceBundle bundle) {
         this.myUserInput = userInput;
         this.myResources = bundle;
         try {
-            this.myCommandMap = BundleInterface.createResourceBundle(SUPERCLASS_PROPERTIES);
-            this.myParameterMap = BundleInterface.createResourceBundle(PARAMETER_PROPERTIES);
-            this.myReplaceMap = BundleInterface.createResourceBundle(REPLACE_PROPERTIES);
+            myCommandMap = BundleInterface.createResourceBundle(SUPERCLASS_PROPERTIES);
+            myParameterMap = BundleInterface.createResourceBundle(PARAMETER_PROPERTIES);
         } catch (IOException e) {
-            // TODO - FIX THIS
-            e.printStackTrace();
+            throw new ResourceBundleException("Could not create User Input resource bundles");
         }
     }
 
@@ -52,13 +50,16 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
             this.myCommandIndex = findLastCommand(this.myLineIndex);
             System.out.println("The Command index: " + this.myCommandIndex);
             String translated = translateCommand(this.myCommand);
-            System.out.println("The transated command: " + translated);
-            String superclass = CommandGenerator.getCommandSuperclass(translated, this.myCommandMap);
+            String superclass = CommandGenerator.getCommandSuperclass(translated, myCommandMap);
             System.out.printf("translated %s to %s \n", this.myCommand, translated);
             if (superclass.equals(CONTROLFLOW)) {
                 System.out.println("Entered loop");
                 List<List<String>> args = getControlFlowArguments(this.myLineIndex, this.myCommandIndex, translated);
                 return CommandGenerator.createControlCommand(superclass, translated, args);
+            } else if (superclass.equals(TELLER)) {
+                this.myPrefix = SPACE; this.mySuffix = SPACE;
+                List<String> args = ControlFlowExtractor.getBracketArguments(this.myUserInput, this.myLineIndex);
+                return CommandGenerator.createCommand(superclass, translated, args);
             } else {
                 int params = countParameters(translated);
                 List<String> args = getArguments(this.myLineIndex, this.myCommandIndex, params);
@@ -71,15 +72,11 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
 
     // TODO - implement method stub - PLEase double check - By Alex
     private List<List<String>> getControlFlowArguments(int myLineIndex, int myCommandIndex, String command) {
-        controlFlowEndIndex = 0;
-
+        this.controlFlowEndIndex = 0;
         List<List<String>> returnList = new ArrayList<>();
         System.out.println("The command is: " + command);
         int numParams = Integer.parseInt(myParameterMap.getString(command).split(",")[1]);
         int numBracketSets = Integer.parseInt(myParameterMap.getString(command).split(",")[0]);
-
-        System.out.println("This Command Object Takes " + numParams + " Parameters");
-        System.out.println("This Command Object Takes " + numBracketSets + " Sets of Bracketed Bodies");
 
         if(numParams == 1){
             List<String> paramsList = new ArrayList<>();
@@ -101,7 +98,6 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
             linePointer += argumentSet.size();
             controlFlowEndIndex = ControlFlowExtractor.getLineLastBrac(myUserInput, lineLocation, columnLocation);
         }
-
         return returnList;
     }
 
@@ -157,7 +153,7 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
         }
         sb.append(SPACE + this.mySuffix);
         this.myUserInput.set(this.myLineIndex, sb.toString().trim());
-        System.out.printf("code replaced to: %s", this.myUserInput.get(this.myLineIndex));
+        System.out.printf("code replaced to: %s\n", this.myUserInput.get(this.myLineIndex));
     }
 
     // TODO: Implementation can be better?
@@ -175,18 +171,6 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
         System.out.println("//");
 
         List<String> prefix = myUserInput.subList(0, myLineIndex);
-
-        /*
-        System.out.println("Looking for end bracket starting on line " + controlFlowEndIndex);
-
-        while(!myUserInput.get(controlFlowEndIndex).contains("]")){
-            controlFlowEndIndex++;
-        }
-        System.out.println("Closing Bracket at Line: " + controlFlowEndIndex);
-
-
-         */
-
         List<String> suffix = myUserInput.subList(controlFlowEndIndex+1, myUserInput.size());
 
         List<String> result = new ArrayList<>();
@@ -203,7 +187,6 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
             for (String s: words) {
                 if (CommandGenerator.isValidCommand(s, this.myResources)) {return i;}
             }
-            // if(s.split("\\s+").length > 1){ return i; }
         }
         throw new NoCommandFoundException();
     }

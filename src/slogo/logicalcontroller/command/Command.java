@@ -1,5 +1,7 @@
 package slogo.logicalcontroller.command;
 
+import slogo.model.ModelTurtle;
+
 //TODO: Refactor into two different classes because there are commands that interact with the model, and there are commands that don't. - Alex
 public interface Command {
 
@@ -15,4 +17,5 @@ public interface Command {
      */
     public String toString();
 
+    String execute(ModelTurtle turtle);
 }

@@ -3,10 +3,11 @@ package slogo.logicalcontroller.command.modifier;
 import java.util.List;
 
 public class PenUp extends ModifierCommand {
-    public static final int RETURN_VALUE = 0;
+    private static final int RETURN_VALUE = 0;
 
     public PenUp(List<String> args){
-        super(""+RETURN_VALUE);
+        super(Integer.toString(RETURN_VALUE));
+        // System.out.println("successfully created penup command");
     }
 
     @Override

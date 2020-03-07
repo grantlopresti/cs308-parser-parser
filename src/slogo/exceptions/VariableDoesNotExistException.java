@@ -2,6 +2,10 @@ package slogo.exceptions;
 
 import slogo.visualcontroller.ErrorSeverity;
 
+/**
+ * Exception thrown when the Variable requested does not exist
+ * @author  Alex Xu
+ */
 public class VariableDoesNotExistException extends LogicalException{
 
     public VariableDoesNotExistException() {

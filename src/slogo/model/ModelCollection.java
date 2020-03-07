@@ -1,8 +1,6 @@
 package slogo.model;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * The purpose of this class is to provide an encapsulation of the data structure used to hold multiple
@@ -10,39 +8,65 @@ import java.util.List;
  * of data structure. Implements the Iterable interface.
  * @author Alex Xu
  */
-public class ModelCollection implements Iterable {
-    private List<ModelObject> myModelObjectList;
+public class ModelCollection {
+
+    private Map<Integer, ModelObject> myModelObjectMap;
 
     /**
      * Default Constructor for ModelCollection object
      */
     public ModelCollection(){
-        myModelObjectList = new ArrayList<ModelObject>();
+        initLists();
+    }
+
+    private void initLists() {
+        this.myModelObjectMap = new HashMap<Integer, ModelObject>();
+    }
+
+    public ModelCollection(List<ModelObject> objects) {
+        this();
+        for (ModelObject o: objects) {
+            this.append(o);
+        }
     }
 
     /**
      * Add a ModelObject to the ModelCollection
-     * @param myModelObject
+     * @param object
      */
-    public void append(ModelObject myModelObject){
-        myModelObjectList.add(myModelObject);
+    public void append(ModelObject object){
+        this.myModelObjectMap.putIfAbsent(object.getID(), object);
+    }
+
+    public Map<Integer, ModelObject>  getModelMap() {
+        return this.myModelObjectMap;
     }
 
     /**
-     * Get a ModelObject from the ModelCollection
-     * @param index
-     * @return
+     *
+     * @return new model collection with all active turtles after a teller has been run
      */
-    public ModelObject get(int index){
-        return myModelObjectList.get(index);
+    public ModelCollection getActiveTurtles() {
+        List<ModelObject> activeTurtles = new ArrayList<ModelObject>();
+        for (ModelObject o: this.myModelObjectMap.values()) {
+            ModelTurtle turtle = (ModelTurtle) o;
+            if (turtle.isActive()) {
+                activeTurtles.add(turtle);
+            }
+        }
+        return new ModelCollection(activeTurtles);
     }
 
-    /**
-     * Required by the Iterator interface
-     * @return
-     */
-    @Override
-    public Iterator iterator() {
-        return myModelObjectList.iterator();
+    public void activate(int id) {
+        ModelObject o = myModelObjectMap.get(id);
+        ModelTurtle turtle = (ModelTurtle)o;
+        turtle.activate();
     }
+
+    public void deactivate(int id) {
+        ModelObject o = myModelObjectMap.get(id);
+        ModelTurtle turtle = (ModelTurtle)o;
+        turtle.deactivate();
+    }
+
 }

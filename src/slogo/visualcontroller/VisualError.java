@@ -1,23 +1,24 @@
 package slogo.visualcontroller;
 
 import javafx.scene.paint.Color;
+import slogo.exceptions.DeprecationException;
 import slogo.exceptions.LogicalException;
 
 public class VisualError {
 
     private final String myMessage;
     private final ErrorSeverity mySeverity;
-    private static final String SEPARATOR = ": ";
-    private static final String INTRO = "Error Type: ";
+    private static final String SEPARATOR = " ERROR: ";
+    private static final String SLEEP_MESSAGE =  "\nProgram will exit after close popup";
 
     public VisualError(LogicalException e) {
         this.myMessage = e.getMessage();
         this.mySeverity = e.getErrorSeverity();
-        testErrorPrint();
     }
 
-    private void testErrorPrint() {
-        System.out.println("Created visual error with message: " + this.toString());
+    public VisualError(DeprecationException e) {
+        this.myMessage = e.getMessage() + SLEEP_MESSAGE;
+        this.mySeverity = e.getErrorSeverity();
     }
 
     public VisualError(String message, ErrorSeverity severe) {
@@ -32,7 +33,7 @@ public class VisualError {
     public String toString() {return errorMessage();}
 
     private String errorMessage() {
-        return INTRO + mySeverity.getLevel() + SEPARATOR + this.myMessage;
+        return mySeverity.getLevel().toUpperCase() + SEPARATOR + this.myMessage;
     }
 
 }

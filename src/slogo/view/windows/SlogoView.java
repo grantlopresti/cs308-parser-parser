@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -30,11 +31,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import slogo.exceptions.InvalidCommandException;
-import slogo.exceptions.ResourceBundleCreationException;
+import slogo.exceptions.ResourceBundleException;
 import slogo.logicalcontroller.BundleInterface;
 import slogo.logicalcontroller.LogicalController;
 import slogo.view.SubTabFactory;
-import slogo.view.TurtleImage;
 import slogo.view.subsections.ToolbarPane;
 import slogo.view.subsections.TurtleOptionsTab;
 import slogo.view.subsections.UserInputPane;
@@ -51,12 +51,15 @@ public class SlogoView extends Application {
   private static final int VISUALIZER_HEIGHT = 525;
   public static final int RIGHT_PANE_WIDTH = 375;
   public static final int LEFT_PANE_WIDTH = 325;
+  private static final int ANIMATION_RATE = 3;
 
   private static final int WINDOW_WIDTH = LEFT_PANE_WIDTH + VISUALIZER_WIDTH + RIGHT_PANE_WIDTH;
   private static final int WINDOW_HEIGHT = 700;
 
-  public static final String PROJECT_TITLE = "Parser Parser - Slogo Project - CS 308";
   public static final String DEFAULT_STYLESHEET = "stylesheets/defaultStyle.css";
+  public Boolean isDarkMode = false;
+
+  public static final String PROJECT_TITLE = "Parser Parser - Slogo Project - CS 308";
   public static final String CREATORS_CREDIT = "Created by: Alex Xu, Amjad Syedibrahim, Grant LoPresti, and Max Smith";
   public static final String CLASS_CREDIT = "CS 308 - Spring 2020 - Duvall";
   public static final String PROJECT_CREDIT = "Slogo - Parser Team 10";
@@ -103,21 +106,25 @@ public class SlogoView extends Application {
   public SlogoView(LogicalController logicalController, VisualController visualController) {
     myLogicalController = logicalController;
     myVisualController = visualController;
-
+    myVisualController.setAnimationRate(ANIMATION_RATE);
+    /*
     try {
       myTabTypeResources = BundleInterface.createResourceBundle(TabResourcePath);
     } catch (IOException e) {
       throw new ResourceBundleCreationException();
     }
+     */
   }
+
+  private Scene myScene;
 
   @Override
   public void start(Stage stage) throws IOException {
-    Scene scene = new Scene(createMainPane(), WINDOW_WIDTH, WINDOW_HEIGHT);
+    myScene = new Scene(createMainPane(), WINDOW_WIDTH, WINDOW_HEIGHT);
     stage.setTitle(PROJECT_TITLE);
-    scene.getStylesheets().add(DEFAULT_STYLESHEET);
-    scene.setFill(Color.DARKGRAY);
-    stage.setScene(scene);
+    myScene.getStylesheets().add(DEFAULT_STYLESHEET);
+    myScene.setFill(Color.DARKGRAY);
+    stage.setScene(myScene);
     stage.show();
   }
 
@@ -153,18 +160,12 @@ public class SlogoView extends Application {
   private void createCenterPane() {
     myCenterPane = new BorderPane();
 
-    myVisualizationPane = new VisualizationPane(VISUALIZER_WIDTH, VISUALIZER_HEIGHT);
+    myVisualizationPane = new VisualizationPane(VISUALIZER_WIDTH, VISUALIZER_HEIGHT, ANIMATION_RATE);
     myVisualizationPane.update();
     HBox programInputArea = getProgramInputNode();
 
     myCenterPane.setCenter(myVisualizationPane);
     myCenterPane.setBottom(programInputArea);
-
-    showTurtleInCenter();
-  }
-
-  private void showTurtleInCenter() {
-    sendUserCommand("bk 1\nfd 1");
   }
 
   private HBox getProgramInputNode() {
@@ -241,7 +242,7 @@ public class SlogoView extends Application {
     try {
       myPossibleTabsResource = BundleInterface.createResourceBundle(POSSIBLE_TABS_RESOURCE);
     } catch (IOException e) {
-      throw new ResourceBundleCreationException();
+      throw new ResourceBundleException();
     }
     for (String key : Collections.list(myPossibleTabsResource.getKeys())) {
       MenuItem menuItem = new MenuItem(myPossibleTabsResource.getString(key).split(",")[0]);
@@ -307,7 +308,7 @@ public class SlogoView extends Application {
     myInputPane.setInputArea(fileContents);
   }
 
-  public void updateVisualTurtles(ArrayList<VisualTurtle> visualTurtles) {
+  public void updateVisualTurtles(List<VisualTurtle> visualTurtles) {
     for (VisualTurtle turtle : visualTurtles){
       myVisualizationPane.addVisualTurtle(turtle);
     }
@@ -330,7 +331,6 @@ public class SlogoView extends Application {
   public void clearScreen() {
     myVisualizationPane.clearElements();
     myVisualizationPane.resetBGColor();
-    myMainPane.setCenter(myCenterPane);
   }
 
   public void setPenColor(double red, double green, double blue) {
@@ -342,5 +342,18 @@ public class SlogoView extends Application {
     myVisualController.changeTurtleImage(newValue.toUpperCase());
     myVisualizationPane.changeTurtleImage(ID, newValue.toUpperCase());
     //TODO: UPDATE CENTER
+  }
+
+  public void toggleDarkMode() {
+    System.out.println(isDarkMode);
+    if (isDarkMode) {
+      myScene.getStylesheets().remove("stylesheets/darkMode.css");
+      myScene.getStylesheets().add("stylesheets/defaultStyle.css");
+      isDarkMode = false;
+    } else {
+      myScene.getStylesheets().remove("stylesheets/defaultStyle.css");
+      myScene.getStylesheets().add("stylesheets/darkMode.css");
+      isDarkMode = true;
+    }
   }
 }

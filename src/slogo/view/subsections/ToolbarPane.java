@@ -2,12 +2,9 @@ package slogo.view.subsections;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collections;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -17,7 +14,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -26,16 +26,11 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javax.script.ScriptException;
 
 import slogo.exceptions.InvalidCommandException;
 import slogo.exceptions.InvalidCommandFileException;
-import slogo.exceptions.InvalidLanguageException;
-import slogo.exceptions.ResourceBundleCreationException;
-import slogo.logicalcontroller.BundleInterface;
 import slogo.logicalcontroller.LogicalController;
 import slogo.view.SubTabFactory;
-import slogo.view.TurtleImage;
 import slogo.view.windows.SlogoView;
 import slogo.visualcontroller.VisualError;
 
@@ -55,7 +50,10 @@ public class ToolbarPane extends ToolBar {
   private Button myLoadAndRun = new Button("Load & Run");
   private ColorPicker myBGColorPicker = new ColorPicker();
   private Button myClearScreen = new Button("Clear Screen");
-  private FileInputStream fis1 = new FileInputStream("src/properties/buttons.properties");
+  private Button myDarkModeToggle = new Button("Toggle Mode");
+
+  private FileInputStream fis1 = new FileInputStream("src/slogo/view/resources/buttons.properties");
+
   private static final ObservableList<String> languageOptions =
       FXCollections.observableArrayList(
           "English",
@@ -66,7 +64,8 @@ public class ToolbarPane extends ToolBar {
           "Portuguese",
           "Russian",
           "Spanish",
-          "Urdu"
+          "Urdu",
+              "Gibberish"
       );
   private ComboBox<String> myLanguage = new ComboBox<>(languageOptions);
   private Button myHelpInfo = new Button("Help/Info");
@@ -85,16 +84,18 @@ public class ToolbarPane extends ToolBar {
         myLoader,
         myLoadAndRun,
         new Separator(),
-        new Text("BG Color:"),
+        new Label("BG Color:"),
         myBGColorPicker,
         new Separator(),
         myClearScreen,
         new Separator(),
-        new Text("Language:"),
+        new Label("Language:"),
         myLanguage,
         new Separator(),
         myHelpInfo,
-        new Separator());
+        new Separator(),
+        new Label("Dark Mode"),
+        myDarkModeToggle);
   }
 
   private void initializeButtons() {
@@ -109,6 +110,7 @@ public class ToolbarPane extends ToolBar {
     myLanguage.getSelectionModel().selectedItemProperty().addListener((options, oldValue,
         newValue) -> changeLanguage(newValue));
     myHelpInfo.setOnAction(e -> showHelpWindow());
+    myDarkModeToggle.setOnAction(e -> myViewer.toggleDarkMode());
   }
 
   private void showHelpWindow() {
@@ -175,12 +177,7 @@ public class ToolbarPane extends ToolBar {
   }
 
   private void changeLanguage(String language) {
-    try {
-      myLogicalController.setLanguage(language);
-    } catch (IOException e) {
-      myViewer.announceError(new VisualError(new InvalidLanguageException("The chosen language: " + language
-          + " is invalid. \n Please try again!")));
-    }
+    myLogicalController.setLanguage(language);
   }
 
   private String getTextFromFile(File file) {

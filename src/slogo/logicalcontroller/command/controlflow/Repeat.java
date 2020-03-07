@@ -1,5 +1,7 @@
 package slogo.logicalcontroller.command.controlflow;
 
+import slogo.model.ModelTurtle;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,5 +42,10 @@ public class Repeat extends ControlFlowCommand {
         for(String s : result){
             System.out.println(s);
         }
+    }
+
+    @Override
+    public String execute(ModelTurtle turtle) {
+        return null;
     }
 }

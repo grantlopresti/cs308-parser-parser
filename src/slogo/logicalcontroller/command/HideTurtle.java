@@ -1,5 +1,7 @@
 package slogo.logicalcontroller.command;
 
+import slogo.model.ModelTurtle;
+
 public class HideTurtle implements Command {
     private double value;
 
@@ -15,5 +17,10 @@ public class HideTurtle implements Command {
     @Override
     public String getCommandType() {
         return "HideTurtle";
+    }
+
+    @Override
+    public String execute(ModelTurtle turtle) {
+        return null;
     }
 }

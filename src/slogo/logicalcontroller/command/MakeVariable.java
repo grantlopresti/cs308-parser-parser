@@ -1,5 +1,7 @@
 package slogo.logicalcontroller.command;
 
+import slogo.model.ModelTurtle;
+
 public class MakeVariable implements Command {
     private double value;
 
@@ -15,5 +17,10 @@ public class MakeVariable implements Command {
     @Override
     public String getCommandType() {
         return "MakeVariable";
+    }
+
+    @Override
+    public String execute(ModelTurtle turtle) {
+        return null;
     }
 }

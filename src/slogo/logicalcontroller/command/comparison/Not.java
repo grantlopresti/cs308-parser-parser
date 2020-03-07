@@ -1,5 +1,7 @@
 package slogo.logicalcontroller.command.comparison;
 
+import slogo.model.ModelTurtle;
+
 import java.util.List;
 
 public class Not extends ComparisonCommand {
@@ -9,7 +11,7 @@ public class Not extends ComparisonCommand {
     }
 
     @Override
-    public String execute() {
+    public String execute(ModelTurtle turtle) {
         boolean bool = this.argument1 == 0;
         return booleanToString(bool);
     }

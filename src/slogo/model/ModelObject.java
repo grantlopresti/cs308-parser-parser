@@ -8,7 +8,7 @@ public abstract class ModelObject implements ModelInterface{
     private double xCoordinate;
     private double yCoordinate;
     private double heading;
-    private int ID;
+    protected int ID;
 
     /**
      * Default Constructor for all ModelObjects
@@ -66,6 +66,7 @@ public abstract class ModelObject implements ModelInterface{
     public void move(double distance) {
         xCoordinate += calcX(distance);
         yCoordinate += calcY(distance);
+        // System.out.printf("new pos: (%.1f, %.1f)\n", xCoordinate, yCoordinate);
     }
 
     public double setPosition(double x, double y){
@@ -173,4 +174,5 @@ public abstract class ModelObject implements ModelInterface{
     private double calcDistance(double x, double y){
         return Math.sqrt(x*x + y*y);
     }
+
 }

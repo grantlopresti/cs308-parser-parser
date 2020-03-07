@@ -17,6 +17,9 @@ public class Home extends Application {
   private static final int WINDOW_WIDTH = 450;
   private static final int WINDOW_HEIGHT = 275;
 
+  private String myDefaultLang = "ENGLISH";
+  private String myColorScheme;
+
   @FXML
   private Button LaunchSlogo;
   @FXML
@@ -69,7 +72,11 @@ public class Home extends Application {
 
   @FXML
   private void launchSim() throws IOException {
-    new Manager();
+    new Manager(myDefaultLang);
+  }
+
+  private void setDefaultLang(String newLang) {
+    myDefaultLang = newLang;
   }
 
 }

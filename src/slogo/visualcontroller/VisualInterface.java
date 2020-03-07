@@ -1,6 +1,9 @@
 package slogo.visualcontroller;
 
 import javafx.beans.property.Property;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
+import slogo.exceptions.DeprecationException;
 import slogo.exceptions.LogicalException;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.variable.Variable;
@@ -17,7 +20,7 @@ public interface VisualInterface {
      * Public method callable by the logical controller to adjust the animation rate
      * @param rate is the new animation rate for adding lines into the view
      */
-    public void setAnimationRate(double rate);
+    void setAnimationRate(double rate);
 
     /**
      * Called by logical controller to update the view
@@ -25,19 +28,23 @@ public interface VisualInterface {
      * @param variableList list of variables to populate within the model
      * @param latestCommand last command run
      */
-    public void update(ModelCollection model, VariableList variableList, Command latestCommand);
+    void update(ModelCollection model, VariableList variableList, Command latestCommand);
 
     /**
      *
      * @param e logical exception thrown during logical controller parsing
      */
-    public void updateErrors(LogicalException e);
+    void updateErrors(LogicalException e);
 
-    public void changeTurtleImage(String newValue);
+    void changeTurtleImage(String newValue);
 
-    public Property getProperty(VisualProperty type);
+    Property getProperty(VisualProperty type);
 
-    public void setSlogoView(SlogoView view);
+    void setSlogoView(SlogoView view);
 
-    public void updateCommand(String fullUserInput);
+    void updateCommand(String fullUserInput);
+
+    void deprecateProgram(DeprecationException e);
+
+    ObservableValue<? extends ObservableList<String>> getMyTurtlesProperty();
 }

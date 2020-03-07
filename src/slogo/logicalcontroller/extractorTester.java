@@ -1,10 +1,10 @@
-package slogo.logicalcontroller.command.controlflow;
+package slogo.logicalcontroller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class extractorTester implements ControlFlowExtractor {
+public class extractorTester extends ControlFlowExtractor {
 
     private static List<String> rawCmds1 = new ArrayList<>(Arrays.asList("dotimes [ :k quotient 360 :angle ]"));
     private static List<String> rawCmds4 = new ArrayList<>(Arrays.asList("repeat 9 [", "  repeat 180 [", "    fd 1 rt 2", "  ]", "  rt 40", "]"));

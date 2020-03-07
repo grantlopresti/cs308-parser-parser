@@ -1,7 +1,7 @@
 package slogo.logicalcontroller;
 
 import slogo.exceptions.ReflectionException;
-import slogo.exceptions.ResourceBundleCreationException;
+import slogo.exceptions.ResourceBundleException;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.command.MakeVariable;
 import slogo.logicalcontroller.command.comparison.ComparisonCommand;
@@ -10,9 +10,12 @@ import slogo.logicalcontroller.command.controlflow.customCommandList;
 import slogo.logicalcontroller.command.math.MathCommand;
 import slogo.logicalcontroller.command.modifier.ModifierCommand;
 import slogo.logicalcontroller.command.querie.QuerieCommand;
+import slogo.logicalcontroller.command.teller.TellerCommand;
 import slogo.logicalcontroller.input.UserInput;
+import slogo.logicalcontroller.variable.ParserInterface;
 import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelCollection;
+import slogo.model.ModelObject;
 import slogo.model.ModelTurtle;
 
 import java.util.*;
@@ -21,19 +24,19 @@ import java.lang.reflect.*;
 
 /**
  * Purpose of this class is to parse incoming commands from the console and from a text file that the user will have an option to read in.
- * @author Amjad S
+ * @author Max S, Alex Q, Amjad S
  */
-public class Parser implements BundleInterface {
+public class Parser implements BundleInterface, ParserInterface {
 
     private String myLanguage;
-    private List<Command> finalCommandObjects;
     private VariableList myVariableList;
     private customCommandList myCustomCommandList;
     private UserInput myUserInput;
     private ModelCollection myModelCollection;
     private ResourceBundle myLanguageResources;
     private Command myLatestCommand;
-    private boolean myFinished;
+
+    private static final String EXECUTE = "execute";
 
     /**
      * Constructor for the Parser class that takes in the input language and initializes all the used variables that are required for parsing.
@@ -49,13 +52,10 @@ public class Parser implements BundleInterface {
      * Reads in the language of the appropriate resource file and loads it into a resource bundle for future use.
      * @param language
      */
+    @Override
     public void setLanguage(String language) throws IOException {
         this.myLanguage = language;
-        try {
-            this.myLanguageResources = BundleInterface.createResourceBundle(nameLanguageFile());
-        } catch (IOException e) {
-            throw new ResourceBundleCreationException();
-        }
+        this.myLanguageResources = BundleInterface.createResourceBundle(nameLanguageFile());
     }
 
     /**
@@ -72,7 +72,8 @@ public class Parser implements BundleInterface {
      * Two stage process, first
      * @param lines
      */
-    public void parse(List<String> lines) {
+    @Override
+    public void parse(List<String> lines) throws ResourceBundleException {
         this.myUserInput = new UserInput(lines, this.myLanguageResources);
     }
 
@@ -83,18 +84,20 @@ public class Parser implements BundleInterface {
     private List<String> executeCommand(Command command) {
         try {
             Class superclazz = command.getClass().getSuperclass();
-            String name = "execute" + superclazz.getSimpleName();
+            String name = EXECUTE + superclazz.getSimpleName();
             Method method = this.getClass().getDeclaredMethod(name, superclazz); //Command.class
             Object o = method.invoke(this, command);
             return (List<String>) o;
         } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException | NullPointerException e) {
-            throw new ReflectionException("Unable to apply Reflection " + e.getMessage());
+            e.printStackTrace();
+            throw new ReflectionException("Unable to apply Reflection in parser");
         }
     }
 
     /**
      * Method to find and execute the next command in the arraylist of raw commands. Represents one step of the turtle.
      */
+    @Override
     public void executeNextCommand(){
         System.out.println("Entered executeNextCommand");
         this.myLatestCommand = this.myUserInput.getNextCommand();
@@ -103,61 +106,57 @@ public class Parser implements BundleInterface {
         this.myUserInput.setCodeReplacement(myList, this.myLatestCommand);
     }
 
-    // TODO - execute on a specific turtle
-    private List<String> executeModifierCommand(ModifierCommand command) {
+    private List<String> executeGeneralCommand(Command command) {
         String replace = "";
-        for (Object o : this.myModelCollection){
+        Collection<ModelObject> turtles = this.myModelCollection.getActiveTurtles().getModelMap().values();
+        System.out.printf("found %d active turtles\n", turtles.size());
+        for (Object o : turtles){
             ModelTurtle turtle = (ModelTurtle) o;
             replace = command.execute(turtle);
         }
         return new ArrayList<String>(List.of(replace));
     }
 
-    // TODO - execute on a specific turtle
+    private List<String> executeModifierCommand(ModifierCommand command) {
+        return executeGeneralCommand(command);
+    }
+
     private List<String> executeQuerieCommand(QuerieCommand command) {
-        String replace = "";
-        for (Object o : this.myModelCollection){
-            ModelTurtle turtle = (ModelTurtle) o;
-            replace = command.execute(turtle);
-        }
-        // return new ArrayList<String>();
-        return new ArrayList<String>(List.of(replace));
+        return executeGeneralCommand(command);
     }
 
     private List<String> executeComparisonCommand(ComparisonCommand command) {
-        return new ArrayList<String>(List.of(command.execute()));
+        return executeGeneralCommand(command);
+    }
+
+    private List<String> executeMathCommand(MathCommand command) {
+        return executeGeneralCommand(command);
+    }
+
+    private List<String> executeTellerCommand(TellerCommand command) {
+        return new ArrayList<String>(List.of(command.execute(this.myModelCollection)));
     }
 
     private List<String> executeControlFlowCommand(ControlFlowCommand command) {
         return new ArrayList<String>();
     }
 
-    private List<String> executeMathCommand(MathCommand command) {
-        return new ArrayList<String>(List.of(command.execute()));
-    }
-
     private List<String> executeVariables(MakeVariable command) {return new ArrayList<String>();}
-    
 
-    /**
-     * Called by the LogicalController
-     * Returns the final list of commands to be executed on the model
-     * @return
-     */
-    public List<Command> getCommands(){
-        return this.finalCommandObjects;
-    }
-
+    @Override
     public Command getLatestCommand() {
         return this.myLatestCommand;
     }
 
+    @Override
     public VariableList getVariables() {return this.myVariableList; }
 
+    @Override
     public boolean isFinished(){
         return this.myUserInput.isFinished();
     }
 
+    @Override
     public ModelCollection getModel(){
         return this.myModelCollection;
     }
@@ -172,10 +171,6 @@ public class Parser implements BundleInterface {
 
     private UserInput getUserInput() {
         return this.myUserInput;
-    }
-
-    public ResourceBundle getLanguageResources() {
-        return this.myLanguageResources;
     }
 
 }
