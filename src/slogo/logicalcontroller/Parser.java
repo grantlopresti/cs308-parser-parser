@@ -11,6 +11,7 @@ import slogo.logicalcontroller.command.modifier.ModifierCommand;
 import slogo.logicalcontroller.command.querie.QuerieCommand;
 import slogo.logicalcontroller.command.teller.TellerCommand;
 import slogo.logicalcontroller.input.UserInput;
+import slogo.logicalcontroller.variable.ParserInterface;
 import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelCollection;
 import slogo.model.ModelObject;
@@ -24,7 +25,7 @@ import java.lang.reflect.*;
  * Purpose of this class is to parse incoming commands from the console and from a text file that the user will have an option to read in.
  * @author Max S, Alex Q, Amjad S
  */
-public class Parser implements BundleInterface {
+public class Parser implements BundleInterface, ParserInterface {
 
     private String myLanguage;
     private VariableList myVariableList;
@@ -49,6 +50,7 @@ public class Parser implements BundleInterface {
      * Reads in the language of the appropriate resource file and loads it into a resource bundle for future use.
      * @param language
      */
+    @Override
     public void setLanguage(String language) throws IOException {
         this.myLanguage = language;
         this.myLanguageResources = BundleInterface.createResourceBundle(nameLanguageFile());
@@ -68,6 +70,7 @@ public class Parser implements BundleInterface {
      * Two stage process, first
      * @param lines
      */
+    @Override
     public void parse(List<String> lines) throws ResourceBundleException {
         this.myUserInput = new UserInput(lines, this.myLanguageResources);
     }
@@ -92,6 +95,7 @@ public class Parser implements BundleInterface {
     /**
      * Method to find and execute the next command in the arraylist of raw commands. Represents one step of the turtle.
      */
+    @Override
     public void executeNextCommand(){
         this.myLatestCommand = this.myUserInput.getNextCommand();
         List<String> myList = this.executeCommand(this.myLatestCommand);
@@ -135,16 +139,20 @@ public class Parser implements BundleInterface {
 
     private List<String> executeVariables(MakeVariable command) {return new ArrayList<String>();}
 
+    @Override
     public Command getLatestCommand() {
         return this.myLatestCommand;
     }
 
+    @Override
     public VariableList getVariables() {return this.myVariableList; }
 
+    @Override
     public boolean isFinished(){
         return this.myUserInput.isFinished();
     }
 
+    @Override
     public ModelCollection getModel(){
         return this.myModelCollection;
     }
