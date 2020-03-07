@@ -52,7 +52,7 @@ public class ToolbarPane extends ToolBar {
   private Button myClearScreen = new Button("Clear Screen");
   private Button myDarkModeToggle = new Button("Toggle Mode");
 
-  private FileInputStream fis1 = new FileInputStream("src/properties/buttons.properties");
+  private FileInputStream fis1 = new FileInputStream("src/slogo/view/resources/buttons.properties");
 
   private static final ObservableList<String> languageOptions =
       FXCollections.observableArrayList(

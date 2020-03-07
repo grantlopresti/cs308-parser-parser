@@ -38,7 +38,7 @@ public abstract class ModifierCommand implements Command, ModifierInterface {
 
     public ModifierCommand(String input1){
         this();
-        System.out.println("successfully created modifier command");
+        // System.out.println("successfully created modifier command");
         argument1 = Double.parseDouble(input1);
     }
 

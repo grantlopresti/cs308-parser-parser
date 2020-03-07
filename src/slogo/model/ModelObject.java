@@ -66,7 +66,7 @@ public abstract class ModelObject implements ModelInterface{
     public void move(double distance) {
         xCoordinate += calcX(distance);
         yCoordinate += calcY(distance);
-        System.out.printf("new pos: (%.1f, %.1f)\n", xCoordinate, yCoordinate);
+        // System.out.printf("new pos: (%.1f, %.1f)\n", xCoordinate, yCoordinate);
     }
 
     public double setPosition(double x, double y){

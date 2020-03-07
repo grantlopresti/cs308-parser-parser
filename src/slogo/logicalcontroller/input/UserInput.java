@@ -69,14 +69,10 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
 
     // TODO - implement method stub - PLEase double check - By Alex
     private List<List<String>> getControlFlowArguments(int myLineIndex, int myCommandIndex, String command) {
-        controlFlowEndIndex = 0;
-
+        this.controlFlowEndIndex = 0;
         List<List<String>> returnList = new ArrayList<>();
         int numParams = Integer.parseInt(myParameterMap.getString(command).split(",")[1]);
         int numBracketSets = Integer.parseInt(myParameterMap.getString(command).split(",")[0]);
-
-        System.out.println("This Command Object Takes " + numParams + " Parameters");
-        System.out.println("This Command Object Takes " + numBracketSets + " Sets of Bracketed Bodies");
 
         if(numParams == 1){
             List<String> paramsList = new ArrayList<>();
@@ -98,7 +94,6 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
             linePointer += argumentSet.size();
             controlFlowEndIndex = ControlFlowExtractor.getLineLastBrac(myUserInput, lineLocation, columnLocation);
         }
-
         return returnList;
     }
 
@@ -170,18 +165,6 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
         System.out.println("//");
 
         List<String> prefix = myUserInput.subList(0, myLineIndex);
-
-        /*
-        System.out.println("Looking for end bracket starting on line " + controlFlowEndIndex);
-
-        while(!myUserInput.get(controlFlowEndIndex).contains("]")){
-            controlFlowEndIndex++;
-        }
-        System.out.println("Closing Bracket at Line: " + controlFlowEndIndex);
-
-
-         */
-
         List<String> suffix = myUserInput.subList(controlFlowEndIndex+1, myUserInput.size());
 
         List<String> result = new ArrayList<>();

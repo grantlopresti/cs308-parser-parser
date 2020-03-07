@@ -7,7 +7,7 @@ public class PenUp extends ModifierCommand {
 
     public PenUp(List<String> args){
         super(Integer.toString(RETURN_VALUE));
-        System.out.println("successfully created penup command");
+        // System.out.println("successfully created penup command");
     }
 
     @Override
