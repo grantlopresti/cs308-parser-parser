@@ -1,5 +1,6 @@
-package slogo.logicalcontroller.command.controlflow;
+package slogo.logicalcontroller.command.userDefinedCommands;
 
+import slogo.logicalcontroller.command.controlflow.MakeUserInstruction;
 import slogo.logicalcontroller.variable.Variable;
 
 import java.util.ArrayList;
