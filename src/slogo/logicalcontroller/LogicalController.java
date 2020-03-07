@@ -6,6 +6,7 @@ import slogo.exceptions.InvalidLanguageException;
 import slogo.exceptions.LogicalException;
 import slogo.logicalcontroller.codefilters.MasterCodeFilterUtility;
 import slogo.logicalcontroller.command.Command;
+import slogo.logicalcontroller.command.controlflow.customCommandList;
 import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelCollection;
 import slogo.visualcontroller.VisualController;
