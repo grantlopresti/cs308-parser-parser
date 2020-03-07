@@ -1,5 +1,6 @@
 package slogo.logicalcontroller.codefilters;
 
+import slogo.exceptions.InvalidFilterException;
 import slogo.exceptions.ResourceBundleException;
 import slogo.logicalcontroller.BundleInterface;
 
@@ -31,7 +32,7 @@ public final class MasterCodeFilterUtility {
         throw new AssertionError(INVALID_INSTANTIATION_ERROR);
     }
 
-    public static String filter(String rawInput, String language) throws NoSuchMethodException, ClassNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException {
+    public static String filter(String rawInput, String language){
         printInput(rawInput);
         String result;
 
@@ -44,14 +45,19 @@ public final class MasterCodeFilterUtility {
             throw new ResourceBundleException();
         }
 
-        List<String> activeFilters = extractActiveFilters(filtersApplied);
-        List<Class> activeFilterClasses = extractOperatingClasses(activeFilters);
+        try {
+            List<String> activeFilters = extractActiveFilters(filtersApplied);
+            List<Class> activeFilterClasses = extractOperatingClasses(activeFilters);
 
-        List<FilterSuperclass> filterObjectsList = extractFilterObjects(activeFilterClasses);
-        List<Method> methodList = extractOperatingMethods(activeFilterClasses);
+            List<FilterSuperclass> filterObjectsList = extractFilterObjects(activeFilterClasses);
+            List<Method> methodList = extractOperatingMethods(activeFilterClasses);
 
-        result = performFiltering(filterObjectsList, methodList, rawInput, languageBundle);
-        return result;
+            result = performFiltering(filterObjectsList, methodList, rawInput, languageBundle);
+            return result;
+        }
+        catch(ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e){
+            throw new InvalidFilterException();
+        }
     }
 
     private static List<FilterSuperclass> extractFilterObjects(List<Class> activeFilters) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
