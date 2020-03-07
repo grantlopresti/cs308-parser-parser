@@ -3,6 +3,7 @@ package slogo.logicalcontroller;
 import slogo.exceptions.InvalidCommandException;
 import slogo.exceptions.LogicalException;
 import slogo.logicalcontroller.command.Command;
+import slogo.logicalcontroller.command.controlflow.customCommandList;
 import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelCollection;
 import slogo.model.ModelTurtle;
@@ -82,12 +83,14 @@ public class LogicalController {
    */
   public void handleNewCommand(String fullUserInput) throws InvalidCommandException, NoSuchMethodException, InstantiationException, ScriptException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
     try {
+      System.out.println("the command is: " + fullUserInput);
       this.myParser.parse(trimList(Arrays.asList(fullUserInput.split("\n"))));
       while(!this.myParser.isFinished()){
         this.myParser.executeNextCommand();
         Command latestCommand = this.myParser.getLatestCommand();
         ModelCollection newModel = this.myParser.getModel();
         VariableList newVariables = this.myParser.getVariables();
+        customCommandList newCustomCommandList = this.myParser.getCustomCommandList();
         this.myVisualController.update(newModel, newVariables, latestCommand);
       }
       this.myVisualController.updateCommand(fullUserInput);
