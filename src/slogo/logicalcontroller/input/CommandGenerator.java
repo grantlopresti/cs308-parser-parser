@@ -4,17 +4,16 @@ import slogo.exceptions.InvalidCommandException;
 import slogo.logicalcontroller.command.Command;
 
 import java.lang.reflect.Constructor;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public interface CommandGenerator {
 
     static Command createControlCommand(String superclass, String command, List<List<String>> args) {
-        try {
+        try {System.out.println("Class name path: " + createCommandPath(superclass, command));
+            System.out.println("Argument 2: " + args.get(1).get(0));
             Class clazz = Class.forName(createCommandPath(superclass, command));
             Constructor ctor = clazz.getConstructor(List.class);
+            System.out.println("Checkpoint importanttt");
             return (Command) ctor.newInstance(args);
         } catch (Exception e) {
             throw new InvalidCommandException("Could not create control flow command");

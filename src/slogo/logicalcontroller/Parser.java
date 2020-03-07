@@ -6,6 +6,7 @@ import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.command.MakeVariable;
 import slogo.logicalcontroller.command.comparison.ComparisonCommand;
 import slogo.logicalcontroller.command.controlflow.ControlFlowCommand;
+import slogo.logicalcontroller.command.controlflow.customCommandList;
 import slogo.logicalcontroller.command.math.MathCommand;
 import slogo.logicalcontroller.command.modifier.ModifierCommand;
 import slogo.logicalcontroller.command.querie.QuerieCommand;
@@ -29,6 +30,7 @@ public class Parser implements BundleInterface, ParserInterface {
 
     private String myLanguage;
     private VariableList myVariableList;
+    private customCommandList myCustomCommandList;
     private UserInput myUserInput;
     private ModelCollection myModelCollection;
     private ResourceBundle myLanguageResources;
@@ -97,7 +99,9 @@ public class Parser implements BundleInterface, ParserInterface {
      */
     @Override
     public void executeNextCommand(){
+        System.out.println("Entered executeNextCommand");
         this.myLatestCommand = this.myUserInput.getNextCommand();
+        System.out.println("Latest to come through" + this.myLatestCommand);
         List<String> myList = this.executeCommand(this.myLatestCommand);
         this.myUserInput.setCodeReplacement(myList, this.myLatestCommand);
     }
@@ -155,6 +159,10 @@ public class Parser implements BundleInterface, ParserInterface {
     @Override
     public ModelCollection getModel(){
         return this.myModelCollection;
+    }
+
+    public customCommandList getCustomCommandList(){
+        return this.myCustomCommandList;
     }
 
     private void setUserInput(List<String> userInput) {

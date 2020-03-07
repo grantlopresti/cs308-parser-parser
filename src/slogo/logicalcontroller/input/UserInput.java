@@ -46,11 +46,14 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
     public Command getNextCommand() {
         try {
             this.myLineIndex = findNextLine();
+            System.out.println("The line index: " + this.myLineIndex);
             this.myCommandIndex = findLastCommand(this.myLineIndex);
+            System.out.println("The Command index: " + this.myCommandIndex);
             String translated = translateCommand(this.myCommand);
             String superclass = CommandGenerator.getCommandSuperclass(translated, myCommandMap);
             System.out.printf("translated %s to %s \n", this.myCommand, translated);
             if (superclass.equals(CONTROLFLOW)) {
+                System.out.println("Entered loop");
                 List<List<String>> args = getControlFlowArguments(this.myLineIndex, this.myCommandIndex, translated);
                 return CommandGenerator.createControlCommand(superclass, translated, args);
             } else if (superclass.equals(TELLER)) {
@@ -71,6 +74,7 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
     private List<List<String>> getControlFlowArguments(int myLineIndex, int myCommandIndex, String command) {
         this.controlFlowEndIndex = 0;
         List<List<String>> returnList = new ArrayList<>();
+        System.out.println("The command is: " + command);
         int numParams = Integer.parseInt(myParameterMap.getString(command).split(",")[1]);
         int numBracketSets = Integer.parseInt(myParameterMap.getString(command).split(",")[0]);
 
@@ -135,6 +139,7 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
     @Override
     public void setCodeReplacement(List<String> code, Command command) {
         if (command.getClass().getSuperclass().getSimpleName().equals("ControlFlowCommand")) {
+            System.out.println("Class name: " + command.getClass());
             multiLineReplace(command);
         } else {
             singleLineReplace(code);
@@ -159,6 +164,7 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
         List<String> code = myControlFlowCommand.getUnraveledCode();
 
         System.out.println("Code to be used to replace: //");
+        System.out.println("Da code: " + Arrays.asList(code));
         for(String s : code){
             System.out.println(s);
         }
@@ -227,6 +233,7 @@ public class UserInput implements UserInputInterface, BundleInterface, CommandGe
      * TODO - what to do if command not found? - throw no command exception
      */
     private String translateCommand(String command) {
+        System.out.println("What is translated" + command);
         ResourceBundle bundle = this.myResources;
         for(String key: Collections.list(bundle.getKeys())){
             String regex = bundle.getString(key);
