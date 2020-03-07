@@ -40,4 +40,10 @@ public class EvaluateVariable extends VariableCommand{
             throw new VariableDoesNotExistException();
         }
     }
+
+    @Override
+    public String execute(VariableList list) {
+        return null;
+    }
+
 }

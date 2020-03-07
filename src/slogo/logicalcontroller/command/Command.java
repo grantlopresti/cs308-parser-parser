@@ -1,5 +1,6 @@
 package slogo.logicalcontroller.command;
 
+import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelTurtle;
 
 //TODO: Refactor into two different classes because there are commands that interact with the model, and there are commands that don't. - Alex
@@ -18,4 +19,6 @@ public interface Command {
     public String toString();
 
     String execute(ModelTurtle turtle);
+
+    String execute(VariableList turtle);
 }

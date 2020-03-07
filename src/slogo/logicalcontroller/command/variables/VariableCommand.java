@@ -1,6 +1,7 @@
 package slogo.logicalcontroller.command.variables;
 
 import slogo.logicalcontroller.command.Command;
+import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelTurtle;
 
 public abstract class VariableCommand implements Command {
@@ -15,4 +16,5 @@ public abstract class VariableCommand implements Command {
     public String execute(ModelTurtle turtle){
         return null;
     }
+
 }

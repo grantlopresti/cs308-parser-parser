@@ -11,6 +11,7 @@ import slogo.logicalcontroller.command.math.MathCommand;
 import slogo.logicalcontroller.command.modifier.ModifierCommand;
 import slogo.logicalcontroller.command.querie.QuerieCommand;
 import slogo.logicalcontroller.command.teller.TellerCommand;
+import slogo.logicalcontroller.command.variables.VariableCommand;
 import slogo.logicalcontroller.input.UserInput;
 import slogo.logicalcontroller.variable.ParserInterface;
 import slogo.logicalcontroller.variable.VariableList;
@@ -141,7 +142,9 @@ public class Parser implements BundleInterface, ParserInterface {
         return new ArrayList<String>();
     }
 
-    private List<String> executeVariables(MakeVariable command) {return new ArrayList<String>();}
+    private List<String> executeVariableCommand(VariableCommand command) {
+        return new ArrayList<String>(List.of(command.execute(this.myVariableList)));
+    }
 
     @Override
     public Command getLatestCommand() {

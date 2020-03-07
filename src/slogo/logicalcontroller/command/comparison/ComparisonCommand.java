@@ -1,6 +1,7 @@
 package slogo.logicalcontroller.command.comparison;
 
 import slogo.logicalcontroller.command.Command;
+import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelTurtle;
 
 import java.util.Arrays;
@@ -45,4 +46,10 @@ public abstract class ComparisonCommand implements Command {
     protected String booleanToString(boolean value) {
         return ""+(value ? 1 : 0);
     }
+
+    @Override
+    public String execute(VariableList list) {
+        return null;
+    }
+
 }

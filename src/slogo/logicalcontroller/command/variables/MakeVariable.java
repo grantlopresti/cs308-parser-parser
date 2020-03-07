@@ -35,6 +35,7 @@ public class MakeVariable extends VariableCommand{
         }
     }
 
+    @Override
     public String execute(VariableList list) {
         appendList(list);
         return Double.toString(this.myValue);
