@@ -1,5 +1,7 @@
 package slogo.logicalcontroller.command.controlflow;
 
+import slogo.model.ModelTurtle;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,5 +39,10 @@ public class For extends ControlFlowCommand {
             result.addAll(myBody);
         }
         setUnraveledCode(result);
+    }
+
+    @Override
+    public String execute(ModelTurtle turtle) {
+        return null;
     }
 }

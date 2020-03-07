@@ -98,8 +98,7 @@ public class Parser implements BundleInterface {
         this.myUserInput.setCodeReplacement(myList, this.myLatestCommand);
     }
 
-    // TODO - execute on a specific turtle
-    private List<String> executeModifierCommand(ModifierCommand command) {
+    private List<String> executeGeneralCommand(Command command) {
         String replace = "";
         Collection<ModelObject> turtles = this.myModelCollection.getActiveTurtles().getModelMap().values();
         System.out.printf("found %d active turtles\n", turtles.size());
@@ -110,23 +109,20 @@ public class Parser implements BundleInterface {
         return new ArrayList<String>(List.of(replace));
     }
 
-    // TODO - execute on a specific turtle
+    private List<String> executeModifierCommand(ModifierCommand command) {
+        return executeGeneralCommand(command);
+    }
+
     private List<String> executeQuerieCommand(QuerieCommand command) {
-        String replace = "";
-        Collection<ModelObject> turtles = this.myModelCollection.getActiveTurtles().getModelMap().values();
-        for (Object o : turtles){
-            ModelTurtle turtle = (ModelTurtle) o;
-            replace = command.execute(turtle);
-        }
-        return new ArrayList<String>(List.of(replace));
+        return executeGeneralCommand(command);
     }
 
     private List<String> executeComparisonCommand(ComparisonCommand command) {
-        return new ArrayList<String>(List.of(command.execute()));
+        return executeGeneralCommand(command);
     }
 
     private List<String> executeMathCommand(MathCommand command) {
-        return new ArrayList<String>(List.of(command.execute()));
+        return executeGeneralCommand(command);
     }
 
     private List<String> executeTellerCommand(TellerCommand command) {

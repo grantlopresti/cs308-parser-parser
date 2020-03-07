@@ -1,5 +1,7 @@
 package slogo.logicalcontroller.command.controlflow;
 
+import slogo.model.ModelTurtle;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,5 +39,10 @@ public class IfElse extends ControlFlowCommand {
         else{
             return true;
         }
+    }
+
+    @Override
+    public String execute(ModelTurtle turtle) {
+        return null;
     }
 }

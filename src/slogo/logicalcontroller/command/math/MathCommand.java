@@ -1,6 +1,7 @@
 package slogo.logicalcontroller.command.math;
 
 import slogo.logicalcontroller.command.Command;
+import slogo.model.ModelTurtle;
 
 /**
  * Abstract class for MathCommand
@@ -44,6 +45,6 @@ public abstract class MathCommand implements Command {
         return userInput;
     }
 
-    public abstract String execute();
+    public abstract String execute(ModelTurtle turtle);
 
 }

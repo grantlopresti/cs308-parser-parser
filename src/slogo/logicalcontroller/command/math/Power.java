@@ -1,6 +1,7 @@
 package slogo.logicalcontroller.command.math;
 
 import slogo.logicalcontroller.command.Command;
+import slogo.model.ModelTurtle;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ public class Power extends MathCommand {
     }
 
     @Override
-    public String execute() {
+    public String execute(ModelTurtle turtle) {
         return Double.toString(Math.pow(this.myArgument1, this.myArgument2));
     }
 
