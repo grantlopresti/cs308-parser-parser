@@ -24,6 +24,7 @@ public abstract class ControlFlowCommand implements Command {
         return unraveledCode;
     }
 
+
     @Override
     public String getCommandType() {
         String className = this.getClass().getSimpleName();
