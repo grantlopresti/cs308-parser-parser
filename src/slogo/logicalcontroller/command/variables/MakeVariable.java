@@ -4,6 +4,7 @@ import slogo.logicalcontroller.variable.BasicVariable;
 import slogo.logicalcontroller.variable.Variable;
 import slogo.logicalcontroller.variable.VariableList;
 
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -12,33 +13,31 @@ import java.util.List;
  * @author Alex Xu
  */
 public class MakeVariable extends VariableCommand{
-    private VariableList myVariableList;
-    private double returnValue;
 
-    public MakeVariable(String name, double value, VariableList variableList){
-        Variable myVariable = new BasicVariable(name, value);
-        myVariableList = variableList;
-        returnValue = value;
-        myVariableList.addVariable(myVariable);
-    }
+    private String myName;
+    private double myValue;
 
     public MakeVariable(List<String> args) {
-        for (String s: args) {
-            System.out.println(s);
-        }
         String name = args.get(0);
         double value = Double.parseDouble(args.get(1));
-        Variable myVariable = new BasicVariable(name, value);
-        this.returnValue = value;
+        this.myValue = value;
+        this.myName = name;
         System.out.printf("successfully created variable with name: %s and value %.2f", name, value);
     }
 
-    public VariableList getUpdatedVariableList(){
-        return myVariableList;
+    private void appendList(VariableList list) {
+        for (Object o : list) {
+            Variable v = (Variable) o;
+            if (v.getName().equals(this.myName)) {
+                list.addVariable(new BasicVariable(this.myName, this.myValue));
+                return;
+            }
+        }
     }
 
-    public double getReturnValue(){
-        return returnValue;
+    public String execute(VariableList list) {
+        appendList(list);
+        return Double.toString(this.myValue);
     }
 
 }
