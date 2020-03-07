@@ -45,6 +45,4 @@ public interface VisualInterface {
     void updateCommand(String fullUserInput);
 
     void deprecateProgram(DeprecationException e);
-
-    ObservableValue<? extends ObservableList<String>> getMyTurtlesProperty();
 }

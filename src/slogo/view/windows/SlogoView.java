@@ -1,7 +1,6 @@
 package slogo.view.windows;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -67,6 +66,7 @@ public class SlogoView extends Application {
   public static final String POSSIBLE_TABS_RESOURCE = "src/slogo/view/resources/possibleTabs.properties";
   private ResourceBundle myPossibleTabsResource;
 
+
   //FIXME: Delete these and replace with XML reading
   public static final String[] INITIAL_RIGHT_TAB_NAMES = new String[]{
       "CommandHistoryTab",
@@ -98,22 +98,10 @@ public class SlogoView extends Application {
   //Factories
   private SubTabFactory mySubTabFactory;
 
-  private ResourceBundle myTabTypeResources;
-
-  private static final String TabResourcePath = "src/slogo/view/resources/possibleTabs.properties";
-
-
   public SlogoView(LogicalController logicalController, VisualController visualController) {
     myLogicalController = logicalController;
     myVisualController = visualController;
     myVisualController.setAnimationRate(ANIMATION_RATE);
-    /*
-    try {
-      myTabTypeResources = BundleInterface.createResourceBundle(TabResourcePath);
-    } catch (IOException e) {
-      throw new ResourceBundleCreationException();
-    }
-     */
   }
 
   private Scene myScene;
@@ -153,19 +141,26 @@ public class SlogoView extends Application {
     createCreditsPane();
   }
 
-  private void createToolbarPane() throws IOException {
-    myToolbarPane = new ToolbarPane(this, myLogicalController).getNode();
+  private void createToolbarPane() {
+    myToolbarPane = new ToolbarPane(this);
   }
 
   private void createCenterPane() {
     myCenterPane = new BorderPane();
 
     myVisualizationPane = new VisualizationPane(VISUALIZER_WIDTH, VISUALIZER_HEIGHT, ANIMATION_RATE);
+    addInitialTurtle();
     myVisualizationPane.update();
     HBox programInputArea = getProgramInputNode();
 
     myCenterPane.setCenter(myVisualizationPane);
     myCenterPane.setBottom(programInputArea);
+  }
+
+  private void addInitialTurtle() {
+    VisualTurtle initialTurtle = new VisualTurtle();
+    myVisualizationPane.addVisualTurtle(initialTurtle);
+    myTurtleOptionsTab.addTurtle(initialTurtle);
   }
 
   private HBox getProgramInputNode() {
@@ -222,7 +217,7 @@ public class SlogoView extends Application {
     myLeftPane = new VBox();
 
     myLeftTabPane = new TabPane();
-    myTurtleOptionsTab = new TurtleOptionsTab(this, myVisualController);
+    myTurtleOptionsTab = new TurtleOptionsTab(this);
     Tab colorPaletteTab = new Tab("Colors");
     Tab imagePaletteTab = new Tab("Images");
     myLeftTabPane.getTabs().addAll(myTurtleOptionsTab, imagePaletteTab, colorPaletteTab);
@@ -239,11 +234,30 @@ public class SlogoView extends Application {
     Menu menu = new Menu("Choose Tab to Add to Right Pane");
     rightNewTab.getMenus().add(menu);
 
+    setPossibleTabsList();
+    setTabMenuItems(menu);
+
+    myRightTabPane = new TabPane();
+    addInitialTabs();
+    myRightTabPane.setPrefWidth(RIGHT_PANE_WIDTH);
+    myRightPane.getChildren().addAll(rightNewTab, myRightTabPane);
+  }
+
+  private void setPossibleTabsList() {
     try {
       myPossibleTabsResource = BundleInterface.createResourceBundle(POSSIBLE_TABS_RESOURCE);
     } catch (IOException e) {
       throw new ResourceBundleException();
     }
+  }
+
+  private void addInitialTabs() {
+    for (String initialTabName : INITIAL_RIGHT_TAB_NAMES){
+      myRightTabPane.getTabs().add(mySubTabFactory.makeTab(this, myVisualController, initialTabName));
+    }
+  }
+
+  private void setTabMenuItems(Menu menu) {
     for (String key : Collections.list(myPossibleTabsResource.getKeys())) {
       MenuItem menuItem = new MenuItem(myPossibleTabsResource.getString(key).split(",")[0]);
       menuItem.setOnAction(e -> {
@@ -252,16 +266,6 @@ public class SlogoView extends Application {
       });
       menu.getItems().add(menuItem);
     }
-
-    myRightTabPane = new TabPane();
-
-    for (String initialTabName : INITIAL_RIGHT_TAB_NAMES){
-      myRightTabPane.getTabs().add(mySubTabFactory.makeTab(this, myVisualController, initialTabName));
-    }
-
-    myRightTabPane.setPrefWidth(RIGHT_PANE_WIDTH);
-
-    myRightPane.getChildren().addAll(rightNewTab, myRightTabPane);
   }
 
   private void createCreditsPane() {
@@ -289,6 +293,17 @@ public class SlogoView extends Application {
   public void announceError(VisualError error) {
     Alert alert;
 
+    alert = getAlert(error);
+
+    alert.setTitle(ALERT_TITLE);
+    alert.setHeaderText(null);
+    alert.setContentText(error.toString());
+
+    alert.showAndWait();
+  }
+
+  private Alert getAlert(VisualError error) {
+    Alert alert;
     if (error.getSeverity() == ErrorSeverity.CRITICAL) {
       alert = new Alert(AlertType.ERROR);
     } else if (error.getSeverity() == ErrorSeverity.MEDIUM){
@@ -296,12 +311,7 @@ public class SlogoView extends Application {
     } else {
       alert = new Alert(AlertType.INFORMATION);
     }
-
-    alert.setTitle(ALERT_TITLE);
-    alert.setHeaderText(null);
-    alert.setContentText(error.toString());
-
-    alert.showAndWait();
+    return alert;
   }
 
   public void setUserInputAreaText(String fileContents) {
@@ -311,6 +321,7 @@ public class SlogoView extends Application {
   public void updateVisualTurtles(List<VisualTurtle> visualTurtles) {
     for (VisualTurtle turtle : visualTurtles){
       myVisualizationPane.addVisualTurtle(turtle);
+      myTurtleOptionsTab.addTurtle(turtle);
     }
     myVisualizationPane.update();
     myMainPane.setCenter(myCenterPane);
@@ -341,19 +352,28 @@ public class SlogoView extends Application {
   public void changeTurtleImage(int ID, String newValue) {
     myVisualController.changeTurtleImage(newValue.toUpperCase());
     myVisualizationPane.changeTurtleImage(ID, newValue.toUpperCase());
-    //TODO: UPDATE CENTER
   }
 
   public void toggleDarkMode() {
     System.out.println(isDarkMode);
     if (isDarkMode) {
-      myScene.getStylesheets().remove("stylesheets/darkMode.css");
-      myScene.getStylesheets().add("stylesheets/defaultStyle.css");
-      isDarkMode = false;
+      switchStyleMode("stylesheets/darkMode.css", "stylesheets/defaultStyle.css", false);
     } else {
-      myScene.getStylesheets().remove("stylesheets/defaultStyle.css");
-      myScene.getStylesheets().add("stylesheets/darkMode.css");
-      isDarkMode = true;
+      switchStyleMode("stylesheets/defaultStyle.css", "stylesheets/darkMode.css", true);
     }
+  }
+
+  private void switchStyleMode(String oldSheet, String newSheet, boolean isDark) {
+    myScene.getStylesheets().remove(oldSheet);
+    myScene.getStylesheets().add(newSheet);
+    isDarkMode = isDark;
+  }
+
+  public void setLanguage(String language) {
+    myLogicalController.setLanguage(language);
+  }
+
+  public void handleNewCommand(String fileContents) {
+    myLogicalController.handleNewCommand(fileContents);
   }
 }
