@@ -28,9 +28,4 @@ public class MakeUserInstruction extends ControlFlowCommand {
     protected void unravelCode() {
         setUnraveledCode(body);
     }
-
-    @Override
-    public String execute(ModelTurtle turtle) {
-        return null;
-    }
 }

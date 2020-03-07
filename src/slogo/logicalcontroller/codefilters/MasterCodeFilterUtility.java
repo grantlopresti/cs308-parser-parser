@@ -86,7 +86,6 @@ public final class MasterCodeFilterUtility {
                 activeFiltersList.add(key);
             }
         }
-        printActiveFilters(activeFiltersList);                                                  //TODO: Remove the print statement later
         return activeFiltersList;
     }
 
@@ -110,18 +109,5 @@ public final class MasterCodeFilterUtility {
 
     private static String createClassPath(String prefix, String className){
         return prefix + className;
-    }
-
-    //TODO: Remove this print statement after debugging and things work.
-    private static void printActiveFilters(List<String> activeFiltersList){
-        System.out.println("ACTIVE FILTERS DETECTED: ");
-        for (String item : activeFiltersList){
-            System.out.println(item);
-        }
-    }
-
-    private static void printInput(String input){
-        System.out.println("RAW INPUT: ");
-        System.out.println(input);
     }
 }
