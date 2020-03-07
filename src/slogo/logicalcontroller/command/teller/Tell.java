@@ -27,11 +27,6 @@ public class Tell extends TellerCommand {
         return "Tell";
     }
 
-    @Override
-    public String execute(ModelTurtle turtle) {
-        return null;
-    }
-
     /**
      * Create turtles and turn them all on
      * @param model

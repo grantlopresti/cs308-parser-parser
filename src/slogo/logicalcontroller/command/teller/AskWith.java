@@ -22,8 +22,5 @@ public class AskWith extends TellerCommand {
         return "AskWidth";
     }
 
-    @Override
-    public String execute(ModelTurtle turtle) {
-        return null;
-    }
+
 }

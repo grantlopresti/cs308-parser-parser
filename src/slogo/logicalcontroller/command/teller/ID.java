@@ -23,8 +23,4 @@ public class ID extends TellerCommand {
         return "ID";
     }
 
-    @Override
-    public String execute(ModelTurtle turtle) {
-        return null;
-    }
 }
