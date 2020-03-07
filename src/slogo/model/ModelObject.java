@@ -5,6 +5,10 @@ package slogo.model;
  * @author Alex Xu
  */
 public abstract class ModelObject implements ModelInterface{
+
+    private static final double ORIGIN = 0.0;
+    private static final double CIRCLE = 360;
+
     private double xCoordinate;
     private double yCoordinate;
     private double heading;
@@ -14,10 +18,10 @@ public abstract class ModelObject implements ModelInterface{
      * Default Constructor for all ModelObjects
      */
     public ModelObject(){
-        xCoordinate = 0.0;
-        yCoordinate = 0.0;
-        heading = 0.0;
-        ID = 0;
+        xCoordinate = ORIGIN;
+        yCoordinate = ORIGIN;
+        heading = ORIGIN;
+        ID = (int) ORIGIN;
     }
 
     /**
@@ -99,11 +103,11 @@ public abstract class ModelObject implements ModelInterface{
     public void turn(double degree) {
         heading += degree;
 
-        while(heading >= 360){
-            heading = heading - 360;
+        while(heading >= CIRCLE){
+            heading = heading - CIRCLE;
         }
         while(heading < 0){
-            heading = heading + 360;
+            heading = heading + CIRCLE;
         }
     }
 
@@ -128,11 +132,11 @@ public abstract class ModelObject implements ModelInterface{
 
         double angle;
 
-        if(relativeY >= 0){
+        if(relativeY >= ORIGIN){
             angle = degrees;
         }
         else{
-            angle = degrees + 180;
+            angle = degrees + CIRCLE/2;
         }
 
         setHeading(angle);

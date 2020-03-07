@@ -3,6 +3,7 @@ package slogo.logicalcontroller.command.teller;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.variable.VariableList;
 import slogo.model.ModelCollection;
+import slogo.model.ModelTurtle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,11 @@ public abstract class TellerCommand implements Command {
 
     @Override
     public String execute(VariableList list) {
+        return null;
+    }
+
+    @Override
+    public String execute(ModelTurtle turtle) {
         return null;
     }
 
