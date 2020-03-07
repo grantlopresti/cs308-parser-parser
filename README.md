@@ -16,9 +16,11 @@ Names: Alex Xu, Amjad Syedibrahim, Max Smith, Grant LoPresti
 ### Primary Roles
 
 Alex Xu:
-* Wrote code for the model package (ModelObjects, Turtles, Pens, ModelCollection, etc.), codefilters package for code preprocessing, and worked on the 
-LogicalController and Parser design, as well as creating the command objects, variable objects, and certain exceptions. Started
-but did not complete XML writing/saving/validation (save workspace functionality) as more work was needed elsewhere.
+* Wrote code for the model package (ModelObjects, Turtles, Pens, ModelCollection, etc
+.), codefilters package for code preprocessing, and worked on the LogicalController and Parser
+ design, as well as creating the command objects, variable objects, and certain exceptions. Started
+but did not complete XML writing/saving/validation (save workspace functionality) as more work
+ was needed elsewhere.
 
 Amjad Syedibrahim:
 * Wrote code for the various functionalities of the Parser's basic implementation. Wrote helper methods in UserInput class to deal with proper creation of command variables.
@@ -29,7 +31,10 @@ Max Smith:
 and interfaces, wrote exceptions to improve error handling, implemented and designed and multiple turtles.
 
 Grant LoPresti:
-* Created the front-end design and implementation of the GUI in the SLogo program. (Add more here)
+* Created the front-end design and implementation of the GUI in the SLogo program. Worked to add
+ splash screen, main screen with CSS implementation, tabs, a tab factory, multiple turtle
+  visualization, movable/changeable tabs, color pickers, a dark mode, and the framework for items
+   that were inevitably and unfortunately not implemented, such as line color and turtle activation.
 
 ### Resources Used
 
