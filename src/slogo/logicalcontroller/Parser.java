@@ -23,7 +23,7 @@ import java.lang.reflect.*;
 
 /**
  * Purpose of this class is to parse incoming commands from the console and from a text file that the user will have an option to read in.
- * @author Max S, Alex Q, Amjad S
+ * @authors Max S, Alex X, Amjad S
  */
 public class Parser implements BundleInterface, ParserInterface {
 
