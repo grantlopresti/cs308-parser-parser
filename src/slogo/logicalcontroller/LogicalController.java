@@ -71,7 +71,6 @@ public class LogicalController {
       fetchExecuteCycle();
       this.myVisualController.updateCommand(fullUserInput);
     } catch (LogicalException e) {
-      e.printStackTrace();
       this.myVisualController.updateErrors(e);
     } catch (DeprecationException e) {
       this.myVisualController.deprecateProgram(e);
