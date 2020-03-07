@@ -142,7 +142,7 @@ public class SlogoView extends Application {
   }
 
   private void createToolbarPane() {
-    myToolbarPane = new ToolbarPane(this);
+    myToolbarPane = new ToolbarPane(this).getNode();
   }
 
   private void createCenterPane() {
