@@ -107,7 +107,7 @@ public class SlogoView extends Application {
   private Scene myScene;
 
   @Override
-  public void start(Stage stage) throws IOException {
+  public void start(Stage stage) {
     myScene = new Scene(createMainPane(), WINDOW_WIDTH, WINDOW_HEIGHT);
     stage.setTitle(PROJECT_TITLE);
     myScene.getStylesheets().add(DEFAULT_STYLESHEET);
@@ -116,7 +116,7 @@ public class SlogoView extends Application {
     stage.show();
   }
 
-  public BorderPane createMainPane() throws IOException {
+  public BorderPane createMainPane() {
     myMainPane = new BorderPane();
 
     createSubPanes();
@@ -131,7 +131,7 @@ public class SlogoView extends Application {
     return myMainPane;
   }
 
-  private void createSubPanes() throws IOException {
+  private void createSubPanes() {
     mySubTabFactory = new SubTabFactory();
 
     createToolbarPane();
@@ -345,7 +345,7 @@ public class SlogoView extends Application {
   }
 
   public void setPenColor(double red, double green, double blue) {
-    Color customColor = new Color(red,green,blue,1);
+    //Color customColor = new Color(red,green,blue,1);
     //TODO: SEND COLOR CHANGE COMMAND TO LOGICAL CONTROLLER
   }
 

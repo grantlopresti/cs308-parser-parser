@@ -26,7 +26,7 @@ import slogo.visualcontroller.VisualTurtle;
 public class VisualizationPane extends Group {
 
   private static final Color DEFAULT_BG_COLOR = Color.DARKGRAY;
-  private static final Color DEFAULT_PEN_COLOR = Color.BLACK;
+  //private static final Color DEFAULT_PEN_COLOR = Color.BLACK;
 
   private double groupWidth;
   private double groupHeight;
@@ -94,22 +94,28 @@ public class VisualizationPane extends Group {
     turtleImage.setFitWidth(turtle.getSize());
     turtleImage.setPreserveRatio(true);
 
-    if (doAnimate && turtle.getPreviousX() != turtle.getCenterX()) {
-      Animation turtleMoveAnimation = makeMoveAnimation(turtle, turtleImage);
-      turtleMoveAnimation.play();
-    }
-
+    animateIfNeeded(turtleImage, turtle, doAnimate);
     turtleImage.rotateProperty().set(360 - turtle.getHeading());
-
-    turtleImage.setX(getAdjustedX(getInbounds(turtle.getCenterX(),
-        turtleImage.getFitWidth(), groupWidth))- (turtle.getSize()/2));
-    turtleImage.setY(getAdjustedY(getInbounds(turtle.getCenterY(),
-        turtleImage.getFitHeight(), groupHeight))- (turtle.getSize()/2));
+    setFinalPosition(turtleImage, turtle);
 
     Lighting lighting = getLightingEffect(turtle.getColor());
     turtleImage.setEffect(lighting);
 
     getChildren().add(turtleImage);
+  }
+
+  private void setFinalPosition(ImageView turtleImage, VisualTurtle turtle) {
+    turtleImage.setX(getAdjustedX(getInbounds(turtle.getCenterX(),
+        turtleImage.getFitWidth(), groupWidth))- (turtle.getSize()/2));
+    turtleImage.setY(getAdjustedY(getInbounds(turtle.getCenterY(),
+        turtleImage.getFitHeight(), groupHeight))- (turtle.getSize()/2));
+  }
+
+  private void animateIfNeeded(ImageView turtleImage, VisualTurtle turtle, Boolean doAnimate) {
+    if (doAnimate && turtle.getPreviousX() != turtle.getCenterX()) {
+      Animation turtleMoveAnimation = makeMoveAnimation(turtle, turtleImage);
+      turtleMoveAnimation.play();
+    }
   }
 
   private double getInbounds(double coordinate, double imageSize, double dimension) {
@@ -195,17 +201,25 @@ public class VisualizationPane extends Group {
   }
 
   public void clearElements() {
-    for (ImageView turtle : myTurtlesImageViews.values()){
-      getChildren().remove(turtle);
-    }
-    for (Line line : myLinesOnScreen){
-      getChildren().remove(line);
-    }
+    removeTurtles();
+    removeLines();
     myTurtles = new HashMap<>();
     myTurtlesImageViews = new HashMap<>();
     myLines = new ArrayList<>();
     myLinesOnScreen = new ArrayList<>();
     update();
+  }
+
+  private void removeLines() {
+    for (Line line : myLinesOnScreen){
+      getChildren().remove(line);
+    }
+  }
+
+  private void removeTurtles() {
+    for (ImageView turtle : myTurtlesImageViews.values()){
+      getChildren().remove(turtle);
+    }
   }
 
   public void resetBGColor() {
@@ -216,17 +230,25 @@ public class VisualizationPane extends Group {
   public void changeTurtleImage(int ID, String imageName) {
     VisualTurtle targetTurtle = myTurtles.get(ID);
 
+    removeOldImage(ID);
+
+    ImageView newImage = replaceWithNewImage(ID, imageName, targetTurtle);
+
+    visualizeTurtle(newImage, targetTurtle, false);
+  }
+
+  private ImageView replaceWithNewImage(int ID, String imageName, VisualTurtle targetTurtle) {
+    targetTurtle.setImage(TurtleImage.valueOf(imageName));
+    ImageView newImage = new ImageView(targetTurtle.getImage().getImagePath());
+    myTurtlesImageViews.put(ID, newImage);
+    return newImage;
+  }
+
+  private void removeOldImage(int ID) {
     if (myTurtlesImageViews.values().size() > 0) {
       getChildren().remove(myTurtlesImageViews.get(ID));
       myTurtlesImageViews.remove(ID);
     }
-
-    targetTurtle.setImage(TurtleImage.valueOf(imageName));
-
-    ImageView newImage = new ImageView(targetTurtle.getImage().getImagePath());
-    myTurtlesImageViews.put(ID, newImage);
-
-    visualizeTurtle(newImage, targetTurtle, false);
   }
 
 }
