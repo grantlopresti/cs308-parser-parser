@@ -23,4 +23,6 @@ public class LeadingTrailingSpaceFilter extends FilterSuperclass {
 
         return processedResult.toString();
     }
+
+
 }

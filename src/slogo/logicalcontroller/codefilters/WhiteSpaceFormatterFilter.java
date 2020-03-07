@@ -6,6 +6,8 @@ package slogo.logicalcontroller.codefilters;
  */
 public class WhiteSpaceFormatterFilter extends FilterSuperclass{
 
+    public static final String MULTIPLE_SPACE_REGEX = " +";
+
     public WhiteSpaceFormatterFilter(){
         super();
     }
@@ -16,7 +18,7 @@ public class WhiteSpaceFormatterFilter extends FilterSuperclass{
 
         String[] lineDelimited = input.split(NEW_LINE);
         for(String line : lineDelimited){
-            String newLine = line.replaceAll(" +", " ");
+            String newLine = line.replaceAll(MULTIPLE_SPACE_REGEX, SPACE);
             newLine = newLine + NEW_LINE;
             processedResult.append(newLine);
         }
