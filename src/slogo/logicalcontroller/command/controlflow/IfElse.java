@@ -40,9 +40,4 @@ public class IfElse extends ControlFlowCommand {
             return true;
         }
     }
-
-    @Override
-    public String execute(ModelTurtle turtle) {
-        return null;
-    }
 }
