@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -26,6 +27,7 @@ public class TurtleOptionsTab extends Tab {
   private ComboBox<String> myTurtleImagePicker = new ComboBox<>();
   private ColorPicker myPenColorPicker = new ColorPicker();
   private GridPane myBonusCommandGrid = new GridPane();
+  private VBox myTurtleStats = new VBox();
 
   private VisualController myController;
   private SlogoView myViewer;
@@ -44,18 +46,16 @@ public class TurtleOptionsTab extends Tab {
   private void buildTab() {
     myOrganizer = new VBox();
     myOrganizer.getStyleClass().add("vBox");
-    Label tabTitleLine = new Label("Turtle Options");
-    Label instructions = new Label("Choose a Turtle Below to see its characteristics");
     for (TurtleImage value : TurtleImage.values()){
       myTurtleImagePicker.getItems().add(value.getName());
     }
     createBonusCommandGrid();
+    createTurtleStatsBox();
     initializeButtons();
+
     myTurtlePicker.itemsProperty().bind(myController.getMyTurtlesProperty());
+
     myOrganizer.getChildren().addAll(
-        tabTitleLine,
-        instructions,
-        new Separator(),
         new Text("Select a Turtle:"),
         new ComboBox<>(),
         new Separator(),
@@ -65,9 +65,38 @@ public class TurtleOptionsTab extends Tab {
         myPenColorPicker,
         new Separator(),
         new Text("Visual Turtle Movement:"),
-        myBonusCommandGrid
+        myBonusCommandGrid,
+        new Separator(),
+        new Text("Current Turtle Statistics"),
+        myTurtleStats
     );
     setContent(myOrganizer);
+  }
+
+  private void createTurtleStatsBox() {
+
+    int boundTurtleID = 0;
+    double boundTurtleXPosition = 0;
+    double boundTurtleYPosition = 0;
+    double boundTurtleHeading = 0;
+    int boundPenState = 0;
+    String boundPenColor = "#022822";
+    double boundPenThickness = 0;
+
+    // position, heading) and the pen (i.e., up/down, color, thickness
+    Label turtleStats = new Label("Turtle Stats:");
+    Label turtleID = new Label("\tTurtle ID:\t\t" + boundTurtleID);
+    Label turtleXPos = new Label("\tTurtle X-Pos:\t" + boundTurtleXPosition);
+    Label turtleYPos = new Label("\tTurtle Y-Pos:\t" + boundTurtleYPosition);
+    Label turtleHeading = new Label("\tTurtle Heading: " + boundTurtleHeading);
+    Label penStats = new Label("Pen Stats:");
+    Label penState = new Label("\tPen State:\t\t" + boundPenState);
+    Label penColor = new Label("\tPen Color:\t" + boundPenColor);
+    Label penThickness = new Label("\tThickness:\t" + boundPenThickness);
+
+    myTurtleStats.getChildren().addAll(turtleStats, turtleID, turtleXPos, turtleYPos,
+        turtleHeading, penStats, penState, penColor, penThickness);
+
   }
 
   private void createBonusCommandGrid() {
