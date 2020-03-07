@@ -6,9 +6,14 @@ import slogo.logicalcontroller.command.Command;
 import java.lang.reflect.Constructor;
 import java.util.*;
 
-public class CommandGenerator {
+public final class CommandGenerator {
 
     public static final String COLON = ":";
+    public static final String INVALID_INSTANTIATION_ERROR = "Instantiating utility class.";
+
+    private CommandGenerator(){
+        throw new AssertionError(INVALID_INSTANTIATION_ERROR);
+    }
 
     static Command createControlCommand(String superclass, String command, List<List<String>> args) {
         try {

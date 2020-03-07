@@ -3,10 +3,15 @@ package slogo.logicalcontroller;
 import java.util.*;
 
 /**
- * Interface to extract information from the control flow commands
+ * Utility class to extract information from the control flow commands
  */
 
-public class ControlFlowExtractor {
+public final class ControlFlowExtractor {
+    public static final String INVALID_INSTANTIATION_ERROR = "Instantiating utility class.";
+
+    private ControlFlowExtractor(){
+        throw new AssertionError(INVALID_INSTANTIATION_ERROR);
+    }
 
     public static List<String> getBracketArguments(List<String> rawCommands, int line) {
         String myLine = rawCommands.get(line);

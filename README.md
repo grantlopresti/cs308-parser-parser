@@ -81,6 +81,7 @@ Back End
 
 Assumptions or Simplifications:
 * Assumed that user input would be space separated
+* Assumed that for the program to have the desired effects, the SLogo syntax will be followed
 * Assumption that control flow statements (for, repeat) have brackets on the first line
 * Assumed that errors could be combined into a single error for user display (e.g. all reflection exceptions get packaged into one exception)
 
