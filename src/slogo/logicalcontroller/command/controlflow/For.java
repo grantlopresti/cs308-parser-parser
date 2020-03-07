@@ -40,9 +40,4 @@ public class For extends ControlFlowCommand {
         }
         setUnraveledCode(result);
     }
-
-    @Override
-    public String execute(ModelTurtle turtle) {
-        return null;
-    }
 }

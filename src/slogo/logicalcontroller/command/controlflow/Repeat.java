@@ -43,9 +43,4 @@ public class Repeat extends ControlFlowCommand {
             System.out.println(s);
         }
     }
-
-    @Override
-    public String execute(ModelTurtle turtle) {
-        return null;
-    }
 }

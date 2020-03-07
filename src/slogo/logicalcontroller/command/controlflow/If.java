@@ -38,9 +38,4 @@ public class If extends ControlFlowCommand {
             return true;
         }
     }
-
-    @Override
-    public String execute(ModelTurtle turtle) {
-        return null;
-    }
 }

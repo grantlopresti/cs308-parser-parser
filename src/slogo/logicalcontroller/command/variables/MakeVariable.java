@@ -12,21 +12,17 @@ import java.util.List;
  * Comamnd to make variables. Assumption is that new variables/updated variables will always appear last on the list.
  * @author Alex Xu
  */
-public class MakeVariable {
-    private double myValue;
+public class MakeVariable extends VariableCommand{
+
     private String myName;
+    private double myValue;
 
     public MakeVariable(List<String> args) {
         String name = args.get(0);
         double value = Double.parseDouble(args.get(1));
-        // Variable myVariable = new BasicVariable(name, value);
         this.myValue = value;
         this.myName = name;
         System.out.printf("successfully created variable with name: %s and value %.2f", name, value);
-    }
-
-    public double getMyValue(){
-        return myValue;
     }
 
     private void appendList(VariableList list) {
