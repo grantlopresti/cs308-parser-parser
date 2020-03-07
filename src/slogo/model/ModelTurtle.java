@@ -75,12 +75,12 @@ public class ModelTurtle extends ModelObject {
     }
 
     public void activate() {
-        System.out.printf("Activating turtle: %d\n", this.ID);
+        // System.out.printf("Activating turtle: %d\n", this.ID);
         this.isActive = true;
     }
 
     public void deactivate() {
-        System.out.printf("Deactivating turtle: %d\n", this.ID);
+        // System.out.printf("Deactivating turtle: %d\n", this.ID);
         this.isActive = false;
     }
 

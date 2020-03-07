@@ -17,10 +17,10 @@ public class extractorTester extends ControlFlowExtractor {
 
         List<String> test = ControlFlowExtractor.initControlFlow(rawCmds4, 0, 2);
 
-        System.out.println("Result: ");
-        for(String elem: test){
-            System.out.println(elem);
-        }
+//        System.out.println("Result: ");
+//        for(String elem: test){
+//            System.out.println(elem);
+//        }
 
         return test;
 

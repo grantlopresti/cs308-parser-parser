@@ -33,7 +33,7 @@ public abstract class ModifierCommand implements Command, ModifierInterface {
         try {
             this.methodMappings = BundleInterface.createResourceBundle(RESOURCE_BUNDLE_LOCATION);
         } catch (IOException e) {
-            System.out.println("File not found exception");
+            // System.out.println("File not found exception");
         }
     }
 

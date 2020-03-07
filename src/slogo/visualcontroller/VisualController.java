@@ -88,7 +88,7 @@ public class VisualController implements VisualInterface {
   public void changeTurtleImage(String newValue) {
     TurtleImage image = TurtleImage.valueOf(newValue);
     for (Integer i : myTurtles.keySet()) {
-      System.out.printf("INDEX: ", i);
+      // System.out.printf("INDEX: ", i);
       myTurtles.get(i).setImage(image);
     }
   }
@@ -157,7 +157,7 @@ public class VisualController implements VisualInterface {
       if (turtle.isPenActive())
         appendLine(new VisualLine(visualTurtle));
     } catch (NullPointerException e) {
-      System.out.println("Given null turtle set, passing on draw");
+      // System.out.println("Given null turtle set, passing on draw");
     }
   }
 

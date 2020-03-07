@@ -11,11 +11,12 @@ public class CommandGenerator {
     public static final String COLON = ":";
 
     static Command createControlCommand(String superclass, String command, List<List<String>> args) {
-        try {System.out.println("Class name path: " + createCommandPath(superclass, command));
-            System.out.println("Argument 2: " + args.get(1).get(0));
+        try {
+            // System.out.println("Class name path: " + createCommandPath(superclass, command));
+            // System.out.println("Argument 2: " + args.get(1).get(0));
             Class clazz = Class.forName(createCommandPath(superclass, command));
             Constructor ctor = clazz.getConstructor(List.class);
-            System.out.println("Checkpoint importanttt");
+            // System.out.println("Checkpoint importanttt");
             return (Command) ctor.newInstance(args);
         } catch (Exception e) {
             throw new InvalidCommandException("Could not create control flow command");
@@ -29,12 +30,12 @@ public class CommandGenerator {
     }
 
     static Command createCommand(String superclass, String command, List<String> arguments) {
-        System.out.printf("trying to createCommand from superclass: %s and command: %s\n", superclass, command);
+        // System.out.printf("trying to createCommand from superclass: %s and command: %s\n", superclass, command);
         try {
             Class clazz = Class.forName(createCommandPath(superclass, command));
             Constructor ctor = clazz.getConstructor(List.class);
-            System.out.printf("clazz: %s \nconstructor: %s \nargs: ", clazz.toString(), ctor.toString());
-            for (String s: arguments) {System.out.println("s");}
+            // System.out.printf("clazz: %s \nconstructor: %s \nargs: ", clazz.toString(), ctor.toString());
+            // for (String s: arguments) {System.out.println("s");}
             return (Command) ctor.newInstance(arguments);
         } catch (Exception e) {
             throw new InvalidCommandException("Could not create command");
@@ -43,8 +44,8 @@ public class CommandGenerator {
 
     static boolean isValidCommand(String s, ResourceBundle bundle) {
         if (s.contains(COLON)) {
-            System.out.println("cound colon in command " + s);
-            System.out.println("returning true");
+            // System.out.println("cound colon in command " + s);
+            // System.out.println("returning true");
             return true;
         }
         for(String key: Collections.list(bundle.getKeys())){

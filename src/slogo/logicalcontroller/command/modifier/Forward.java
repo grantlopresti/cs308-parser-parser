@@ -10,7 +10,7 @@ public class Forward extends ModifierCommand {
 
     public Forward(List<String> args){
         super(args.get(0));
-        System.out.printf("making forward with arg: %s \n", this.getArgument1());
+        // System.out.printf("making forward with arg: %s \n", this.getArgument1());
     }
 
     @Override

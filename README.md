@@ -21,8 +21,9 @@ LogicalController and Parser design, as well as creating the command objects, va
 but did not complete XML writing/saving/validation (save workspace functionality) as more work was needed elsewhere.
 
 Amjad Syedibrahim:
-* Implemented the first iteration of the Parser basic functionality, controlFlowExtractor utility class, implemented user-defined commands
-...(add more here)
+* Wrote code for the various functionalities of the Parser's basic implementation. Wrote helper methods in UserInput class to deal with proper creation of command variables.
+Implemented controlFlowExtractor utility class, worked on user-defined commands and control flow structures.
+
 
 Max Smith:
 * Wrote code for the visualController, implemented and designed the latest iteration of the Parser, redesigned Command object hierarchy

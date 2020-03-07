@@ -18,11 +18,10 @@ public class Repeat extends ControlFlowCommand {
      */
     public Repeat(List<List<String>> rawInput){
         super(rawInput.get(1));
-        System.out.println("Creating repeat command \n called constructor");
-        System.out.printf("rawInput.get(0).get(0)=%s", rawInput.get(0).get(0));
+        // System.out.println("Creating repeat command \n called constructor");
+        // System.out.printf("rawInput.get(0).get(0)=%s", rawInput.get(0).get(0));
         this.myRepeatCount = (int)Math.round(Double.parseDouble(rawInput.get(0).get(0)));
-        System.out.println("myRepeatCount: " + this.myRepeatCount);
-
+        // System.out.println("myRepeatCount: " + this.myRepeatCount);
         unravelCode();
     }
 
@@ -38,9 +37,9 @@ public class Repeat extends ControlFlowCommand {
 
         setUnraveledCode(result);
 
-        System.out.println("From Command Object's Perspective, Body is");
-        for(String s : result){
-            System.out.println(s);
-        }
+        // System.out.println("From Command Object's Perspective, Body is");
+//        for(String s : result){
+//            System.out.println(s);
+//        }
     }
 }
