@@ -92,7 +92,7 @@ public final class MasterCodeFilterUtility {
     private static List<Method> extractOperatingMethods(List<Class> classList) throws NoSuchMethodException {
         List<Method> methodList = new ArrayList<>();
         for (Class myClass : classList){
-            Method filterMethod = myClass.getMethod("filter", String.class, String.class);            //TODO: Use reflection to extract this "filter" name.
+            Method filterMethod = myClass.getMethod("filter", String.class, ResourceBundle.class);            //TODO: Use reflection to extract this "filter" name.
             methodList.add(filterMethod);
         }
         return methodList;
