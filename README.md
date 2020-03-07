@@ -81,6 +81,7 @@ Back End
 
 Assumptions or Simplifications:
 * Assumed that user input would be space separated
+* Assumed that for the program to have the desired effects, the SLogo syntax will be followed
 
 Interesting data files:
 * (Add more here)
