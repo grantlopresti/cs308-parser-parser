@@ -105,7 +105,6 @@ public class Parser implements BundleInterface {
         System.out.printf("found %d active turtles\n", turtles.size());
         for (Object o : turtles){
             ModelTurtle turtle = (ModelTurtle) o;
-            System.out.println("executing in parser on turtle: " + turtle.getID());
             replace = command.execute(turtle);
         }
         return new ArrayList<String>(List.of(replace));

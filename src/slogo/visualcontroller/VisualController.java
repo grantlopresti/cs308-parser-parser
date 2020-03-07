@@ -152,7 +152,6 @@ public class VisualController implements VisualInterface {
     myTurtlesList.add(visualTurtle);
     visualTurtle.updateVisualTurtle(turtle);
     try {
-      System.out.println("attempting to move turtle: " + turtle.getID() + " in visual controller");
       mySlogoView.updateVisualTurtles(new ArrayList<>(List.of(visualTurtle)));
       if (turtle.isPenActive())
         appendLine(new VisualLine(visualTurtle));
