@@ -5,7 +5,7 @@ import slogo.exceptions.ResourceBundleException;
 import slogo.logicalcontroller.command.Command;
 import slogo.logicalcontroller.command.comparison.ComparisonCommand;
 import slogo.logicalcontroller.command.controlflow.ControlFlowCommand;
-import slogo.logicalcontroller.command.controlflow.customCommandList;
+import slogo.logicalcontroller.command.userDefinedCommands.customCommandList;
 import slogo.logicalcontroller.command.math.MathCommand;
 import slogo.logicalcontroller.command.modifier.ModifierCommand;
 import slogo.logicalcontroller.command.querie.QuerieCommand;
