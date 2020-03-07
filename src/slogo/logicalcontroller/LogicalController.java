@@ -66,15 +66,8 @@ public class LogicalController {
   public void handleNewCommand(String fullUserInput) {
     try {
       String filteredInput = applyFilters(fullUserInput);
-
       this.myParser.parse(Arrays.asList(filteredInput.split(NEW_LINE)));
-      while(!this.myParser.isFinished()){
-        this.myParser.executeNextCommand();
-        Command latestCommand = this.myParser.getLatestCommand();
-        ModelCollection newModel = this.myParser.getModel();
-        VariableList newVariables = this.myParser.getVariables();
-        this.myVisualController.update(newModel, newVariables, latestCommand);
-      }
+      fetchExecuteCycle();
       this.myVisualController.updateCommand(fullUserInput);
     } catch (LogicalException e) {
       this.myVisualController.updateErrors(e);
@@ -85,5 +78,15 @@ public class LogicalController {
 
   private String applyFilters(String userInput) {
     return MasterCodeFilterUtility.filter(userInput, myLanguage);
+  }
+
+  private void fetchExecuteCycle(){
+    while(!this.myParser.isFinished()){
+      this.myParser.executeNextCommand();
+      Command latestCommand = this.myParser.getLatestCommand();
+      ModelCollection newModel = this.myParser.getModel();
+      VariableList newVariables = this.myParser.getVariables();
+      this.myVisualController.update(newModel, newVariables, latestCommand);
+    }
   }
 }
