@@ -1,11 +1,6 @@
 package slogo.view.subsections;
 
-
 import javafx.scene.control.TextArea;
-import slogo.exceptions.InvalidCommandException;
-import slogo.logicalcontroller.LogicalController;
-import slogo.view.windows.SlogoView;
-import slogo.visualcontroller.VisualError;
 
 public class UserInputPane {
   private TextArea myTextArea;
