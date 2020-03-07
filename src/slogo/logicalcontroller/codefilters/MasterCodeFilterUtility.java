@@ -7,10 +7,7 @@ import slogo.logicalcontroller.BundleInterface;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Utility class that filters the user input before sending it to the parser.
@@ -24,6 +21,7 @@ public final class MasterCodeFilterUtility {
     public static final String CLASS_PREFIX = "slogo.logicalcontroller.codefilters.";
     public static final String LANGUAGES_PATH = "resources/languages/";
     public static final String PROPERTIES_SUFFIX = ".properties";
+    public static final String PROPERTIES_METHOD_NAME = "methodName";
 
     /**
      * Applies all of the filters, user-defined through a properties file.
@@ -35,7 +33,6 @@ public final class MasterCodeFilterUtility {
     public static String filter(String rawInput, String language){
         printInput(rawInput);
         String result;
-
         ResourceBundle filtersApplied;
         ResourceBundle languageBundle;
         try {
@@ -44,14 +41,11 @@ public final class MasterCodeFilterUtility {
         } catch (Exception e) {
             throw new ResourceBundleException();
         }
-
         try {
             List<String> activeFilters = extractActiveFilters(filtersApplied);
             List<Class> activeFilterClasses = extractOperatingClasses(activeFilters);
-
             List<FilterSuperclass> filterObjectsList = extractFilterObjects(activeFilterClasses);
-            List<Method> methodList = extractOperatingMethods(activeFilterClasses);
-
+            List<Method> methodList = extractOperatingMethods(activeFilterClasses, filtersApplied.getString(PROPERTIES_METHOD_NAME));
             result = performFiltering(filterObjectsList, methodList, rawInput, languageBundle);
             return result;
         }
@@ -83,8 +77,9 @@ public final class MasterCodeFilterUtility {
     private static List<String> extractActiveFilters(ResourceBundle filterInformation){
         List<String> activeFiltersList = new ArrayList<>();
 
-        Set<String> keys = filterInformation.keySet();
-        for(String key : keys){
+        Enumeration keys = filterInformation.getKeys();
+        while(keys.hasMoreElements()){
+            String key = (String) keys.nextElement();
             String value = filterInformation.getString(key);
             boolean activeState = Boolean.parseBoolean(value);
             if(activeState){
@@ -95,10 +90,10 @@ public final class MasterCodeFilterUtility {
         return activeFiltersList;
     }
 
-    private static List<Method> extractOperatingMethods(List<Class> classList) throws NoSuchMethodException {
+    private static List<Method> extractOperatingMethods(List<Class> classList, String methodKeyWord) throws NoSuchMethodException {
         List<Method> methodList = new ArrayList<>();
         for (Class myClass : classList){
-            Method filterMethod = myClass.getMethod("filter", String.class, ResourceBundle.class);            //TODO: Use reflection to extract this "filter" name.
+            Method filterMethod = myClass.getMethod(methodKeyWord, String.class, ResourceBundle.class);            //TODO: Use reflection to extract this "filter" name.
             methodList.add(filterMethod);
         }
         return methodList;
