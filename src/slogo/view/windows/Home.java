@@ -60,7 +60,7 @@ public class Home extends Application {
       try {
         launchSim();
       } catch (IOException ex) {
-        ex.printStackTrace();
+        ;
       }
     });
     //TODO: Add actual events to these button clicks
