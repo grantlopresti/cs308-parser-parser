@@ -23,7 +23,6 @@ import javafx.stage.Stage;
 
 import slogo.exceptions.InvalidCommandException;
 import slogo.exceptions.InvalidCommandFileException;
-import slogo.logicalcontroller.LogicalController;
 import slogo.view.windows.SlogoView;
 import slogo.visualcontroller.VisualError;
 
@@ -39,6 +38,7 @@ public class ToolbarPane extends ToolBar {
   private Button myClearScreen = new Button("Clear Screen");
   private Button myDarkModeToggle = new Button("Toggle Mode");
 
+  //SHOULD BE READ IN FROM A RESOURCE FILE
   private static final ObservableList<String> languageOptions =
       FXCollections.observableArrayList(
           "English",

@@ -15,6 +15,10 @@ import slogo.Manager;
 import slogo.exceptions.ResourceBundleException;
 import slogo.logicalcontroller.BundleInterface;
 
+/**
+ * A WORK IN PROGRESS REPLACEMENT FOR THE UNSATISFACTORY SPLASH SCREEN THAT IS CURRENTLY USED
+ * ALSO AN ATTEMPT AT USING RESOURCE FILES AND REFLECTION
+ */
 public class Home2 extends Application {
 
   private static final int WINDOW_WIDTH = 450;

@@ -5,9 +5,9 @@ package slogo.xmlfactories;
  * @author Alex Xu
  */
 public final class XMLReader {
-    private XMLReader(){}
+    public static final String INVALID_INSTANTIATION_ERROR = "Instantiating utility class.";
 
-    public void readXML(){
-
+    private XMLReader(){
+        throw new AssertionError(INVALID_INSTANTIATION_ERROR);
     }
 }
