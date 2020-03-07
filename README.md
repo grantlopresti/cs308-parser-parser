@@ -96,3 +96,8 @@ Extra credit:
 * Designing the parsing algorithm was a challenge for this project
 * Interesting to see how data-driven design and design patterns can be used to create a program that evaluates another
 "programming language".
+* Late night, pair programming sessions were surprisingly productive, many benefits (accountability, perspective, motivation)
+seen in group programming sessions from design and implementation perspective.
+* Design emphasis in the beginning definitely payed off in the end
+* EVERYTHING is a tradeoff, cannot be open to everything, must evaluate pros and cons of each decision and decide on the 
+"best" and/or "least bad" option.
