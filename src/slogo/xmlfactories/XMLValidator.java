@@ -16,9 +16,12 @@ import slogo.exceptions.InvalidXMLConfigException;
  * @author Alex Xu
  */
 public class XMLValidator {
-    public static final String XSD_SCHEMA_FILEPATH = "src\\cellsociety\\config\\schema_v2.xsd";
+    public static final String XSD_SCHEMA_FILEPATH = "src\\slogo\\xmlfactories\\workspaceSchema.xsd";
+    public static final String INVALID_INSTANTIATION_ERROR = "Instantiating utility class.";
 
-    private XMLValidator(){}
+    private XMLValidator(){
+        throw new AssertionError(INVALID_INSTANTIATION_ERROR);
+    }
 
     /**
      * Validates a XML file against the XSD file that is given as part of the program.
