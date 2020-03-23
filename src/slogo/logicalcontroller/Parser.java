@@ -39,47 +39,29 @@ public class Parser implements BundleInterface, ParserInterface {
 
     /**
      * Constructor for the Parser class that takes in the input language and initializes all the used variables that are required for parsing.
-     * @param language
+     * @param Takes in the language, model, and the variables
      */
     public Parser(String language, ModelCollection model, VariableList variables) throws IOException {
         setLanguage(language);
         this.myModelCollection = model;
         this.myVariableList = variables;
     }
-
-    /**
-     * Reads in the language of the appropriate resource file and loads it into a resource bundle for future use.
-     * @param language
-     */
+    
     @Override
     public void setLanguage(String language) throws IOException {
         this.myLanguage = language;
         this.myLanguageResources = BundleInterface.createResourceBundle(nameLanguageFile());
     }
 
-    /**
-     * Method to find out name of the resource file, based on whatever language the user selected
-     * @return String representing the file path of the resource file
-     */
-
     private String nameLanguageFile() {
         return "resources/languages/" + this.myLanguage + ".properties";
     }
 
-    /**
-     * Called by SlogoView with lines to parse into executable commmands
-     * Two stage process, first
-     * @param lines
-     */
     @Override
     public void parse(List<String> lines) throws ResourceBundleException {
         this.myUserInput = new UserInput(lines, this.myLanguageResources);
     }
 
-    /**
-     * @param command use reflection on command superclass to route command to appropriate helper method
-     * @return list of strings to replace that command in the UserInput
-     */
     private List<String> executeCommand(Command command) {
         try {
             Class superclazz = command.getClass().getSuperclass();
@@ -92,9 +74,6 @@ public class Parser implements BundleInterface, ParserInterface {
         }
     }
 
-    /**
-     * Method to find and execute the next command in the arraylist of raw commands. Represents one step of the turtle.
-     */
     @Override
     public void executeNextCommand(){
         this.myLatestCommand = this.myUserInput.getNextCommand();
@@ -153,23 +132,11 @@ public class Parser implements BundleInterface, ParserInterface {
         return this.myUserInput.isFinished();
     }
 
-    /**
-     * This method is for returning the current model collection, which includes important data about the current state of the model that will be useful in the future
-     * If anything causes the modelcollection variable to be null, things may not work as intended
-     * This method is dependent on the myModelCollection private instance variable in the Parser class, and takes in no parameters
-     * @return This method returns a ModelCollection object
-     */
     @Override
     public ModelCollection getModel(){
         return this.myModelCollection;
     }
 
-    /**
-     * This method is for returning the custom command list variable that is a part of this class
-     * This method assumes that the value of the myCustomCommandList variable is not null
-     * Used by other classes to access the custom command list
-     * @return customCommandList object
-     */
     public customCommandList getCustomCommandList(){
         return this.myCustomCommandList;
     }
