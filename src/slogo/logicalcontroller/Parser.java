@@ -153,11 +153,23 @@ public class Parser implements BundleInterface, ParserInterface {
         return this.myUserInput.isFinished();
     }
 
+    /**
+     * This method is for returning the current model collection, which includes important data about the current state of the model that will be useful in the future
+     * If anything causes the modelcollection variable to be null, things may not work as intended
+     * This method is dependent on the myModelCollection private instance variable in the Parser class, and takes in no parameters
+     * @return This method returns a ModelCollection object
+     */
     @Override
     public ModelCollection getModel(){
         return this.myModelCollection;
     }
 
+    /**
+     * This method is for returning the custom command list variable that is a part of this class
+     * This method assumes that the value of the myCustomCommandList variable is not null
+     * Used by other classes to access the custom command list
+     * @return customCommandList object
+     */
     public customCommandList getCustomCommandList(){
         return this.myCustomCommandList;
     }
