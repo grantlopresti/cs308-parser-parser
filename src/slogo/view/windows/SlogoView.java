@@ -44,6 +44,11 @@ import slogo.visualcontroller.VisualError;
 import slogo.visualcontroller.VisualLine;
 import slogo.visualcontroller.VisualTurtle;
 
+/**
+ * Main View Class
+ *
+ * @author Grant LoPresti
+ */
 public class SlogoView extends Application {
 
   private static final int VISUALIZER_WIDTH = 800;

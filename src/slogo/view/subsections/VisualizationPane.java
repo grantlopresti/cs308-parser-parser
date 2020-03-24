@@ -23,6 +23,11 @@ import slogo.view.TurtleImage;
 import slogo.visualcontroller.VisualLine;
 import slogo.visualcontroller.VisualTurtle;
 
+/**
+ * Center Group which shows the turtles' motion and appearances
+ *
+ * @author Grant LoPresti
+ */
 public class VisualizationPane extends Group {
 
   private static final Color DEFAULT_BG_COLOR = Color.DARKGRAY;

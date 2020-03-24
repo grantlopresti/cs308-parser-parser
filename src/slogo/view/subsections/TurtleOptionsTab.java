@@ -22,6 +22,12 @@ import slogo.view.TurtleImage;
 import slogo.view.windows.SlogoView;
 import slogo.visualcontroller.VisualTurtle;
 
+/**
+ * Special Tab which allows selection, adjustment, and viewing of a specific turtle in the
+ * application
+ *
+ * @author Grant LoPresti   
+ */
 public class TurtleOptionsTab extends Tab {
 
   public static final String TAB_NAME = "Turtle Options";

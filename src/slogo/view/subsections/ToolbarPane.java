@@ -57,10 +57,20 @@ public class ToolbarPane extends ToolBar {
   private ComboBox<String> myLanguage = new ComboBox<>(languageOptions);
   private Button myHelpInfo = new Button("Help/Info");
 
+  /**
+   * constructor, creates the toolbar pane and assigns it a SlogoView
+   * @param viewer the SlogoView that owns it
+   *
+   * @author Grant LoPresti
+   */
   public ToolbarPane(SlogoView viewer) {
     myViewer = viewer;
   }
 
+  /**
+   * creates the toolbar to be displayed at the top of the GUI (including associated buttons)
+   * @return the ToolBar object
+   */
   public ToolBar getNode() {
 
     initializeButtons();
@@ -83,6 +93,13 @@ public class ToolbarPane extends ToolBar {
         myDarkModeToggle);
   }
 
+  /**
+   * Sets the specific actions for each button. I recognize that this should have been done using
+   * a resource file and reflection, this has been done in my SubTab Factory and I sincerely
+   * regret that I didn't have the time to implement this change here.
+   *
+   * @author Grant LoPresti
+   */
   private void initializeButtons() {
     myLoader.setOnAction(e -> loadFile());
     myLoadAndRun.setOnAction(e -> loadAndRun());
@@ -98,6 +115,11 @@ public class ToolbarPane extends ToolBar {
     myDarkModeToggle.setOnAction(e -> myViewer.toggleDarkMode());
   }
 
+  /**
+   * Displays the "help window" as a direct link to the class website's help window
+   *
+   * @author Grant LoPresti
+   */
   private void showHelpWindow() {
     Stage stage = new Stage();
     stage.setTitle("Slogo Help/Info");
@@ -137,6 +159,12 @@ public class ToolbarPane extends ToolBar {
     sendCommands(file);
   }
 
+  /**
+   * Opens a file chooser for the user to select a .logo file
+   * @return the .logo file selected
+   *
+   * @author Grant LoPresti
+   */
   private File getUserFile() {
     FileChooser fc = new FileChooser();
     String dataPath = System.getProperty("user.dir") + "/data/examples";
@@ -150,6 +178,12 @@ public class ToolbarPane extends ToolBar {
     return fc.showOpenDialog(new Stage());
   }
 
+  /**
+   * Reads commands from a file and send them to the user
+   * @param file is the file the commands should be read from
+   *
+   * @author Grant LoPresti
+   */
   private void sendCommands(File file) {
     String fileContents = getTextFromFile(file);
     try {
@@ -165,6 +199,11 @@ public class ToolbarPane extends ToolBar {
     myViewer.setLanguage(language);
   }
 
+  /**
+   * parses the input .logo file and returns the text based commands to be displayed or run
+   * @param file the selected file containing the commands to be parsed
+   * @return a string of all of the contained file text
+   */
   private String getTextFromFile(File file) {
     Path filePath = file.toPath();
     try {
