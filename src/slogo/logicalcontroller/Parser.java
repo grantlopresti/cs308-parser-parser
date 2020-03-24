@@ -46,12 +46,7 @@ public class Parser implements BundleInterface, ParserInterface {
         this.myModelCollection = model;
         this.myVariableList = variables;
     }
-
-    /**
-     * Reads in the language of the appropriate resource file and loads it into a resource bundle for future use.
-     *  Assumes that the language fed in is one from the list already determined
-     * @param Takes in the language selected as a string
-     */
+    
     @Override
     public void setLanguage(String language) throws IOException {
         this.myLanguage = language;
@@ -62,11 +57,6 @@ public class Parser implements BundleInterface, ParserInterface {
         return "resources/languages/" + this.myLanguage + ".properties";
     }
 
-    /**
-     * Called by SlogoView with lines to parse into executable commmands
-     * Two stage process, first sets up the UserInput object so that it can interpret and parse based on the language selected
-     * @param Takes in parameter of list of raw commands inputted, as strings
-     */
     @Override
     public void parse(List<String> lines) throws ResourceBundleException {
         this.myUserInput = new UserInput(lines, this.myLanguageResources);
@@ -84,11 +74,6 @@ public class Parser implements BundleInterface, ParserInterface {
         }
     }
 
-    /**
-     * Method to find and execute the next command in the arraylist of raw commands. Represents one step of the turtle.
-     * Method assumes that there are more command in the list to be executed
-     * No parameters as this is a getter method
-     */
     @Override
     public void executeNextCommand(){
         this.myLatestCommand = this.myUserInput.getNextCommand();
@@ -134,23 +119,11 @@ public class Parser implements BundleInterface, ParserInterface {
         return new ArrayList<String>(List.of(command.execute(this.myVariableList)));
     }
 
-    /**
-     * This method returns the latest command that was executed
-     * If there was no previous command, it will return null
-     * No parameters as this is a getter method
-     * @return Returns a Command object representing the latest command executed
-     */
     @Override
     public Command getLatestCommand() {
         return this.myLatestCommand;
     }
 
-    /**
-     * This method is to return the list of variables that may be defined by the user in the program
-     * This method can fail potentially if the data structure goes null
-     * No parameters as this is a getter method
-     * @return Returns a VariableList object with all the variables in it
-     */
     @Override
     public VariableList getVariables() {return this.myVariableList; }
 
@@ -159,23 +132,11 @@ public class Parser implements BundleInterface, ParserInterface {
         return this.myUserInput.isFinished();
     }
 
-    /**
-     * This method is for returning the current model collection, which includes important data about the current state of the model that will be useful in the future
-     * If anything causes the modelcollection variable to be null, things may not work as intended
-     * This method is dependent on the myModelCollection private instance variable in the Parser class, and takes in no parameters
-     * @return This method returns a ModelCollection object
-     */
     @Override
     public ModelCollection getModel(){
         return this.myModelCollection;
     }
 
-    /**
-     * This method is for returning the custom command list variable that is a part of this class
-     * This method assumes that the value of the myCustomCommandList variable is not null
-     * Used by other classes to access the custom command list
-     * @return customCommandList object
-     */
     public customCommandList getCustomCommandList(){
         return this.myCustomCommandList;
     }
