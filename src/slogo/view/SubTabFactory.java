@@ -13,15 +13,13 @@ import slogo.view.windows.SlogoView;
 import slogo.visualcontroller.VisualController;
 import slogo.visualcontroller.VisualProperty;
 
-
 /**
- * Class that encapsulates possible Bet options and how they are created/chosen so other classes,
- * especially the Game logic, does not need to be aware of the implementation details.
+ * Class that encapsulates possible SubTab options and how they are created/chosen so other classes,
+ * especially the SlogoView class, does not need to be aware of the implementation details.
  *
- * @author Robert C. Duvall
+ * @author Grant LoPresti
  */
 public class SubTabFactory {
-  private static final String PACKAGE = SubTabFactory.class.getPackageName();
   // where to find resource data, note you can use java's package syntax
   public static final String REFLECTION_RESOURCES = "src/slogo/view/resources/possibleTabs.properties";
   // tabs GUI can make
@@ -32,6 +30,8 @@ public class SubTabFactory {
 
   /**
    * Create default factory
+   *
+   * @author Grant LoPresti
    */
   public SubTabFactory () {
     myPossibleTabs = new ArrayList<>();
@@ -57,7 +57,9 @@ public class SubTabFactory {
    * @param controller is the Visual Controller which the listview is bound to
    * @param className tells the method exactly what kind of tab to make
    * @return the new List Tab
-   * @throws IllegalStateException
+   * @throws IllegalStateException if unable to create new tab
+   *
+   * @author Grant LoPresti
    */
   public ListTab makeTab (SlogoView viewer, VisualController controller, String className) throws IllegalStateException {
     try {
