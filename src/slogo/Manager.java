@@ -7,16 +7,16 @@ import slogo.model.ModelCollection;
 import slogo.model.ModelTurtle;
 import slogo.view.windows.SlogoView;
 import slogo.visualcontroller.VisualController;
-import java.io.IOException;
 
 /**
  * Purpose of this class is to manage the controllers and the model.
- * NOTE: Not complete and will only be continued to work on if we have time by basic implementation due date.
+ * An essential part of our SlogoView project, the Manager class not only creates the main
+ * SlogoView GUI, but also passes around the other essential components in our design loop so
+ * that they can remain private, but still communicate with each other.
+ *
  */
 public class Manager {
     private String myDefaultLang;
-
-    private static final int ANIMATION_RATE = 3;
 
     private ModelCollection myModelCollection;
     private VariableList myVariables;
@@ -25,7 +25,12 @@ public class Manager {
     private VisualController myVisualController;
     private LogicalController myLogicalController;
 
-    public Manager(String defaultLang) throws IOException {
+    /**
+     * Creates all of the seperate Slogo Components with the specified settings, and then starts
+     * the application
+     * @param defaultLang
+     */
+    public Manager(String defaultLang) {
         myDefaultLang = defaultLang;
         createModel();
         createVisualController();
@@ -35,14 +40,29 @@ public class Manager {
         startView();
     }
 
-    private void startView() throws IOException {
+    /**
+     * Starts the SlogoView GUI
+     *
+     * @author Grant LoPresti
+     */
+    private void startView() {
         mySlogoView.start(new Stage());
     }
 
+    /**
+     * Allows the Visual Controller to communicate directly with the GUI
+     *
+     * @author Grant LoPresti
+     */
     private void setViewControllerView() {
         myVisualController.setSlogoView(mySlogoView);
     }
 
+    /**
+     * Allows the GUI to pass changes made by the user to both the logical and visual controllers
+     *
+     * @author Grant LoPresti
+     */
     private void createSlogoView() {
         mySlogoView = new SlogoView(myLogicalController, myVisualController);
     }
