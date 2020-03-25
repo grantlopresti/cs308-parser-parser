@@ -1,0 +1,12 @@
+setxy 100 -100
+
+lt 45
+
+repeat 3 [
+  repeat 9 [
+    fd 6 rt 20
+  ]
+  repeat 9 [
+    fd 6 lt 20
+  ]
+]

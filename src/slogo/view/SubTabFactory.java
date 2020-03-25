@@ -14,6 +14,9 @@ import slogo.visualcontroller.VisualController;
 import slogo.visualcontroller.VisualProperty;
 
 /**
+ * FOR MASTERPIECE:
+ *  - I believe that this code is well designed as it
+ *
  * Class that encapsulates possible SubTab options and how they are created/chosen so other classes,
  * especially the SlogoView class, does not need to be aware of the implementation details.
  *

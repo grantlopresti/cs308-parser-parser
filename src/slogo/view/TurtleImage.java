@@ -1,6 +1,8 @@
 package slogo.view;
 
 /**
+ * FOR MASTERPIECE:
+ *
  * Enum Turtle Image is a simple class that is referenced throughout the project and allows the
  * user to choose one of a set number of images for the turtle object. This is essentially the
  * template framework for all of the potential palettes and choices the user has for changing
