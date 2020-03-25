@@ -26,7 +26,7 @@ import slogo.visualcontroller.VisualTurtle;
  * Special Tab which allows selection, adjustment, and viewing of a specific turtle in the
  * application
  *
- * @author Grant LoPresti   
+ * @author Grant LoPresti
  */
 public class TurtleOptionsTab extends Tab {
 
