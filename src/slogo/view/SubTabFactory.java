@@ -22,7 +22,7 @@ import slogo.visualcontroller.VisualProperty;
  *
  * @author Grant LoPresti
  */
-public class SubTabFactory {
+public final class SubTabFactory {
   // where to find resource data, note you can use java's package syntax
   public static final String REFLECTION_RESOURCES = "src/slogo/view/resources/possibleTabs.properties";
   // tabs GUI can make
