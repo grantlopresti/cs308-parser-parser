@@ -7,13 +7,26 @@ package slogo.model;
 public class ModelTurtle extends ModelObject {
 
     private Pen myPen;
+    private boolean isShowing;
+    private boolean isActive;
 
     /**
      * Default constructor of ModelTurtle object
      */
     public ModelTurtle(){
         super();
-        myPen = new Pen();
+        orientTurtle();
+    }
+
+    public ModelTurtle(int id) {
+        super(id);
+        orientTurtle();
+    }
+
+    private void orientTurtle() {
+        this.myPen = new Pen();
+        this.isShowing = true;
+        this.isActive = true;
     }
 
     /**
@@ -42,4 +55,39 @@ public class ModelTurtle extends ModelObject {
     public double getPenThickness() {
         return myPen.getThickness();
     }
+
+    public double penUp(){
+        myPen.penUp();
+        return 0;
+    }
+    public double penDown(){
+        myPen.penDown();
+        return 1;
+    }
+
+    public double showTurtle(){
+        isShowing = true;
+        return 1;
+    }
+    public double hideTurtle(){
+        isShowing = false;
+        return 0;
+    }
+
+    public void activate() {
+        // System.out.printf("Activating turtle: %d\n", this.ID);
+        this.isActive = true;
+    }
+
+    public void deactivate() {
+        // System.out.printf("Deactivating turtle: %d\n", this.ID);
+        this.isActive = false;
+    }
+
+    public boolean isShowing(){
+        return isShowing;
+    }
+
+    public boolean isActive() {return this.isActive;}
+
 }

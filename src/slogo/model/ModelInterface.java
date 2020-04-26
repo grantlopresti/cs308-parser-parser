@@ -26,6 +26,12 @@ public interface ModelInterface {
     public double getHeading();
 
     /**
+     * Returns the ID of the ModelObject
+     * @return int representing the ID number
+     */
+    public int getID();
+
+    /**
      * Returns whether the Pen is Active or Not.
      * @return boolean representing pen state.
      */
@@ -52,11 +58,13 @@ public interface ModelInterface {
      * Sets the Heading to the specified degree
      * @param degree to set the ModelObject heading to
      */
-    public void setHeading(double degree);
+    public double setHeading(double degree);
 
     /**
      * Turns the ModelObject (heading) by the specified degree
      * @param degree to turn the ModelObject by
      */
     public void turn(double degree);
+
+    public double forward(double value);
 }

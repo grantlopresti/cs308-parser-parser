@@ -5,17 +5,32 @@ package slogo.model;
  * @author Alex Xu
  */
 public abstract class ModelObject implements ModelInterface{
+
+    private static final double ORIGIN = 0.0;
+    private static final double CIRCLE = 360;
+
     private double xCoordinate;
     private double yCoordinate;
     private double heading;
+    protected int ID;
 
     /**
      * Default Constructor for all ModelObjects
      */
     public ModelObject(){
-        xCoordinate = 0.0;
-        yCoordinate = 0.0;
-        heading = 0.0;
+        xCoordinate = ORIGIN;
+        yCoordinate = ORIGIN;
+        heading = ORIGIN;
+        ID = (int) ORIGIN;
+    }
+
+    /**
+     * Constructor for ModelObject that takes in a specific ID Value.
+     * @param idValue
+     */
+    public ModelObject(int idValue){
+        this();
+        ID = idValue;
     }
 
     /**
@@ -55,6 +70,17 @@ public abstract class ModelObject implements ModelInterface{
     public void move(double distance) {
         xCoordinate += calcX(distance);
         yCoordinate += calcY(distance);
+        // System.out.printf("new pos: (%.1f, %.1f)\n", xCoordinate, yCoordinate);
+    }
+
+    public double setPosition(double x, double y){
+        double prevX = xCoordinate;
+        double prevY = yCoordinate;
+
+        xCoordinate = x;
+        yCoordinate = y;
+
+        return calcDistance(prevX -x, prevY -y);
     }
 
     /**
@@ -62,8 +88,11 @@ public abstract class ModelObject implements ModelInterface{
      * @param degree to set the ModelObjects heading to
      */
     @Override
-    public void setHeading(double degree) {
+    public double setHeading(double degree) {
+        double prevHeading = heading;
         heading = degree;
+
+        return heading-prevHeading;
     }
 
     /**
@@ -73,6 +102,65 @@ public abstract class ModelObject implements ModelInterface{
     @Override
     public void turn(double degree) {
         heading += degree;
+
+        while(heading >= CIRCLE){
+            heading = heading - CIRCLE;
+        }
+        while(heading < 0){
+            heading = heading + CIRCLE;
+        }
+    }
+
+    public double left(double degree){
+        turn(degree);
+        return degree;
+    }
+
+    public double right(double degree){
+        turn(-1*degree);
+        return degree;
+    }
+
+    public double setTowards(double x, double y){
+        double prevHeading = heading;
+
+        double relativeX = x - xCoordinate;
+        double relativeY = y - yCoordinate;
+
+        double theta = Math.atan(relativeY / relativeX);
+        double degrees = Math.toDegrees(theta);
+
+        double angle;
+
+        if(relativeY >= ORIGIN){
+            angle = degrees;
+        }
+        else{
+            angle = degrees + CIRCLE/2;
+        }
+
+        setHeading(angle);
+
+        return Math.abs(heading - prevHeading);
+    }
+
+    /**
+     * Returns the ID Number of the ModelObject.
+     */
+    @Override
+    public int getID(){
+        return ID;
+    }
+
+    @Override
+    public double forward(double value){
+        move(value);
+        return value;
+    }
+
+    public double backward(double value){
+        move(-1*value);
+        return value;
     }
 
     private double calcX(double distance){
@@ -86,4 +174,9 @@ public abstract class ModelObject implements ModelInterface{
         double sinValue = Math.sin(radians);
         return distance*sinValue;
     }
+
+    private double calcDistance(double x, double y){
+        return Math.sqrt(x*x + y*y);
+    }
+
 }
